@@ -16,18 +16,18 @@ self.addEventListener('activate', event => {
   event.waitUntil(self.clients.claim());
 });
 
+
 self.importScripts('/dist/dumber-bundle.js');
 
+console.log('to load dumber module');
 requirejs(['dumber'], function(d) {
   var Dumber = d.default;
   var dumber;
-  var parent;
+
+  console.log('loaded dumber module');
 
   self.addEventListener('message', function(action) {
     console.log('action', action);
-    if (!parent && action.parent) {
-      parent = action.parent;
-    }
 
     if (action.type === 'init') {
       dumber = new Dumber(action.options);
@@ -72,7 +72,7 @@ requirejs(['dumber'], function(d) {
                 }
               })
             );
-            parent.postMessage('build-done');
+            self.postMessage('build-done');
           });
         });
     }
@@ -85,5 +85,7 @@ requirejs(['dumber'], function(d) {
       })
     );
   });
+
+  self.postMessage('worker-ready');
 });
 

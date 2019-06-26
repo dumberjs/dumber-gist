@@ -12,6 +12,7 @@ const serve = gulp.series(
   function startServer(done) {
     bs.init({
       https: true,
+      host: 'gist-code.com',
       port: 443,
       ghostMode: false,
       online: false,

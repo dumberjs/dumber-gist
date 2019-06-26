@@ -4,14 +4,19 @@ if ('serviceWorker' in navigator) {
       console.log('Service worker registration succeeded:', registration);
 
       addEventListener('message', event => {
-        const data = Object.create(event.data);
-        data.parent = parent;
-        registration.active.postMessage(data);
+        console.log('iframe got message: ', event);
+        registration.active.postMessage(event.data);
       });
 
-      setTimeout(function() {
-        parent.postMessage('worker-ready');
-      });
+      registration.active.onmessage = event => {
+        var data = event.data;
+        console.log('send back message', event);
+        parent.postMessage(data, window.location.origin);
+      }
+
+      // setTimeout(function() {
+      //   parent.postMessage('worker-ready', '*');
+      // });
     },
     function(error) {
       console.log('Service worker registration failed:', error);

@@ -11,6 +11,7 @@ let resolveWorkerPage = null;
 const workerPageReady = new Promise(resolve => resolveWorkerPage = resolve);
 
 function handleMessage(event) {
+  console.log('parent got message: ', event.data);
   if (event.data === 'worker-ready') {
     resolveWorkerPage();
     return;
@@ -19,5 +20,5 @@ function handleMessage(event) {
 addEventListener('message', handleMessage);
 
 export function postMessageToWorker(message) {
-  workerPageReady.then(() => iframe.contentWindow.postMessage(message, '*'));
+  workerPageReady.then(() => iframe.contentWindow.postMessage(message, window.location.origin));
 }

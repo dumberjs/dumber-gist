@@ -6,7 +6,7 @@ const dumber = require('gulp-dumber');
 const fs = require('fs');
 
 const dr = dumber({
-  skipModuleLoader: true,
+  // skipModuleLoader: true,
   // requirejs baseUrl, dumber default is "/dist"
   baseUrl: '/' + outputDir,
   // Turn on hash for production build
@@ -15,7 +15,7 @@ const dr = dumber({
   deps: [
     "dumber",
   ],
-  prepend: ['../dumber-module-loader/dist/index.debug.js'],
+  // prepend: ['../dumber-module-loader/dist/index.debug.js'],
 
   onManifest: function(filenameMap) {
     // Update index.html dumber-bundle.js with dumber-bundle.hash...js
