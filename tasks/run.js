@@ -3,12 +3,16 @@ const bs = require('browser-sync').create();
 const historyApiFallback = require('connect-history-api-fallback/lib');
 const clean = require('./clean');
 const build = require('./build');
+const buildWorker = require('./build-worker');
 
 // Use browserSync as dev server
 const serve = gulp.series(
   build,
+  buildWorker,
   function startServer(done) {
     bs.init({
+      https: true,
+      port: 443,
       ghostMode: false,
       online: false,
       open: !process.env.CI,
@@ -43,15 +47,8 @@ function reload(done) {
   done();
 }
 
-// Watch all js/html/scss files for rebuild and reload browserSync.
 function watch() {
-  const exts = [
-    'json',
-    'js',
-    'html',
-    'scss'
-  ];
-  return gulp.watch(`src/**/*.{${exts.join()}}`, gulp.series(build, reload));
+  return gulp.watch('src/**/*', gulp.series(build, reload));
 }
 
 module.exports = gulp.series(

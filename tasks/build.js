@@ -17,8 +17,6 @@ const dr = require('./_dumber');
 function buildJs(src) {
   const transpile = babel();
 
-  // Note with gulp v4, gulp.src and gulp.dest supports sourcemaps directly
-  // we don't need gulp-sourcemaps any more.
   return gulp.src(src, {sourcemaps: !isProduction, since: gulp.lastRun(build)})
   .pipe(gulpif(!isProduction, plumber()))
   // Read src/main.js
