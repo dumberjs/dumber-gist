@@ -1,5 +1,3 @@
-/* global requirejs */
-
 self.addEventListener('install', event => {
   // The skipWaiting() method allows this service worker to progress from the registration's
   // waiting position to active even while service worker clients are using the registration.
