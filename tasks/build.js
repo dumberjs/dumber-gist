@@ -1,6 +1,5 @@
 const gulp = require('gulp');
 const babel = require('gulp-babel');
-const preprocess = require('gulp-preprocess');
 const sass = require('gulp-sass');
 const plumber = require('gulp-plumber');
 const merge2 = require('merge2');
@@ -13,18 +12,11 @@ const postcssUrl = require('postcss-url');
 const {isProduction, isTest, outputDir} = require('./_env');
 const dr = require('./_dumber');
 
-
 function buildJs(src) {
   const transpile = babel();
 
   return gulp.src(src, {sourcemaps: !isProduction, since: gulp.lastRun(build)})
   .pipe(gulpif(!isProduction, plumber()))
-  // Read src/main.js
-  // We use gulp-preprocess to preprocess main.js. So we don't need any
-  // conditional plugin loading which creates extra trouble for tracer/bundler.
-  // With this preprocessed static plugin loading, aurelia-testing is
-  // auto-traced in test mode, but not in any other env.
-  .pipe(preprocess({context: {isProduction, isTest}}))
   .pipe(transpile);
 }
 
@@ -63,13 +55,11 @@ function build() {
   // Then generates new Vinyl files for all output bundle files.
   .pipe(dr())
 
-  // Want minify? Sure, gulp can do it, dumber is too dumb to do it.
   // Terser fast minify mode
   // https://github.com/terser-js/terser#terser-fast-minify-mode
   // It's a good balance on size and speed to turn off compress.
   .pipe(gulpif(isProduction, terser({compress: false})))
 
-  // Want to write bundle files? Sure, gulp can do it, dumber is too dumb to do it.
   .pipe(gulp.dest(outputDir, {sourcemaps: isProduction ? false : '.'}));
 }
 
