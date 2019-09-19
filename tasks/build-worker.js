@@ -13,7 +13,7 @@ const dr = dumber({
   hash: isProduction,
   entryBundle: 'dumber-bundle',
   deps: [
-    "dumber",
+    "dumber"
   ],
   // prepend: ['../dumber-module-loader/dist/index.debug.js'],
 

@@ -1,27 +1,29 @@
 if ('serviceWorker' in navigator) {
+  addEventListener('message', event => {
+    console.log('iframe got message: ', event.data);
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage(event.data);
+    }
+  });
+
   navigator.serviceWorker.register('/worker.js', {scope: './'}).then(
     function(registration) {
       console.log('Service worker registration succeeded:', registration);
 
-      addEventListener('message', event => {
-        console.log('iframe got message: ', event);
-        registration.active.postMessage(event.data);
-      });
-
-      registration.active.onmessage = event => {
-        var data = event.data;
-        console.log('send back message', event);
-        parent.postMessage(data, window.location.origin);
+      if (registration.active) {
+        console.log('worker is active');
       }
-
-      // setTimeout(function() {
-      //   parent.postMessage('worker-ready', '*');
-      // });
     },
     function(error) {
       console.log('Service worker registration failed:', error);
     }
   );
+
+  navigator.serviceWorker.addEventListener('message', function(event) {
+    var data = event.data;
+    console.log('send back message', event);
+    parent.postMessage(data, '*');
+  });
 } else {
   var msg = 'Service workers are not supported in this browser. Please get a better browser.';
   console.log(msg);

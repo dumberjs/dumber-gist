@@ -14,21 +14,31 @@ self.addEventListener('activate', event => {
   event.waitUntil(self.clients.claim());
 });
 
-
 self.importScripts('/dist/dumber-bundle.js');
 
-console.log('to load dumber module');
-requirejs(['dumber'], function(d) {
-  var Dumber = d.default;
+requirejs(['dumber'], function(Dumber) {
   var dumber;
-
   console.log('loaded dumber module');
 
-  self.addEventListener('message', function(action) {
-    console.log('action', action);
+  self.addEventListener('message', function(event) {
+    var action = event.data;
+    // event.source.postMessage({echo: action});
 
     if (action.type === 'init') {
-      dumber = new Dumber(action.options);
+      try {
+        // TODO make sure only init once.
+        // TODO make sure worker is not shared.
+        dumber = new Dumber({
+          skipModuleLoader: true,
+          prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js']
+        });
+        console.log('created dumber');
+        console.log('say worker-ready');
+        event.source.postMessage('worker-ready');
+      } catch (e) {
+        console.error(e);
+        event.source.postMessage(e.message);
+      }
     } else if (action.type === 'update-file') {
       if (action.file.path.startsWith('src/') || action.file.path.startsWith('test/')) {
         dumber.capture(action.file);
@@ -70,7 +80,7 @@ requirejs(['dumber'], function(d) {
                 }
               })
             );
-            self.postMessage('build-done');
+            event.source.postMessage('build-done');
           });
         });
     }
@@ -83,7 +93,5 @@ requirejs(['dumber'], function(d) {
       })
     );
   });
-
-  self.postMessage('worker-ready');
 });
 

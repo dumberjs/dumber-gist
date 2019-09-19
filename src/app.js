@@ -1,4 +1,4 @@
-import {activate, postMessageToWorker} from './worker-activator';
+import {activate, init, postMessageToWorker} from './worker-activator';
 
 export class App {
   message = 'Hello Aurelia!';
@@ -14,11 +14,19 @@ export class App {
       console.log('activate app');
       activate();
     }
+  }
 
-    // setTimeout(() => postMessageToWorker({a: 1, b:2}), 3000);
+  testInit() {
+    console.log('init');
+    init();
+  }
+
+  testMessage() {
+    console.log('testMessage');
+    postMessageToWorker({a: 1, b:2});
   }
 
   gotMessage(event) {
-    console.log('gotMessage', event);
+    console.log('app gotMessage', event.data);
   }
 }
