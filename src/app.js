@@ -21,9 +21,56 @@ export class App {
     init();
   }
 
-  testMessage() {
-    console.log('testMessage');
-    postMessageToWorker({a: 1, b:2});
+  testApp() {
+    console.log('test app');
+    const indexFile = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Aurelia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+  <base href="/">
+</head>
+
+<body>
+<script src="/dist/entry-bundle.js" data-main="main"></script>
+</body>
+</html>
+`;
+    postMessageToWorker({
+      type: 'update-file',
+      file: {
+        path: 'index.html',
+        contents: indexFile,
+        type: 'text/html; charset=utf-8'
+      }
+    });
+
+    postMessageToWorker({
+      type: 'update-file',
+      file: {
+        path: 'src/main.js',
+        moduleId: 'main',
+        contents: `
+define(function() {
+  var div = document.createElement('div');
+  div.textContent = 'Hello';
+  document.body.appendChild(div);
+});
+        `
+      }
+    });
+  }
+
+  testBuild() {
+    console.log('test build');
+    postMessageToWorker({type: 'build'});
+  }
+
+  testBrowser() {
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('src', 'https://b.gist-code.com/index.html');
+    document.body.appendChild(iframe);
   }
 
   gotMessage(event) {

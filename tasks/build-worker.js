@@ -13,7 +13,8 @@ const dr = dumber({
   hash: isProduction,
   entryBundle: 'dumber-bundle',
   deps: [
-    "dumber"
+    "dumber",
+    "aurelia-deps-finder"
   ],
   // prepend: ['../dumber-module-loader/dist/index.debug.js'],
 

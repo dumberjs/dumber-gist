@@ -16,9 +16,19 @@ self.addEventListener('activate', event => {
 
 self.importScripts('/dist/dumber-bundle.js');
 
-requirejs(['dumber'], function(Dumber) {
+
+
+requirejs(['dumber', 'aurelia-deps-finder'], function(Dumber, _findDeps) {
   var dumber;
   console.log('loaded dumber module');
+
+  // function findDeps(filename, contents) {
+  //   return _findDeps(filename, contents, {
+  //     readFile(filepath) {
+
+  //     }
+  //   });
+  // }
 
   self.addEventListener('message', function(event) {
     var action = event.data;
@@ -30,6 +40,8 @@ requirejs(['dumber'], function(Dumber) {
         // TODO make sure worker is not shared.
         dumber = new Dumber({
           skipModuleLoader: true,
+          cache: false,
+          // depsFinder: findDeps,
           prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js']
         });
         console.log('created dumber');
@@ -41,9 +53,11 @@ requirejs(['dumber'], function(Dumber) {
       }
     } else if (action.type === 'update-file') {
       if (action.file.path.startsWith('src/') || action.file.path.startsWith('test/')) {
+        console.log('capture ' + action.file.path);
         dumber.capture(action.file);
       } else {
         caches.open('v1').then(function(cache) {
+          console.log('cache ' + action.file.path);
           cache.put(
             new Request('/' + action.file.path, { mode: 'no-cors' }),
             new Response(action.file.contents, {
@@ -54,18 +68,20 @@ requirejs(['dumber'], function(Dumber) {
               }
             })
           );
-        })
+        });
       }
     } else if (action.type === 'build') {
+      console.log('try build');
       dumber.resolve()
-        .then(function() { return dumber.bundler(); })
+        .then(function() { return dumber.bundle(); })
         .then(function(bundles) {
+
+          console.log('done build!', bundles);
           // only use single bundle
-          var bundle = bundles[0];
+          var bundle = bundles['entry-bundle'];
           var all = [];
           var f;
 
-          for (f of bundle.appendFiles) all.push(f.contents);
           for (f of bundle.files) all.push(f.contents);
           all.push('requirejs.config(' + JSON.stringify(bundle.config, null , 2) + ');');
 
@@ -82,11 +98,15 @@ requirejs(['dumber'], function(Dumber) {
             );
             event.source.postMessage('build-done');
           });
+        })
+        .catch(function(e) {
+          console.error(e);
         });
     }
   });
 
   self.addEventListener('fetch', function(event) {
+    console.log('fetch ', event);
     event.respondWith(
       caches.match(event.request).then(function(response) {
         return response ? response : fetch(event.request);
