@@ -52,11 +52,10 @@ export class App {
         path: 'src/main.js',
         moduleId: 'main',
         contents: `
-define(function() {
-  var div = document.createElement('div');
-  div.textContent = 'Hello';
-  document.body.appendChild(div);
-});
+var _ = require('lodash');
+var div = document.createElement('div');
+div.textContent = _.kebabCase('HelloWorld');
+document.body.appendChild(div);
         `
       }
     });
