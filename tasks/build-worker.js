@@ -28,7 +28,7 @@ const dr = dumber({
   }
 });
 
-function build() {
+function buildWorker() {
   const d = dr();
   d.end();
 
@@ -37,4 +37,4 @@ function build() {
     .pipe(gulp.dest(outputDir, {sourcemaps: isProduction ? false : '.'}));
 }
 
-module.exports = build;
+module.exports = buildWorker;
