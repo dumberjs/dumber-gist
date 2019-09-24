@@ -40,7 +40,7 @@ export class App {
     postMessageToWorker({
       type: 'update-file',
       file: {
-        path: 'index.html',
+        path: '',
         contents: indexFile,
         type: 'text/html; charset=utf-8'
       }
@@ -68,7 +68,7 @@ document.body.appendChild(div);
 
   testBrowser() {
     const iframe = document.createElement('iframe');
-    iframe.setAttribute('src', 'https://b.gist-code.com/index.html');
+    iframe.setAttribute('src', 'https://b.gist-code.com');
     document.body.appendChild(iframe);
   }
 

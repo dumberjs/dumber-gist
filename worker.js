@@ -14,7 +14,7 @@ self.addEventListener('activate', event => {
   event.waitUntil(self.clients.claim());
 });
 
-self.importScripts('/dist/dumber-bundle.js');
+self.importScripts('/output/dumber-bundle.js');
 
 
 
