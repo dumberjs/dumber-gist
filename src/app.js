@@ -33,6 +33,7 @@ export class App {
 </head>
 
 <body>
+<div id="vue-root"></div>
 <script src="/dist/entry-bundle.js" data-main="main"></script>
 </body>
 </html>
@@ -52,10 +53,53 @@ export class App {
         path: 'src/main.js',
         moduleId: 'main',
         contents: `
-var _ = require('lodash');
-var div = document.createElement('div');
-div.textContent = _.kebabCase('HelloWorld');
-document.body.appendChild(div);
+const Vue = require('vue');
+const App = require('./App');
+
+new Vue({
+  components: {App},
+  template: '<App></App>'
+}).$mount('#vue-root');
+        `
+      }
+    });
+
+    postMessageToWorker({
+      type: 'update-file',
+      file: {
+        path: 'src/App.js',
+        moduleId: 'App',
+        contents: `
+require("./App.css");
+
+module.exports = {
+  template: \`
+    <div class="app">
+      <h2>{{ msg }}</h2>
+    </div>
+  \`,
+  data() {
+    return {
+      msg: 'Hello Vue!'
+    };
+  }
+};
+        `
+      }
+    });
+
+    postMessageToWorker({
+      type: 'update-file',
+      file: {
+        path: 'src/App.css',
+        moduleId: 'App.css',
+        contents: `
+.app {
+  color: #333333;
+  font-family: --apple-system, BlinkMacSystemFont, Helvetica Neue, Arial, sans-serif;
+  line-height: 4rem;
+  padding-left: 5rem;
+}
         `
       }
     });

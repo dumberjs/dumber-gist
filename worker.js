@@ -42,7 +42,10 @@ requirejs(['dumber', 'aurelia-deps-finder'], function(Dumber, _findDeps) {
           skipModuleLoader: true,
           cache: false,
           // depsFinder: findDeps,
-          prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js']
+          prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
+          deps: [
+            {name: 'vue', main: 'dist/vue.js'}
+          ]
         });
         console.log('created dumber');
         console.log('say worker-ready');
