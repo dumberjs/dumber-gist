@@ -53,8 +53,8 @@ export class App {
         path: 'src/main.js',
         moduleId: 'main',
         contents: `
-const Vue = require('vue');
-const App = require('./App');
+import Vue from 'vue';
+import App from './App';
 
 new Vue({
   components: {App},
@@ -70,9 +70,9 @@ new Vue({
         path: 'src/App.js',
         moduleId: 'App',
         contents: `
-require("./App.css");
+import "./App.css";
 
-module.exports = {
+export default {
   template: \`
     <div class="app">
       <h2>{{ msg }}</h2>
