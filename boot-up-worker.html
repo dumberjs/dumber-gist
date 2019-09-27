@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+<!--
+For https://some-hash.gist-code.com/.
+Load boot-up code to init service worker for embedded app.
+This index.html will be loaded by an invisible iframe to
+setup the service worker.
+Once service worker is in place, a user index.html will be
+added to cache and then be served as entry of the embedded
+app in second visible iframe.
+-->
+<script>
+addEventListener('message', event => {
+  // Forward data from parent window to service worker.
+  if (navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage(event.data);
+  }
+});
+
+navigator.serviceWorker.register('/worker.js', {scope: './'}).then(
+  function(registration) {
+    parent.postMessage({type: 'worker-up'});
+
+    if (registration.active) {
+      console.log('worker is active');
+    }
+  },
+  function(error) {
+    parent.postMessage({type: 'worker-error', error: error});
+  }
+);
+
+navigator.serviceWorker.addEventListener('message', function(event) {
+  // Forward data from service worker to parent window.
+  var data = event.data;
+  parent.postMessage(data, '*');
+});
+</script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-import 'regenerator-runtime/runtime';
+import 'bootstrap';
 
 export function configure(aurelia) {
   aurelia.use.feature('resources');

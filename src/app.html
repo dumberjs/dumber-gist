@@ -1,11 +1,22 @@
 <template>
-  <require from="./app.css"></require>
-  <div class="app">
-    <h1>${message}</h1>
+  <require from="./app.scss"></require>
+
+  <div class="app-top-bar">
+    <div class="app-title">Gist Code</div>
+    <div class="app-buttons">
+      <div class="button"></div>
+    </div>
   </div>
-  <button click.trigger="test()">Test</button>
-  <button click.trigger="testInit()">Test Init</button>
-  <button click.trigger="testApp()">Test App</button>
-  <button click.trigger="testBuild()">Test Build</button>
-  <button click.trigger="testBrowser()">Test Browser</button>
+  <div class="app-content">
+    <div class="app-side-bar" if.bind="isSideBarVisible">
+
+
+    </div>
+    <div class="app-editors" if.bind="isEditorsVisible">
+
+    </div>
+    <div class="app-browser-window" if.bind="isBrowserWindowVisible">
+
+    </div>
+  </div>
 </template>

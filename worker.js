@@ -16,8 +16,6 @@ self.addEventListener('activate', event => {
 
 self.importScripts('/output/dumber-bundle.js');
 
-
-
 requirejs(['dumber', 'aurelia-deps-finder'], function(Dumber, _findDeps) {
   var dumber;
   console.log('loaded dumber module');
@@ -33,6 +31,7 @@ requirejs(['dumber', 'aurelia-deps-finder'], function(Dumber, _findDeps) {
   self.addEventListener('message', function(event) {
     var action = event.data;
     // event.source.postMessage({echo: action});
+    console.log('action.type ' +  action.type);
 
     if (action.type === 'init') {
       try {
@@ -48,11 +47,10 @@ requirejs(['dumber', 'aurelia-deps-finder'], function(Dumber, _findDeps) {
           ]
         });
         console.log('created dumber');
-        console.log('say worker-ready');
-        event.source.postMessage('worker-ready');
+        event.source.postMessage({type: 'worker-ready'});
       } catch (e) {
         console.error(e);
-        event.source.postMessage(e.message);
+        event.source.postMessage({error: e.message});
       }
     } else if (action.type === 'update-file') {
       if (action.file.path.startsWith('src/') || action.file.path.startsWith('test/')) {
@@ -60,7 +58,6 @@ requirejs(['dumber', 'aurelia-deps-finder'], function(Dumber, _findDeps) {
         dumber.capture(action.file);
       } else {
         caches.open('v1').then(function(cache) {
-          console.log('cache ' + action.file.path);
           cache.put(
             new Request('/' + action.file.path, { mode: 'no-cors' }),
             new Response(action.file.contents, {
@@ -74,12 +71,10 @@ requirejs(['dumber', 'aurelia-deps-finder'], function(Dumber, _findDeps) {
         });
       }
     } else if (action.type === 'build') {
-      console.log('try build');
       dumber.resolve()
         .then(function() { return dumber.bundle(); })
         .then(function(bundles) {
-
-          console.log('done build!', bundles);
+          console.log('Done build!');
           // only use single bundle
           var bundle = bundles['entry-bundle'];
           var all = [];
@@ -99,7 +94,7 @@ requirejs(['dumber', 'aurelia-deps-finder'], function(Dumber, _findDeps) {
                 }
               })
             );
-            event.source.postMessage('build-done');
+            event.source.postMessage({type: 'build-done'});
           });
         })
         .catch(function(e) {
@@ -112,7 +107,9 @@ requirejs(['dumber', 'aurelia-deps-finder'], function(Dumber, _findDeps) {
     console.log('fetch ', event);
     event.respondWith(
       caches.match(event.request).then(function(response) {
-        return response ? response : fetch(event.request);
+        if (response) return response;
+        // fetch(event.request);
+        // TODO: return '/' for SPA pages. return 404 for unknown resources (.js, .css)
       })
     );
   });

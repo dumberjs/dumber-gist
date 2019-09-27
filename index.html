@@ -2,40 +2,43 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Aurelia</title>
+  <title>Gist Code</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-  <!-- base tag is recommended when using aurelia route with push state -->
   <base href="/">
 </head>
 
 <body>
 <script>
-(function() {
-  var hostname = location.hostname;
-  var m = hostname.match(/^(.+)\.gist-code\.com/);
-  var appHash = m && m[1] || '';
-  var script = document.createElement('script');
-  if (appHash === 'b') {
-    // load boot-up code to init service worker for embedded app
-    script.src = 'boot-up-worker.js';
-  } else if (appHash.length > 1) {
-    // load embedded app
-    // should not see this, all resources in app is behind service worker cache
-    var error = document.createElement('h1');
-    error.textContent = 'Something is not right, you should not see this page!';
-    document.body.appendChild(error);
-    return;
-  } else {
-    // load gist-code app
-    script.setAttribute('data-main', 'aurelia-bootstrapper');
-    script.src = 'output/entry-bundle.js';
-    document.body.setAttribute('aurelia-app', 'main');
-  }
-  script.type = 'text/javascript';
-  script.charset = 'utf-8';
-  script.async = true;
-  document.body.appendChild(script);
-})();
+if ('serviceWorker' in navigator) {
+  (function() {
+    var hostname = location.hostname;
+    var m = hostname.match(/^(.+)\.gist-code\.com/);
+    var appHash = m && m[1] || '';
+    var script = document.createElement('script');
+    if (appHash) {
+      // For https://some-hash.gist-code.com/.
+      // Warn users if they manually open this iframe in new tab/window.
+      var info = document.createElement('p');
+      info.textContent = 'You cannot open this embedded app (iframe) by "Open Frame in new Tab/Window". This is because gist-code has no backend, all magic happens in front-end ServiceWorker.';
+      document.body.appendChild(info);
+    } else {
+      // Load gist-code app for https://gist-code.com/.
+      script.setAttribute('data-main', 'aurelia-bootstrapper');
+      script.src = 'output/entry-bundle.js';
+      document.body.setAttribute('aurelia-app', 'main');
+    }
+    script.type = 'text/javascript';
+    script.charset = 'utf-8';
+    script.async = true;
+    document.body.appendChild(script);
+  })();
+} else {
+  var msg = 'Service workers are not supported in this browser. Please get a better browser.';
+  console.log(msg);
+  var error = document.createElement('h1');
+  error.textContent = msg;
+  document.body.appendChild(error);
+}
 </script>
 </body>
 </html>

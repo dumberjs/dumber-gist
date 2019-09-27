@@ -14,8 +14,8 @@ let resolveWorkerPage = null;
 const workerPageReady = new Promise(resolve => resolveWorkerPage = resolve);
 
 function handleMessage(event) {
-  console.log('parent got message: ', event.data);
-  if (event.data === 'worker-ready') {
+  // console.log('parent got message: ', event.data);
+  if (event.data && event.data.type === 'worker-ready') {
     console.log('Worker is ready!');
     // removeEventListener('message', handleMessage);
     resolveWorkerPage();
