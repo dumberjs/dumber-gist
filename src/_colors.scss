@@ -1,0 +1,34 @@
+$charcoal: #2B2D33;
+
+$blue:    #30A1C1;
+// $indigo:  #6610f2;
+// $purple:  #6f42c1;
+$pink:    #D06566;
+$red:     #DD6163;
+$orange:  #D56D59;
+$yellow:  #FEC624;
+$green:   #34C371;
+// $teal:    #20c997;
+$cyan:    #5D99BD;
+
+$dark-cyan: #6d90a3;
+
+$white:  #fff;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #868e96;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+$black:  #000;
+$shadow: transparentize($black, .95);
+$dark-shadow: transparentize($black, .7);
+
+$red-light: lighten($red, 35%);
+$cyan-light: lighten($cyan, 38%);
+$yellow-light: lighten($yellow, 35%);
+$blue-light: lighten($blue, 45%);
+$green-light: lighten($green, 45%);

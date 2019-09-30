@@ -1,40 +1,58 @@
-@import "../node_modules/bootstrap/scss/bootstrap";
+@import "colors";
 
-body {
+html {
+  font-size: 14px;
+}
+
+@media (max-width: 399.99px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 699.99px) and (min-width: 400px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+.app {
   background-color: $gray-900;
   color: $white;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
 .app-top-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2.5rem;
+  flex: 0 0 auto;
   display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   background-color: $gray-800;
 
   .app-title {
-    font-size: 1.2rem;
-    line-height: 2.5rem;
-    margin-left: .5rem;
-    margin-right: .5rem;
+    // font-size: 1.2rem;
+    // line-height: 2.5rem;
+    margin: .5rem;
     color: $gray-200;
+    white-space: nowrap;
   }
 
   .app-buttons {
-    margin-left: auto;
+    margin: .5rem .5rem .5rem auto;
+    white-space: nowrap;
   }
 }
 
 .app-content {
-  position: fixed;
-  top: 2rem;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  flex: 1 1 auto;
   display: flex;
-  flex-wrap: nowrap;
   align-items: stretch;
 
   .app-side-bar {
@@ -52,5 +70,70 @@ body {
     flex-grow: 1;
     flex-shrink: 1;
 
+  }
+}
+
+button {
+  display: inline-block;
+  border: 0;
+  padding: .5rem .75rem;
+  border-radius: .25rem;
+  margin: 0;
+  text-decoration: none;
+  background-color: $gray-400;
+  color: $charcoal;
+  font-family: sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 250ms ease-in-out, transform 150ms ease;
+  appearance: none;
+
+  &:hover, &:focus {
+    background-color: $white;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 .25rem $blue-light;
+  }
+
+  &:active {
+    transform: scale(.95);
+  }
+
+  &.primary {
+    background-color: $blue;
+    color: $white;
+
+    &:hover, &:focus {
+      background-color: darken($blue, 15%);
+    }
+  }
+
+  &.success {
+    background-color: $green;
+    color: $white;
+
+    &:hover, &:focus {
+      background-color: darken($green, 15%);
+    }
+  }
+
+  &.warning {
+    background-color: $yellow;
+    color: $white;
+
+    &:hover, &:focus {
+      background-color: darken($yellow, 15%);
+    }
+  }
+
+  &.error {
+    background-color: $red;
+    color: $white;
+
+    &:hover, &:focus {
+      background-color: darken($red, 15%);
+    }
   }
 }

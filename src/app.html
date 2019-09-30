@@ -1,22 +1,26 @@
 <template>
   <require from="./app.scss"></require>
 
-  <div class="app-top-bar">
-    <div class="app-title">Gist Code</div>
-    <div class="app-buttons">
-      <div class="button"></div>
+  <div class="app">
+    <div class="app-top-bar">
+      <div class="app-title">Gist Code</div>
+      <div class="app-buttons">
+        <button><i class="far fa-edit"></i></button>
+        <button class="primary"><i class="far fa-edit"></i></button>
+        <button class="success"><i class="far fa-edit"></i> Lorem ipsum.</button>
+        <button class="warning"><i class="far fa-edit"></i></button>
+        <button class="error"><i class="far fa-edit"></i> Hello</button>
+      </div>
+    </div>
+    <div class="app-content">
+      <div class="app-side-bar" ref="sideBar" css="width: ${sideBarWidth}px">
+
+
+      </div>
+      <div class="app-canvas" ref="canvas">
+
+      </div>
     </div>
   </div>
-  <div class="app-content">
-    <div class="app-side-bar" if.bind="isSideBarVisible">
 
-
-    </div>
-    <div class="app-editors" if.bind="isEditorsVisible">
-
-    </div>
-    <div class="app-browser-window" if.bind="isBrowserWindowVisible">
-
-    </div>
-  </div>
 </template>

@@ -3,12 +3,12 @@ const bs = require('browser-sync').create();
 const historyApiFallback = require('connect-history-api-fallback/lib');
 const clean = require('./clean');
 const build = require('./build');
-const buildWorker = require('./build-worker');
+// const buildWorker = require('./build-worker');
 
 // Use browserSync as dev server
 const serve = gulp.series(
   build,
-  buildWorker,
+  // buildWorker,
   function startServer(done) {
     bs.init({
       https: true,

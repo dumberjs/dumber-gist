@@ -1,5 +1,3 @@
-import 'bootstrap';
-
 export function configure(aurelia) {
   aurelia.use.feature('resources');
   aurelia.use.standardConfiguration();
