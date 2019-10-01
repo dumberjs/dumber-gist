@@ -1,24 +1,45 @@
 <template>
   <require from="./app.scss"></require>
+  <require from="./panel-resizer"></require>
 
-  <div class="app">
+  <div class="app" ref="dndElement">
     <div class="app-top-bar">
+      <div class="app-buttons d-small">
+        <button
+          class="btn ${showSideBarInSmallLayout ? 'primary' : 'clean'}"
+          click.trigger="showSideBarInSmallLayout = !showSideBarInSmallLayout & leftClick"><i class="fas fa-bars"></i></button>
+      </div>
       <div class="app-title">Gist Code</div>
-      <div class="app-buttons">
-        <button><i class="far fa-edit"></i></button>
-        <button class="primary"><i class="far fa-edit"></i></button>
-        <button class="success"><i class="far fa-edit"></i> Lorem ipsum.</button>
-        <button class="warning"><i class="far fa-edit"></i></button>
-        <button class="error"><i class="far fa-edit"></i> Hello</button>
+      <div class="app-buttons ml-auto">
+        <button
+          class="btn d-small ${showEditorsInSmallLayout ? 'primary' : 'clean'}"
+          click.trigger="toggleEditors() & leftClick"><i class="far fa-edit"></i></button>
+        <button
+          class="btn d-small ${showBrowserWindowInSmallLayout ? 'primary' : 'clean'}"
+          click.trigger="toggleBrowserWindow() & leftClick"><i class="far fa-window-maximize"></i></button>
+
+        <button class="btn"><i class="fab fa-github"></i></button>
       </div>
     </div>
     <div class="app-content">
-      <div class="app-side-bar" ref="sideBar" css="width: ${sideBarWidth}px">
-
-
+      <div
+        ref="sideBar"
+        class="app-side-bar ${showSideBarInSmallLayout ? 'show-side-bar' : ''}"
+        css="width: ${effectiveSideBarWidth}px;"
+      >
+        side-bar
+        <panel-resizer class="d-small-hide" panel="side-bar"></panel-resizer>
       </div>
-      <div class="app-canvas" ref="canvas">
-
+      <div
+        ref="editors"
+        class="app-editors ${showEditorsInSmallLayout ? 'show-editors' : 'hide-editors'} ${showEditorsInSmallLayout && !showBrowserWindowInSmallLayout ? 'sole-panel' : ''}"
+        css="width: ${effectiveEditorsWidth}px;"
+      >
+        editor
+        <panel-resizer class="d-tiny-hide" panel="editors"></panel-resizer>
+      </div>
+      <div class="app-browser-window ${showBrowserWindowInSmallLayout ? 'show-browser-window' : 'hide-browser-window'} ${!showEditorsInSmallLayout && showBrowserWindowInSmallLayout ? 'sole-panel' : ''}" ref="browserWindow">
+        browser-window
       </div>
     </div>
   </div>

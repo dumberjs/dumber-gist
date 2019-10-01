@@ -1,3 +1,5 @@
 export function configure(config) {
-  config.globalResources([]);
+  config.globalResources([
+    './left-click'
+  ]);
 }

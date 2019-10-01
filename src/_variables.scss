@@ -26,9 +26,13 @@ $gray-900: #212529;
 $black:  #000;
 $shadow: transparentize($black, .95);
 $dark-shadow: transparentize($black, .7);
+$bright-shadow: transparentize($white, .7);
 
 $red-light: lighten($red, 35%);
 $cyan-light: lighten($cyan, 38%);
 $yellow-light: lighten($yellow, 35%);
 $blue-light: lighten($blue, 45%);
 $green-light: lighten($green, 45%);
+
+$tiny: 450px;
+$small: 800px;
