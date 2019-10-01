@@ -75,10 +75,10 @@ export class App {
     const diff = mouseEndAt.x - mouseStartAt.x;
 
     if (this.dnd.model.panel === 'side-bar') {
-      this.intension.sideBar = diff;
       let newWidth = this.sideBarWidth + diff;
       if (newWidth < 50) newWidth = 50;
       const effetiveDiff = newWidth - this.sideBarWidth;
+      this.intension.sideBar = effetiveDiff;
       this.intension.editors = -effetiveDiff;
     } else {
       this.intension.editors = diff;
