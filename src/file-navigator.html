@@ -1,0 +1,9 @@
+<template class="file-navigator">
+  <require from="./file-node"></require>
+
+  <file-node
+    repeat.for="node of session.fileTree"
+    node.bind="node"
+    collapse-flags.bind="collapseFlags"
+    ></file-node>
+</template>

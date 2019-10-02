@@ -1,0 +1,22 @@
+<template>
+  <div
+    class="folder-node folder-node-${collapseFlags[node.filename] ? 'closed' : 'open'}"
+    if.bind="node.folder"
+    click.trigger="collapseFlags[node.filename] = !collapseFlags[node.filename] & leftClick"
+  >
+    <i class="fas fa-folder text-cyan"></i>
+    ${node.folder}
+  </div>
+  <div class="file-node" else>
+    <i class.bind="faIcon"></i>
+    ${node.file}
+  </div>
+  <div class="nested-file-node" if.bind="node.folder && !collapseFlags[node.filename]">
+    <file-node
+      repeat.for="child of node.files"
+      node.bind="child"
+      collapse-flags.bind="collapseFlags"
+      ></file-node>
+  </div>
+
+</template>

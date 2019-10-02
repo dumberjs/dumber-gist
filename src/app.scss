@@ -285,3 +285,127 @@ html {
     }
   }
 }
+
+.text-cyan {
+  color: $cyan;
+}
+
+.text-primary {
+  color: $blue;
+}
+
+.text-success {
+  color: $green;
+}
+
+.text-warning {
+  color: $yellow;
+}
+
+.text-error {
+  color: $red;
+}
+
+.text-primary-light {
+  color: $blue-light;
+}
+
+.text-success-light {
+  color: $green-light;
+}
+
+.text-warning-light {
+  color: $yellow-light;
+}
+
+.text-error-light {
+  color: $red-light;
+}
+
+$node-offset: 1.4rem;
+
+.file-node, .folder-node {
+  margin-top: .25rem;
+  margin-bottom: .25rem;
+  padding-left: $node-offset;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  position: relative;
+  cursor: default;
+  color: $gray-500;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: $gray-700;
+    color: $white;
+  }
+}
+
+.nested-file-node .file-node,
+.nested-file-node .folder-node {
+  padding-left: $node-offset * 2;
+}
+
+.nested-file-node .nested-file-node .file-node,
+.nested-file-node .nested-file-node .folder-node {
+  padding-left: $node-offset * 3;
+}
+
+.nested-file-node .nested-file-node .nested-file-node .file-node,
+.nested-file-node .nested-file-node .nested-file-node .folder-node {
+  padding-left: $node-offset * 4;
+}
+
+.nested-file-node .nested-file-node .nested-file-node .nested-file-node .file-node,
+.nested-file-node .nested-file-node .nested-file-node .nested-file-node .folder-node {
+  padding-left: $node-offset * 5;
+}
+
+.folder-node {
+  &::after {
+    color: $gray-300;
+    display: block;
+    content: '\f0d7';
+    position: absolute;
+    text-align: center;
+    font-weight: 900;
+    font-family: 'Font Awesome 5 Free';
+    left: 0;
+    top: 50%;
+    width: 1.25rem;
+    margin-top: -.625rem;
+  }
+
+  &.folder-node-closed {
+    &::after {
+      content: '\f0da';
+    }
+  }
+}
+
+.nested-file-node .folder-node::after {
+  left: $node-offset;
+}
+
+.nested-file-node .nested-file-node .folder-node::after {
+  left: $node-offset * 2;
+}
+
+.nested-file-node .nested-file-node .nested-file-node .folder-node::after {
+  left: $node-offset * 3;
+}
+
+.nested-file-node .nested-file-node .nested-file-node .nested-file-node .folder-node::after {
+  left: $node-offset * 4;
+}
+
+.file-navigator {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}

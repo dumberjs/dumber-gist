@@ -1,6 +1,7 @@
 <template>
   <require from="./app.scss"></require>
   <require from="./panel-resizer"></require>
+  <require from="./file-navigator"></require>
 
   <div class="app" ref="dndElement">
     <div class="app-top-bar">
@@ -27,7 +28,7 @@
         class="app-side-bar ${showSideBarInSmallLayout ? 'show-side-bar' : ''}"
         css="width: ${effectiveSideBarWidth}px;"
       >
-        side-bar
+        <file-navigator></file-navigator>
         <panel-resizer class="d-small-hide" panel="side-bar"></panel-resizer>
       </div>
       <div

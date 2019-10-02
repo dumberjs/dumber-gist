@@ -57,9 +57,13 @@ requirejs(['dumber', 'aurelia-deps-finder'], function(Dumber, _findDeps) {
         console.log('capture ' + action.file.path);
         dumber.capture(action.file);
       } else {
+        let wantedPath = action.file.path;
+        if (wantedPath === 'index.html') {
+          wantedPath = '';
+        }
         caches.open('v1').then(function(cache) {
           cache.put(
-            new Request('/' + action.file.path, { mode: 'no-cors' }),
+            new Request('/' + wantedPath, { mode: 'no-cors' }),
             new Response(action.file.contents, {
               status: 200,
               statusText: 'OK',
