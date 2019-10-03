@@ -1,5 +1,7 @@
 export function configure(config) {
   config.globalResources([
-    './left-click'
+    './code-editor',
+    './left-click',
+    './file-icon'
   ]);
 }

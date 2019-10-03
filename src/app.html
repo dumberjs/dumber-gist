@@ -2,6 +2,7 @@
   <require from="./app.scss"></require>
   <require from="./panel-resizer"></require>
   <require from="./file-navigator"></require>
+  <require from="./editor-tabs"></require>
 
   <div class="app" ref="dndElement">
     <div class="app-top-bar">
@@ -24,7 +25,6 @@
     </div>
     <div class="app-content">
       <div
-        ref="sideBar"
         class="app-side-bar ${showSideBarInSmallLayout ? 'show-side-bar' : ''}"
         css="width: ${effectiveSideBarWidth}px;"
       >
@@ -35,17 +35,21 @@
           dblclick.trigger="onResize(true) & leftClick"></panel-resizer>
       </div>
       <div
-        ref="editors"
         class="app-editors ${showEditorsInSmallLayout ? 'show-editors' : 'hide-editors'} ${showEditorsInSmallLayout && !showBrowserWindowInSmallLayout ? 'sole-panel' : ''}"
         css="width: ${effectiveEditorsWidth}px;"
       >
-        editor
+        <editor-tabs></editor-tabs>
+        <code-editor
+          if.bind="session.focusedEditingFile"
+          file.bind="session.focusedEditingFile"
+          line-wrapping.bind="true"
+          ></code-editor>
         <panel-resizer
           class="d-tiny-hide"
           panel="editors"
           dblclick.trigger="onResize(true) & leftClick"></panel-resizer>
       </div>
-      <div class="app-browser-window ${showBrowserWindowInSmallLayout ? 'show-browser-window' : 'hide-browser-window'} ${!showEditorsInSmallLayout && showBrowserWindowInSmallLayout ? 'sole-panel' : ''}" ref="browserWindow">
+      <div class="app-browser-window ${showBrowserWindowInSmallLayout ? 'show-browser-window' : 'hide-browser-window'} ${!showEditorsInSmallLayout && showBrowserWindowInSmallLayout ? 'sole-panel' : ''}">
         browser-window
       </div>
     </div>

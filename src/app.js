@@ -94,7 +94,14 @@ export default {
     this.dndService.addTarget(this);
     this.subscribers = [
       this.ea.subscribe('dnd:willStart', () => this.resetIntention()),
-      this.ea.subscribe('dnd:didEnd', () => this.resetIntention())
+      this.ea.subscribe('dnd:didEnd', () => this.resetIntention()),
+      this.ea.subscribe('edit-file', () => {
+        this.showSideBarInSmallLayout = false;
+        this.showEditorsInSmallLayout = true;
+        if (this.windowWidth <= 450) {
+          this.showBrowserWindowInSmallLayout = false;
+        }
+      })
     ];
     window.addEventListener('resize', this.onResize);
   }

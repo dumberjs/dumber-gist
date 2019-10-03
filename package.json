@@ -19,6 +19,7 @@
     "bcx-aurelia-dnd": "^1.0.1",
     "browser-do": "^0.3.2",
     "browser-sync": "^2.26.7",
+    "codemirror": "^5.49.0",
     "connect-history-api-fallback": "^1.6.0",
     "cross-env": "^6.0.0",
     "del": "^5.1.0",

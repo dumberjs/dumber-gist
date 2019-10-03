@@ -95,16 +95,14 @@ html {
 
   .app-side-bar {
     position: relative;
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: auto;
+    flex: 0 0 auto;
     display: flex;
     align-items: stretch;
     flex-direction: column;
+    z-index: 100;
 
     @media (max-width: $small - .02) {
       background-color: $gray-800;
-      z-index: 100;
       position: absolute;
       top: 0;
       bottom: 0;
@@ -121,13 +119,14 @@ html {
 
   .app-editors {
     position: relative;
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: auto;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    z-index: 3;
 
     @media (max-width: $tiny - .02) {
       display: none;
-      z-index: 3;
       position: absolute;
       top: 0;
       bottom: 0;
@@ -136,14 +135,12 @@ html {
       width: auto !important;
 
       &.show-editors {
-        display: block;
+        display: flex;
       }
     }
 
     @media (max-width: $small - .02) and (min-width: $tiny) {
       &.sole-panel {
-        display: block;
-        z-index: 3;
         position: absolute;
         top: 0;
         bottom: 0;
@@ -163,12 +160,14 @@ html {
   }
 
   .app-browser-window {
-    flex-grow: 1;
-    flex-shrink: 1;
+    flex: 1 1 0;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    z-index: 2;
 
     @media (max-width: $tiny - .02) {
       display: none;
-      z-index: 2;
       position: absolute;
       top: 0;
       bottom: 0;
@@ -176,14 +175,12 @@ html {
       right: 0;
 
       &.show-browser-window {
-        display: block;
+        display: flex;
       }
     }
 
     @media (max-width: $small - .02) and (min-width: $tiny) {
       &.sole-panel {
-        display: block;
-        z-index: 2;
         position: absolute;
         top: 0;
         bottom: 0;
@@ -291,6 +288,10 @@ html {
 
 .text-cyan {
   color: $cyan;
+}
+
+.text-dark {
+  color: $charcoal;
 }
 
 .text-primary {
@@ -410,4 +411,58 @@ $node-offset: 1.4rem;
   flex: 1 1 auto;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+.editor-tabs {
+  cursor: default;
+  flex: 0 0 auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  justify-content: flex-start;
+
+  .editor-tab {
+    flex: 0 1 auto;
+    font-size: .85rem;
+    padding: .5rem 1rem;
+    background-color: $gray-1000;
+    margin-right: -1px;
+    color: $gray-600;
+    white-space: nowrap;
+
+    &:not(:first-child) {
+      border-left: 1px solid $gray-800;
+    }
+
+    &:not(:last-child) {
+      border-right: 1px solid $gray-800;
+    }
+
+    &:hover {
+      background-color: $black;
+    }
+
+    &.active {
+      background-color: $cyan-dark;
+      color: $white;
+
+      .close-file {
+        color: $gray-500;
+
+        &:hover {
+          color: $white;
+        }
+      }
+    }
+
+    .close-file {
+      position: relative;
+      left: .5rem;
+      color: $gray-700;
+
+      &:hover {
+        color: $white;
+      }
+    }
+  }
 }

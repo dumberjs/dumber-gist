@@ -1,7 +1,9 @@
-import {observable, computedFrom} from 'aurelia-framework';
+import {inject, observable, computedFrom} from 'aurelia-framework';
+import {EventAggregator} from 'aurelia-event-aggregator';
 import _ from 'lodash';
 import path from 'path';
 
+@inject(EventAggregator)
 export class EditSession {
   _originalFiles = [];
   _files = [];
@@ -10,6 +12,10 @@ export class EditSession {
   fileTree = [];
   editingFilenames = [];
   focusedEditingIndex = -1;
+
+  constructor(ea) {
+    this.ea = ea;
+  }
 
   loadFiles(files) {
     this._originalFiles = _.map(files, f => ({filename: f.filename, content: f.content}));
@@ -26,19 +32,36 @@ export class EditSession {
 
   editFile(file) {
     if (file.folder) return;
-    const idx = this.editingFilenames.indexOf(file.filename);
+    const filename = file.filename || file;
+    const idx = this.editingFilenames.indexOf(filename);
     if (idx === -1) {
-      this.editingFilenames.push(file.filename);
+      this.editingFilenames.push(filename);
       this.focusedEditingIndex = this.editingFilenames.length - 1;
     } else {
       this.focusedEditingIndex = idx;
     }
+    this.ea.publish('edit-file', file);
   }
 
   stopEditingFile(file) {
-    const idx = this.editingFilenames.indexOf(file.filename);
+    const filename = file.filename || file;
+    const idx = this.editingFilenames.indexOf(filename);
     if (idx !== -1) {
       this.editingFilenames.splice(idx, 1);
+      if (this.focusedEditingIndex > idx) {
+        this.focusedEditingIndex -= 1;
+        if (this.focusedEditingIndex < 0 && this.editingFilenames.length) {
+          this.focusedEditingIndex = 0;
+        }
+      } else if (this.focusedEditingIndex === idx) {
+        if (this.focusedEditingIndex >= this.editingFilenames.length) {
+          this.focusedEditingIndex = this.editingFilenames.length - 1;
+        } else {
+          // force reload
+          this.focusedEditingIndex += 1;
+          this.focusedEditingIndex -= 1;
+        }
+      }
     }
   }
 
@@ -57,6 +80,7 @@ export class EditSession {
     this.editingFilenames = [];
     this.focusedEditingIndex = -1;
   }
+
   _mutationCounterChanged() {
     this._updateFileTree();
     this._trimEditingFiles();

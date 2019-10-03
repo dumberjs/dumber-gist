@@ -11,7 +11,6 @@ $green:   #34C371;
 // $teal:    #20c997;
 $cyan:    #5D99BD;
 
-$dark-cyan: #6d90a3;
 
 $white:  #fff;
 $gray-100: #f8f9fa;
@@ -23,6 +22,7 @@ $gray-600: #868e96;
 $gray-700: #495057;
 $gray-800: #343a40;
 $gray-900: #212529;
+$gray-1000: #101215;
 $black:  #000;
 $shadow: transparentize($black, .95);
 $dark-shadow: transparentize($black, .7);
@@ -33,6 +33,12 @@ $cyan-light: lighten($cyan, 38%);
 $yellow-light: lighten($yellow, 35%);
 $blue-light: lighten($blue, 45%);
 $green-light: lighten($green, 45%);
+
+$red-dark: darken($red, 20%);
+$cyan-dark: darken($cyan, 20%);
+$yellow-dark: darken($yellow, 20%);
+$blue-dark: darken($blue, 20%);
+$green-dark: darken($green, 20%);
 
 $tiny: 450px;
 $small: 800px;

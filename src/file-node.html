@@ -8,7 +8,7 @@
     ${node.folder}
   </div>
   <div class="file-node ${cssClass}" else click.trigger="edit() & leftClick">
-    <i class.bind="faIcon"></i>
+    <file-icon filename.bind="node.file"></file-icon>
     ${node.file}
   </div>
   <div class="nested-file-node" if.bind="node.folder && !collapseFlags[node.filename]">
