@@ -29,7 +29,10 @@
         css="width: ${effectiveSideBarWidth}px;"
       >
         <file-navigator></file-navigator>
-        <panel-resizer class="d-small-hide" panel="side-bar"></panel-resizer>
+        <panel-resizer
+          class="d-small-hide"
+          panel="side-bar"
+          dblclick.trigger="onResize(true) & leftClick"></panel-resizer>
       </div>
       <div
         ref="editors"
@@ -37,7 +40,10 @@
         css="width: ${effectiveEditorsWidth}px;"
       >
         editor
-        <panel-resizer class="d-tiny-hide" panel="editors"></panel-resizer>
+        <panel-resizer
+          class="d-tiny-hide"
+          panel="editors"
+          dblclick.trigger="onResize(true) & leftClick"></panel-resizer>
       </div>
       <div class="app-browser-window ${showBrowserWindowInSmallLayout ? 'show-browser-window' : 'hide-browser-window'} ${!showEditorsInSmallLayout && showBrowserWindowInSmallLayout ? 'sole-panel' : ''}" ref="browserWindow">
         browser-window

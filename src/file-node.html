@@ -7,7 +7,7 @@
     <i class="fas fa-folder text-cyan"></i>
     ${node.folder}
   </div>
-  <div class="file-node" else>
+  <div class="file-node ${cssClass}" else click.trigger="edit() & leftClick">
     <i class.bind="faIcon"></i>
     ${node.file}
   </div>

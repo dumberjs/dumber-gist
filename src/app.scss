@@ -98,6 +98,9 @@ html {
     flex-grow: 0;
     flex-shrink: 0;
     flex-basis: auto;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
 
     @media (max-width: $small - .02) {
       background-color: $gray-800;
@@ -200,8 +203,8 @@ html {
   position: absolute;
   top: 0;
   bottom: 0;
-  right: 0;
-  width: 5px;
+  right: -3px;
+  width: 6px;
   z-index: 2;
   cursor: ew-resize;
   background-color: $gray-800;
@@ -336,6 +339,10 @@ $node-offset: 1.4rem;
   white-space: nowrap;
 
   &:hover {
+    background-color: $black;
+  }
+
+  &.active {
     background-color: $gray-700;
     color: $white;
   }
@@ -400,12 +407,7 @@ $node-offset: 1.4rem;
 }
 
 .file-navigator {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+  flex: 1 1 auto;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }

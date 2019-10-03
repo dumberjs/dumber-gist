@@ -10,7 +10,8 @@
     }
   },
   "rules": {
-    "no-console": 0
+    "no-console": 0,
+    "getter-return": 0
   },
   "env": {
     "es6": true,

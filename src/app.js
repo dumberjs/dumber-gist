@@ -22,6 +22,7 @@ export class App {
     this.ea = ea;
     this.dndService = dndService;
     this.session = session;
+    // For dev only
     session.loadFiles([
       {
         filename: 'index.html',
@@ -104,13 +105,13 @@ export default {
     window.removeEventListener('resize');
   }
 
-  onResize() {
+  onResize(reset) {
     let width = window.innerWidth;
     if (width < 320) {
       width = 320;
     }
 
-    if (this.windowWidth) {
+    if (this.windowWidth && !reset) {
       this.sideBarWidth = Math.round(this.sideBarWidth / this.windowWidth * width);
       this.editorsWidth = Math.round(this.editorsWidth / this.windowWidth * width);
     } else if (width >= 800) {
