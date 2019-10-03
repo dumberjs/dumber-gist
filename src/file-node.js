@@ -16,9 +16,9 @@ export class FileNode {
     this.session.editFile(this.node);
   }
 
-  @computedFrom('node', 'node.filename', 'session.focusedEditingFile')
+  @computedFrom('node', 'node.filename', 'session.editingFile')
   get cssClass() {
-    const target = this.session.focusedEditingFile;
+    const target = this.session.editingFile;
     if (!target) return '';
     if (this.node.filename === target.filename) return 'active';
     return '';

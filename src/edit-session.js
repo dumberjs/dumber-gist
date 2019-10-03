@@ -66,7 +66,7 @@ export class EditSession {
   }
 
   @computedFrom('editingFilenames', 'focusedEditingIndex')
-  get focusedEditingFile() {
+  get editingFile() {
     if (this.focusedEditingIndex >= 0) {
       const fn = this.editingFilenames[this.focusedEditingIndex];
       if (fn) {

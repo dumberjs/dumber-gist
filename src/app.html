@@ -40,8 +40,8 @@
       >
         <editor-tabs></editor-tabs>
         <code-editor
-          if.bind="session.focusedEditingFile"
-          file.bind="session.focusedEditingFile"
+          if.bind="session.editingFile"
+          file.bind="session.editingFile"
           line-wrapping.bind="true"
           ></code-editor>
         <panel-resizer
