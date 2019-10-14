@@ -1,22 +1,26 @@
 <template>
   <div
-    class="folder-node folder-node-${collapseFlags[node.filename] ? 'closed' : 'open'}"
-    if.bind="node.folder"
-    click.trigger="collapseFlags[node.filename] = !collapseFlags[node.filename] & leftClick"
+    class="folder-node folder-node-${collapseFlags[node.filePath] ? 'closed' : 'open'}"
+    if.bind="node.files"
+    click.trigger="collapseFlags[node.filePath] = !collapseFlags[node.filePath] & leftClick"
   >
     <i class="fas fa-folder text-cyan"></i>
-    ${node.folder}
+    <span class="mr-auto">${node.name}</span>
+    <i class="fas file-action fa-pencil-alt" click.trigger="editName($event) & leftClick"></i>
+    <i class="fas file-action fa-plus"></i>
+    <i class="fas file-action fa-times"></i>
   </div>
   <div class="file-node ${cssClass}" else click.trigger="edit() & leftClick">
-    <file-icon filename.bind="node.file"></file-icon>
-    ${node.file}
+    <file-icon filename.bind="node.filePath"></file-icon>
+    <span class="mr-auto">${node.name}</span>
+    <i class="fas file-action fa-pencil-alt" click.trigger="editName($event) & leftClick"></i>
+    <i class="fas file-action fa-times"></i>
   </div>
-  <div class="nested-file-node" if.bind="node.folder && !collapseFlags[node.filename]">
+  <div class="nested-file-node" if.bind="node.files && !collapseFlags[node.filePath]">
     <file-node
       repeat.for="child of node.files"
       node.bind="child"
       collapse-flags.bind="collapseFlags"
       ></file-node>
   </div>
-
 </template>

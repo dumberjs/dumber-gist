@@ -5,8 +5,11 @@ import path from 'path';
 
 @inject(EventAggregator)
 export class EditSession {
+  _gist = null;
   _originalFiles = [];
   _files = [];
+  _originalDescription = '';
+  _description = '';
 
   @observable _mutationCounter = 0;
   fileTree = [];
@@ -17,9 +20,12 @@ export class EditSession {
     this.ea = ea;
   }
 
-  loadFiles(files) {
-    this._originalFiles = _.map(files, f => ({filename: f.filename, content: f.content}));
+  loadGist(gist) {
+    this._gist = gist;
+    this._originalFiles = _.map(gist.files, f => ({filename: f.filename, content: f.content}));
     this._files = _.cloneDeep(this._originalFiles);
+    this._originalDescription = gist.description;
+    this.description = gist.description;
     this._reset();
 
     if (this._mutationCounter !== 0) {
@@ -98,19 +104,19 @@ export class EditSession {
         if (i === len - 1) {
           // file
           branch.push({
-            file: p,
-            filename,
-            content: f.content
+            filePath: filename,
+            name: p,
+            file: f
           });
         } else {
           // dir
-          const existingFolder = _.find(branch, {folder: p});
+          const existingFolder = _.find(branch, b => b.files && b.name === p);
           if (existingFolder) {
             branch = existingFolder.files;
           } else {
             const newFolder = {
-              folder: p,
-              filename: parts.slice(0, i + 1).join('/'),
+              filePath: parts.slice(0, i + 1).join('/'),
+              name: p,
               files: []
             };
             branch.push(newFolder);

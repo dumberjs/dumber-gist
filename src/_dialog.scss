@@ -1,0 +1,150 @@
+ux-dialog-container, ux-dialog-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+ux-dialog-overlay {
+  opacity: 0;
+}
+
+ux-dialog-overlay.active {
+  opacity: 1;
+}
+
+ux-dialog-container {
+  display: block;
+  transition: opacity .2s linear;
+  opacity: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+ux-dialog-container.active {
+  opacity: 1;
+}
+
+ux-dialog-container>div {
+  padding: 1rem 0;
+  height: 100%;
+}
+
+ux-dialog-container>div>div {
+  display: block;
+  min-width: 200px;
+  width: fit-content;
+  height: 100%;
+  margin: auto;
+}
+
+ux-dialog-container,ux-dialog-container > div,ux-dialog-container > div > div {
+  outline: 0;
+}
+
+ux-dialog {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 5px 15px $dark-shadow;
+  border-radius: $border-radius;
+  padding: 3;
+  min-width: 300px;
+  max-height: 100%;
+  margin: auto;
+  border-image-source: initial;
+  border-image-slice: initial;
+  border-image-width: initial;
+  border-image-outset: initial;
+  border-image-repeat: initial;
+  background-color: $white;
+}
+
+ux-dialog > ux-dialog-header {
+  display: block;
+  flex: 0 0;
+  padding: 1rem;
+  border-bottom: 1px solid $gray-200;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+
+  .dialog-header-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .dialog-close {
+    float: right;
+    appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 0 .5rem;
+    margin: -.5rem -.5rem -.5rem 0;
+    color: $charcoal;
+    font-size: 2.8rem;
+    line-height: 1;
+    border-radius: $border-radius;
+
+    &:focus {
+      outline: 0;
+    }
+
+    &:hover {
+      background-color: $gray-100;
+    }
+  }
+}
+
+ux-dialog > ux-dialog-body {
+  display: block;
+  flex: 0 1;
+  padding: 1rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+ux-dialog > ux-dialog-footer {
+  display: block;
+  flex: 0 0;
+  padding: 1rem;
+  border-top: 1px solid $gray-200;
+  background-color: $gray-100;
+  text-align: right;
+  border-bottom-left-radius: $border-radius;
+  border-bottom-right-radius: $border-radius;
+
+  &::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+}
+
+ux-dialog > ux-dialog-footer .btn {
+  min-width: 5rem;
+}
+
+ux-dialog > ux-dialog-footer .btn+.btn {
+  margin-left: 10px;
+}
+
+ux-dialog > ux-dialog-footer button:disabled {
+  cursor: default;
+  opacity: .45;
+}
+
+.ux-dialog-open {
+  overflow: hidden;
+}
+
+ux-dialog.merge-header-with-body > ux-dialog-header {
+  border-bottom: 0;
+}
+
+ux-dialog.merge-header-with-body > ux-dialog-body {
+  padding-top: 0;
+}

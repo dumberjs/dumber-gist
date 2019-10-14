@@ -1,26 +1,46 @@
 import {inject, bindable, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
+import {DialogService} from 'aurelia-dialog';
+import {EditNameDialog} from './dialogs/edit-name-dialog';
 import {EditSession} from './edit-session';
 
-@inject(EventAggregator, EditSession)
+@inject(EventAggregator, DialogService, EditSession)
 export class FileNode {
   @bindable node;
   @bindable collapseFlags;
 
-  constructor(ea, session) {
+  constructor(ea, dialogService, session) {
     this.ea = ea;
+    this.dialogService = dialogService;
     this.session = session;
   }
 
   edit() {
-    this.session.editFile(this.node);
+    const {file} = this.node;
+    if (!file) return;
+    this.session.editFile(file);
   }
 
-  @computedFrom('node', 'node.filename', 'session.editingFile')
+  editName(event) {
+    if (event) event.stopPropagation();
+    const {name, filePath, files} = this.node;
+    const isFolder = !!files;
+    this.dialogService.open({
+      viewModel: EditNameDialog,
+      model: {name, isFolder}
+    }).whenClosed(response => {
+      if (response.wasCancelled) return;
+
+      const name = response.output;
+      console.log('name', name);
+    });
+  }
+
+  @computedFrom('node', 'node.filePath', 'session.editingFile')
   get cssClass() {
     const target = this.session.editingFile;
     if (!target) return '';
-    if (this.node.filename === target.filename) return 'active';
+    if (this.node.filePath === target.filename) return 'active';
     return '';
   }
 }

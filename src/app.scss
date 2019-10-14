@@ -1,5 +1,5 @@
 @import "variables";
-
+@import "dialog";
 
 html {
   font-size: 14px;
@@ -49,6 +49,14 @@ html {
   margin-right: auto !important;
 }
 
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: left;
+}
+
 .app {
   background-color: $gray-900;
   color: $white;
@@ -60,6 +68,7 @@ html {
   right: 0;
   bottom: 0;
   left: 0;
+  user-select: none;
 }
 
 .app-top-bar {
@@ -215,21 +224,24 @@ html {
 .btn {
   display: inline-block;
   border: 0;
-  padding: .4rem .6rem;
+  padding: .6rem .8rem;
   border-radius: .25rem;
   margin: 0;
   text-decoration: none;
-  background-color: $gray-400;
+  background-color: $gray-100;
   color: $charcoal;
-  font-family: sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   cursor: pointer;
   text-align: center;
   transition: background-color 200ms ease-in-out, transform 150ms ease;
   appearance: none;
 
+  &.even-size {
+    min-width: 6rem;
+  }
+
   &:hover, &:focus {
-    background-color: $white;
+    background-color: $gray-400;
   }
 
   &:focus {
@@ -332,20 +344,41 @@ $node-offset: 1.4rem;
   margin-top: .25rem;
   margin-bottom: .25rem;
   padding-left: $node-offset;
+  padding-right: .25rem;
   padding-top: .5rem;
   padding-bottom: .5rem;
   position: relative;
   cursor: default;
   color: $gray-500;
   white-space: nowrap;
+  display: flex;
 
   &:hover {
     background-color: $black;
+
+    .file-action {
+      display: inline-block;
+    }
   }
 
   &.active {
     background-color: $gray-700;
     color: $white;
+  }
+
+  .fas, .far, .fal, .fab {
+    margin-left: .25rem;
+    margin-right: .25rem;
+  }
+
+
+  .file-action {
+    display: none;
+    color: $gray-600;
+
+    &:hover {
+      color: $white;
+    }
   }
 }
 
@@ -423,8 +456,8 @@ $node-offset: 1.4rem;
 
   .editor-tab {
     flex: 0 1 auto;
-    font-size: .85rem;
-    padding: .5rem 1rem;
+    font-size: .8rem;
+    padding: .7rem 1rem;
     background-color: $gray-1000;
     margin-right: -1px;
     color: $gray-600;

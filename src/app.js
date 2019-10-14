@@ -23,69 +23,72 @@ export class App {
     this.dndService = dndService;
     this.session = session;
     // For dev only
-    session.loadFiles([
-      {
-        filename: 'index.html',
-        content: `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Aurelia</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-  <base href="/">
-</head>
+    session.loadGist({
+      description: 'Lorem ipsum dolor sit amet.',
+      files: [
+        {
+          filename: 'index.html',
+          content: `<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="utf-8">
+    <title>Aurelia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <base href="/">
+  </head>
 
-<body>
-<div id="vue-root"></div>
-<script src="/dist/entry-bundle.js" data-main="main"></script>
-</body>
-</html>
-`
-      },
-      {
-        filename: 'src/main.js',
-        content: `import Vue from 'vue';
-import App from './App';
+  <body>
+  <div id="vue-root"></div>
+  <script src="/dist/entry-bundle.js" data-main="main"></script>
+  </body>
+  </html>
+  `
+        },
+        {
+          filename: 'src/main.js',
+          content: `import Vue from 'vue';
+  import App from './App';
 
-new Vue({
-  components: {App},
-  template: '<App></App>'
-}).$mount('#vue-root');
- `
-      },
-      {
-        filename: 'src/App.js',
-        content: `import "./App.css";
+  new Vue({
+    components: {App},
+    template: '<App></App>'
+  }).$mount('#vue-root');
+   `
+        },
+        {
+          filename: 'src/App.js',
+          content: `import "./App.css";
 
-export default {
-  template: \`
-    <div class="app">
-      <h2>{{ msg }}</h2>
-    </div>
-  \`,
-  data() {
-    return {
-      msg: 'Hello Vue!'
-    };
+  export default {
+    template: \`
+      <div class="app">
+        <h2>{{ msg }}</h2>
+      </div>
+    \`,
+    data() {
+      return {
+        msg: 'Hello Vue!'
+      };
+    }
+  };
+  `
+        },
+        {
+          filename: 'src/App.css',
+          content: `.app {
+    color: #333333;
+    font-family: --apple-system, BlinkMacSystemFont, Helvetica Neue, Arial, sans-serif;
+    line-height: 4rem;
+    padding-left: 5rem;
   }
-};
-`
-      },
-      {
-        filename: 'src/App.css',
-        content: `.app {
-  color: #333333;
-  font-family: --apple-system, BlinkMacSystemFont, Helvetica Neue, Arial, sans-serif;
-  line-height: 4rem;
-  padding-left: 5rem;
-}
-`
-      },
-      {
-        filename: 'test/one/two/three/some.svg',
-        content: 'hello'
-      }
-    ]);
+  `
+        },
+        {
+          filename: 'test/one/two/three/some.svg',
+          content: 'hello'
+        }
+      ]
+    });
     this.onResize = _.debounce(this.onResize.bind(this), 100);
     this.onResize();
   }
