@@ -148,39 +148,55 @@ export default {
     return model.type === 'resize-panel';
   }
 
-  dndHover(location) {
+  _buildIntension(location) {
+    const intension = {sideBar: 0, editors: 0};
     const {mouseStartAt, mouseEndAt} = location;
     const diff = mouseEndAt.x - mouseStartAt.x;
 
     if (this.dnd.model.panel === 'side-bar') {
       let newWidth = this.sideBarWidth + diff;
-      if (newWidth < MIN_PANEL_WIDTH) newWidth = MIN_PANEL_WIDTH;
+      if (newWidth < MIN_PANEL_WIDTH) {
+        newWidth = MIN_PANEL_WIDTH;
+      } else if (newWidth > this.windowWidth - 2 * MIN_PANEL_WIDTH) {
+        newWidth = this.windowWidth - 2 * MIN_PANEL_WIDTH;
+      }
       const effetiveDiff = newWidth - this.sideBarWidth;
-      this.intension.sideBar = effetiveDiff;
-      this.intension.editors = -effetiveDiff;
-    } else {
-      this.intension.editors = diff;
-    }
-  }
-
-  dndDrop(location) {
-    const {mouseStartAt, mouseEndAt} = location;
-    const diff = mouseEndAt.x - mouseStartAt.x;
-
-    if (this.dnd.model.panel === 'side-bar') {
-      let newWidth = this.sideBarWidth + diff;
-      if (newWidth < MIN_PANEL_WIDTH) newWidth = MIN_PANEL_WIDTH;
-      const effetiveDiff = newWidth - this.sideBarWidth;
-      this.sideBarWidth = newWidth;
+      intension.sideBar = effetiveDiff;
 
       let newWidth2 = this.editorsWidth - effetiveDiff;
       if (newWidth2 < MIN_PANEL_WIDTH) newWidth2 = MIN_PANEL_WIDTH;
-      this.editorsWidth = newWidth2;
+      intension.editors = newWidth2 - this.editorsWidth;
     } else {
       let newWidth = this.editorsWidth + diff;
-      if (newWidth < MIN_PANEL_WIDTH) newWidth = MIN_PANEL_WIDTH;
-      this.editorsWidth = newWidth;
+      if (newWidth < MIN_PANEL_WIDTH) {
+        newWidth = MIN_PANEL_WIDTH;
+      } else {
+        if (this.windowWidth >= 800) {
+          if (newWidth > this.windowWidth - MIN_PANEL_WIDTH - this.sideBarWidth) {
+            newWidth = this.windowWidth - MIN_PANEL_WIDTH - this.sideBarWidth;
+          }
+        } else {
+          if (newWidth > this.windowWidth - MIN_PANEL_WIDTH) {
+            newWidth = this.windowWidth - MIN_PANEL_WIDTH;
+          }
+        }
+      }
+      intension.editors = newWidth - this.editorsWidth;
     }
+
+    return intension;
+  }
+
+  dndHover(location) {
+    const intension = this._buildIntension(location);
+    if (this.intension.sideBar !== intension.sideBar) this.intension.sideBar = intension.sideBar;
+    if (this.intension.editors !== intension.editors) this.intension.editors = intension.editors;
+  }
+
+  dndDrop(location) {
+    const intension = this._buildIntension(location);
+    this.sideBarWidth += intension.sideBar;
+    this.editorsWidth += intension.editors;
   }
 
   toggleEditors() {
@@ -204,14 +220,12 @@ export default {
   @computedFrom('sideBarWidth', 'intension.sideBar')
   get effectiveSideBarWidth() {
     const width = this.sideBarWidth + this.intension.sideBar;
-    if (width < MIN_PANEL_WIDTH) return MIN_PANEL_WIDTH;
     return width;
   }
 
   @computedFrom('editorsWidth', 'intension.editors')
   get effectiveEditorsWidth() {
     const width = this.editorsWidth + this.intension.editors;
-    if (width < MIN_PANEL_WIDTH) return MIN_PANEL_WIDTH;
     return width;
   }
 }
