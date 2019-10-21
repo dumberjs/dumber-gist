@@ -24,12 +24,16 @@ export class EditSession {
     ea.subscribe('update-file', ({filename, content}) => {
       const f = _.find(this._files, {filename});
       const oldF = _.find(this._originalFiles, {filename});
+
       if (f && f.content !== content) {
         f.content = content;
         f.isRendered = false;
         f.isChanged = !oldF || oldF.content !== content;
-        this._mutationCounter += 1;
+      } else {
+        this._files.push({filename, content});
       }
+
+      this._mutationCounter += 1;
     });
   }
 
@@ -121,6 +125,9 @@ export class EditSession {
     const tree = [];
 
     _.each(this._files, f => {
+      // gist-code.json is a special file
+      if (f.filename === 'gist-code.json') return;
+
       const filename = path.normalize(f.filename);
       const parts = filename.split('/');
       const len = parts.length;
