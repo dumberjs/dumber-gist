@@ -9,7 +9,6 @@ export class EditorTabs {
     this.ea = ea;
     this.session = session;
   }
-
 }
 
 export class LastPartValueConverter {

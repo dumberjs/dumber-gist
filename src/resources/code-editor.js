@@ -1,5 +1,6 @@
-import {bindable} from 'aurelia-framework';
+import {inject, bindable} from 'aurelia-framework';
 import path from 'path';
+import {EventAggregator} from 'aurelia-event-aggregator';
 import CodeMirror from 'codemirror';
 // import "codemirror/addon/selection/active-line";
 import "codemirror/addon/dialog/dialog";
@@ -33,6 +34,7 @@ const MODES = {
   '.svg': 'xml'
 };
 
+@inject(EventAggregator)
 export class CodeEditor {
   @bindable file;
   @bindable readOnly = false;
@@ -40,7 +42,8 @@ export class CodeEditor {
   @bindable autoFocus = false;
   mode = '';
 
-  constructor() {
+  constructor(ea) {
+    this.ea = ea;
     this.onChange = this.onChange.bind(this);
   }
 
@@ -61,7 +64,9 @@ export class CodeEditor {
     const value = this.file.content || '';
 
     if (value !== cm.getValue()) {
+      this._internalUpdate = true;
       cm.setValue(value);
+      this._internalUpdate = false;
     }
   }
 
@@ -72,11 +77,12 @@ export class CodeEditor {
   // }
 
   onChange() {
-    const {cm} = this;
-    if (!cm) return;
+    if (this._internalUpdate) return;
+    const {cm, file} = this;
+    if (!cm || !file) return;
 
     const value = cm.getValue();
-    this.file.content = value;
+    this.ea.publish('update-file', {filename: file.filename, content: value})
   }
 
   updateMode() {

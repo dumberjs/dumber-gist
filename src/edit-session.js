@@ -15,15 +15,36 @@ export class EditSession {
   fileTree = [];
   editingFilenames = [];
   focusedEditingIndex = -1;
+  isRendered = false;
+  isChanged = false;
 
   constructor(ea) {
     this.ea = ea;
+
+    ea.subscribe('update-file', ({filename, content}) => {
+      const f = _.find(this._files, {filename});
+      const oldF = _.find(this._originalFiles, {filename});
+      if (f && f.content !== content) {
+        f.content = content;
+        f.isRendered = false;
+        f.isChanged = !oldF || oldF.content !== content;
+        this._mutationCounter += 1;
+      }
+    });
   }
 
   loadGist(gist) {
     this._gist = gist;
-    this._originalFiles = _.map(gist.files, f => ({filename: f.filename, content: f.content}));
-    this._files = _.cloneDeep(this._originalFiles);
+    this._originalFiles = _.map(gist.files, f => ({
+      filename: f.filename,
+      content: f.content
+    }));
+    this._files = _.map(this._originalFiles, f => ({
+      filename: f.filename,
+      content: f.content,
+      isRendered: false,
+      isChanged: false
+    }));
     this._originalDescription = gist.description;
     this.description = gist.description;
     this._reset();
@@ -90,6 +111,10 @@ export class EditSession {
   _mutationCounterChanged() {
     this._updateFileTree();
     this._trimEditingFiles();
+
+    this.isRendered = _.every(this._files, 'isRendered');
+    this.isChanged = _.some(this._files, 'isChanged') ||
+      this._files.length !== this._originalFiles.length;
   }
 
   _updateFileTree() {
@@ -106,6 +131,7 @@ export class EditSession {
           branch.push({
             filePath: filename,
             name: p,
+            isChanged: f.isChanged,
             file: f
           });
         } else {
@@ -126,6 +152,7 @@ export class EditSession {
       });
     });
 
+    markIsChanged(tree);
     this.fileTree = tree;
   }
 
@@ -138,4 +165,19 @@ export class EditSession {
     });
     toRemove.forEach(i => this.editingFilenames.splice(i, 1));
   }
+}
+
+function markIsChanged(tree) {
+  let isChanged = false;
+  _.each(tree, branch => {
+    if (branch.files) {
+      isChanged = markIsChanged(branch.files);
+      branch.isChanged = isChanged;
+    } else {
+      if (branch.isChanged) {
+        isChanged = true;
+      }
+    }
+  });
+  return isChanged;
 }
