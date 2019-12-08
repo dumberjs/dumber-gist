@@ -1,14 +1,9 @@
-import {bindable, computedFrom} from 'aurelia-framework';
 import path from 'path';
 
-export class FileIcon {
-  @bindable filename;
-
-  @computedFrom('filename')
-  get faIcon() {
-    const {filename} = this;
-    if (!filename) return 'fas fa-file';
-    const ext = path.extname(filename);
+export class FileIconValueConverter {
+  toView(value) {
+    if (!value) return 'fas fa-file';
+    const ext = path.extname(value);
     if (ext === '.html') return 'fab fa-html5 text-warning';
     if (ext === '.js' || ext === '.ts') return 'fas fa-file-code text-warning';
     if (ext === '.css' || ext === '.scss' || ext === '.less') return 'fab fa-css3 text-primary';

@@ -4,7 +4,7 @@
     class="editor-tab ${session.focusedEditingIndex === $index ? 'active' : ''}"
     click.trigger="session.focusedEditingIndex = $index & leftClick"
   >
-    <file-icon filename.bind="filename"></file-icon>
+    <i class.bind="filename | fileIcon"></i>
     ${filename | lastPart}
     <i class="fas fa-times close-file" click.trigger="session.stopEditingFile(filename) & leftClick"></i>
   </div>
