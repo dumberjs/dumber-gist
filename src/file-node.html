@@ -4,7 +4,7 @@
     if.bind="node.files"
     click.trigger="collapseFlags[node.filePath] = !collapseFlags[node.filePath] & leftClick"
   >
-    <i class="fas fa-folder text-cyan"></i>
+    <i class="fas fa-folder${collapseFlags[node.filePath] ? '' : '-open'} text-cyan"></i>
     <span class="mr-auto">${node.name}</span>
     <i class="fas file-action fa-pencil-alt" click.trigger="editName($event) & leftClick"></i>
     <i class="fas file-action fa-plus"></i>
@@ -18,10 +18,11 @@
     <i class="fas file-action fa-times"></i>
     <i if.bind="node.isChanged" class="fas fa-circle text-primary"></i>
   </div>
-  <div class="nested-file-node" if.bind="node.files && !collapseFlags[node.filePath]">
+  <div class="nested-file-node-${indent}" if.bind="node.files && !collapseFlags[node.filePath]">
     <file-node
       repeat.for="child of node.files"
       node.bind="child"
+      indent.bind="indent + 1"
       collapse-flags.bind="collapseFlags"
       ></file-node>
   </div>

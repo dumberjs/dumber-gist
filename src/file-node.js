@@ -7,6 +7,7 @@ import {EditSession} from './edit-session';
 @inject(EventAggregator, DialogService, EditSession)
 export class FileNode {
   @bindable node;
+  @bindable indent = 0;
   @bindable collapseFlags;
 
   constructor(ea, dialogService, session) {
@@ -23,14 +24,13 @@ export class FileNode {
 
   editName(event) {
     if (event) event.stopPropagation();
-    const {name, filePath, files} = this.node;
+    const {name, files} = this.node;
     const isFolder = !!files;
     this.dialogService.open({
       viewModel: EditNameDialog,
       model: {name, isFolder}
     }).whenClosed(response => {
       if (response.wasCancelled) return;
-
       const name = response.output;
       console.log('name', name);
     });
