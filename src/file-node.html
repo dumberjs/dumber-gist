@@ -9,14 +9,14 @@
     <i class="fas file-action fa-pencil-alt" click.trigger="editName($event) & leftClick"></i>
     <i class="fas file-action fa-plus"></i>
     <i class="fas file-action fa-times"></i>
-    <i if.bind="node.isChanged" class="fas fa-circle text-primary"></i>
+    <small if.bind="node.isChanged" class="fas fa-circle text-primary"></small>
   </div>
   <div class="file-node ${cssClass}" else click.trigger="edit() & leftClick">
     <i class.bind="node.filePath | fileIcon"></i>
     <span class="mr-auto">${node.name}</span>
     <i class="fas file-action fa-pencil-alt" click.trigger="editName($event) & leftClick"></i>
     <i class="fas file-action fa-times"></i>
-    <i if.bind="node.isChanged" class="fas fa-circle text-primary"></i>
+    <small if.bind="node.isChanged" class="fas fa-circle text-primary"></small>
   </div>
   <div class="nested-file-node-${indent}" if.bind="node.files && !collapseFlags[node.filePath]">
     <file-node

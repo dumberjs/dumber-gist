@@ -2,11 +2,14 @@
   <ux-dialog>
     <ux-dialog-header>Edit ${isFolder ? 'Folder' : 'File'} Name</ux-dialog-header>
     <ux-dialog-body>
-      <input type="text" value.bind="name" class="w100" focus.one-time="true">
+      <form submit.trigger="save()">
+        <input type="text" value.bind="name" class="w100" focus.one-time="true" ref="input">
+        <hidden-submit></hidden-submit>
+      </form>
     </ux-dialog-body>
     <ux-dialog-footer>
       <button class="btn even-size float-left" click.trigger="controller.cancel() & leftClick">Cancel</button>
-      <button class="btn even-size primary" click.trigger="controller.ok(name) & leftClick" disabled.bind="!name || !isChanged">Save</button>
+      <button class="btn even-size primary" click.trigger="save() & leftClick" disabled.bind="!name || !isChanged">Save</button>
     </ux-dialog-footer>
   </ux-dialog>
 </template>

@@ -24,7 +24,7 @@ export class FileNode {
 
   editName(event) {
     if (event) event.stopPropagation();
-    const {name, files} = this.node;
+    const {name, filePath, files} = this.node;
     const isFolder = !!files;
     this.dialogService.open({
       viewModel: EditNameDialog,
@@ -32,7 +32,11 @@ export class FileNode {
     }).whenClosed(response => {
       if (response.wasCancelled) return;
       const name = response.output;
-      console.log('name', name);
+
+      const parts = filePath.split('/');
+      const newFilePath = [...parts.slice(0, -1), name].join('/');
+
+      this.session.updateFilePath(filePath, newFilePath);
     });
   }
 

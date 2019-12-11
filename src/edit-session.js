@@ -96,6 +96,31 @@ export class EditSession {
     }
   }
 
+  updateFilePath(filePath, newFilePath) {
+    let isChanged = false;
+    _.each(this._files, f => {
+      if (f.filename.startsWith(filePath)) {
+        const filename = newFilePath + f.filename.slice(filePath.length);
+        const existingF = _.find(this._files, {filename});
+        if (existingF) {
+          // ignore
+          console.error('cannot rename ' + f.filename + ' to ' + filename + ' because of there is an existing file.');
+          return;
+        }
+
+        isChanged = true;
+        f.filename = filename;
+        f.isRendered = false;
+        const oldF = _.find(this._originalFiles, {filename});
+        f.isChanged = !oldF;
+      }
+    });
+
+    if (isChanged) {
+      this._mutationCounter += 1;
+    }
+  }
+
   @computedFrom('editingFilenames', 'focusedEditingIndex')
   get editingFile() {
     if (this.focusedEditingIndex >= 0) {
