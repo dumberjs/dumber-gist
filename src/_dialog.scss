@@ -8,6 +8,7 @@ ux-dialog-container, ux-dialog-overlay {
 
 ux-dialog-overlay {
   opacity: 0;
+  background-color: rgba(0, 0, 0, .3);
 }
 
 ux-dialog-overlay.active {

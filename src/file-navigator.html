@@ -1,6 +1,11 @@
 <template class="file-navigator">
   <require from="./file-node"></require>
 
+  <div class="section-node">
+    <strong class="mr-auto">Files</strong>
+    <i class="fas fa-plus" click.trigger="createFile() & leftClick"></i>
+  </div>
+
   <file-node
     repeat.for="node of session.fileTree"
     node.bind="node"

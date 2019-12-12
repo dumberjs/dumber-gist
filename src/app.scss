@@ -344,7 +344,7 @@ html {
 
 $node-offset: 1.4rem;
 
-.file-node, .folder-node {
+.file-node, .folder-node, .section-node {
   margin-top: .25rem;
   margin-bottom: .25rem;
   padding: .3rem .5rem;
@@ -353,7 +353,13 @@ $node-offset: 1.4rem;
   color: $gray-500;
   white-space: nowrap;
   display: flex;
+}
 
+.section-node {
+  border-bottom: 1px solid $gray-800;
+}
+
+.file-node, .folder-node {
   &:hover {
     background-color: $black;
 

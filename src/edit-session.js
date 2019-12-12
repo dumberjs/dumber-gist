@@ -25,12 +25,18 @@ export class EditSession {
       const f = _.find(this._files, {filename});
       const oldF = _.find(this._originalFiles, {filename});
 
-      if (f && f.content !== content) {
+      if (f) {
+        if (f.content === content) return;
         f.content = content;
         f.isRendered = false;
         f.isChanged = !oldF || oldF.content !== content;
       } else {
-        this._files.push({filename, content});
+        this._files.push({
+          filename,
+          content,
+          isRendered: false,
+          isChanged: true
+        });
       }
 
       this._mutationCounter += 1;
@@ -121,6 +127,45 @@ export class EditSession {
     }
   }
 
+  createFile(filename) {
+    const existingF = _.find(this._files, {filename});
+    if (existingF) {
+      // ignore
+      console.error('cannot create ' + filename + ' because of there is an existing file.');
+      return;
+    }
+
+    this._files.push({
+      filename: filename,
+      content: '',
+      isRendered: false,
+      isChanged: true
+    });
+
+    this._mutationCounter += 1;
+  }
+
+  deleteFolder(filePath) {
+    let idx;
+    let isChanged = false;
+    while ((idx = _.findLastIndex(this._files, f => f.filename.startsWith(filePath))) !== -1) {
+      isChanged = true;
+      this._files.splice(idx, 1);
+    }
+
+    if (isChanged) {
+      this._mutationCounter += 1;
+    }
+  }
+
+  deleteFile(filename) {
+    const idx = _.findIndex(this._files, {filename});
+    if (idx !== -1) {
+      this._files.splice(idx, 1);
+      this._mutationCounter += 1;
+    }
+  }
+
   @computedFrom('editingFilenames', 'focusedEditingIndex')
   get editingFile() {
     if (this.focusedEditingIndex >= 0) {
@@ -149,40 +194,42 @@ export class EditSession {
   _updateFileTree() {
     const tree = [];
 
-    _.each(this._files, f => {
-      // gist-code.json is a special file
-      if (f.filename === 'gist-code.json') return;
-
-      const filename = path.normalize(f.filename);
-      const parts = filename.split('/');
-      const len = parts.length;
-      let branch = tree;
-      _.each(parts, (p, i) => {
-        if (i === len - 1) {
-          // file
-          branch.push({
-            filePath: filename,
-            name: p,
-            isChanged: f.isChanged,
-            file: f
-          });
-        } else {
-          // dir
-          const existingFolder = _.find(branch, b => b.files && b.name === p);
-          if (existingFolder) {
-            branch = existingFolder.files;
-          } else {
-            const newFolder = {
-              filePath: parts.slice(0, i + 1).join('/'),
+    _(this._files)
+      .map(f => {
+        const filename = path.normalize(f.filename);
+        const parts = filename.split('/');
+        const len = parts.length;
+        return {filename, parts, len, f};
+      })
+      .sortBy(f => -f.len)
+      .each(({filename, parts, len, f}) => {
+        let branch = tree;
+        _.each(parts, (p, i) => {
+          if (i === len - 1) {
+            // file
+            branch.push({
+              filePath: filename,
               name: p,
-              files: []
-            };
-            branch.push(newFolder);
-            branch = newFolder.files;
+              isChanged: f.isChanged,
+              file: f
+            });
+          } else {
+            // dir
+            const existingFolder = _.find(branch, b => b.files && b.name === p);
+            if (existingFolder) {
+              branch = existingFolder.files;
+            } else {
+              const newFolder = {
+                filePath: parts.slice(0, i + 1).join('/'),
+                name: p,
+                files: []
+              };
+              branch.push(newFolder);
+              branch = newFolder.files;
+            }
           }
-        }
+        });
       });
-    });
 
     markIsChanged(tree);
     this.fileTree = tree;
