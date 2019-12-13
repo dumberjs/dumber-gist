@@ -41,6 +41,13 @@ export class EditSession {
 
       this._mutationCounter += 1;
     });
+
+    ea.subscribe('close-active-editor', () => {
+      console.log('close-active-editor');
+      if (this.editingFile) {
+        this.stopEditingFile(this.editingFile.filename);
+      }
+    })
   }
 
   loadGist(gist) {

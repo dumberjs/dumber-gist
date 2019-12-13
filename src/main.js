@@ -1,6 +1,7 @@
 export function configure(aurelia) {
   aurelia.use.feature('resources');
   aurelia.use.standardConfiguration();
+
   if (process.env.NODE_ENV === 'production') {
     aurelia.use.developmentLogging('warn');
   } else {
@@ -17,5 +18,6 @@ export function configure(aurelia) {
     config.settings.centerHorizontalOnly = true;
   });
 
+  aurelia.use.plugin('aurelia-combo');
   aurelia.start().then(() => aurelia.setRoot());
 }

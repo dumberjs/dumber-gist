@@ -45,6 +45,11 @@ export class CodeEditor {
   constructor(ea) {
     this.ea = ea;
     this.onChange = this.onChange.bind(this);
+    this.closeEditor = this.closeEditor.bind(this);
+  }
+
+  closeEditor() {
+    this.ea.publish('close-active-editor');
   }
 
   fileChanged() {
@@ -111,7 +116,10 @@ export class CodeEditor {
         lineWrapping: this.lineWrapping,
         highlightSelectionMatches: {showToken: /\w|-|_|\./},
         gutters: ["CodeMirror-lint-markers"],
-        lint: true
+        lint: true,
+        extraKeys: {
+          'Ctrl-W': this.closeEditor,
+        }
       });
 
       this.cm.on('change', this.onChange);

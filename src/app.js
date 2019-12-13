@@ -2,6 +2,7 @@ import {inject, computedFrom} from 'aurelia-framework';
 import {DndService} from 'bcx-aurelia-dnd';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {EditSession} from './edit-session';
+import {combo} from 'aurelia-combo';
 import _ from 'lodash';
 
 const MIN_PANEL_WIDTH = 150;
@@ -214,6 +215,14 @@ export default {
       this.showEditorsInSmallLayout = true;
     } else if (this.windowWidth <= 450) {
       this.showEditorsInSmallLayout = false;
+    }
+  }
+
+  @combo('ctrl+w')
+  closeActiveTab() {
+    const {editingFile} = this.session;
+    if (editingFile) {
+      this.session.stopEditingFile(editingFile.filename);
     }
   }
 
