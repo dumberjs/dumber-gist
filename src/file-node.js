@@ -25,18 +25,14 @@ export class FileNode {
 
   editName(event) {
     if (event) event.stopPropagation();
-    const {name, filePath, files} = this.node;
+    const {filePath, files} = this.node;
     const isFolder = !!files;
     this.dialogService.open({
       viewModel: EditNameDialog,
-      model: {name, isFolder}
+      model: {filePath, isFolder}
     }).whenClosed(response => {
       if (response.wasCancelled) return;
-      const name = response.output;
-
-      const parts = filePath.split('/');
-      const newFilePath = [...parts.slice(0, -1), name].join('/');
-
+      const newFilePath = response.output;
       this.session.updateFilePath(filePath, newFilePath);
     });
   }
@@ -51,7 +47,6 @@ export class FileNode {
     }).whenClosed(response => {
       if (response.wasCancelled) return;
       const filename = response.output;
-
       this.session.createFile(filename);
     });
   }

@@ -17,6 +17,6 @@ export class CreateFileDialog {
 
   save() {
     if (!this.name) return;
-    this.controller.ok(this.name);
+    this.controller.ok(_.trim(this.name, '/'));
   }
 }

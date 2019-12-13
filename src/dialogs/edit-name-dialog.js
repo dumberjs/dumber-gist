@@ -1,6 +1,6 @@
 import {DialogController} from 'aurelia-dialog';
 import {inject, computedFrom} from 'aurelia-framework';
-
+import _ from 'lodash';
 // TODO validate against exisitn file names
 
 @inject(DialogController)
@@ -10,23 +10,24 @@ export class EditNameDialog {
   }
 
   activate(model) {
-    this.name = model.name;
-    this._originalName = model.name;
+    this.filePath = model.filePath;
+    this._originalfilePath = model.filePath;
     this.isFolder = model.isFolder;
   }
 
   attached() {
-    const part = this.name.split('.')[0];
-    this.input.setSelectionRange(0, part.length);
+    let startIdx = this.filePath.lastIndexOf('/') + 1;
+    const part = this.filePath.split('.')[0];
+    this.input.setSelectionRange(startIdx, part.length);
   }
 
   save() {
-    if (!this.name || !this.isChanged) return;
-    this.controller.ok(this.name);
+    if (!this.filePath || !this.isChanged) return;
+    this.controller.ok(_.trim(this.filePath, '/'));
   }
 
-  @computedFrom('name', '_originalName')
+  @computedFrom('filePath', '_originalfilePath')
   get isChanged() {
-    return this.name !== this._originalName;
+    return this.filePath !== this._originalfilePath;
   }
 }
