@@ -24,29 +24,12 @@ module.exports = dumber({
   // Turn on hash for production build
   hash: isProduction && !isTest,
 
-  // Note prepend/append only affects entry bundle.
-
-  // prepend before amd loader.
-  // dumber-module-loader is injected automatically by dumber bundler after prepends.
-  prepend: [
-    // Promise polyfill for IE
-    "node_modules/promise-polyfill/dist/polyfill.min.js"
-  ],
-
   // append after amd loader and all module definitions in entry bundle.
   append: [
     // Kick off all test files.
     // Note dumber-module-loader requirejs call accepts regex which loads all matched module ids!
     // Note all module ids are relative to dumber option "src" (default to 'src') folder.
     isTest && "requirejs(['../test/setup', /^\\.\\.\\/test\\/.+\\.spec$/]);"
-  ],
-
-  // Explicit dependencies, can use either "deps" (short name) or "dependencies" (full name).
-  // Here we load Aurelia packages which are not explicitly required by user code.
-  deps: [
-    "aurelia-bootstrapper",
-    "aurelia-loader-default",
-    "aurelia-pal-browser"
   ],
 
   // Code split is intuitive and flexible.
