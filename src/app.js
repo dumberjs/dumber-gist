@@ -218,6 +218,7 @@ export default {
     }
   }
 
+  // TODO test ctrl-w in Win10 Chrome
   @combo('ctrl+w')
   closeActiveTab() {
     const {editingFile} = this.session;
