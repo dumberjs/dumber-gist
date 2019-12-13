@@ -12,7 +12,7 @@ export function configure(aurelia) {
   aurelia.use.plugin('aurelia-dialog', config => {
     config.useDefaults();
     config.useCSS(''); // css in scss partial _dialog.scss
-    config.settings.lock = true;
+    config.settings.lock = false;
     config.settings.overlayDismiss = true;
     config.settings.ignoreTransitions = true;
     config.settings.centerHorizontalOnly = true;

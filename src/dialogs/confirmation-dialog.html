@@ -1,0 +1,11 @@
+<template>
+  <ux-dialog>
+    <ux-dialog-body>
+      <i class="fas fa-exclamation-triangle text-warning" style="font-size: 2rem; vertical-align: middle; margin-right: 1rem;"></i> ${message}
+    </ux-dialog-body>
+    <ux-dialog-footer>
+      <button class="btn even-size float-left" click.trigger="controller.cancel() & leftClick">No</button>
+      <button class="btn even-size primary" click.trigger="controller.ok() & leftClick">Yes</button>
+    </ux-dialog-footer>
+  </ux-dialog>
+</template>

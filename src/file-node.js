@@ -3,6 +3,7 @@ import {EventAggregator} from 'aurelia-event-aggregator';
 import {DialogService} from 'aurelia-dialog';
 import {EditNameDialog} from './dialogs/edit-name-dialog';
 import {CreateFileDialog} from './dialogs/create-file-dialog';
+import {ConfirmationDialog} from './dialogs/confirmation-dialog';
 import {EditSession} from './edit-session';
 
 @inject(EventAggregator, DialogService, EditSession)
@@ -58,11 +59,20 @@ export class FileNode {
 
     // TODO confirm dialog
 
-    if (isFolder) {
-      this.session.deleteFolder(filePath);
-    } else {
-      this.session.deleteFile(filePath);
-    }
+    this.dialogService.open({
+      viewModel: ConfirmationDialog,
+      model: {
+        message: `Delete ${isFolder ? 'folder' : 'file'} "${filePath}"?`
+      }
+    }).whenClosed(response => {
+      if (response.wasCancelled) return;
+
+      if (isFolder) {
+        this.session.deleteFolder(filePath);
+      } else {
+        this.session.deleteFile(filePath);
+      }
+    });
   }
 
   @computedFrom('node', 'node.filePath', 'session.editingFile')

@@ -157,6 +157,7 @@ export class EditSession {
     let isChanged = false;
     while ((idx = _.findLastIndex(this._files, f => f.filename.startsWith(filePath))) !== -1) {
       isChanged = true;
+      this.stopEditingFile(this._files[idx]);
       this._files.splice(idx, 1);
     }
 
@@ -168,6 +169,7 @@ export class EditSession {
   deleteFile(filename) {
     const idx = _.findIndex(this._files, {filename});
     if (idx !== -1) {
+      this.stopEditingFile(this._files[idx]);
       this._files.splice(idx, 1);
       this._mutationCounter += 1;
     }
