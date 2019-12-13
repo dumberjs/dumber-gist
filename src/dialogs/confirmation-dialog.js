@@ -1,6 +1,5 @@
 import {DialogController} from 'aurelia-dialog';
-import {inject, computedFrom} from 'aurelia-framework';
-import _ from 'lodash';
+import {inject} from 'aurelia-framework';
 
 @inject(DialogController)
 export class ConfirmationDialog {
