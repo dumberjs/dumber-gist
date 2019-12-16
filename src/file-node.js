@@ -67,7 +67,7 @@ export class FileNode {
   edit() {
     const {file} = this.node;
     if (!file) return;
-    this.session.editFile(file);
+    this.session.openFile(file);
   }
 
   editName(event) {

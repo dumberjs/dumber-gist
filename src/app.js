@@ -223,7 +223,7 @@ export default {
   closeActiveTab() {
     const {editingFile} = this.session;
     if (editingFile) {
-      this.session.stopEditingFile(editingFile.filename);
+      this.session.closeFile(editingFile.filename);
     }
   }
 

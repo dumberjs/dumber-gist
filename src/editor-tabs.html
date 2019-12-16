@@ -6,6 +6,6 @@
   >
     <i class.bind="filename | fileIcon"></i>
     ${filename | lastPart}
-    <i class="fas fa-times close-file" click.trigger="session.stopEditingFile(filename) & leftClick"></i>
+    <i class="fas fa-times close-file" click.trigger="session.closeFile(filename) & leftClick"></i>
   </div>
 </template>

@@ -50,7 +50,7 @@ export class CodeEditor {
 
   closeEditor() {
     if (this.file) {
-      this.session.stopEditingFile(this.file.filename);
+      this.session.closeFile(this.file.filename);
     }
   }
 

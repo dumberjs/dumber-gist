@@ -67,7 +67,7 @@ export class EditSession {
     this._mutationCounter += 1;
   }
 
-  editFile(file) {
+  openFile(file) {
     if (file.folder) return;
     const filename = file.filename || file;
     const idx = this.editingFilenames.indexOf(filename);
@@ -80,7 +80,7 @@ export class EditSession {
     this.ea.publish('edit-file', file);
   }
 
-  stopEditingFile(file) {
+  closeFile(file) {
     const filename = file.filename || file;
     const idx = this.editingFilenames.indexOf(filename);
     if (idx !== -1) {
@@ -117,7 +117,7 @@ export class EditSession {
         const isEditing = this.editingFilenames.includes(f.filename);
 
         if (isEditing) {
-          this.stopEditingFile(f);
+          this.closeFile(f);
         }
 
         isChanged = true;
@@ -127,7 +127,7 @@ export class EditSession {
         f.isChanged = !oldF || oldF.content !== f.content;
 
         if (isEditing) {
-          this.editFile(f);
+          this.openFile(f);
         }
       }
     });
@@ -160,7 +160,7 @@ export class EditSession {
     let isChanged = false;
     while ((idx = _.findLastIndex(this._files, f => f.filename.startsWith(filePath))) !== -1) {
       isChanged = true;
-      this.stopEditingFile(this._files[idx]);
+      this.closeFile(this._files[idx]);
       this._files.splice(idx, 1);
     }
 
@@ -172,7 +172,7 @@ export class EditSession {
   deleteFile(filename) {
     const idx = _.findIndex(this._files, {filename});
     if (idx !== -1) {
-      this.stopEditingFile(this._files[idx]);
+      this.closeFile(this._files[idx]);
       this._files.splice(idx, 1);
       this._mutationCounter += 1;
     }
@@ -198,7 +198,7 @@ export class EditSession {
         const isEditing = this.editingFilenames.includes(f.filename);
 
         if (isEditing) {
-          this.stopEditingFile(f);
+          this.closeFile(f);
         }
 
         isChanged = true;
@@ -208,7 +208,7 @@ export class EditSession {
         f.isChanged = !oldF || oldF.content !== f.content;
 
         if (isEditing) {
-          this.editFile(f);
+          this.openFile(f);
         }
       }
     });
