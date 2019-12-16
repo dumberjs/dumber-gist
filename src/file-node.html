@@ -1,29 +1,26 @@
 <template>
-  <div
-    class="folder-node folder-node-${collapseFlags[node.filePath] ? 'closed' : 'open'}"
-    if.bind="node.files"
-    click.trigger="collapseFlags[node.filePath] = !collapseFlags[node.filePath] & leftClick"
-  >
-    <i class="fas fa-folder${collapseFlags[node.filePath] ? '' : '-open'} text-cyan"></i>
-    <span class="mr-auto">${node.name}</span>
-    <i class="fas file-action fa-pencil-alt" click.trigger="editName($event) & leftClick"></i>
-    <i class="fas file-action fa-plus" click.trigger="createFile($event) & leftClick"></i>
-    <i class="fas file-action fa-times" click.trigger="delete($event) & leftClick"></i>
-    <small if.bind="node.isChanged" class="fas fa-circle text-primary"></small>
-  </div>
-  <div class="file-node ${cssClass}" else click.trigger="edit() & leftClick">
-    <i class.bind="node.filePath | fileIcon"></i>
-    <span class="mr-auto">${node.name}</span>
-    <i class="fas file-action fa-pencil-alt" click.trigger="editName($event) & leftClick"></i>
-    <i class="fas file-action fa-times" click.trigger="delete($event) & leftClick"></i>
-    <small if.bind="node.isChanged" class="fas fa-circle text-primary"></small>
-  </div>
-  <div class="nested-file-node-${indent}" if.bind="node.files && !collapseFlags[node.filePath]">
-    <file-node
-      repeat.for="child of node.files"
-      node.bind="child"
-      indent.bind="indent + 1"
-      collapse-flags.bind="collapseFlags"
-      ></file-node>
+  <div ref="dndElement" class.bind="dndClass">
+    <div
+      class="${node.files ? 'folder-node' : 'file-node'} ${cssClass}"
+      click.trigger="onClick() & leftClick"
+    >
+      <span class="mr-auto node-title" ref="srElement">
+        <i if.bind="node.files" class="fas fa-folder${collapseFlags[node.filePath] ? '' : '-open'} text-cyan"></i>
+        <i else class.bind="node.filePath | fileIcon"></i>
+        <span>${node.name}</span>
+      </span>
+      <i class="fas file-action fa-pencil-alt" click.trigger="editName($event) & leftClick"></i>
+      <i if.bind="node.files" class="fas file-action fa-plus" click.trigger="createFile($event) & leftClick"></i>
+      <i class="fas file-action fa-times" click.trigger="delete($event) & leftClick"></i>
+      <small if.bind="node.isChanged" class="fas fa-circle text-primary"></small>
+    </div>
+    <div class="nested-file-node-${indent}" if.bind="node.files && !collapseFlags[node.filePath]">
+      <file-node
+        repeat.for="child of node.files"
+        node.bind="child"
+        indent.bind="indent + 1"
+        collapse-flags.bind="collapseFlags"
+        ></file-node>
+    </div>
   </div>
 </template>

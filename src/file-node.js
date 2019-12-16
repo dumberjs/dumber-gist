@@ -5,17 +5,60 @@ import {EditNameDialog} from './dialogs/edit-name-dialog';
 import {CreateFileDialog} from './dialogs/create-file-dialog';
 import {ConfirmationDialog} from './dialogs/confirmation-dialog';
 import {EditSession} from './edit-session';
+import {DndService} from 'bcx-aurelia-dnd';
 
-@inject(EventAggregator, DialogService, EditSession)
+@inject(EventAggregator, DialogService, EditSession, DndService)
 export class FileNode {
   @bindable node;
   @bindable indent = 0;
   @bindable collapseFlags;
 
-  constructor(ea, dialogService, session) {
+  constructor(ea, dialogService, session, dndService) {
     this.ea = ea;
     this.dialogService = dialogService;
     this.session = session;
+    this.dndService = dndService;
+  }
+
+  attached() {
+    this.dndService.addSource(this, {
+      element: this.srElement,
+      hideCursor: true,
+      centerPreviewToMousePosition: true
+    });
+    this.dndService.addTarget(this);
+  }
+
+  detached() {
+    this.dndService.removeSource(this);
+    this.dndService.removeTarget(this);
+  }
+
+  dndModel() {
+    return this.node;
+  }
+
+  dndCanDrop(model) {
+    const {files, filePath} = this.node;
+    if (!files) return false;
+    const sourceFilePath = model.filePath;
+    if (filePath.startsWith(sourceFilePath)) return false;
+    return true;
+  }
+
+  dndDrop() {
+    const sourceNode = this.dnd.model;
+    const sourceFilePath = sourceNode.filePath;
+    const {filePath} = this.node;
+    this.session.move(sourceFilePath, filePath);
+  }
+
+  onClick() {
+    if (this.node.files) {
+      this.collapseFlags[this.node.filePath] = !this.collapseFlags[this.node.filePath];
+    } else {
+      this.edit();
+    }
   }
 
   edit() {
@@ -81,5 +124,13 @@ export class FileNode {
     if (!target) return '';
     if (this.node.filePath === target.filename) return 'active';
     return '';
+  }
+
+  @computedFrom('dnd', 'dnd.isProcessing', 'dnd.canDrop', 'dnd.isHoveringShallowly')
+  get dndClass() {
+    const {dnd} = this;
+    if (!dnd || !dnd.isProcessing) return '';
+    if (!dnd.canDrop || !dnd.isHoveringShallowly) return '';
+    return 'can-drop';
   }
 }

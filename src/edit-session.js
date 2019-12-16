@@ -43,7 +43,6 @@ export class EditSession {
     });
 
     ea.subscribe('close-active-editor', () => {
-      console.log('close-active-editor');
       if (this.editingFile) {
         this.stopEditingFile(this.editingFile.filename);
       }
@@ -121,11 +120,20 @@ export class EditSession {
           return;
         }
 
+        const isEditing = this.editingFilenames.includes(f.filename);
+
+        if (isEditing) {
+          this.stopEditingFile(f);
+        }
+
         isChanged = true;
         f.filename = filename;
         f.isRendered = false;
-        const oldF = _.find(this._originalFiles, {filename});
-        f.isChanged = !oldF;
+        f.isChanged = true;
+
+        if (isEditing) {
+          this.editFile(f);
+        }
       }
     });
 
@@ -175,7 +183,45 @@ export class EditSession {
     }
   }
 
-  @computedFrom('editingFilenames', 'focusedEditingIndex')
+  move(sourceFilePath, filePath) {
+    const sourceFolder = _.trim(sourceFilePath.slice(0, sourceFilePath.lastIndexOf('/') + 1), '/');
+
+    let isChanged = false;
+    _.each(this._files, f => {
+      if (f.filename.startsWith(sourceFilePath)) {
+        const filename = _.trim(filePath + f.filename.slice(sourceFolder.length), '/');
+        if (filename === f.filename) return;
+
+        const existingF = _.find(this._files, {filename});
+        if (existingF) {
+          // ignore
+          console.error('cannot rename ' + f.filename + ' to ' + filename + ' because of there is an existing file.');
+          return;
+        }
+
+        const isEditing = this.editingFilenames.includes(f.filename);
+
+        if (isEditing) {
+          this.stopEditingFile(f);
+        }
+
+        isChanged = true;
+        f.filename = filename;
+        f.isRendered = false;
+        f.isChanged = true;
+
+        if (isEditing) {
+          this.editFile(f);
+        }
+      }
+    });
+
+    if (isChanged) {
+      this._mutationCounter += 1;
+    }
+  }
+
+  @computedFrom('editingFilenames', 'focusedEditingIndex', '_mutationCounter')
   get editingFile() {
     if (this.focusedEditingIndex >= 0) {
       const fn = this.editingFilenames[this.focusedEditingIndex];
@@ -252,6 +298,9 @@ export class EditSession {
       }
     });
     toRemove.forEach(i => this.editingFilenames.splice(i, 1));
+    if (this.editingFilenames.length - 1 < this.focusedEditingIndex) {
+      this.focusedEditingIndex = this.editingFilenames.length - 1;
+    }
   }
 }
 
