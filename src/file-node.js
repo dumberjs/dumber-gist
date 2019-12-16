@@ -35,19 +35,22 @@ export class FileNode {
   }
 
   dndModel() {
-    return this.node;
+    return {type: 'move-file', node: this.node};
   }
 
   dndCanDrop(model) {
+    const {type, node} = model;
+    if (type !== 'move-file') return false;
     const {files, filePath} = this.node;
     if (!files) return false;
-    const sourceFilePath = model.filePath;
+    const sourceFilePath = node.filePath;
+    if (!sourceFilePath) return false;
     if (filePath.startsWith(sourceFilePath)) return false;
     return true;
   }
 
   dndDrop() {
-    const sourceNode = this.dnd.model;
+    const sourceNode = this.dnd.model.node;
     const sourceFilePath = sourceNode.filePath;
     const {filePath} = this.node;
     this.session.move(sourceFilePath, filePath);

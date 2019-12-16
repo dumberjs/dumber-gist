@@ -24,13 +24,13 @@ export class FileNavigator {
     this.dndService.removeTarget(this);
   }
 
-  dndCanDrop() {
-    return true;
+  dndCanDrop(model) {
+    return model.type === 'move-file';
   }
 
   dndDrop() {
-    const sourceNode = this.dnd.model;
-    const sourceFilePath = sourceNode.filePath;
+    const {node} = this.dnd.model;
+    const sourceFilePath = node.filePath;
     this.session.move(sourceFilePath, '');
   }
 
