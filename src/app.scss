@@ -81,10 +81,9 @@ html {
   align-items: center;
   flex-wrap: wrap;
   background-color: $gray-800;
+  border-bottom: 2px solid $gray-900;
 
   .app-title {
-    // font-size: 1.2rem;
-    // line-height: 2.5rem;
     margin: .5rem .5rem .5rem 0;
     color: $gray-200;
     white-space: nowrap;
@@ -426,28 +425,24 @@ $node-offset: 1.4rem;
     flex: 0 1 auto;
     font-size: .8rem;
     padding: .7rem 1rem;
-    background-color: $gray-1000;
     margin-right: -1px;
     color: $gray-600;
     white-space: nowrap;
 
-    &:not(:first-child) {
-      border-left: 1px solid $gray-800;
-    }
-
-    &:not(:last-child) {
-      border-right: 1px solid $gray-800;
-    }
-
     &:hover {
       background-color: $black;
+
+      .close-file {
+        visibility: visible;
+      }
     }
 
     &.active {
-      background-color: $cyan-dark;
+      background-color: $gray-800;
       color: $white;
 
       .close-file {
+        visibility: visible;
         color: $gray-500;
 
         &:hover {
@@ -457,6 +452,7 @@ $node-offset: 1.4rem;
     }
 
     .close-file {
+      visibility: hidden;
       position: relative;
       left: .5rem;
       color: $gray-700;
