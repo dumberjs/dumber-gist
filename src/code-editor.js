@@ -113,7 +113,7 @@ export class CodeEditor {
       this.cm = CodeMirror(this.editor, {
         value: this.file.content,
         mode: this.mode,
-        theme: 'solarized dark',
+        theme: 'gist-editor',
         autofocus: this.autoFocus,
         lineNumbers: true,
         readOnly: this.readOnly,

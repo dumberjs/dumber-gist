@@ -1,5 +1,6 @@
 @import "variables";
 @import "dialog";
+@import "gist-editor";
 
 html {
   font-size: 14px;
@@ -357,6 +358,10 @@ $node-offset: 1.4rem;
   border-bottom: 1px solid $gray-800;
   margin-top: .25rem;
   margin-bottom: .25rem;
+
+  .file-action {
+    display: inline-block;
+  }
 }
 
 .all-nodes {
@@ -384,15 +389,14 @@ $node-offset: 1.4rem;
     margin-left: .25rem;
     margin-right: .25rem;
   }
+}
 
+.file-action {
+  display: none;
+  color: $gray-600;
 
-  .file-action {
-    display: none;
-    color: $gray-600;
-
-    &:hover {
-      color: $white;
-    }
+  &:hover {
+    color: $white;
   }
 }
 
@@ -420,12 +424,12 @@ $node-offset: 1.4rem;
   -webkit-overflow-scrolling: touch;
   display: flex;
   justify-content: flex-start;
+  background-color: $gray-1000;
 
   .editor-tab {
     flex: 0 1 auto;
     font-size: .8rem;
     padding: .7rem 1rem;
-    margin-right: -1px;
     color: $gray-600;
     white-space: nowrap;
 
