@@ -7,7 +7,7 @@
       <span class="mr-auto node-title" ref="srElement">
         <i if.bind="node.files" class="fas fa-folder${collapseFlags[node.filePath] ? '' : '-open'} text-cyan"></i>
         <i else class.bind="node.filePath | fileIcon"></i>
-        <span>${node.name}</span>
+        <span class="node-name">${node.name}</span>
       </span>
       <i class="fas file-action fa-pencil-alt" click.trigger="editName($event) & leftClick"></i>
       <i if.bind="node.files" class="fas file-action fa-plus" click.trigger="createFile($event) & leftClick"></i>

@@ -471,6 +471,14 @@ $node-offset: 1.4rem;
 .can-drop {
   background-color: $black;
 
+  > .folder-node > .node-title {
+    transform: scale(1.2);
+
+    > .node-name {
+      text-decoration: underline;
+    }
+  }
+
 
   @media (min-width: $small) {
     box-shadow: 0 0 0 2px $blue;
@@ -487,7 +495,9 @@ $node-offset: 1.4rem;
   }
 }
 
-.node-title.bcx-dnd-preview {
-  background-color: $gray-900;
-  color: $gray-300;
+.node-title {
+  &.bcx-dnd-preview {
+    background-color: $gray-900;
+    color: $gray-300;
+  }
 }

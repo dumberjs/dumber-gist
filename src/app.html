@@ -3,6 +3,7 @@
   <require from="./panel-resizer"></require>
   <require from="./file-navigator"></require>
   <require from="./editor-tabs"></require>
+  <require from="./code-editor"></require>
 
   <div class="app" ref="dndElement">
     <div class="app-top-bar">
@@ -42,6 +43,7 @@
         <code-editor
           if.bind="session.editingFile"
           file.bind="session.editingFile"
+          read-only.bind="false"
           line-wrapping.bind="true"
           ></code-editor>
         <panel-resizer

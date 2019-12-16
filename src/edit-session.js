@@ -20,33 +20,6 @@ export class EditSession {
 
   constructor(ea) {
     this.ea = ea;
-
-    ea.subscribe('update-file', ({filename, content}) => {
-      const f = _.find(this._files, {filename});
-      const oldF = _.find(this._originalFiles, {filename});
-
-      if (f) {
-        if (f.content === content) return;
-        f.content = content;
-        f.isRendered = false;
-        f.isChanged = !oldF || oldF.content !== content;
-      } else {
-        this._files.push({
-          filename,
-          content,
-          isRendered: false,
-          isChanged: true
-        });
-      }
-
-      this._mutationCounter += 1;
-    });
-
-    ea.subscribe('close-active-editor', () => {
-      if (this.editingFile) {
-        this.stopEditingFile(this.editingFile.filename);
-      }
-    })
   }
 
   loadGist(gist) {
@@ -71,6 +44,27 @@ export class EditSession {
       // Force state update.
       this._mutationCounterChanged();
     }
+  }
+
+  updateFile({filename, content}) {
+    const f = _.find(this._files, {filename});
+    const oldF = _.find(this._originalFiles, {filename});
+
+    if (f) {
+      if (f.content === content) return;
+      f.content = content;
+      f.isRendered = false;
+      f.isChanged = !oldF || oldF.content !== content;
+    } else {
+      this._files.push({
+        filename,
+        content,
+        isRendered: false,
+        isChanged: true
+      });
+    }
+
+    this._mutationCounter += 1;
   }
 
   editFile(file) {
@@ -129,7 +123,8 @@ export class EditSession {
         isChanged = true;
         f.filename = filename;
         f.isRendered = false;
-        f.isChanged = true;
+        const oldF = _.find(this._originalFiles, {filename});
+        f.isChanged = !oldF || oldF.content !== f.content;
 
         if (isEditing) {
           this.editFile(f);
@@ -184,12 +179,13 @@ export class EditSession {
   }
 
   move(sourceFilePath, filePath) {
-    const sourceFolder = _.trim(sourceFilePath.slice(0, sourceFilePath.lastIndexOf('/') + 1), '/');
+    const sourceFolder = path.dirname(sourceFilePath);
 
     let isChanged = false;
     _.each(this._files, f => {
       if (f.filename.startsWith(sourceFilePath)) {
-        const filename = _.trim(filePath + f.filename.slice(sourceFolder.length), '/');
+        let relative = path.relative(sourceFolder, f.filename);
+        const filename = path.join(filePath, relative);
         if (filename === f.filename) return;
 
         const existingF = _.find(this._files, {filename});
@@ -208,7 +204,8 @@ export class EditSession {
         isChanged = true;
         f.filename = filename;
         f.isRendered = false;
-        f.isChanged = true;
+        const oldF = _.find(this._originalFiles, {filename});
+        f.isChanged = !oldF || oldF.content !== f.content;
 
         if (isEditing) {
           this.editFile(f);
