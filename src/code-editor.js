@@ -57,12 +57,11 @@ export class CodeEditor {
   fileChanged(file) {
     const {cm} = this;
     if (!cm) return;
-    // cleanup codemirror session to avoid unwanted undo stack.
-
     if (!file) return;
 
     this.updateContent();
     this.updateMode();
+    // cleanup codemirror session to avoid unwanted undo stack.
     cm.clearHistory();
   }
 

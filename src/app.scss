@@ -82,7 +82,7 @@ html {
   align-items: center;
   flex-wrap: wrap;
   background-color: $gray-800;
-  border-bottom: 2px solid $gray-900;
+  border-bottom: 2px solid $gray-1000;
 
   .app-title {
     margin: .5rem .5rem .5rem 0;
@@ -343,9 +343,8 @@ html {
 }
 
 $node-offset: 1.4rem;
-
+$node-start-offset: .6rem;
 .file-node, .folder-node, .section-node {
-  padding: .3rem .5rem;
   position: relative;
   cursor: default;
   color: $gray-500;
@@ -355,9 +354,8 @@ $node-offset: 1.4rem;
 
 .section-node {
   flex: 0 0 auto;
-  border-bottom: 1px solid $gray-800;
-  margin-top: .25rem;
-  margin-bottom: .25rem;
+  padding: .8rem $node-start-offset + .25rem;
+  background-color: $gray-1000;
 
   .file-action {
     display: inline-block;
@@ -372,6 +370,8 @@ $node-offset: 1.4rem;
 }
 
 .file-node, .folder-node {
+  padding: .4rem $node-start-offset;
+
   &:hover {
     background-color: $black;
 
@@ -403,7 +403,7 @@ $node-offset: 1.4rem;
 @for $i from 0 through 8 {
   .nested-file-node-#{$i} {
     .file-node, .folder-node {
-      padding-left: .5rem + $node-offset * ($i + 1);
+      padding-left: $node-start-offset + $node-offset * ($i + 1);
     }
   }
 }
@@ -428,8 +428,7 @@ $node-offset: 1.4rem;
 
   .editor-tab {
     flex: 0 1 auto;
-    font-size: .8rem;
-    padding: .7rem 1rem;
+    padding: .8rem 1rem .8rem 1.2rem;
     color: $gray-600;
     white-space: nowrap;
 
@@ -457,8 +456,7 @@ $node-offset: 1.4rem;
 
     .close-file {
       visibility: hidden;
-      position: relative;
-      left: .5rem;
+      margin-left: .5rem;
       color: $gray-700;
 
       &:hover {
