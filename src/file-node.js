@@ -4,6 +4,7 @@ import {DialogService} from 'aurelia-dialog';
 import {EditNameDialog} from './dialogs/edit-name-dialog';
 import {CreateFileDialog} from './dialogs/create-file-dialog';
 import {ConfirmationDialog} from './dialogs/confirmation-dialog';
+import {FileContextmenu} from './dialogs/file-contextmenu';
 import {EditSession} from './edit-session';
 import {DndService} from 'bcx-aurelia-dnd';
 
@@ -61,6 +62,26 @@ export class FileNode {
     } else {
       this.edit();
     }
+  }
+
+  onContextmenu(e) {
+    this.dialogService.open({
+      viewModel: FileContextmenu,
+      model: {
+        x: e.pageX,
+        y: e.pageY,
+        items: [
+          {title: 'Rename...', code: 'rename'},
+          {title: 'Delete', code: 'delete', class: 'text-error'}
+        ]
+      }
+    }).whenClosed(response => {
+      if (response.wasCancelled) return;
+
+      const code = response.output;
+      if (code === 'rename') return this.editName();
+      else if (code === 'delete') return this.delete();
+    })
   }
 
   edit() {

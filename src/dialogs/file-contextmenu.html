@@ -1,0 +1,16 @@
+<template>
+  <div
+    class="context-overlay"
+    click.trigger="controller.cancel()"
+    contextmenu.trigger="controller.cancel()"></div>
+  <div class="context-menu" css="top: ${y}px; left: ${x}px;">
+    <div
+      class="context-menu-item ${item.class || ''}"
+      repeat.for="item of items"
+      click.trigger="controller.ok(item.code) & leftClick"
+    >
+      <i if.bind="item.icon" class.bind="item.icon"></i>
+      ${item.title}
+    </div>
+  </div>
+</template>

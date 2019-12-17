@@ -46,27 +46,6 @@ export class EditSession {
     }
   }
 
-  updateFile({filename, content}) {
-    const f = _.find(this._files, {filename});
-    const oldF = _.find(this._originalFiles, {filename});
-
-    if (f) {
-      if (f.content === content) return;
-      f.content = content;
-      f.isRendered = false;
-      f.isChanged = !oldF || oldF.content !== content;
-    } else {
-      this._files.push({
-        filename,
-        content,
-        isRendered: false,
-        isChanged: true
-      });
-    }
-
-    this._mutationCounter += 1;
-  }
-
   openFile(file) {
     if (file.folder) return;
     const filename = file.filename || file;
@@ -100,6 +79,27 @@ export class EditSession {
         }
       }
     }
+  }
+
+  updateFile({filename, content}) {
+    const f = _.find(this._files, {filename});
+    const oldF = _.find(this._originalFiles, {filename});
+
+    if (f) {
+      if (f.content === content) return;
+      f.content = content;
+      f.isRendered = false;
+      f.isChanged = !oldF || oldF.content !== content;
+    } else {
+      this._files.push({
+        filename,
+        content,
+        isRendered: false,
+        isChanged: true
+      });
+    }
+
+    this._mutationCounter += 1;
   }
 
   updateFilePath(node, newFilePath) {

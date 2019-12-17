@@ -1,7 +1,6 @@
 import {DialogController} from 'aurelia-dialog';
 import {inject, computedFrom} from 'aurelia-framework';
 import _ from 'lodash';
-// TODO validate against exisitn file names
 
 @inject(DialogController)
 export class EditNameDialog {

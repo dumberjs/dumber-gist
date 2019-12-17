@@ -3,6 +3,7 @@
     <div
       class="${node.files ? 'folder-node' : 'file-node'} ${cssClass}"
       click.trigger="onClick() & leftClick"
+      contextmenu.trigger="onContextmenu($event)"
     >
       <span class="mr-auto node-title" ref="srElement">
         <i if.bind="node.files" class="fas fa-folder${collapseFlags[node.filePath] ? '' : '-open'} text-cyan"></i>
