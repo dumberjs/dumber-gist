@@ -499,3 +499,55 @@ $node-start-offset: .6rem;
     color: $gray-300;
   }
 }
+
+#toast-container.toast-top-center > div {
+  @media (min-width: $tiny) {
+    width: 25rem;
+  }
+
+  @media (max-width: $tiny - .02) {
+    width: 100%;
+  }
+
+  opacity: 1;
+  padding: 1rem;
+  box-shadow: none !important;
+  border-radius: 0;
+}
+
+#toast-container > .toast {
+  background-image: none !important;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+
+  .toast-message {
+    flex: 1 1 auto;
+  }
+
+  &::before {
+    flex: 0 0 auto;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 1;
+    color: #FFF;
+    margin-right: 1rem;
+  }
+
+  &.toast-warning::before {
+    content: "\f071";
+  }
+
+  &.toast-error::before {
+    content: "\f06a";
+  }
+
+  &.toast-info::before {
+    content: "\f05a";
+  }
+
+  &.toast-success::before {
+    content: "\f058";
+  }
+}

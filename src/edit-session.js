@@ -106,11 +106,15 @@ export class EditSession {
     let isChanged = false;
     _.each(this._files, f => {
       if (f.filename.startsWith(filePath)) {
-        const filename = newFilePath + f.filename.slice(filePath.length);
+        const relative = f.filename.slice(filePath.length);
+        // don't match partial filename
+        if (relative && !relative.startsWith('/')) return;
+
+        const filename = newFilePath + relative;
         const existingF = _.find(this._files, {filename});
         if (existingF) {
           // ignore
-          console.error('cannot rename ' + f.filename + ' to ' + filename + ' because of there is an existing file.');
+          this.ea.publish('error', 'Cannot rename ' + f.filename + ' to ' + filename + ' because there is an existing file.');
           return;
         }
 
@@ -141,7 +145,7 @@ export class EditSession {
     const existingF = _.find(this._files, {filename});
     if (existingF) {
       // ignore
-      console.error('cannot create ' + filename + ' because of there is an existing file.');
+      this.ea.publish('error', 'Cannot create ' + filename + ' because there is an existing file.');
       return;
     }
 
@@ -191,7 +195,7 @@ export class EditSession {
         const existingF = _.find(this._files, {filename});
         if (existingF) {
           // ignore
-          console.error('cannot rename ' + f.filename + ' to ' + filename + ' because of there is an existing file.');
+          this.ea.publish('error', 'Cannot rename ' + f.filename + ' to ' + filename + ' because there is an existing file.');
           return;
         }
 

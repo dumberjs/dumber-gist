@@ -24,6 +24,11 @@ module.exports = dumber({
   // Turn on hash for production build
   hash: isProduction && !isTest,
 
+  prepend: [
+    require.resolve('jquery/dist/jquery.min.js'),
+    require.resolve('toastr/toastr.js')
+  ],
+
   // append after amd loader and all module definitions in entry bundle.
   append: [
     // Kick off all test files.
@@ -48,6 +53,7 @@ module.exports = dumber({
   codeSplit: isTest ? undefined : function(moduleId, packageName) {
     // Here for any local src, put into app-bundle
     if (!packageName) return 'app-bundle';
+    return 'deps-bundle';
     // The codeSplit func does not need to return a valid bundle name.
     // For any undefined return, dumber put the module into entry bundle,
     // this means no module can skip bundling.

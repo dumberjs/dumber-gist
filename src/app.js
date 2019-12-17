@@ -1,9 +1,12 @@
+/* globals toastr */
 import {inject, computedFrom} from 'aurelia-framework';
 import {DndService} from 'bcx-aurelia-dnd';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {EditSession} from './edit-session';
 import {combo} from 'aurelia-combo';
 import _ from 'lodash';
+
+toastr.options.positionClass = 'toast-top-center';
 
 const MIN_PANEL_WIDTH = 150;
 
@@ -96,7 +99,7 @@ export default {
 
   attached() {
     this.dndService.addTarget(this);
-    this.subscribers = [
+    this._subscribers = [
       this.ea.subscribe('dnd:willStart', () => this.resetIntention()),
       this.ea.subscribe('dnd:didEnd', () => this.resetIntention()),
       this.ea.subscribe('edit-file', () => {
@@ -105,14 +108,26 @@ export default {
         if (this.windowWidth <= 450) {
           this.showBrowserWindowInSmallLayout = false;
         }
-      })
+      }),
+      this.ea.subscribe('success', (message) => {
+        toastr.success(message);
+      }),
+      this.ea.subscribe('info', (message) => {
+        toastr.info(message);
+      }),
+      this.ea.subscribe('error', (message) => {
+        toastr.error(message);
+      }),
+      this.ea.subscribe('warning', (message) => {
+        toastr.warning(message);
+      }),
     ];
     window.addEventListener('resize', this.onResize);
   }
 
   detached() {
     this.dndService.removeTarget(this);
-    this.subscribers.forEach(s => s.dispose());
+    this._subscribers.forEach(s => s.dispose());
     window.removeEventListener('resize');
   }
 
