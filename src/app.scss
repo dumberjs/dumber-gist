@@ -365,7 +365,7 @@ $node-start-offset: .6rem;
 .all-nodes {
   flex: 1 1 0;
   padding: .25rem 0;
-  margin-bottom: .25rem;
+  margin: .25rem 0;
   overflow-y: auto;
 }
 
@@ -442,7 +442,7 @@ $node-start-offset: .6rem;
 
     &.active {
       background-color: $gray-800;
-      color: $white;
+      color: $gray-400;
 
       .close-file {
         visibility: visible;

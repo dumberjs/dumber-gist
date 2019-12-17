@@ -102,41 +102,45 @@ export class EditSession {
     }
   }
 
-  updateFilePath(filePath, newFilePath) {
-    let isChanged = false;
-    _.each(this._files, f => {
-      if (f.filename.startsWith(filePath)) {
-        const relative = f.filename.slice(filePath.length);
-        // don't match partial filename
-        if (relative && !relative.startsWith('/')) return;
+  updateFilePath(node, newFilePath) {
+    const _updateFilePath = (node, newFilePath) => {
+      if (node.filePath === newFilePath) return;
 
-        const filename = newFilePath + relative;
-        const existingF = _.find(this._files, {filename});
+      let isChanged = false;
+      const {file, files} = node;
+
+      if (file) {
+        const existingF = _.find(this._files, {filename: newFilePath});
         if (existingF) {
           // ignore
-          this.ea.publish('error', 'Cannot rename ' + f.filename + ' to ' + filename + ' because there is an existing file.');
-          return;
+          this.ea.publish('error', 'Cannot rename ' + file.filename + ' to ' + newFilePath + ' because there is an existing file.');
+          return false;
         }
 
-        const isEditing = this.editingFilenames.includes(f.filename);
+        const isEditing = this.editingFilenames.includes(file.filename);
 
         if (isEditing) {
-          this.closeFile(f);
+          this.closeFile(file);
         }
 
         isChanged = true;
-        f.filename = filename;
-        f.isRendered = false;
-        const oldF = _.find(this._originalFiles, {filename});
-        f.isChanged = !oldF || oldF.content !== f.content;
+        file.filename = newFilePath;
+        file.isRendered = false;
+        const oldF = _.find(this._originalFiles, {filename: newFilePath});
+        file.isChanged = !oldF || oldF.content !== file.content;
 
         if (isEditing) {
-          this.openFile(f);
+          this.openFile(file);
         }
+      } else if (files) {
+        _.each(files, n => {
+          isChanged = _updateFilePath(n, newFilePath + '/' + n.name) || isChanged;
+        });
       }
-    });
+      return isChanged;
+    }
 
-    if (isChanged) {
+    if (_updateFilePath(node, newFilePath)) {
       this._mutationCounter += 1;
     }
   }
@@ -178,46 +182,6 @@ export class EditSession {
     if (idx !== -1) {
       this.closeFile(this._files[idx]);
       this._files.splice(idx, 1);
-      this._mutationCounter += 1;
-    }
-  }
-
-  move(sourceFilePath, filePath) {
-    const sourceFolder = path.dirname(sourceFilePath);
-
-    let isChanged = false;
-    _.each(this._files, f => {
-      if (f.filename.startsWith(sourceFilePath)) {
-        let relative = path.relative(sourceFolder, f.filename);
-        const filename = path.join(filePath, relative);
-        if (filename === f.filename) return;
-
-        const existingF = _.find(this._files, {filename});
-        if (existingF) {
-          // ignore
-          this.ea.publish('error', 'Cannot rename ' + f.filename + ' to ' + filename + ' because there is an existing file.');
-          return;
-        }
-
-        const isEditing = this.editingFilenames.includes(f.filename);
-
-        if (isEditing) {
-          this.closeFile(f);
-        }
-
-        isChanged = true;
-        f.filename = filename;
-        f.isRendered = false;
-        const oldF = _.find(this._originalFiles, {filename});
-        f.isChanged = !oldF || oldF.content !== f.content;
-
-        if (isEditing) {
-          this.openFile(f);
-        }
-      }
-    });
-
-    if (isChanged) {
       this._mutationCounter += 1;
     }
   }
@@ -265,6 +229,7 @@ export class EditSession {
             // file
             branch.push({
               filePath: filename,
+              dirPath: parts.slice(0, i).join('/'),
               name: p,
               isChanged: f.isChanged,
               file: f
@@ -277,6 +242,7 @@ export class EditSession {
             } else {
               const newFolder = {
                 filePath: parts.slice(0, i + 1).join('/'),
+                dirPath: parts.slice(0, i).join('/'),
                 name: p,
                 files: []
               };

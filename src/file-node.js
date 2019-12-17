@@ -51,9 +51,8 @@ export class FileNode {
 
   dndDrop() {
     const sourceNode = this.dnd.model.node;
-    const sourceFilePath = sourceNode.filePath;
     const {filePath} = this.node;
-    this.session.move(sourceFilePath, filePath);
+    this.session.updateFilePath(sourceNode, filePath + '/' + sourceNode.name);
   }
 
   onClick() {
@@ -80,7 +79,7 @@ export class FileNode {
     }).whenClosed(response => {
       if (response.wasCancelled) return;
       const newFilePath = response.output;
-      this.session.updateFilePath(filePath, newFilePath);
+      this.session.updateFilePath(this.node, newFilePath);
     });
   }
 

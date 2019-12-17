@@ -21,7 +21,7 @@
 
 .cm-s-gist-editor .CodeMirror-gutters {
   background: $gray-900;
-  border-right: 1px solid $gray-800;
+  border-right: 2px dashed $gray-800;
 }
 
 .cm-s-gist-editor .CodeMirror-guttermarker {
