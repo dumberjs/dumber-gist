@@ -223,6 +223,20 @@ html {
     transition: transform 150ms ease;
     transform: scaleX(2);
   }
+
+  &.panel-resizer-horizontal {
+    top: -3px;
+    height: 6px;
+    width: unset;
+    left: 0;
+    right: 0;
+    bottom: unset;
+    cursor: ns-resize;
+
+    &:hover {
+      transform: scaleY(2);
+    }
+  }
 }
 
 .btn {
@@ -417,16 +431,17 @@ $node-start-offset: .6rem;
   flex-wrap: nowrap;
 }
 
-.editor-tabs {
+.tabs {
   cursor: default;
   flex: 0 0 auto;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   background-color: $gray-1000;
 
-  .editor-tab {
+  .tab {
     flex: 0 1 auto;
     padding: .8rem 1rem .8rem 1.2rem;
     color: $gray-600;
@@ -583,4 +598,104 @@ $node-start-offset: .6rem;
       background-color: $black;
     }
   }
+}
+
+.browser-bar {
+  cursor: default;
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: nowrap;
+  background-color: $gray-1000;
+  align-items: center;
+  padding: 0 .5rem 0 1rem;
+
+  .browser-bar-icon {
+    flex: 0 0 auto;
+    margin: .8rem .5rem;
+    line-height: 1.15;
+  }
+
+  .browser-bar-address-input {
+    flex: 1 1 auto;
+  }
+}
+
+input[type='text'] {
+  border: 0;
+  border-radius: $border-radius;
+  padding: .25rem;
+  background-color: $gray-600;
+
+  &:focus {
+    background-color: $gray-300;
+    outline: none;
+  }
+}
+
+.browser-frame {
+  flex: 1 0 0;
+  display: block;
+}
+
+.browser-dev-tools {
+  position: relative;
+  flex: 0 0 auto;
+  display: block;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.dev-details-panel {
+  position: relative;
+
+  .dev-details {
+    overflow-y: auto;
+  }
+}
+
+.badge {
+  padding: .2rem .5rem .25rem;
+  border-radius: .8rem;
+  font-size: .8rem;
+}
+
+.bg-cyan {
+  background-color: $cyan;
+}
+
+.bg-dark {
+  background-color: $charcoal;
+}
+
+.bg-primary {
+  background-color: $blue;
+}
+
+.bg-success {
+  background-color: $green;
+}
+
+.bg-warning {
+  background-color: $yellow;
+}
+
+.bg-error {
+  background-color: $red;
+}
+
+.bg-primary-light {
+  background-color: $blue-light;
+}
+
+.bg-success-light {
+  background-color: $green-light;
+}
+
+.bg-warning-light {
+  background-color: $yellow-light;
+}
+
+.bg-error-light {
+  background-color: $red-light;
 }

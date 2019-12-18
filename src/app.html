@@ -5,6 +5,9 @@
   <require from="./file-navigator"></require>
   <require from="./editor-tabs"></require>
   <require from="./code-editor"></require>
+  <require from="./browser-bar"></require>
+  <require from="./browser-frame"></require>
+  <require from="./browser-dev-tools"></require>
 
   <div class="app" ref="dndElement">
     <div class="app-top-bar">
@@ -53,7 +56,18 @@
           dblclick.trigger="onResize(true) & leftClick"></panel-resizer>
       </div>
       <div class="app-browser-window ${showBrowserWindowInSmallLayout ? 'show-browser-window' : 'hide-browser-window'} ${!showEditorsInSmallLayout && showBrowserWindowInSmallLayout ? 'sole-panel' : ''}">
-        browser-window
+        <browser-bar></browser-bar>
+        <browser-frame></browser-frame>
+        <browser-dev-tools
+          height.bind="effectiveDevToolsHeight"
+          toggle-dev-tools.call="toggleDevTools()"
+        >
+          <panel-resizer
+            class="panel-resizer-horizontal"
+            panel="dev-tools"
+            dblclick.trigger="toggleDevTools() & leftClick"
+            ></panel-resizer>
+        </browser-dev-tools>
       </div>
     </div>
   </div>
