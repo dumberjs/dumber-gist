@@ -29,6 +29,12 @@ requirejs(['dumber', 'aurelia-deps-finder'], function(_Dumber, _findDeps) {
     return _findDeps(filename, contents, {
       readFile(filepath) {
         console.log('findDpes readFile ' + filepath);
+        if (filepath.startsWith('/')) {
+          return fetch('/' + filepath).then(response => {
+            if (!response.ok) throw new Error();
+          });
+        }
+        // local source, don't bother to check
         return Promise.reject();
       }
     });
