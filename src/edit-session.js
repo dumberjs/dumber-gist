@@ -2,6 +2,7 @@ import {inject, observable, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import _ from 'lodash';
 import path from 'path';
+import {postMessageToWorker} from './worker-activator';
 
 @inject(EventAggregator)
 export class EditSession {
@@ -184,6 +185,23 @@ export class EditSession {
       this._files.splice(idx, 1);
       this._mutationCounter += 1;
     }
+  }
+
+  renderFiles() {
+    _.each(this._files, f => {
+      if (f.isRendered) return;
+      postMessageToWorker({
+        type: 'update-file',
+        file: {
+          path: f.filename,
+          moduleId: path.relative('src', f.filename),
+          contents: f.content,
+          type: f.filename.endsWith('.html') ? 'text/html; charset=utf-8': 'text/plain'
+        }
+      });
+      f.isRendered = true;
+    });
+    this.isRendered = true;
   }
 
   @computedFrom('editingFilenames', 'focusedEditingIndex', '_mutationCounter')

@@ -4,6 +4,7 @@ import {DndService} from 'bcx-aurelia-dnd';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {EditSession} from './edit-session';
 import {combo} from 'aurelia-combo';
+import {activate, init, postMessageToWorker} from './worker-activator';
 import _ from 'lodash';
 
 toastr.options.positionClass = 'toast-top-center';
@@ -17,6 +18,8 @@ export class App {
   showEditorsInSmallLayout = true;
   showBrowserWindowInSmallLayout = true;
 
+  isBundling = false;
+  bundlerError = null;
   intension = {sideBar: 0, editors: 0, devTools: 0};
 
   sideBarWidth = 400;
@@ -60,7 +63,7 @@ new Vue({
   components: {App},
   template: '<App></App>'
 }).$mount('#vue-root');
- `
+`
         },
         {
           filename: 'src/App.js',
@@ -83,20 +86,17 @@ export default {
         {
           filename: 'src/App.css',
           content: `.app {
-  color: #333333;
+  color: #05d;
   font-family: --apple-system, BlinkMacSystemFont, Helvetica Neue, Arial, sans-serif;
   line-height: 4rem;
   padding-left: 5rem;
 }
 `
-        },
-        {
-          filename: 'test/one/two/three/some.svg',
-          content: 'hello'
         }
       ]
     });
     this.onResize = _.debounce(this.onResize.bind(this), 100);
+    this.gotMessage = this.gotMessage.bind(this);
     this.onResize();
   }
 
@@ -131,6 +131,43 @@ export default {
       }),
     ];
     window.addEventListener('resize', () => this.onResize());
+
+    window.addEventListener("message", this.gotMessage);
+    activate();
+  }
+
+  gotMessage(event) {
+    console.log('app gotMessage', event.data);
+    const type = _.get(event, 'data.type');
+
+    if (type === 'worker-up') {
+      init();
+    } else if (type === 'worker-ready') {
+      console.log('ready to roll!');
+    } else if (type === 'build-done') {
+      this.isBundling = false;
+      console.log('done bundling', this.isBundling);
+    } else if (type === 'worker-error') {
+      const error = _.get(event, 'data.error') || 'unknown error';
+      if (this.isBundling) {
+        this.isBundling = false;
+        this.bundlerError = error;
+      }
+      console.log('worker-error ' + error);
+    }
+  }
+
+  bundle() {
+    if (this.isBundling) return;
+    if (this.session.isRendered) return;
+
+    this.isBundling = true;
+    this.bundlerError = null;
+
+    this.session.renderFiles();
+    setTimeout(() => {
+      postMessageToWorker({type: 'build'});
+    }, 200);
   }
 
   detached() {

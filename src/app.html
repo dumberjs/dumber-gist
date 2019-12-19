@@ -56,8 +56,12 @@
           dblclick.trigger="onResize(true) & leftClick"></panel-resizer>
       </div>
       <div class="app-browser-window ${showBrowserWindowInSmallLayout ? 'show-browser-window' : 'hide-browser-window'} ${!showEditorsInSmallLayout && showBrowserWindowInSmallLayout ? 'sole-panel' : ''}">
-        <browser-bar></browser-bar>
-        <browser-frame></browser-frame>
+        <browser-bar
+          is-bundling.bind="isBundling"
+          bundle.call="bundle()"></browser-bar>
+        <browser-frame
+          is-bundling.bind="isBundling"
+          bundler-error.bind="bundlerError"></browser-frame>
         <browser-dev-tools
           height.bind="effectiveDevToolsHeight"
           toggle-dev-tools.call="toggleDevTools()"

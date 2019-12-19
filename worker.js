@@ -16,50 +16,87 @@ self.addEventListener('activate', event => {
 
 self.importScripts('/output/dumber-bundle.js');
 
-requirejs(['dumber', 'aurelia-deps-finder'], function(Dumber, _findDeps) {
-  var dumber;
-  console.log('loaded dumber module');
+let resolveWorker = null;
+const workerReady = new Promise(resolve => resolveWorker = resolve);
 
-  // function findDeps(filename, contents) {
-  //   return _findDeps(filename, contents, {
-  //     readFile(filepath) {
+let Dumber;
+let dumber;
+let findDeps;
 
-  //     }
-  //   });
-  // }
+console.log('delete v1 cache');
+caches.delete('v1').then(() => {
+  // overwrite boot-up-worker.html with empty html to avoid
+  // creating duplicated service worker.
+  console.log('stub boot-up-worker.html');
+  caches.open('v1').then(function(cache) {
+    return cache.put(
+      new Request('/boot-up-worker.html', { mode: 'no-cors' }),
+      new Response('<!DOCTYPE html><html></html>', {
+        status: 200,
+        statusText: 'OK',
+        headers: {
+          'Content-Type': 'text/html; charset=utf-8'
+        }
+      })
+    );
+  }).then(() => {
+    return requirejs(['dumber', 'aurelia-deps-finder'], function(_Dumber, _findDeps) {
+      console.log('loaded dumber module');
 
-  self.addEventListener('message', function(event) {
-    var action = event.data;
-    // event.source.postMessage({echo: action});
-    console.log('action.type ' +  action.type);
+      Dumber = _Dumber;
+      findDeps = (filename, contents) => {
+        return _findDeps(filename, contents, {
+          readFile(filepath) {
+            console.log('findDpes readFile ' + filepath);
+            return Promise.reject();
+          }
+        });
+      };
+    });
+  }).then(resolveWorker);
+});
 
+self.addEventListener('message', function(event) {
+  var action = event.data;
+  // event.source.postMessage({echo: action});
+  console.log('action.type ' +  action.type);
+
+  workerReady.then(() => {
+    if (action.type !== 'init' && !dumber) {
+      event.source.postMessage({type: 'worker-error', error: 'dumber did not init!'});
+      return;
+    }
     if (action.type === 'init') {
       try {
-        // TODO make sure only init once.
-        // TODO make sure worker is not shared.
-        dumber = new Dumber({
-          skipModuleLoader: true,
-          cache: false,
-          // depsFinder: findDeps,
-          prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
-          deps: [
-            {name: 'vue', main: 'dist/vue.js'}
-          ]
+        caches.delete('v1').then(() => {
+          dumber = new Dumber({
+            skipModuleLoader: true,
+            cache: false,
+            depsFinder: findDeps,
+            prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
+            deps: [
+              {name: 'vue', main: 'dist/vue.js', lazyMain: true}
+            ]
+          });
+          console.log('created dumber');
+          event.source.postMessage({type: 'worker-ready'});
         });
-        console.log('created dumber');
-        event.source.postMessage({type: 'worker-ready'});
       } catch (e) {
         console.error(e);
-        event.source.postMessage({error: e.message});
+        event.source.postMessage({type: 'worker-error', error: e.message});
       }
     } else if (action.type === 'update-file') {
-      if (action.file.path.startsWith('src/') || action.file.path.startsWith('test/')) {
+      if (action.file.path.startsWith('src/') || !action.file.path.match(/[^/]+\.html/)) {
         console.log('capture ' + action.file.path);
         dumber.capture(action.file);
       } else {
+        let wantedPath = action.file.path;
+        if (wantedPath === 'index.html') {
+          wantedPath = '';
+        }
         caches.open('v1').then(function(cache) {
           cache.put(
-            new Request('/' + action.file.path, { mode: 'no-cors' }),
+            new Request('/' + wantedPath, { mode: 'no-cors' }),
             new Response(action.file.contents, {
               status: 200,
               statusText: 'OK',
@@ -99,19 +136,19 @@ requirejs(['dumber', 'aurelia-deps-finder'], function(Dumber, _findDeps) {
         })
         .catch(function(e) {
           console.error(e);
+          event.source.postMessage({type: 'worker-error', error: e.message});
         });
     }
   });
-
-  self.addEventListener('fetch', function(event) {
-    console.log('fetch ', event);
-    event.respondWith(
-      caches.match(event.request).then(function(response) {
-        if (response) return response;
-        // fetch(event.request);
-        // TODO: return '/' for SPA pages. return 404 for unknown resources (.js, .css)
-      })
-    );
-  });
 });
 
+self.addEventListener('fetch', function(event) {
+  console.log('fetch ', event);
+  event.respondWith(
+    caches.match(event.request).then(function(response) {
+      if (response) return response;
+      // fetch(event.request);
+      // TODO: return '/' for SPA pages. return 404 for unknown resources (.js, .css)
+    })
+  );
+});

@@ -1,5 +1,5 @@
 const iframe = document.createElement('iframe');
-iframe.setAttribute('src', 'https://b.gist-code.com');
+iframe.setAttribute('src', 'https://b.gist-code.com/boot-up-worker.html');
 iframe.setAttribute('style', 'display: none');
 
 export function activate() {
@@ -14,7 +14,6 @@ let resolveWorkerPage = null;
 const workerPageReady = new Promise(resolve => resolveWorkerPage = resolve);
 
 function handleMessage(event) {
-  // console.log('parent got message: ', event.data);
   if (event.data && event.data.type === 'worker-ready') {
     console.log('Worker is ready!');
     // removeEventListener('message', handleMessage);

@@ -23,14 +23,13 @@ addEventListener('message', event => {
 
 navigator.serviceWorker.register('/worker.js', {scope: './'}).then(
   function(registration) {
-    parent.postMessage({type: 'worker-up'});
-
-    if (registration.active) {
-      console.log('worker is active');
-    }
+    setTimeout(function() {
+      parent.postMessage({type: 'worker-up'}, '*');
+    }, 1500);
   },
   function(error) {
-    parent.postMessage({type: 'worker-error', error: error});
+    console.log('error', error);
+    parent.postMessage({type: 'worker-error', error: error.message}, '*');
   }
 );
 

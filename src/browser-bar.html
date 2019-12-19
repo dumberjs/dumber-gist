@@ -1,6 +1,6 @@
 <template class="browser-bar">
-  <i class="browser-bar-icon fas fa-chevron-left"></i>
-  <i class="browser-bar-icon fas fa-chevron-right"></i>
-  <i class="browser-bar-icon fas fa-sync-alt"></i>
-  <input type="text" tabindex="-1" class="browser-bar-address-input">
+  <i class="browser-bar-icon fas fa-chevron-left ${isBundling ? 'text-muted' : ''}"></i>
+  <i class="browser-bar-icon fas fa-chevron-right ${isBundling ? 'text-muted' : ''}"></i>
+  <i class="browser-bar-icon fas fa-sync-alt ${isBundling || session.isRendered ? 'text-muted' : ''} ${isBundling ? 'fa-spin' : ''}" click.trigger="bundle() & leftClick"></i>
+  <input type="text" tabindex="-1" class="browser-bar-address-input" disabled.bind="isBundling">
 </template>
