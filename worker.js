@@ -23,38 +23,17 @@ let Dumber;
 let dumber;
 let findDeps;
 
-console.log('delete v1 cache');
-caches.delete('v1').then(() => {
-  // overwrite boot-up-worker.html with empty html to avoid
-  // creating duplicated service worker.
-  console.log('stub boot-up-worker.html');
-  caches.open('v1').then(function(cache) {
-    return cache.put(
-      new Request('/boot-up-worker.html', { mode: 'no-cors' }),
-      new Response('<!DOCTYPE html><html></html>', {
-        status: 200,
-        statusText: 'OK',
-        headers: {
-          'Content-Type': 'text/html; charset=utf-8'
-        }
-      })
-    );
-  }).then(() => {
-    return requirejs(['dumber', 'aurelia-deps-finder'], function(_Dumber, _findDeps) {
-      console.log('loaded dumber module');
-
-      Dumber = _Dumber;
-      findDeps = (filename, contents) => {
-        return _findDeps(filename, contents, {
-          readFile(filepath) {
-            console.log('findDpes readFile ' + filepath);
-            return Promise.reject();
-          }
-        });
-      };
+requirejs(['dumber', 'aurelia-deps-finder'], function(_Dumber, _findDeps) {
+  Dumber = _Dumber;
+  findDeps = (filename, contents) => {
+    return _findDeps(filename, contents, {
+      readFile(filepath) {
+        console.log('findDpes readFile ' + filepath);
+        return Promise.reject();
+      }
     });
-  }).then(resolveWorker);
-});
+  };
+}).then(resolveWorker);
 
 self.addEventListener('message', function(event) {
   var action = event.data;
@@ -147,8 +126,8 @@ self.addEventListener('fetch', function(event) {
   event.respondWith(
     caches.match(event.request).then(function(response) {
       if (response) return response;
-      // fetch(event.request);
-      // TODO: return '/' for SPA pages. return 404 for unknown resources (.js, .css)
+      // return fetch(event.request);
+      throw new Error('not cached');
     })
   );
 });
