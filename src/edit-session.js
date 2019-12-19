@@ -154,13 +154,15 @@ export class EditSession {
       return;
     }
 
-    this._files.push({
+    const file = {
       filename: filename,
       content: '',
       isRendered: false,
       isChanged: true
-    });
+    };
 
+    this._files.push(file);
+    this.openFile(file);
     this._mutationCounter += 1;
   }
 
