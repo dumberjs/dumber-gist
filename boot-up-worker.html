@@ -2,16 +2,17 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <title>Boot up worker</title>
 </head>
 <body>
 <!--
 For https://some-hash.gist-code.com/.
 Load boot-up code to init service worker for embedded app.
-This index.html will be loaded by an invisible iframe to
+This page will be loaded by an invisible iframe to
 setup the service worker.
 Once service worker is in place, a user index.html will be
 added to cache and then be served as entry of the embedded
-app in second visible iframe.
+app in the second visible iframe.
 -->
 <script>
 addEventListener('message', event => {
