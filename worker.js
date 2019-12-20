@@ -42,8 +42,10 @@ requirejs(['dumber', 'aurelia-deps-finder'], function(_Dumber, _findDeps) {
 
 self.addEventListener('message', function(event) {
   var action = event.data;
-  // event.source.postMessage({echo: action});
-  console.log('action.type ' +  action.type);
+  if (!action.type) {
+    console.log('action', action);
+    return;
+  }
 
   workerReady.then(() => {
     if (action.type !== 'init' && !dumber) {
@@ -55,6 +57,7 @@ self.addEventListener('message', function(event) {
         caches.delete('v1').then(() => {
           dumber = new Dumber({
             skipModuleLoader: true,
+            // localStorage is not available in service worker.
             cache: false,
             depsFinder: findDeps,
             prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
@@ -127,7 +130,6 @@ self.addEventListener('message', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-  console.log('fetch ', event);
   event.respondWith(
     caches.match(event.request).then(function(response) {
       if (response) return response;
