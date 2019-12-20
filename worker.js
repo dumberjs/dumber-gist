@@ -42,10 +42,7 @@ requirejs(['dumber', 'aurelia-deps-finder'], function(_Dumber, _findDeps) {
 
 self.addEventListener('message', function(event) {
   var action = event.data;
-  if (!action.type) {
-    console.log('action', action);
-    return;
-  }
+  if (!action.type) return;
 
   workerReady.then(() => {
     if (action.type !== 'init' && !dumber) {

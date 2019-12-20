@@ -39,7 +39,6 @@ export class CodeEditor {
   @bindable file;
   @bindable readOnly = false;
   @bindable lineWrapping = false;
-  @bindable autoFocus = false;
   mode = '';
 
   constructor(session) {
@@ -63,6 +62,7 @@ export class CodeEditor {
     this.updateMode();
     // cleanup codemirror session to avoid unwanted undo stack.
     cm.clearHistory();
+    cm.focus();
   }
 
   updateContent() {
@@ -113,7 +113,7 @@ export class CodeEditor {
         value: this.file.content,
         mode: this.mode,
         theme: 'gist-editor',
-        autofocus: this.autoFocus,
+        autofocus: true,
         lineNumbers: true,
         readOnly: this.readOnly,
         lineWrapping: this.lineWrapping,
