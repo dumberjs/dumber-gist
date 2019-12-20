@@ -10,7 +10,7 @@ import _ from 'lodash';
 toastr.options.positionClass = 'toast-top-center';
 
 const MIN_PANEL_WIDTH = 150;
-const MIN_DEV_TOOLS_HEIGHT = 50;
+const MIN_DEV_TOOLS_HEIGHT = 25;
 
 @inject(EventAggregator, DndService, EditSession)
 export class App {
