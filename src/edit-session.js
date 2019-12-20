@@ -146,7 +146,7 @@ export class EditSession {
     }
   }
 
-  createFile(filename) {
+  createFile(filename, content = '') {
     const existingF = _.find(this._files, {filename});
     if (existingF) {
       // ignore
@@ -156,7 +156,7 @@ export class EditSession {
 
     const file = {
       filename: filename,
-      content: '',
+      content,
       isRendered: false,
       isChanged: true
     };

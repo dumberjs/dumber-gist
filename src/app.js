@@ -17,6 +17,7 @@ export class App {
   showSideBarInSmallLayout = false;
   showEditorsInSmallLayout = true;
   showBrowserWindowInSmallLayout = true;
+  duringFileDrop = false;
 
   isBundling = false;
   bundlerError = null;
@@ -34,65 +35,8 @@ export class App {
     this.session = session;
     // For dev only
     session.loadGist({
-      description: 'Lorem ipsum dolor sit amet.',
-      files: [
-        {
-          filename: 'index.html',
-          content: `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>App</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-</head>
-
-<body>
-<div id="vue-root"></div>
-<script src="/dist/entry-bundle.js" data-main="main"></script>
-</body>
-</html>
-`
-        },
-        {
-          filename: 'src/main.js',
-          content: `import Vue from 'vue';
-import App from './App';
-
-new Vue({
-  components: {App},
-  template: '<App></App>'
-}).$mount('#vue-root');
-`
-        },
-        {
-          filename: 'src/App.js',
-          content: `import "./App.css";
-
-export default {
-  template: \`
-    <div class="app">
-      <h2>{{ msg }}</h2>
-    </div>
-  \`,
-  data() {
-    return {
-      msg: 'Hello Vue!'
-    };
-  }
-};
-`
-        },
-        {
-          filename: 'src/App.css',
-          content: `.app {
-  color: #05d;
-  font-family: --apple-system, BlinkMacSystemFont, Helvetica Neue, Arial, sans-serif;
-  line-height: 4rem;
-  padding-left: 5rem;
-}
-`
-        }
-      ]
+      description: '',
+      files: []
     });
     this.onResize = _.debounce(this.onResize.bind(this), 100);
     this.gotMessage = this.gotMessage.bind(this);
@@ -129,10 +73,68 @@ export default {
         toastr.warning(message);
       }),
     ];
+    this._setupFileDrop();
     window.addEventListener('resize', () => this.onResize());
-
     window.addEventListener("message", this.gotMessage);
     activate();
+  }
+
+  _setupFileDrop() {
+    let toFinish;
+    const cancelFinish = () => {
+      if (toFinish) {
+        clearTimeout(toFinish);
+        toFinish = null;
+      }
+    };
+
+    const finish = () => {
+      cancelFinish();
+      toFinish = setTimeout(() => this.duringFileDrop = false, 50);
+    };
+
+    const scanFiles = item => {
+      if (item.isDirectory) {
+        const reader = item.createReader();
+        reader.readEntries(entries => {
+          entries.forEach(entry => {
+            scanFiles(entry);
+          })
+        });
+      } else if (item.isFile) {
+        item.file(file => {
+          const reader = new FileReader();
+          reader.onload = e => {
+            const content = e.target.result;
+            const filename = _.trim(item.fullPath, '/');
+            this.session.createFile(filename, content);
+          };
+          reader.readAsText(file);
+        });
+      }
+    };
+
+    document.addEventListener('dragenter', e => {
+      e.stopPropagation();
+      e.preventDefault();
+      cancelFinish();
+      this.duringFileDrop = true;
+    });
+    document.addEventListener('dragover', e => {
+      e.stopPropagation();
+      e.preventDefault();
+      finish();
+    });
+    document.addEventListener('drop', e => {
+      e.stopPropagation();
+      e.preventDefault();
+      finish();
+      const {items} = e.dataTransfer;
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i].webkitGetAsEntry();
+        scanFiles(item);
+      }
+    });
   }
 
   gotMessage(event) {
