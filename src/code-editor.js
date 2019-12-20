@@ -114,6 +114,7 @@ export class CodeEditor {
         mode: this.mode,
         theme: 'gist-editor',
         autofocus: true,
+        dragDrop: false, // avoid competing with app.js file drop
         lineNumbers: true,
         readOnly: this.readOnly,
         lineWrapping: this.lineWrapping,
