@@ -38,7 +38,6 @@ requirejs(['dumber', 'aurelia-deps-finder', 'localforage'], function(_Dumber, _f
       return localforage.clear();
     }
   };
-  console.log('use localforage');
 }).then(resolveWorker);
 
 self.addEventListener('message', function(event) {

@@ -21,7 +21,7 @@ const dr = dumber({
 
   onManifest: function(filenameMap) {
     // Update index.html dumber-bundle.js with dumber-bundle.hash...js
-    console.log('Update index.html with ' + filenameMap['dumber-bundle.js']);
+    console.log('Update worker.js with ' + filenameMap['dumber-bundle.js']);
     const workerJs = fs.readFileSync('_worker.js').toString()
       .replace('dumber-bundle.js', filenameMap['dumber-bundle.js']);
 
