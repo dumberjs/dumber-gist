@@ -1,5 +1,5 @@
 const iframe = document.createElement('iframe');
-iframe.setAttribute('src', 'https://b.gist-code.com/boot-up-worker.html');
+iframe.setAttribute('src', 'https://app.gist-code.com/boot-up-worker.html');
 iframe.setAttribute('style', 'display: none');
 
 export function activate() {
