@@ -35,6 +35,7 @@
     "gulp-terser": "^1.2.0",
     "htmlhint": "0.11.0",
     "jquery": "^3.4.1",
+    "localforage": "^1.7.3",
     "lodash": "^4.17.15",
     "merge2": "^1.3.0",
     "postcss-url": "^8.0.0",

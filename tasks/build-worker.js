@@ -14,7 +14,8 @@ const dr = dumber({
   entryBundle: 'dumber-bundle',
   deps: [
     "dumber",
-    "aurelia-deps-finder"
+    "aurelia-deps-finder",
+    "localforage"
   ],
   // prepend: ['../dumber-module-loader/dist/index.debug.js'],
 

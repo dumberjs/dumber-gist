@@ -22,22 +22,23 @@ const workerReady = new Promise(resolve => resolveWorker = resolve);
 let Dumber;
 let dumber;
 let findDeps;
+let cache;
 
-requirejs(['dumber', 'aurelia-deps-finder'], function(_Dumber, _findDeps) {
+requirejs(['dumber', 'aurelia-deps-finder', 'localforage'], function(_Dumber, _findDeps, localforage) {
   Dumber = _Dumber;
-  findDeps = (filename, contents) => {
-    return _findDeps(filename, contents, {
-      readFile(filepath) {
-        if (filepath.startsWith('/')) {
-          return fetch('/' + filepath).then(response => {
-            if (!response.ok) throw new Error();
-          });
-        }
-        // local source, don't bother to check
-        return Promise.reject();
-      }
-    });
+  findDeps = _findDeps;
+  cache = {
+    getCache: function(hash) {
+      return localforage.getItem(hash);
+    },
+    setCache: function(hash, object) {
+      return localforage.setItem(hash, object);
+    },
+    clearCache: function() {
+      return localforage.clear();
+    }
   };
+  console.log('use localforage');
 }).then(resolveWorker);
 
 self.addEventListener('message', function(event) {
@@ -54,9 +55,8 @@ self.addEventListener('message', function(event) {
         caches.delete('v1').then(() => {
           dumber = new Dumber({
             skipModuleLoader: true,
-            // localStorage is not available in service worker.
-            cache: false,
             depsFinder: findDeps,
+            cache, // use localforage to cache traced results
             prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
             deps: [
               {name: 'vue', main: 'dist/vue.js', lazyMain: true}
