@@ -1,5 +1,10 @@
+const crypto = require('crypto');
+
+// randomised id for every instance.
+export const id = crypto.randomBytes(20).toString('hex');
+
 const iframe = document.createElement('iframe');
-iframe.setAttribute('src', 'https://app.gist-code.com/boot-up-worker.html');
+iframe.setAttribute('src', `https://${id}.gist-code.com/boot-up-worker.html`);
 iframe.setAttribute('style', 'display: none');
 
 export function activate() {
@@ -24,8 +29,8 @@ function handleMessage(event) {
 
 addEventListener('message', handleMessage);
 
-export function postMessageToWorker(message) {
+export function postMessageToWorker(action) {
   workerPageReady.then(() => {
-    iframe.contentWindow.postMessage(message, '*');
+    iframe.contentWindow.postMessage(action, '*');
   });
 }

@@ -55,7 +55,7 @@ self.addEventListener('message', function(event) {
           dumber = new Dumber({
             skipModuleLoader: true,
             depsFinder: findDeps,
-            // cache, // use localforage to cache traced results
+            cache, // use localforage to cache traced results
             prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
             deps: [
               {name: 'vue', main: 'dist/vue.js', lazyMain: true}

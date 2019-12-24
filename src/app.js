@@ -6,6 +6,7 @@ import {EditSession} from './edit-session';
 import {combo} from 'aurelia-combo';
 import {activate, init, postMessageToWorker} from './worker-activator';
 import _ from 'lodash';
+import localforage from 'localforage';
 
 toastr.options.positionClass = 'toast-top-center';
 
@@ -155,6 +156,20 @@ export class App {
         this.bundlerError = error;
       }
       console.log('worker-error ' + error);
+    } else if (type === 'get-cache') {
+      const {hash} = event.data;
+      console.log('localforage.getItem');
+      localforage.getItem(hash)
+        .then(
+          object => postMessageToWorker({type: 'got-cache', hash, object}),
+          () => postMessageToWorker({type: 'got-cache', hash})
+        );
+    } else if (type === 'set-cache') {
+      console.log('localforage.setItem');
+      localforage.setItem(event.data.hash, event.data.object);
+    } else if (type === 'clear-cache') {
+      console.log('localforage.clear()');
+      localforage.clear();
     }
   }
 
