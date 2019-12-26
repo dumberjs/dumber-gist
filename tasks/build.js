@@ -9,7 +9,7 @@ const gulpif = require('gulp-if');
 const autoprefixer = require('autoprefixer');
 const postcssUrl = require('postcss-url');
 
-const {isProduction, isTest, outputDir} = require('./_env');
+const {isProduction, outputDir} = require('./_env');
 const dr = require('./_dumber');
 
 function buildJs(src) {
@@ -46,7 +46,7 @@ function build() {
   return merge2(
     gulp.src('src/**/*.json', {since: gulp.lastRun(build)}),
     gulp.src('src/**/*.html', {since: gulp.lastRun(build)}),
-    buildJs(isTest ? ['src/**/*.js', 'test/**/*.js'] :'src/**/*.js'),
+    buildJs('src/**/*.js'),
     buildCss('src/**/*.scss')
   )
 

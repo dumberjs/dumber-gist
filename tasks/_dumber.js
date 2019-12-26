@@ -31,10 +31,6 @@ module.exports = dumber({
 
   // append after amd loader and all module definitions in entry bundle.
   append: [
-    // Kick off all test files.
-    // Note dumber-module-loader requirejs call accepts regex which loads all matched module ids!
-    // Note all module ids are relative to dumber option "src" (default to 'src') folder.
-    isTest && "requirejs(['../test/setup', /^\\.\\.\\/test\\/.+\\.spec$/]);"
   ],
 
   // Code split is intuitive and flexible.

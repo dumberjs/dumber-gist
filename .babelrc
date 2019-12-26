@@ -1,14 +1,36 @@
 {
-  "presets": [
-    ["@babel/preset-env", {
-      "loose": true,
-      "targets": "edge >= 15, firefox >= 53, chrome >= 55, safari >= 11",
-      "modules": false
-    }]
-  ],
+
   "plugins": [
     ["@babel/plugin-proposal-decorators", { legacy: true }],
     ["@babel/plugin-proposal-class-properties", { loose: true }],
     "@babel/plugin-syntax-dynamic-import"
-  ]
+  ],
+  "env": {
+    "development": {
+      "presets": [
+        ["@babel/preset-env", {
+          "loose": true,
+          "targets": "edge >= 15, firefox >= 53, chrome >= 55, safari >= 11",
+          "modules": false
+        }]
+      ],
+    },
+    "production": {
+      "presets": [
+        ["@babel/preset-env", {
+          "loose": true,
+          "targets": "edge >= 15, firefox >= 53, chrome >= 55, safari >= 11",
+          "modules": false
+        }]
+      ],
+    },
+    "test": {
+      "presets": [
+        ["@babel/preset-env", {
+          "loose": true,
+          "targets": "edge >= 15, firefox >= 53, chrome >= 55, safari >= 11"
+        }]
+      ],
+    }
+  }
 }
