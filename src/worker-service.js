@@ -41,7 +41,21 @@ export class WorkerService {
     iframe.setAttribute('style', 'display: none');
     document.body.appendChild(iframe);
     this.iframe = iframe;
-    addEventListener('message', this._workerSaid);
+
+    let resolveWorker = null;
+    this._workerUp = new Promise(resolve => resolveWorker = resolve);
+
+    const handleMessage = event => {
+      if (event.data && event.data.type === 'worker-up') {
+        console.log('gist-code Service Worker is up!');
+        removeEventListener('message', handleMessage);
+        addEventListener('message', this._workerSaid);
+        resolveWorker();
+        return;
+      }
+    }
+
+    addEventListener('message', handleMessage);
   }
 
   _workerSaid(event) {
@@ -72,11 +86,13 @@ export class WorkerService {
   }
 
   _kickOff() {
-    if (this._currentJob) return;
-    if ((this._currentJob = this._jobs.shift()) !== undefined) {
-      // kick off first job.
-      this._workerDo(this._currentJob.action);
-    }
+    this._workerUp.then(() => {
+      if (this._currentJob) return;
+      if ((this._currentJob = this._jobs.shift()) !== undefined) {
+        // kick off first job.
+        this._workerDo(this._currentJob.action);
+      }
+    });
   }
 
   async queueJob(action) {

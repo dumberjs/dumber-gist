@@ -17,6 +17,7 @@ const ea = {
 
 class TestWorkerService extends WorkerService {
   _bootUpWorker() {
+    this._workerUp = Promise.resolve();
     this.iframe = {
       contentWindow: {
         postMessage: action => {
@@ -34,11 +35,12 @@ test.serial('WorkerService queues and executes action', async t => {
   t.falsy(w.isWaiting);
 
   const j = w.queueJob({type: 'work1', data: {a:1}});
-  t.truthy(w.isWaiting);
-  t.deepEqual(actions, [{type: 'work1', data: {a:1}}]);
-  t.is(published.length, 0);
 
   setTimeout(() => {
+    t.truthy(w.isWaiting);
+    t.deepEqual(actions, [{type: 'work1', data: {a:1}}]);
+    t.is(published.length, 0);
+
     w._workerSaid({
       data: {
         type: 'ack',
@@ -60,11 +62,12 @@ test.serial('WorkerService queues and executes action with failure', async t => 
   t.falsy(w.isWaiting);
 
   const j = w.queueJob({type: 'work1', data: {a:1}});
-  t.truthy(w.isWaiting);
-  t.deepEqual(actions, [{type: 'work1', data: {a:1}}]);
-  t.is(published.length, 0);
 
   setTimeout(() => {
+    t.truthy(w.isWaiting);
+    t.deepEqual(actions, [{type: 'work1', data: {a:1}}]);
+    t.is(published.length, 0);
+
     w._workerSaid({
       data: {
         type: 'err',
@@ -83,11 +86,13 @@ test.serial('WorkerService queues and executes action with unknown failure, igno
   t.falsy(w.isWaiting);
 
   const j = w.queueJob({type: 'work1', data: {a:1}});
-  t.truthy(w.isWaiting);
-  t.deepEqual(actions, [{type: 'work1', data: {a:1}}]);
-  t.is(published.length, 0);
+
 
   setTimeout(() => {
+    t.truthy(w.isWaiting);
+    t.deepEqual(actions, [{type: 'work1', data: {a:1}}]);
+    t.is(published.length, 0);
+
     w._workerSaid({
       data: {
         type: 'a'
@@ -114,11 +119,12 @@ test.serial('WorkerService queues and executes actions', async t => {
   const j = w.queueJob({type: 'work1', data: {a:1}});
   const j2 = w.queueJob({type: 'work2', data: {a:2}});
   const j3 = w.queueJob({type: 'work3', data: {a:3}});
-  t.truthy(w.isWaiting);
-  t.deepEqual(actions, [{type: 'work1', data: {a:1}}]);
-  t.is(published.length, 0);
 
   setTimeout(() => {
+    t.truthy(w.isWaiting);
+    t.deepEqual(actions, [{type: 'work1', data: {a:1}}]);
+    t.is(published.length, 0);
+
     w._workerSaid({
       data: {
         type: 'ack',
@@ -185,11 +191,12 @@ test.serial('WorkerService queues and executes actions, with failed results and 
   const j = w.queueJob({type: 'work1', data: {a:1}});
   const j2 = w.queueJob({type: 'work2', data: {a:2}});
   const j3 = w.queueJob({type: 'work3', data: {a:3}});
-  t.truthy(w.isWaiting);
-  t.deepEqual(actions, [{type: 'work1', data: {a:1}}]);
-  t.is(published.length, 0);
 
   setTimeout(() => {
+    t.truthy(w.isWaiting);
+    t.deepEqual(actions, [{type: 'work1', data: {a:1}}]);
+    t.is(published.length, 0);
+
     w._workerSaid({
       data: {
         what: 'ever'

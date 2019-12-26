@@ -26,17 +26,9 @@ addEventListener('message', event => {
   }
 });
 
-navigator.serviceWorker.register('/worker-bundle.js', {scope: './'}).then(
-  function(registration) {
-    // TODO how to wait for the worker to the really activated?
-    setTimeout(function() {
-      parent.postMessage({type: 'worker-up'}, '*');
-    }, 1500);
-  },
-  function(error) {
-    console.log('error', error);
-    parent.postMessage({type: 'worker-error', error: error.message}, '*');
-  }
+navigator.serviceWorker.register('/worker-bundle.js', {scope: './'});
+navigator.serviceWorker.ready.then(
+  parent.postMessage({type: 'worker-up'}, '*');
 );
 
 navigator.serviceWorker.addEventListener('message', function(event) {
