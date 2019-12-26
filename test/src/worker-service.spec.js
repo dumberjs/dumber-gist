@@ -1,5 +1,5 @@
 import test from 'ava';
-import {WorkerService} from '../src/worker-service';
+import {WorkerService} from '../../src/worker-service';
 
 let actions = [];
 let published = [];
@@ -34,7 +34,7 @@ test.serial('WorkerService queues and executes action', async t => {
   const w = new TestWorkerService(ea);
   t.falsy(w.isWaiting);
 
-  const j = w.queueJob({type: 'work1', data: {a:1}});
+  const j = w.perform({type: 'work1', data: {a:1}});
 
   setTimeout(() => {
     t.truthy(w.isWaiting);
@@ -61,7 +61,7 @@ test.serial('WorkerService queues and executes action with failure', async t => 
   const w = new TestWorkerService(ea);
   t.falsy(w.isWaiting);
 
-  const j = w.queueJob({type: 'work1', data: {a:1}});
+  const j = w.perform({type: 'work1', data: {a:1}});
 
   setTimeout(() => {
     t.truthy(w.isWaiting);
@@ -85,7 +85,7 @@ test.serial('WorkerService queues and executes action with unknown failure, igno
   const w = new TestWorkerService(ea);
   t.falsy(w.isWaiting);
 
-  const j = w.queueJob({type: 'work1', data: {a:1}});
+  const j = w.perform({type: 'work1', data: {a:1}});
 
 
   setTimeout(() => {
@@ -116,9 +116,9 @@ test.serial('WorkerService queues and executes actions', async t => {
   const w = new TestWorkerService(ea);
   t.falsy(w.isWaiting);
 
-  const j = w.queueJob({type: 'work1', data: {a:1}});
-  const j2 = w.queueJob({type: 'work2', data: {a:2}});
-  const j3 = w.queueJob({type: 'work3', data: {a:3}});
+  const j = w.perform({type: 'work1', data: {a:1}});
+  const j2 = w.perform({type: 'work2', data: {a:2}});
+  const j3 = w.perform({type: 'work3', data: {a:3}});
 
   setTimeout(() => {
     t.truthy(w.isWaiting);
@@ -188,9 +188,9 @@ test.serial('WorkerService queues and executes actions, with failed results and 
   const w = new TestWorkerService(ea);
   t.falsy(w.isWaiting);
 
-  const j = w.queueJob({type: 'work1', data: {a:1}});
-  const j2 = w.queueJob({type: 'work2', data: {a:2}});
-  const j3 = w.queueJob({type: 'work3', data: {a:3}});
+  const j = w.perform({type: 'work1', data: {a:1}});
+  const j2 = w.perform({type: 'work2', data: {a:2}});
+  const j3 = w.perform({type: 'work3', data: {a:3}});
 
   setTimeout(() => {
     t.truthy(w.isWaiting);

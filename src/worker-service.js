@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import {inject, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
+import localforage from 'localforage';
 
 @inject(EventAggregator)
 export class WorkerService {
@@ -62,6 +63,19 @@ export class WorkerService {
     const {data} = event;
     if (!data || !data.type) return;
 
+    if (data.type === 'get-cache') {
+      const {hash} = event.data;
+      console.log('localforage.getItem');
+      localforage.getItem(hash)
+        .then(
+          object => this._workerDo({type: 'got-cache', hash, object}),
+          () => this._workerDo({type: 'got-cache', hash})
+        );
+    } else if (data.type === 'set-cache') {
+      console.log('localforage.setItem');
+      localforage.setItem(event.data.hash, event.data.object);
+    }
+
     const {_currentJob} = this;
     if (!_currentJob) return;
 
@@ -95,7 +109,7 @@ export class WorkerService {
     });
   }
 
-  async queueJob(action) {
+  async perform(action) {
     let resolve;
     let reject;
     const p = new Promise((_resolve, _reject) => {

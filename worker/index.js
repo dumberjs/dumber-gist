@@ -1,25 +1,9 @@
+import DumberSession from './dumber-session';
+import ServiceCache from './service-cache';
 import Dumber from 'dumber';
 import findDeps from 'aurelia-deps-finder';
 
-let dumbers = {};
-
-const DEFAULT_INDEX_HTML = `<!DOCTYPE html>
-<html>
-<head>
-<title>App</title>
-</head>
-<body>
-<h1>Please create an index.html file to render</h1>
-</body>
-</html>
-`;
-
-const DEFAULT_BUNDLE_JS = `
-var m = document.createElement('h1');
-m.textContent = 'Error: /dist/entry-bundle.js is not ready.';
-document.body.appendChild(m);
-`;
-
+const session = new DumberSession(Dumber, findDeps, new ServiceCache());
 const cacheGetters = {};
 
 addEventListener('install', event => {
@@ -38,142 +22,68 @@ addEventListener('activate', event => {
   event.waitUntil(clients.claim());
 });
 
-addEventListener('message', function(event) {
+addEventListener('message', async function(event) {
   var action = event.data;
-  if (!action.type) return;
-  const {id} = action.id;
+  const {id, type} = action;
+  if (!type) return;
 
-  const {source} = event;
-  if (action.type !== 'init' && !dumbers[id]) {
-    source.postMessage({type: 'worker-error', error: 'dumber did not init!'});
-    return;
-  }
-  if (action.type === 'init') {
-    try {
-      caches.delete(id).then(() => {
-        return caches.open(id)
-      }).then(function(cache) {
-        console.log('stub index.html and entry-bundle.js');
-        return Promise.all([
-          cache.put(
-            new Request('/', { mode: 'no-cors' }),
-            new Response(DEFAULT_INDEX_HTML, {
-              status: 200,
-              statusText: 'OK',
-              headers: {
-                'Content-Type': 'text/html; charset=utf-8'
-              }
-            })
-          ),
-          cache.put(
-            new Request('/dist/entry-bundle.js', { mode: 'no-cors' }),
-            new Response(DEFAULT_BUNDLE_JS, {
-              status: 200,
-              statusText: 'OK',
-              headers: {
-                'Content-Type': 'application/javascript'
-              }
-            })
-          )
-        ]);
-      }).then(() => {
-        dumbers[id] = new Dumber({
-          skipModuleLoader: true,
-          depsFinder: findDeps,
-          cache: {
-            getCache: function(hash) {
-              if (!cacheGetters[hash]) {
-                let resolve;
-                const getter = new Promise((_resolve, reject) => {
-                  resolve = _resolve;
-                  setTimeout(reject, 500);
-                });
-                cacheGetters[hash] = {getter, resolve};
-              }
-              source.postMessage({type: 'get-cache', hash});
-              return cacheGetters[hash].getter;
-            },
-            setCache: function(hash, object) {
-              source.postMessage({type: 'set-cache', hash, object});
-            },
-            clearCache: function() {
-              source.postMessage({type: 'clear-cache'});
-            }
-          },
-          prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
-          deps: [
-            {name: 'vue', main: 'dist/vue.js', lazyMain: true}
-          ]
-        });
-        console.log('created dumber');
-        source.postMessage({type: 'worker-ready'});
-      });
-    } catch (e) {
-      console.error(e);
-      source.postMessage({type: 'worker-error', error: e.message});
-    }
-  } else if (action.type === 'update-file') {
-    if (action.file.path.startsWith('src/') || !action.file.path.match(/[^/]+\.html/)) {
-      console.log('capture ' + action.file.path);
-      dumbers[id].capture(action.file);
-    } else {
-      let wantedPath = action.file.path;
-      if (wantedPath === 'index.html') {
-        wantedPath = '';
-      }
-      console.log('caching /' + wantedPath);
-      return caches.open(id).then(function(cache) {
-        return cache.put(
-          new Request('/' + wantedPath, { mode: 'no-cors' }),
-          new Response(action.file.contents, {
-            status: 200,
-            statusText: 'OK',
-            headers: {
-              'Content-Type': action.file.type
-            }
-          })
-        );
-      });
-    }
-  } else if (action.type === 'build') {
-    dumbers[id].resolve()
-      .then(function() { return dumbers[id].bundle(); })
-      .then(function(bundles) {
-        console.log('Done build!');
-        // only use single bundle
-        var bundle = bundles['entry-bundle'];
-        var all = [];
-        var f;
-
-        for (f of bundle.files) all.push(f.contents);
-        all.push('requirejs.config(' + JSON.stringify(bundle.config, null , 2) + ');');
-
-        return caches.open(id).then(function(cache) {
-          return cache.put(
-            new Request('/dist/entry-bundle.js', { mode: 'no-cors' }),
-            new Response(all.join('\n'), {
-              status: 200,
-              statusText: 'OK',
-              headers: {
-                'Content-Type': 'application/javascript'
-              }
-            })
-          );
-        }).then(() => {
-          source.postMessage({type: 'build-done'});
-        });
-      })
-      .catch(function(e) {
-        console.error(e);
-        source.postMessage({type: 'worker-error', error: e.message});
-      });
-  } else if (action.type === 'got-cache') {
+  // Got traced cache from main page gist-code.com
+  // See comments below for more details.
+  if (type === 'got-cache') {
     const {hash, object} = action;
     if (cacheGetters[hash]) {
       cacheGetters[hash].resolve(object);
       delete cacheGetters[hash];
     }
   }
+
+  const {source} = event;
+
+  try {
+    let data;
+
+    if (type === 'init') {
+      // Let main page gist-code.com to cache traced result so that cached
+      // result can be reused for all gist-code apps.
+      // We cannot use service worker to cache traced result, because service
+      // worker is in domain ${app-id}.gist-code.com, the cache will be
+      // limited to be reused by this single app.
+      const dumberCache = {
+        getCache: hash => {
+          if (!cacheGetters[hash]) {
+            let resolve;
+            const getter = new Promise((_resolve, reject) => {
+              resolve = _resolve;
+              setTimeout(reject, 500);
+            });
+            cacheGetters[hash] = {getter, resolve};
+          }
+          source.postMessage({type: 'get-cache', hash});
+          return cacheGetters[hash].getter;
+        },
+        setCache: function(hash, object) {
+          source.postMessage({type: 'set-cache', hash, object});
+        },
+        clearCache: function() {
+          source.postMessage({type: 'clear-cache'});
+        }
+      };
+
+      data = await session.init(action.config, dumberCache);
+    } else if (type === 'update') {
+      data = await session.update(action.files);
+    } else if (type === 'build') {
+      data = await session.build();
+    } else {
+      throw new Error(`Unknown action: ${JSON.stringify(action)}`);
+    }
+
+    source.postMessage({type: 'ack', id, data});
+  } catch (e) {
+    console.error(e);
+    source.postMessage({type: 'err', id, error: e.message});
+  }
+
 });
 
 addEventListener('fetch', function(event) {
@@ -181,6 +91,7 @@ addEventListener('fetch', function(event) {
   event.respondWith(
     caches.match(event.request).then(function(response) {
       if (response) return response;
+      // TODO to support SPA, get '/' response for '/any/path/with/out/ext'
       return fetch(event.request);
     })
   );

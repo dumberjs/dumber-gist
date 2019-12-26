@@ -15,7 +15,6 @@ added to cache and then be served as entry of the embedded
 app in the second visible iframe.
 -->
 <script>
-
 addEventListener('message', event => {
   var action = event.data;
   if (!action || !action.type) return;
@@ -27,9 +26,11 @@ addEventListener('message', event => {
 });
 
 navigator.serviceWorker.register('/worker-bundle.js', {scope: './'});
-navigator.serviceWorker.ready.then(
-  parent.postMessage({type: 'worker-up'}, '*');
-);
+navigator.serviceWorker.ready.then(function() {
+  setTimeout(function() {
+    parent.postMessage({type: 'worker-up'}, '*');
+  }, 500);
+});
 
 navigator.serviceWorker.addEventListener('message', function(event) {
   // Forward data from service worker to parent window.
