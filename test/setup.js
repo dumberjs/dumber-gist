@@ -1,3 +1,6 @@
+import fetch from 'node-fetch';
+global.fetch =  fetch;
+
 import {Options} from 'aurelia-loader-nodejs';
 import path from 'path';
 Options.relativeToDir = path.join(__dirname, '..', 'src');
