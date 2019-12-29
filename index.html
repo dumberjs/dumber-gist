@@ -27,7 +27,9 @@ if ('serviceWorker' in navigator) {
       // Load gist-code app for https://gist-code.com/.
       script.setAttribute('data-main', 'aurelia-bootstrapper');
       script.src = 'output/entry-bundle.js';
-      document.body.setAttribute('aurelia-app', 'main');
+      const d = document.createElement('div');
+      d.setAttribute('aurelia-app', 'main');
+      document.body.appendChild(d);
     }
     script.type = 'text/javascript';
     script.charset = 'utf-8';

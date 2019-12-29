@@ -54,7 +54,7 @@ export class WorkerService {
         resolveWorker();
         return;
       }
-    }
+    };
 
     addEventListener('message', handleMessage);
   }
@@ -65,15 +65,15 @@ export class WorkerService {
 
     if (data.type === 'get-cache') {
       const {hash} = event.data;
-      console.log('localforage.getItem');
       localforage.getItem(hash)
         .then(
           object => this._workerDo({type: 'got-cache', hash, object}),
           () => this._workerDo({type: 'got-cache', hash})
         );
+      return;
     } else if (data.type === 'set-cache') {
-      console.log('localforage.setItem');
       localforage.setItem(event.data.hash, event.data.object);
+      return;
     }
 
     const {_currentJob} = this;
@@ -91,7 +91,7 @@ export class WorkerService {
     _currentJob.resolve(data.data);
     if ((this._currentJob = this._jobs.shift()) !== undefined) {
       // kick off next job.
-      this._workerDo(this._currentJob.action);
+      this._workerDo({...this._currentJob.action, id: this._currentJob.id});
     }
   }
 
@@ -104,7 +104,7 @@ export class WorkerService {
       if (this._currentJob) return;
       if ((this._currentJob = this._jobs.shift()) !== undefined) {
         // kick off first job.
-        this._workerDo(this._currentJob.action);
+        this._workerDo({...this._currentJob.action, id: this._currentJob.id});
       }
     });
   }

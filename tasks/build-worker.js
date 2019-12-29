@@ -16,6 +16,11 @@ const dr = dumber({
   hash: isProduction,
   entryBundle: 'worker-bundle',
   // prepend: ['../dumber-module-loader/dist/index.debug.js'],
+  deps: [
+    // semver main index.js uses lazyRequire, we need explicit
+    // require for bundler to work.
+    {name: 'semver', main: 'preload.js'}
+  ],
   append: [
     "requirejs(['index']);"
   ],

@@ -1,4 +1,5 @@
-import DumberSession from './dumber-session';
+import 'aurelia-polyfills';
+import {DumberSession} from './dumber-session';
 import findDeps from 'aurelia-deps-finder';
 import {Container} from 'aurelia-dependency-injection';
 
@@ -36,6 +37,7 @@ addEventListener('message', async function(event) {
       cacheGetters[hash].resolve(object);
       delete cacheGetters[hash];
     }
+    return;
   }
 
   const {source} = event;
@@ -88,9 +90,9 @@ addEventListener('message', async function(event) {
 });
 
 addEventListener('fetch', function(event) {
-  if (!event.request.url.includes('browser')) console.log('fetch ', event.request.url, event.request.headers.get('Cookie'));
   event.respondWith(
     caches.match(event.request).then(function(response) {
+      if (!event.request.url.includes('browser')) console.log('fetch ', event.request.url, !!response);
       if (response) return response;
       // TODO to support SPA, get '/' response for '/any/path/with/out/ext'
       return fetch(event.request);

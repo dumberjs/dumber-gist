@@ -2,9 +2,9 @@ import {inject, observable, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import _ from 'lodash';
 import path from 'path';
-import {postMessageToWorker} from './worker-activator';
+import {WorkerService} from './worker-service';
 
-@inject(EventAggregator)
+@inject(EventAggregator, WorkerService)
 export class EditSession {
   _gist = null;
   _originalFiles = [];
@@ -19,8 +19,9 @@ export class EditSession {
   isRendered = false;
   isChanged = false;
 
-  constructor(ea) {
+  constructor(ea, ws) {
     this.ea = ea;
+    this.ws = ws;
   }
 
   loadGist(gist) {
@@ -189,20 +190,42 @@ export class EditSession {
     }
   }
 
-  renderFiles() {
-    _.each(this._files, f => {
-      if (f.isRendered) return;
-      postMessageToWorker({
-        type: 'update-file',
-        file: {
-          path: f.filename,
-          moduleId: path.relative('src', f.filename),
-          contents: f.content,
-          type: f.filename.endsWith('.html') ? 'text/html; charset=utf-8': 'text/plain'
-        }
-      });
-      f.isRendered = true;
+  async render() {
+    // This flag is only for app didn't provide package.json
+    // which contains aurelia-bootstrapper.
+    const isAurelia1 = _.some(this._files, f => {
+      const m = f.content.match(/\bconfigure\s*\(\s*(\w)+\s*\)/);
+      if (!m) return false;
+      const auVar = m[1];
+
+      return _.includes(f.content, `${auVar}.start`) &&
+        _.includes(f.content, `${auVar}.setRoot`);
     });
+
+    // Get dependencies from package.json
+    let deps = {};
+    _.each(this._files, f => {
+      if (f.filename !== 'package.json') return;
+      const json = JSON.parse(f.content);
+      deps = json.dependencies;
+      return false; // exit early
+    })
+
+    const result = await this.ws.perform({
+      type: 'init',
+      config: {isAurelia1, deps}
+    });
+
+    await this.ws.perform({
+      type: 'update',
+      files: result.isNew ?
+        this._files :
+        this._files.filter(f => !f.isRendered)
+    });
+
+    await this.ws.perform({type: 'build'});
+
+    this._files.forEach(f => f.isRendered = true);
     this.isRendered = true;
   }
 

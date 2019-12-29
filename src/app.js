@@ -4,9 +4,7 @@ import {DndService} from 'bcx-aurelia-dnd';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {EditSession} from './edit-session';
 import {combo} from 'aurelia-combo';
-import {activate, init, postMessageToWorker} from './worker-activator';
 import _ from 'lodash';
-import localforage from 'localforage';
 
 toastr.options.positionClass = 'toast-top-center';
 
@@ -40,7 +38,6 @@ export class App {
       files: []
     });
     this.onResize = _.debounce(this.onResize.bind(this), 100);
-    this.gotMessage = this.gotMessage.bind(this);
     this.onResize();
   }
 
@@ -68,16 +65,16 @@ export class App {
         toastr.info(message);
       }),
       this.ea.subscribe('error', (message) => {
+        console.error(message);
         toastr.error(message);
       }),
       this.ea.subscribe('warning', (message) => {
+        console.warn(message);
         toastr.warning(message);
       }),
     ];
     this._setupFileDrop();
     window.addEventListener('resize', () => this.onResize());
-    window.addEventListener("message", this.gotMessage);
-    activate();
   }
 
   _setupFileDrop() {
@@ -138,52 +135,20 @@ export class App {
     });
   }
 
-  gotMessage(event) {
-    console.log('app gotMessage', event.data);
-    const type = _.get(event, 'data.type');
-
-    if (type === 'worker-up') {
-      init();
-    } else if (type === 'worker-ready') {
-      console.log('ready to roll!');
-    } else if (type === 'build-done') {
-      this.isBundling = false;
-      console.log('done bundling', this.isBundling);
-    } else if (type === 'worker-error') {
-      const error = _.get(event, 'data.error') || 'unknown error';
-      if (this.isBundling) {
-        this.isBundling = false;
-        this.bundlerError = error;
-      }
-      console.log('worker-error ' + error);
-    } else if (type === 'get-cache') {
-      const {hash} = event.data;
-      console.log('localforage.getItem');
-      localforage.getItem(hash)
-        .then(
-          object => postMessageToWorker({type: 'got-cache', hash, object}),
-          () => postMessageToWorker({type: 'got-cache', hash})
-        );
-    } else if (type === 'set-cache') {
-      console.log('localforage.setItem');
-      localforage.setItem(event.data.hash, event.data.object);
-    } else if (type === 'clear-cache') {
-      console.log('localforage.clear()');
-      localforage.clear();
-    }
-  }
-
-  bundle() {
+  async bundle() {
     if (this.isBundling) return;
     if (this.session.isRendered) return;
 
     this.isBundling = true;
     this.bundlerError = null;
 
-    this.session.renderFiles();
-    setTimeout(() => {
-      postMessageToWorker({type: 'build'});
-    }, 200);
+    try {
+      await this.session.render();
+    } catch (e) {
+      this.bundlerError = e.message;
+    }
+
+    this.isBundling = false;
   }
 
   detached() {

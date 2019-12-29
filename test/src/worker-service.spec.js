@@ -38,7 +38,7 @@ test.serial('WorkerService queues and executes action', async t => {
 
   setTimeout(() => {
     t.truthy(w.isWaiting);
-    t.deepEqual(actions, [{type: 'work1', data: {a:1}}]);
+    t.deepEqual(actions, [{id: 0, type: 'work1', data: {a:1}}]);
     t.is(published.length, 0);
 
     w._workerSaid({
@@ -65,7 +65,7 @@ test.serial('WorkerService queues and executes action with failure', async t => 
 
   setTimeout(() => {
     t.truthy(w.isWaiting);
-    t.deepEqual(actions, [{type: 'work1', data: {a:1}}]);
+    t.deepEqual(actions, [{id: 0, type: 'work1', data: {a:1}}]);
     t.is(published.length, 0);
 
     w._workerSaid({
@@ -90,7 +90,7 @@ test.serial('WorkerService queues and executes action with unknown failure, igno
 
   setTimeout(() => {
     t.truthy(w.isWaiting);
-    t.deepEqual(actions, [{type: 'work1', data: {a:1}}]);
+    t.deepEqual(actions, [{id: 0, type: 'work1', data: {a:1}}]);
     t.is(published.length, 0);
 
     w._workerSaid({
@@ -122,7 +122,7 @@ test.serial('WorkerService queues and executes actions', async t => {
 
   setTimeout(() => {
     t.truthy(w.isWaiting);
-    t.deepEqual(actions, [{type: 'work1', data: {a:1}}]);
+    t.deepEqual(actions, [{id: 0, type: 'work1', data: {a:1}}]);
     t.is(published.length, 0);
 
     w._workerSaid({
@@ -158,8 +158,8 @@ test.serial('WorkerService queues and executes actions', async t => {
   t.deepEqual(result, {result: 1});
   t.truthy(w.isWaiting);
   t.deepEqual(actions, [
-    {type: 'work1', data: {a:1}},
-    {type: 'work2', data: {a:2}}
+    {id: 0, type: 'work1', data: {a:1}},
+    {id: 1, type: 'work2', data: {a:2}}
   ]);
   t.is(published.length, 0);
 
@@ -167,9 +167,9 @@ test.serial('WorkerService queues and executes actions', async t => {
   t.deepEqual(result2, {result: 2});
   t.truthy(w.isWaiting);
   t.deepEqual(actions, [
-    {type: 'work1', data: {a:1}},
-    {type: 'work2', data: {a:2}},
-    {type: 'work3', data: {a:3}}
+    {id: 0, type: 'work1', data: {a:1}},
+    {id: 1, type: 'work2', data: {a:2}},
+    {id: 2, type: 'work3', data: {a:3}}
   ]);
   t.is(published.length, 0);
 
@@ -177,9 +177,9 @@ test.serial('WorkerService queues and executes actions', async t => {
   t.deepEqual(result3, {result: 3});
   t.falsy(w.isWaiting);
   t.deepEqual(actions, [
-    {type: 'work1', data: {a:1}},
-    {type: 'work2', data: {a:2}},
-    {type: 'work3', data: {a:3}}
+    {id: 0, type: 'work1', data: {a:1}},
+    {id: 1, type: 'work2', data: {a:2}},
+    {id: 2, type: 'work3', data: {a:3}}
   ]);
   t.is(published.length, 0);
 });
@@ -194,7 +194,7 @@ test.serial('WorkerService queues and executes actions, with failed results and 
 
   setTimeout(() => {
     t.truthy(w.isWaiting);
-    t.deepEqual(actions, [{type: 'work1', data: {a:1}}]);
+    t.deepEqual(actions, [{id: 0, type: 'work1', data: {a:1}}]);
     t.is(published.length, 0);
 
     w._workerSaid({
@@ -235,17 +235,17 @@ test.serial('WorkerService queues and executes actions, with failed results and 
   t.deepEqual(result, {result: 1});
   t.truthy(w.isWaiting);
   t.deepEqual(actions, [
-    {type: 'work1', data: {a:1}},
-    {type: 'work2', data: {a:2}}
+    {id: 0, type: 'work1', data: {a:1}},
+    {id: 1, type: 'work2', data: {a:2}}
   ]);
   t.is(published.length, 0);
 
   await t.throwsAsync(async() => await j2, {message: 'lorem'});
   t.truthy(w.isWaiting);
   t.deepEqual(actions, [
-    {type: 'work1', data: {a:1}},
-    {type: 'work2', data: {a:2}},
-    {type: 'work3', data: {a:3}}
+    {id: 0, type: 'work1', data: {a:1}},
+    {id: 1, type: 'work2', data: {a:2}},
+    {id: 2, type: 'work3', data: {a:3}}
   ]);
   t.is(published.length, 0);
 
@@ -253,9 +253,9 @@ test.serial('WorkerService queues and executes actions, with failed results and 
   t.deepEqual(result3, {result: 3});
   t.falsy(w.isWaiting);
   t.deepEqual(actions, [
-    {type: 'work1', data: {a:1}},
-    {type: 'work2', data: {a:2}},
-    {type: 'work3', data: {a:3}}
+    {id: 0, type: 'work1', data: {a:1}},
+    {id: 1, type: 'work2', data: {a:2}},
+    {id: 2, type: 'work3', data: {a:3}}
   ]);
   t.is(published.length, 0);
 });

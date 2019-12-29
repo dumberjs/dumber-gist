@@ -45,8 +45,14 @@ export class DumberSession {
   }
 
   async init(config, dumberCache) {
-    await this.serviceCache.reset();
+    if (this.instance && _.isEqual(this.config, config)) {
+      // reuse existing dumber
+      console.log('Reuse dumber instance');
+      return {isNew: false};
+    }
+
     console.log('stub index.html and entry-bundle.js');
+    await this.serviceCache.reset();
     await this.serviceCache.put(
       '/',
       DEFAULT_INDEX_HTML,
@@ -58,13 +64,8 @@ export class DumberSession {
       'application/javascript'
     );
 
-    if (this.instance && _.isEqual(this.config, config)) {
-      // reuse existing dumber
-      console.log('Reuse dumber instance');
-      return {isNew: false};
-    }
-
     const deps = await this.depsResolver.resolve(config.deps);
+    console.log('Deps', deps);
     const isAurelia1 = config.isAurelia1 || _.some(deps, {name: 'aurelia-bootstrapper'});
     this.config = config;
     this.instance = new this.Dumber({

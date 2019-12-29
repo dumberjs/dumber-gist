@@ -123,12 +123,16 @@ test('DumberSession reuses existing dumber instance', async t => {
   });
   const instance1 = session.instance;
 
+  await session.update([
+    { filename: 'index.html', content: 'index-html' }
+  ]);
+
   const data2 = await session.init(config, dumberCache);
   t.deepEqual(data2, {isNew: false});
   t.truthy(session.isInitialised);
   t.deepEqual(serviceCache.map, {
     '/': {
-      content: DEFAULT_INDEX_HTML,
+      content: 'index-html',
       contentType: 'text/html; charset=utf-8'
     },
     '/dist/entry-bundle.js': {

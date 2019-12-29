@@ -15,31 +15,9 @@ added to cache and then be served as entry of the embedded
 app in the second visible iframe.
 -->
 <script>
-function setAppId(id) {
-  var cookie = document.cookie || '';
-  var newCookie;
-  if (cookie.indexOf('gistcode_appid=') !== -1) {
-    newCookie = cookie.replace(/gistcode_appid=[^; ]+/, 'gistcode_appid='+id);
-  } else {
-    if (cookie && !cookie.endsWith(';') && !cookie.endsWith('; ')) {
-      newCookie = cookie + '; gistcode_appid='+id;
-    } else {
-      newCookie = cookie + ' gistcode_appid='+id;
-    }
-  }
-  if (newCookie !== cookie) {
-    console.log('set cookie to ' + newCookie);
-    document.cookie = newCookie;
-  }
-}
-
 addEventListener('message', event => {
   var action = event.data;
   if (!action || !action.type) return;
-
-  var id = action.id;
-  // set app id in cookie for following fetches
-  if (id) setAppId(id);
 
   // Forward data from parent window to service worker.
   if (navigator.serviceWorker.controller) {
@@ -47,18 +25,12 @@ addEventListener('message', event => {
   }
 });
 
-navigator.serviceWorker.register('/worker-bundle.js', {scope: './'}).then(
-  function(registration) {
-    // TODO how to wait for the worker to the really activated?
-    setTimeout(function() {
-      parent.postMessage({type: 'worker-up'}, '*');
-    }, 1500);
-  },
-  function(error) {
-    console.log('error', error);
-    parent.postMessage({type: 'worker-error', error: error.message}, '*');
-  }
-);
+navigator.serviceWorker.register('/worker-bundle.js', {scope: './'});
+navigator.serviceWorker.ready.then(function() {
+  setTimeout(function() {
+    parent.postMessage({type: 'worker-up'}, '*');
+  }, 500);
+});
 
 navigator.serviceWorker.addEventListener('message', function(event) {
   // Forward data from service worker to parent window.
