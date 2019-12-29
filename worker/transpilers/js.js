@@ -10,7 +10,7 @@ export class JsTranspiler {
     return EXTS.indexOf(ext) !== -1;
   }
 
-  transpile(file) {
+  async transpile(file) {
     const {filename, content} = file;
     if (!this.match(file)) throw new Error('Cannot use JsTranspiler for file: ' + filename);
 
@@ -41,6 +41,7 @@ export class JsTranspiler {
     const sourceMap = JSON.parse(sourceMapText);
     sourceMap.file = newFilename;
     sourceMap.sources = [filename];
+    sourceMap.sourceRoot = '';
 
     return {
       filename: newFilename,

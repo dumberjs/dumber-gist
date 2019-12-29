@@ -1,11 +1,15 @@
 import fetch from 'node-fetch';
 global.fetch =  fetch;
 
-import {Options} from 'aurelia-loader-nodejs';
-import path from 'path';
-Options.relativeToDir = path.join(__dirname, '..', 'src');
-import {globalize} from 'aurelia-pal-nodejs';
-globalize();
+// Cannot turn on aurelia testing for now
+// Because jsdom confused sass.js/dist/sass.sync (thought it's in browser).
+
+// import {Options} from 'aurelia-loader-nodejs';
+// import path from 'path';
+// Options.relativeToDir = path.join(__dirname, '..', 'src');
+// import {globalize} from 'aurelia-pal-nodejs';
+// globalize();
+
 // ignore css modules
 function skipCSS(module) {
   module.exports = '';

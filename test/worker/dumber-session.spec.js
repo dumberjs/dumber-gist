@@ -62,7 +62,7 @@ const depsResolver = {
 };
 
 const transpiler = {
-  transpile(file) {
+  async transpile(file) {
     return file;
   }
 }

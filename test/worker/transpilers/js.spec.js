@@ -18,7 +18,7 @@ test('JsTranspiler does not match other files', t => {
   t.falsy(jt.match({filename: 'src/foo.scss', content: ''}));
 });
 
-test('JsTranspiler transpiles ts file', t => {
+test('JsTranspiler transpiles ts file', async t => {
   const jt = new JsTranspiler();
   const code = `import {autoinject, bindable} from 'aurelia-framework';
 @autoinject
@@ -27,7 +27,7 @@ export class Foo {
   constructor(private element: Element) {}
 }
 `;
-  const file = jt.transpile({
+  const file = await jt.transpile({
     filename: 'src/foo.ts',
     content: code
   });
@@ -40,7 +40,7 @@ export class Foo {
   t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
 
-test('JsTranspiler transpiles js file', t => {
+test('JsTranspiler transpiles js file', async t => {
   const jt = new JsTranspiler();
   const code = `import {inject, bindable} from 'aurelia-framework';
 @inject(Element)
@@ -51,7 +51,7 @@ export class Foo {
   }
 }
 `;
-  const file = jt.transpile({
+  const file = await jt.transpile({
     filename: 'src/foo.js',
     content: code
   });
@@ -64,10 +64,10 @@ export class Foo {
   t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
 
-test('JsTranspiler transpiles tsx file', t => {
+test('JsTranspiler transpiles tsx file', async t => {
   const jt = new JsTranspiler();
   const code = 'export default (void) => <p>lorem</p>;';
-  const file = jt.transpile({
+  const file = await jt.transpile({
     filename: 'src/foo.tsx',
     content: code
   });
@@ -80,10 +80,10 @@ test('JsTranspiler transpiles tsx file', t => {
   t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
 
-test('JsTranspiler transpiles jsx file', t => {
+test('JsTranspiler transpiles jsx file', async t => {
   const jt = new JsTranspiler();
   const code = 'export default () => <p>lorem</p>;';
-  const file = jt.transpile({
+  const file = await jt.transpile({
     filename: 'src/foo.jsx',
     content: code
   });
@@ -96,9 +96,9 @@ test('JsTranspiler transpiles jsx file', t => {
   t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
 
-test('JsTranspiler cannot tranpile other file', t => {
+test('JsTranspiler cannot tranpile other file', async t => {
   const jt = new JsTranspiler();
-  t.throws(() => jt.transpile({
+  await t.throwsAsync(async () => jt.transpile({
     filename: 'src/foo.html',
     content: ''
   }));

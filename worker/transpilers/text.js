@@ -8,7 +8,7 @@ export class TextTranspiler {
     return EXTS.indexOf(ext) !== -1;
   }
 
-  transpile(file) {
+  async transpile(file) {
     if (!this.match(file)) throw new Error('Cannot use TextTranspiler for file: ' + file.filename);
     return file;
   }

@@ -19,10 +19,10 @@ test('TextTranspiler does not match other files', t => {
   t.falsy(jt.match({filename: 'src/foo.scss', content: ''}));
 });
 
-test('TextTranspiler passes through supported file', t => {
+test('TextTranspiler passes through supported file', async t => {
   const jt = new TextTranspiler();
   const code = 'lorem';
-  const file = jt.transpile({
+  const file = await jt.transpile({
     filename: 'src/foo.html',
     content: code
   });
@@ -32,9 +32,9 @@ test('TextTranspiler passes through supported file', t => {
   t.falsy(file.sourceMap);
 });
 
-test('TextTranspiler cannot tranpile other file', t => {
+test('TextTranspiler cannot tranpile other file', async t => {
   const jt = new TextTranspiler();
-  t.throws(() => jt.transpile({
+  await t.throwsAsync(async () => jt.transpile({
     filename: 'src/foo.js',
     content: ''
   }));

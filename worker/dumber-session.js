@@ -92,7 +92,7 @@ export class DumberSession {
     for (let i = 0, ii = files.length; i < ii; i++) {
       const file = files[i];
       if (file.filename.startsWith('src/') || !file.filename.match(/[^/]+\.html/)) {
-        const transpiledFile = this.transpiler.transpile(file);
+        const transpiledFile = await this.transpiler.transpile(file, files);
         if (!transpiledFile) continue;
 
         console.log('Capture ' + transpiledFile.filename);
