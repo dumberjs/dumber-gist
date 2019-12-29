@@ -59,11 +59,17 @@ const depsResolver = {
       ];
     }
   }
+};
+
+const transpiler = {
+  transpile(file) {
+    return file;
+  }
 }
 
 test('DumberSession initialises new dumber instance', async t => {
   const serviceCache = new ServiceCache();
-  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver);
+  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver, transpiler);
   t.falsy(session.isInitialised);
   t.deepEqual(serviceCache.map, {});
 
@@ -95,7 +101,7 @@ test('DumberSession initialises new dumber instance', async t => {
 
 test('DumberSession reuses existing dumber instance', async t => {
   const serviceCache = new ServiceCache();
-  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver);
+  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver, transpiler);
   t.falsy(session.isInitialised);
   t.deepEqual(serviceCache.map, {});
 
@@ -146,7 +152,7 @@ test('DumberSession reuses existing dumber instance', async t => {
 
 test('DumberSession replaces existing dumber instance with different config', async t => {
   const serviceCache = new ServiceCache();
-  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver);
+  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver, transpiler);
   t.falsy(session.isInitialised);
   t.deepEqual(serviceCache.map, {});
 
@@ -207,7 +213,7 @@ test('DumberSession replaces existing dumber instance with different config', as
 
 test('DumberSession initialises new dumber instance with aurelia v1 deps finder', async t => {
   const serviceCache = new ServiceCache();
-  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver);
+  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver, transpiler);
   t.falsy(session.isInitialised);
   t.deepEqual(serviceCache.map, {});
 
@@ -237,7 +243,7 @@ test('DumberSession initialises new dumber instance with aurelia v1 deps finder'
 
 test('DumberSession builds', async t => {
   const serviceCache = new ServiceCache();
-  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver);
+  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver, transpiler);
 
   await session.init({}, dumberCache);
   await session.update([
@@ -277,7 +283,7 @@ requirejs.config({
 
 test('DumberSession cannot update before init', async t => {
   const serviceCache = new ServiceCache();
-  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver);
+  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver, transpiler);
 
   await t.throwsAsync(async () => {
     await session.update([
@@ -291,7 +297,7 @@ test('DumberSession cannot update before init', async t => {
 
 test('DumberSession cannot build before init', async t => {
   const serviceCache = new ServiceCache();
-  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver);
+  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver, transpiler);
 
   await t.throwsAsync(async () => {
     await session.build();

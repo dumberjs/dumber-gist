@@ -86,7 +86,6 @@ addEventListener('message', async function(event) {
     console.error(e);
     source.postMessage({type: 'err', id, error: e.message});
   }
-
 });
 
 addEventListener('fetch', function(event) {

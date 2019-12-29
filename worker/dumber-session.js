@@ -5,6 +5,7 @@ import Dumber from 'dumber';
 import findDeps from 'aurelia-deps-finder';
 import {ServiceCache} from './service-cache';
 import {DepsResolver} from './deps-resolver';
+import {Transpiler} from './transpiler';
 
 export const DEFAULT_INDEX_HTML = `<!DOCTYPE html>
 <html>
@@ -29,15 +30,16 @@ export class DumberUninitializedError extends Error {
   }
 }
 
-@inject(Factory.of(Dumber), findDeps, ServiceCache, DepsResolver)
+@inject(Factory.of(Dumber), findDeps, ServiceCache, DepsResolver, Transpiler)
 export class DumberSession {
-  constructor(Dumber, auFindDeps, serviceCache, depsResolver) {
+  constructor(Dumber, auFindDeps, serviceCache, depsResolver, transpiler) {
     this.Dumber = Dumber;
     this.auFindDeps = auFindDeps;
     this.instance = null;
     this.config = null;
     this.serviceCache = serviceCache;
     this.depsResolver = depsResolver;
+    this.transpiler = transpiler;
   }
 
   get isInitialised() {
@@ -51,7 +53,7 @@ export class DumberSession {
       return {isNew: false};
     }
 
-    console.log('stub index.html and entry-bundle.js');
+    console.log('Stub index.html and entry-bundle.js');
     await this.serviceCache.reset();
     await this.serviceCache.put(
       '/',
@@ -65,7 +67,7 @@ export class DumberSession {
     );
 
     const deps = await this.depsResolver.resolve(config.deps);
-    console.log('Deps', deps);
+    console.log('Dumber deps', deps);
     const isAurelia1 = config.isAurelia1 || _.some(deps, {name: 'aurelia-bootstrapper'});
     this.config = config;
     this.instance = new this.Dumber({
@@ -90,13 +92,15 @@ export class DumberSession {
     for (let i = 0, ii = files.length; i < ii; i++) {
       const file = files[i];
       if (file.filename.startsWith('src/') || !file.filename.match(/[^/]+\.html/)) {
-        console.log('capture ' + file.filename);
-        let moduleId = path.relative('src', file.filename);
-        if (moduleId.endsWith('.js')) moduleId = moduleId.slice(0, -3);
+        const transpiledFile = this.transpiler.transpile(file);
+        if (!transpiledFile) continue;
+
+        console.log('Capture ' + transpiledFile.filename);
         await this.instance.capture({
-          path: file.filename,
-          moduleId,
-          contents: file.content
+          path: transpiledFile.filename,
+          moduleId: transpiledFile.moduleId,
+          contents: transpiledFile.content,
+          sourceMap: transpiledFile.sourceMap
         });
       } else {
         let wantedPath = file.filename;
@@ -114,6 +118,7 @@ export class DumberSession {
     }
   }
 
+  // TODO add source map support, copy code from gulp-dumber
   async build() {
     if (!this.isInitialised) {
       throw new DumberUninitializedError();
