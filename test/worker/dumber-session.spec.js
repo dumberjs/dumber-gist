@@ -1,4 +1,5 @@
 import test from 'ava';
+import _ from 'lodash';
 import {
   DEFAULT_INDEX_HTML,
   DEFAULT_BUNDLE_JS,
@@ -42,13 +43,31 @@ class ServiceCache {
 
 const dumberCache = {dc: 1};
 
+const depsResolver = {
+  async resolve(deps) {
+    if (!deps || Object.keys(deps).length === 0) return [];
+
+    if (_.isEqual(deps, {'aurelia-bootstrapper': '^2.0.0'})) {
+      return [
+        {name: 'aurelia-binding', version: '2.0.0', lazyMain: true},
+        {name: 'aurelia-bootstrapper', version: '2.3.3', lazyMain: true},
+        {name: 'aurelia-framework', version: '1.0.0', lazyMain: true}
+      ];
+    } else if (_.isEqual(deps, {'vue': '^2.0.0'})) {
+      return [
+        {name: 'vue', version: '2.1.0', main: 'dist/vue.js', lazyMain: true}
+      ];
+    }
+  }
+}
+
 test('DumberSession initialises new dumber instance', async t => {
   const serviceCache = new ServiceCache();
-  const session = new DumberSession(Dumber, auFindDeps, serviceCache);
+  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver);
   t.falsy(session.isInitialised);
   t.deepEqual(serviceCache.map, {});
 
-  const config = {a:1};
+  const config = {deps: {vue: '^2.0.0'}};
   const data = await session.init(config, dumberCache);
   t.deepEqual(data, {isNew: true});
   t.truthy(session.isInitialised);
@@ -69,18 +88,18 @@ test('DumberSession initialises new dumber instance', async t => {
     cache: dumberCache,
     prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
     deps: [
-      {name: 'vue', main: 'dist/vue.js', lazyMain: true}
+      {name: 'vue', main: 'dist/vue.js', version: '2.1.0', lazyMain: true}
     ]
   });
 });
 
 test('DumberSession reuses existing dumber instance', async t => {
   const serviceCache = new ServiceCache();
-  const session = new DumberSession(Dumber, auFindDeps, serviceCache);
+  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver);
   t.falsy(session.isInitialised);
   t.deepEqual(serviceCache.map, {});
 
-  const config = {a:1};
+  const config = {};
   const data = await session.init(config, dumberCache);
   t.deepEqual(data, {isNew: true});
   t.truthy(session.isInitialised);
@@ -100,9 +119,7 @@ test('DumberSession reuses existing dumber instance', async t => {
     depsFinder: undefined,
     cache: dumberCache,
     prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
-    deps: [
-      {name: 'vue', main: 'dist/vue.js', lazyMain: true}
-    ]
+    deps: []
   });
   const instance1 = session.instance;
 
@@ -125,11 +142,11 @@ test('DumberSession reuses existing dumber instance', async t => {
 
 test('DumberSession replaces existing dumber instance with different config', async t => {
   const serviceCache = new ServiceCache();
-  const session = new DumberSession(Dumber, auFindDeps, serviceCache);
+  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver);
   t.falsy(session.isInitialised);
   t.deepEqual(serviceCache.map, {});
 
-  const config = {a:1};
+  const config = {deps: {vue: '^2.0.0'}};
   const data = await session.init(config, dumberCache);
   t.deepEqual(data, {isNew: true});
   t.truthy(session.isInitialised);
@@ -150,12 +167,12 @@ test('DumberSession replaces existing dumber instance with different config', as
     cache: dumberCache,
     prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
     deps: [
-      {name: 'vue', main: 'dist/vue.js', lazyMain: true}
+      {name: 'vue', main: 'dist/vue.js', version: '2.1.0', lazyMain: true}
     ]
   });
   const instance1 = session.instance;
 
-  const config2 = {a: 2};
+  const config2 = {deps: {'aurelia-bootstrapper': '^2.0.0'}};
   const data2 = await session.init(config2, dumberCache);
   t.deepEqual(data2, {isNew: true});
   t.truthy(session.isInitialised);
@@ -173,18 +190,20 @@ test('DumberSession replaces existing dumber instance with different config', as
   t.falsy(session.instance === instance1);
   t.deepEqual(session.instance.config, {
     skipModuleLoader: true,
-    depsFinder: undefined,
+    depsFinder: auFindDeps,
     cache: dumberCache,
     prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
     deps: [
-      {name: 'vue', main: 'dist/vue.js', lazyMain: true}
+      {name: 'aurelia-binding', version: '2.0.0', lazyMain: true},
+      {name: 'aurelia-bootstrapper', version: '2.3.3', lazyMain: true},
+      {name: 'aurelia-framework', version: '1.0.0', lazyMain: true}
     ]
   });
 });
 
 test('DumberSession initialises new dumber instance with aurelia v1 deps finder', async t => {
   const serviceCache = new ServiceCache();
-  const session = new DumberSession(Dumber, auFindDeps, serviceCache);
+  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver);
   t.falsy(session.isInitialised);
   t.deepEqual(serviceCache.map, {});
 
@@ -208,15 +227,13 @@ test('DumberSession initialises new dumber instance with aurelia v1 deps finder'
     depsFinder: auFindDeps,
     cache: dumberCache,
     prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
-    deps: [
-      {name: 'vue', main: 'dist/vue.js', lazyMain: true}
-    ]
+    deps: []
   });
 });
 
 test('DumberSession builds', async t => {
   const serviceCache = new ServiceCache();
-  const session = new DumberSession(Dumber, auFindDeps, serviceCache);
+  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver);
 
   await session.init({}, dumberCache);
   await session.update([
@@ -256,7 +273,7 @@ requirejs.config({
 
 test('DumberSession cannot update before init', async t => {
   const serviceCache = new ServiceCache();
-  const session = new DumberSession(Dumber, auFindDeps, serviceCache);
+  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver);
 
   await t.throwsAsync(async () => {
     await session.update([
@@ -270,7 +287,7 @@ test('DumberSession cannot update before init', async t => {
 
 test('DumberSession cannot build before init', async t => {
   const serviceCache = new ServiceCache();
-  const session = new DumberSession(Dumber, auFindDeps, serviceCache);
+  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver);
 
   await t.throwsAsync(async () => {
     await session.build();

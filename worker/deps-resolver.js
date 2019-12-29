@@ -1,173 +1,60 @@
 import semver from 'semver';
-import { Graph } from 'graphlib';
+import {Factory, inject} from 'aurelia-dependency-injection';
+import {Resolver} from './turbo-resolver/resolver';
 
+// Turn turbo-resolver result into dumber config deps
+@inject(Factory.of(Resolver))
 export class DepsResolver {
-  constructor(registry){
-    this.registry = registry;
-
-    this.graph = new Graph();
-    this.requestedPeers = {};
-    this.jpack = {
-      appDependencies: {},
-      resDependencies: {}
-    };
-    this.jobs = [];
+  constructor(getResolver) {
+    this.getResolver = getResolver;
   }
 
-  loadRegistryPackage(task){
-    const job = this.registry.fetch(task.name).then(registryPackage =>
-      this.resolveDependencies(task, registryPackage)
-    );
-    const index = this.jobs.length;
-    this.jobs.push(job);
+  async resolve(dependencies) {
+    if (!dependencies || Object.keys(dependencies).length === 0) {
+      return [];
+    }
 
-    job.then(
-      () => {
-        this.jobs[index] = {done: true};
-      },
-      err => {
-        console.error(err);
-        this.jobs[index] = {done: true, error: err.message};
-      }
-    ).then(() => {
-      // check finishes
-      if (this.jobs.filter(j => !j.done).length === 0) {
-        const errors = this.jobs.filter(j => j.error).map(j => j.error);
+    const result = await this.getResolver().resolve(dependencies);
 
-        if (errors.length) {
-          this._reject(new Error(errors.join('\n')));
-        } else {
-          this._resolve(this.renderJpack());
+    const packages = {};
+    Object.keys(result.appDependencies).forEach(name => {
+      packages[name] = result.appDependencies[name].version;
+    });
+
+    Object.keys(result.resDependencies).sort().forEach(fullName => {
+      const idx = fullName.lastIndexOf('@');
+      if (idx === -1) return;
+      const name = fullName.substr(0, idx);
+      const version = fullName.substr(idx + 1);
+      if (packages[name]) {
+        if (typeof packages[name] === 'string') {
+          packages[name] = [packages[name]];
         }
-      }
-    });
-  }
-
-  // Resolution & Iteration
-  resolveDependencies(task, registryPackage){
-    const version = this.resolveVersion(task.version, registryPackage);
-
-    const fullName = `${registryPackage.name}@${version}`;
-    const versionPackageJson = registryPackage.versions[version];
-    const isRootDependency = task.parentNode === 'root';
-    const subDepsResolved = this.graph.hasNode(fullName);
-
-    if (isRootDependency) {
-      this.graph.setNode(registryPackage.name, { version, fullName });
-      this.graph.setNode(fullName);
-      this.graph.setEdge(task.parentNode, registryPackage.name);
-    } else {
-      this.graph.setEdge(task.parentNode, fullName);
-    }
-
-    if (subDepsResolved) {
-      return;
-    }
-
-    const dependencies = versionPackageJson.dependencies || {};
-    const depNames = Object.keys(dependencies);
-
-    return this.registry.batchFetch(depNames).then(() => {
-      depNames.forEach(name => {
-        this.loadRegistryPackage({
-          name,
-          version: dependencies[name],
-          parentNode: fullName
-        })
-      });
-    });
-  }
-
-  resolveVersion(requestedVersion, registryPackage){
-    if(registryPackage['dist-tags'] && registryPackage['dist-tags'].hasOwnProperty(requestedVersion)){
-      return registryPackage['dist-tags'][requestedVersion];
-    }
-
-    const availableVersions = Object.keys(registryPackage.versions || {});
-
-    if(requestedVersion === ''){
-      requestedVersion = '*';
-    }
-
-    let version = semver.maxSatisfying(availableVersions, requestedVersion, true);
-
-    if(!version && requestedVersion === '*' && availableVersions.every(availableVersion => !!semver(availableVersion, true).prerelease.length)){
-      version = registryPackage['dist-tags'] && registryPackage['dist-tags'].latest;
-    }
-
-    if(!version){
-      throw new Error(`No version satisfies "${registryPackage.name}": "${requestedVersion}".`);
-    }
-    return version;
-  }
-
-  // Jpack Rendering
-  fillJpackDep(fullName, versionPkg, dep){
-    this.graph.successors(fullName).forEach(name => {
-      if(name.substr(1).indexOf('@') === -1){ // dependency is a peer
-        const peerDep = this.graph.node(name);
-
-        if(peerDep){
-          dep.dependencies[name] = `${name}@${peerDep.version}`;
-        }
+        packages[name].push(version);
       } else {
-        dep.dependencies[name.substr(0, name.lastIndexOf('@'))] = name;
-        this.addJpackResDep(name);
+        packages[name] = version;
       }
     });
-  }
 
-  addJpackResDep(fullName){
-    if(!this.jpack.resDependencies.hasOwnProperty(fullName)){
-      // TODO: encode this information in nodes instead of using string ops
-      const atIndex = fullName.lastIndexOf('@');
-
-      if(atIndex <= 0){ // No '@' in string, or only '@' is first character (dependency is a peer)
-        this.fillJpackDep(fullName, null, this.jpack.appDependencies[fullName])
-      } else {
-        const depName = fullName.substr(0, atIndex);
-        const version = fullName.substr(atIndex + 1);
-        const versionPkg = this.registry.cache[depName].versions[version];
-        const resDep = this.jpack.resDependencies[fullName] = { dependencies: {} };
-
-        this.fillJpackDep(fullName, versionPkg, resDep);
+    const deps = [];
+    Object.keys(packages).sort().forEach(name => {
+      let version = packages[name];
+      if (Array.isArray(version)) {
+        version.sort(semver.compare);
+        console.warn(`Duplicated package "${name}" versions detected: ${JSON.stringify(version)}`);
+        // This is an overly simplified decision on duplicated versions.
+        // Only take the last one which is most likely the biggest version (because of the sorting of resDeps keys).
+        version = version[version.length - 1];
+        console.warn(`Dumber only uses package "${name}" version ${version}`);
       }
-    }
-  }
-
-  renderJpack(){
-    this.graph.successors('root').forEach(depName => {
-      const { version, fullName } = this.graph.node(depName);
-      const versionPkg = this.registry.cache[depName].versions[version];
-      const appDep = this.jpack.appDependencies[depName] = { version, dependencies: {} };
-
-      this.fillJpackDep(fullName, versionPkg, appDep);
+      const dep = {name, version, lazyMain: true};
+      if (name === 'vue' && semver.major(version) === 2) {
+        // Use vue file with builtin template compiler
+        dep.main = 'dist/vue.js'
+      }
+      deps.push(dep);
     });
 
-    return this.jpack;
-  }
-
-  resolve(dependencies){
-    return new Promise((resolve, reject) => {
-      this._resolve = resolve;
-      this._reject = reject;
-      const depNames = Object.keys(dependencies);
-
-      if(depNames.length === 0){
-        return resolve(this.jpack);
-      }
-
-      this.startTime = Date.now();
-
-      this.registry.batchFetch(depNames).then(() => {
-        depNames.forEach(name => {
-          this.loadRegistryPackage({
-            name,
-            version: dependencies[name],
-            parentNode: 'root'
-          })
-        });
-      });
-    });
+    return deps;
   }
 }

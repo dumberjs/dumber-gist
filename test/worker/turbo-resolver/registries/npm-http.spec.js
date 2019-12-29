@@ -1,5 +1,5 @@
 import test from 'ava';
-import {NpmHttpRegistry} from '../../../worker/registries/npm-http';
+import {NpmHttpRegistry} from '../../../../worker/turbo-resolver/registries/npm-http';
 
 const r = new NpmHttpRegistry();
 

@@ -1,5 +1,10 @@
 import _ from 'lodash';
 import path from 'path';
+import {Factory, inject} from 'aurelia-dependency-injection';
+import Dumber from 'dumber';
+import findDeps from 'aurelia-deps-finder';
+import {ServiceCache} from './service-cache';
+import {DepsResolver} from './deps-resolver';
 
 export const DEFAULT_INDEX_HTML = `<!DOCTYPE html>
 <html>
@@ -24,13 +29,15 @@ export class DumberUninitializedError extends Error {
   }
 }
 
+@inject(Factory.of(Dumber), findDeps, ServiceCache, DepsResolver)
 export class DumberSession {
-  constructor(Dumber, auFindDeps, serviceCache) {
+  constructor(Dumber, auFindDeps, serviceCache, depsResolver) {
     this.Dumber = Dumber;
     this.auFindDeps = auFindDeps;
     this.instance = null;
     this.config = null;
     this.serviceCache = serviceCache;
+    this.depsResolver = depsResolver;
   }
 
   get isInitialised() {
@@ -57,20 +64,18 @@ export class DumberSession {
       return {isNew: false};
     }
 
-    // TODO resolve config.deps using https://github.com/stackblitz/core/tree/master/turbo-resolver
-
+    const deps = await this.depsResolver.resolve(config.deps);
+    const isAurelia1 = config.isAurelia1 || _.some(deps, {name: 'aurelia-bootstrapper'});
     this.config = config;
     this.instance = new this.Dumber({
       skipModuleLoader: true,
-      depsFinder: config.isAurelia1 ? this.auFindDeps : undefined,
+      depsFinder: isAurelia1 ? this.auFindDeps : undefined,
       // Cache is implemented in main window.
       // Because we want to share cache on domain gist-code.com
       // for all instance of ${app-id}.gist-code.com
       cache: dumberCache,
       prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
-      deps: [
-        {name: 'vue', main: 'dist/vue.js', lazyMain: true}
-      ]
+      deps: deps
     });
     console.log('Created dumber instance');
     return {isNew: true};

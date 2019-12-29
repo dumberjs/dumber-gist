@@ -1,9 +1,10 @@
 import DumberSession from './dumber-session';
-import ServiceCache from './service-cache';
-import Dumber from 'dumber';
 import findDeps from 'aurelia-deps-finder';
+import {Container} from 'aurelia-dependency-injection';
 
-const session = new DumberSession(Dumber, findDeps, new ServiceCache());
+const container = new Container();
+container.registerInstance(findDeps, findDeps);
+const session = container.get(DumberSession);
 const cacheGetters = {};
 
 addEventListener('install', event => {
