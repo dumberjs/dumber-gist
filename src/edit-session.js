@@ -147,7 +147,7 @@ export class EditSession {
     }
   }
 
-  createFile(filename, content = '') {
+  createFile(filename, content = '', skipOpen = false) {
     const existingF = _.find(this._files, {filename});
     if (existingF) {
       // ignore
@@ -163,7 +163,7 @@ export class EditSession {
     };
 
     this._files.push(file);
-    this.openFile(file);
+    if (!skipOpen) this.openFile(file);
     this._mutationCounter += 1;
   }
 

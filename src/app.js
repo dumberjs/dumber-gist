@@ -105,7 +105,8 @@ export class App {
           reader.onload = e => {
             const content = e.target.result;
             const filename = _.trim(item.fullPath, '/');
-            this.session.createFile(filename, content);
+            // Create but not open it in editor
+            this.session.createFile(filename, content, true);
           };
           reader.readAsText(file);
         });
