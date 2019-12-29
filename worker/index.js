@@ -92,7 +92,7 @@ addEventListener('message', async function(event) {
 addEventListener('fetch', function(event) {
   event.respondWith(
     caches.match(event.request).then(function(response) {
-      if (!event.request.url.includes('browser')) console.log('fetch ', event.request.url, !!response);
+      if (!event.request.url.includes('browser')) console.log('fetch ' + event.request.url + ' cached:' + !!response);
       if (response) return response;
       // TODO to support SPA, get '/' response for '/any/path/with/out/ext'
       return fetch(event.request);
