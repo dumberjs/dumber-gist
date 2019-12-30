@@ -1,5 +1,5 @@
+/* globals Sass */
 import path from 'path';
-import sass from 'sass.js/dist/sass.sync';
 import _ from 'lodash';
 
 const EXTS = ['.scss', '.sass'];
@@ -26,7 +26,6 @@ export class SassTranspiler {
 
     const ext = path.extname(filename);
 
-    // const sass = new Sass();
     const cssFiles = {};
     _.each(files, f => {
       const ext = path.extname(f.filename);
@@ -36,11 +35,11 @@ export class SassTranspiler {
     });
 
     return new Promise((resolve, reject) => {
-      sass.writeFile(cssFiles, () => {
-        sass.compileFile(
+      Sass.writeFile(cssFiles, () => {
+        Sass.compileFile(
           filename,
           result => {
-            sass.removeFile(Object.keys(cssFiles), () => {
+            Sass.removeFile(Object.keys(cssFiles), () => {
               if (result.status === 0) {
                 const {text, map} = result;
                 const newFilename = filename.slice(0, -ext.length) + '.css';

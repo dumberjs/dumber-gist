@@ -26,11 +26,22 @@ module.exports = dumber({
 
   prepend: [
     require.resolve('jquery/dist/jquery.min.js'),
-    require.resolve('toastr/toastr.js')
+    require.resolve('toastr/toastr.js'),
+    isTest && require.resolve('sass.js/dist/sass.sync.js')
   ],
 
   // append after amd loader and all module definitions in entry bundle.
   append: [
+    // Kick off all test files.
+    // Note dumber-module-loader requirejs call accepts regex which loads all matched module ids!
+    // Note all module ids are relative to dumber option "src" (default to 'src') folder.
+    isTest && "requirejs(['../test/setup', /^\\.\\.\\/test\\/.+\\.spec$/]);"
+  ],
+
+  deps: [
+    // semver main index.js uses lazyRequire, we need explicit
+    // require for bundler to work.
+    isTest && {name: 'semver', main: 'preload.js', lazyMain: true}
   ],
 
   // Code split is intuitive and flexible.

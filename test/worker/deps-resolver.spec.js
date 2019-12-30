@@ -1,4 +1,4 @@
-import test from 'ava';
+import test from 'tape-promise/tape';
 import _ from 'lodash';
 import {DepsResolver} from '../../worker/deps-resolver';
 
@@ -48,7 +48,7 @@ class TurboResolver {
 test('DepsResolver lists empty deps', async t => {
   const r = new DepsResolver(() => new TurboResolver());
   const deps = await r.resolve({});
-  t.is(deps.length, 0);
+  t.equal(deps.length, 0);
 });
 
 test('DepsResolver lists all deps from appDependencies', async t => {

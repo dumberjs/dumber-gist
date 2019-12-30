@@ -1,21 +1,23 @@
-import test from 'ava';
+import test from 'tape-promise/tape';
 import {JsTranspiler} from '../../../worker/transpilers/js';
 
 test('JsTranspiler matches js/ts/jsx/tsx files', t => {
   const jt = new JsTranspiler();
-  t.truthy(jt.match({filename: 'src/foo.js', content: ''}));
-  t.truthy(jt.match({filename: 'src/foo.jsx', content: ''}));
-  t.truthy(jt.match({filename: 'src/foo.ts', content: ''}));
-  t.truthy(jt.match({filename: 'src/foo.tsx', content: ''}));
+  t.ok(jt.match({filename: 'src/foo.js', content: ''}));
+  t.ok(jt.match({filename: 'src/foo.jsx', content: ''}));
+  t.ok(jt.match({filename: 'src/foo.ts', content: ''}));
+  t.ok(jt.match({filename: 'src/foo.tsx', content: ''}));
+  t.end();
 });
 
 test('JsTranspiler does not match other files', t => {
   const jt = new JsTranspiler();
-  t.falsy(jt.match({filename: 'src/foo.html', content: ''}));
-  t.falsy(jt.match({filename: 'src/foo.css', content: ''}));
-  t.falsy(jt.match({filename: 'src/foo.json', content: ''}));
-  t.falsy(jt.match({filename: 'src/foo.less', content: ''}));
-  t.falsy(jt.match({filename: 'src/foo.scss', content: ''}));
+  t.notOk(jt.match({filename: 'src/foo.html', content: ''}));
+  t.notOk(jt.match({filename: 'src/foo.css', content: ''}));
+  t.notOk(jt.match({filename: 'src/foo.json', content: ''}));
+  t.notOk(jt.match({filename: 'src/foo.less', content: ''}));
+  t.notOk(jt.match({filename: 'src/foo.scss', content: ''}));
+  t.end();
 });
 
 test('JsTranspiler transpiles ts file', async t => {
@@ -32,10 +34,10 @@ export class Foo {
     content: code
   });
 
-  t.is(file.filename, 'src/foo.js');
-  t.truthy(file.content.includes("this.bar = '';"));
-  t.falsy(file.content.includes("sourceMappingURL"));
-  t.is(file.sourceMap.file, 'src/foo.js');
+  t.equal(file.filename, 'src/foo.js');
+  t.ok(file.content.includes("this.bar = '';"));
+  t.notOk(file.content.includes("sourceMappingURL"));
+  t.equal(file.sourceMap.file, 'src/foo.js');
   t.deepEqual(file.sourceMap.sources, ['src/foo.ts']);
   t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
@@ -56,10 +58,10 @@ export class Foo {
     content: code
   });
 
-  t.is(file.filename, 'src/foo.js');
-  t.truthy(file.content.includes("this.bar = '';"));
-  t.falsy(file.content.includes("sourceMappingURL"));
-  t.is(file.sourceMap.file, 'src/foo.js');
+  t.equal(file.filename, 'src/foo.js');
+  t.ok(file.content.includes("this.bar = '';"));
+  t.notOk(file.content.includes("sourceMappingURL"));
+  t.equal(file.sourceMap.file, 'src/foo.js');
   t.deepEqual(file.sourceMap.sources, ['src/foo.js']);
   t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
@@ -72,10 +74,10 @@ test('JsTranspiler transpiles tsx file', async t => {
     content: code
   });
 
-  t.is(file.filename, 'src/foo.js');
-  t.truthy(file.content.includes("React.createElement"));
-  t.falsy(file.content.includes("sourceMappingURL"));
-  t.is(file.sourceMap.file, 'src/foo.js');
+  t.equal(file.filename, 'src/foo.js');
+  t.ok(file.content.includes("React.createElement"));
+  t.notOk(file.content.includes("sourceMappingURL"));
+  t.equal(file.sourceMap.file, 'src/foo.js');
   t.deepEqual(file.sourceMap.sources, ['src/foo.tsx']);
   t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
@@ -88,17 +90,17 @@ test('JsTranspiler transpiles jsx file', async t => {
     content: code
   });
 
-  t.is(file.filename, 'src/foo.js');
-  t.truthy(file.content.includes("React.createElement"));
-  t.falsy(file.content.includes("sourceMappingURL"));
-  t.is(file.sourceMap.file, 'src/foo.js');
+  t.equal(file.filename, 'src/foo.js');
+  t.ok(file.content.includes("React.createElement"));
+  t.notOk(file.content.includes("sourceMappingURL"));
+  t.equal(file.sourceMap.file, 'src/foo.js');
   t.deepEqual(file.sourceMap.sources, ['src/foo.jsx']);
   t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
 
 test('JsTranspiler cannot tranpile other file', async t => {
   const jt = new JsTranspiler();
-  await t.throwsAsync(async () => jt.transpile({
+  await t.rejects(async () => jt.transpile({
     filename: 'src/foo.html',
     content: ''
   }));

@@ -9,7 +9,7 @@ const gulpif = require('gulp-if');
 const autoprefixer = require('autoprefixer');
 const postcssUrl = require('postcss-url');
 
-const {isProduction, outputDir} = require('./_env');
+const {isProduction, isTest, outputDir} = require('./_env');
 const dr = require('./_dumber');
 
 function buildJs(src) {
@@ -46,7 +46,7 @@ function build() {
   return merge2(
     gulp.src('src/**/*.json', {since: gulp.lastRun(build)}),
     gulp.src('src/**/*.html', {since: gulp.lastRun(build)}),
-    buildJs('src/**/*.js'),
+    buildJs(isTest ? '{src,worker,test}/**/*.js' : 'src/**/*.js'),
     buildCss('src/**/*.scss')
   )
 
@@ -60,7 +60,7 @@ function build() {
   // It's a good balance on size and speed to turn off compress.
   .pipe(gulpif(isProduction, terser({compress: false})))
 
-  .pipe(gulp.dest(outputDir, {sourcemaps: isProduction ? false : '.'}));
+  .pipe(gulp.dest(outputDir, {sourcemaps: isProduction ? false : (isTest ? true : '.')}));
 }
 
 module.exports = build;

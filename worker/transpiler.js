@@ -1,6 +1,7 @@
 import path from 'path';
 import {JsTranspiler} from './transpilers/js';
 import {SassTranspiler} from './transpilers/sass';
+import {LessTranspiler} from './transpilers/less';
 import {TextTranspiler} from './transpilers/text';
 
 export class Transpiler {
@@ -8,6 +9,7 @@ export class Transpiler {
     this.transpilers = [
       new JsTranspiler(),
       new SassTranspiler(),
+      new LessTranspiler(),
       new TextTranspiler()
     ];
   }

@@ -1,4 +1,4 @@
-import test from 'ava';
+import test from 'tape-promise/tape';
 import _ from 'lodash';
 import {
   DEFAULT_INDEX_HTML,
@@ -70,13 +70,13 @@ const transpiler = {
 test('DumberSession initialises new dumber instance', async t => {
   const serviceCache = new ServiceCache();
   const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver, transpiler);
-  t.falsy(session.isInitialised);
+  t.notOk(session.isInitialised);
   t.deepEqual(serviceCache.map, {});
 
   const config = {deps: {vue: '^2.0.0'}};
   const data = await session.init(config, dumberCache);
   t.deepEqual(data, {isNew: true});
-  t.truthy(session.isInitialised);
+  t.ok(session.isInitialised);
   t.deepEqual(serviceCache.map, {
     '/': {
       content: DEFAULT_INDEX_HTML,
@@ -102,13 +102,13 @@ test('DumberSession initialises new dumber instance', async t => {
 test('DumberSession reuses existing dumber instance', async t => {
   const serviceCache = new ServiceCache();
   const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver, transpiler);
-  t.falsy(session.isInitialised);
+  t.notOk(session.isInitialised);
   t.deepEqual(serviceCache.map, {});
 
   const config = {};
   const data = await session.init(config, dumberCache);
   t.deepEqual(data, {isNew: true});
-  t.truthy(session.isInitialised);
+  t.ok(session.isInitialised);
   t.deepEqual(serviceCache.map, {
     '/': {
       content: DEFAULT_INDEX_HTML,
@@ -135,7 +135,7 @@ test('DumberSession reuses existing dumber instance', async t => {
 
   const data2 = await session.init(config, dumberCache);
   t.deepEqual(data2, {isNew: false});
-  t.truthy(session.isInitialised);
+  t.ok(session.isInitialised);
   t.deepEqual(serviceCache.map, {
     '/': {
       content: 'index-html',
@@ -147,19 +147,19 @@ test('DumberSession reuses existing dumber instance', async t => {
     }
   });
   t.deepEqual(session.config, config);
-  t.is(session.instance, instance1);
+  t.equal(session.instance, instance1);
 });
 
 test('DumberSession replaces existing dumber instance with different config', async t => {
   const serviceCache = new ServiceCache();
   const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver, transpiler);
-  t.falsy(session.isInitialised);
+  t.notOk(session.isInitialised);
   t.deepEqual(serviceCache.map, {});
 
   const config = {deps: {vue: '^2.0.0'}};
   const data = await session.init(config, dumberCache);
   t.deepEqual(data, {isNew: true});
-  t.truthy(session.isInitialised);
+  t.ok(session.isInitialised);
   t.deepEqual(serviceCache.map, {
     '/': {
       content: DEFAULT_INDEX_HTML,
@@ -185,7 +185,7 @@ test('DumberSession replaces existing dumber instance with different config', as
   const config2 = {deps: {'aurelia-bootstrapper': '^2.0.0'}};
   const data2 = await session.init(config2, dumberCache);
   t.deepEqual(data2, {isNew: true});
-  t.truthy(session.isInitialised);
+  t.ok(session.isInitialised);
   t.deepEqual(serviceCache.map, {
     '/': {
       content: DEFAULT_INDEX_HTML,
@@ -197,7 +197,7 @@ test('DumberSession replaces existing dumber instance with different config', as
     }
   });
   t.deepEqual(session.config, config2);
-  t.falsy(session.instance === instance1);
+  t.notOk(session.instance === instance1);
   t.deepEqual(session.instance.config, {
     skipModuleLoader: true,
     depsFinder: auFindDeps,
@@ -214,13 +214,13 @@ test('DumberSession replaces existing dumber instance with different config', as
 test('DumberSession initialises new dumber instance with aurelia v1 deps finder', async t => {
   const serviceCache = new ServiceCache();
   const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver, transpiler);
-  t.falsy(session.isInitialised);
+  t.notOk(session.isInitialised);
   t.deepEqual(serviceCache.map, {});
 
   const config = {isAurelia1: true};
   const data = await session.init(config, dumberCache);
   t.deepEqual(data, {isNew: true});
-  t.truthy(session.isInitialised);
+  t.ok(session.isInitialised);
   t.deepEqual(serviceCache.map, {
     '/': {
       content: DEFAULT_INDEX_HTML,
@@ -252,7 +252,7 @@ test('DumberSession builds', async t => {
     { filename: 'src/app.js', content: 'app' },
     { filename: 'src/app.html', content: 'app-html' }
   ]);
-  t.is(session.instance.files.length, 3);
+  t.equal(session.instance.files.length, 3);
   t.deepEqual(serviceCache.map, {
     '/': {
       content: 'index-html',
@@ -285,7 +285,7 @@ test('DumberSession cannot update before init', async t => {
   const serviceCache = new ServiceCache();
   const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver, transpiler);
 
-  await t.throwsAsync(async () => {
+  await t.rejects(async () => {
     await session.update([
       { filename: 'index.html', content: 'index-html' },
       { filename: 'src/main.js', content: 'main' },
@@ -299,7 +299,7 @@ test('DumberSession cannot build before init', async t => {
   const serviceCache = new ServiceCache();
   const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver, transpiler);
 
-  await t.throwsAsync(async () => {
+  await t.rejects(async () => {
     await session.build();
   }, {instanceOf: DumberUninitializedError});
 });

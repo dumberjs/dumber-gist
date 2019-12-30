@@ -9,13 +9,14 @@ const fs = require('fs');
 
 const dr = dumber({
   src: 'worker',
-  // skipModuleLoader: true,
   // requirejs baseUrl, dumber default is "/dist"
   baseUrl: '/',
   // Turn on hash for production build
   hash: isProduction,
   entryBundle: 'worker-bundle',
-  // prepend: ['../dumber-module-loader/dist/index.debug.js'],
+  prepend: [
+    require.resolve('sass.js/dist/sass.sync.js')
+  ],
   deps: [
     // semver main index.js uses lazyRequire, we need explicit
     // require for bundler to work.

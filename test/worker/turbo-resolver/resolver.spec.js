@@ -1,9 +1,9 @@
-import test from 'ava';
+import test from 'tape-promise/tape';
 import _ from 'lodash';
 import {NpmHttpRegistry} from '../../../worker/turbo-resolver/registries/npm-http';
 import {Resolver} from '../../../worker/turbo-resolver/resolver';
 
-test.serial('Resolver resolves au1 deps', async t => {
+test('Resolver resolves au1 deps', async t => {
   const r = new Resolver(new NpmHttpRegistry());
 
   const result = await r.resolve({
@@ -11,10 +11,10 @@ test.serial('Resolver resolves au1 deps', async t => {
   });
 
   t.deepEqual(Object.keys(result.appDependencies), ['aurelia-bootstrapper']);
-  t.truthy(_.some(Object.keys(result.resDependencies), k => k.startsWith('aurelia-framework')));
+  t.ok(_.some(Object.keys(result.resDependencies), k => k.startsWith('aurelia-framework')));
 });
 
-test.serial('Resolver resolves vue2 deps', async t => {
+test('Resolver resolves vue2 deps', async t => {
   const r = new Resolver(new NpmHttpRegistry());
 
   const result = await r.resolve({
@@ -22,5 +22,5 @@ test.serial('Resolver resolves vue2 deps', async t => {
   });
 
   t.deepEqual(Object.keys(result.appDependencies), ['vue']);
-  t.is(Object.keys(result.resDependencies).length, 0);
+  t.equal(Object.keys(result.resDependencies).length, 0);
 });

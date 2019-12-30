@@ -1,4 +1,4 @@
-import test from 'ava';
+import test from 'tape-promise/tape';
 import {WorkerService} from '../../src/worker-service';
 
 let actions = [];
@@ -28,18 +28,17 @@ class TestWorkerService extends WorkerService {
   }
 }
 
-test.serial.beforeEach(clearUp);
-
-test.serial('WorkerService queues and executes action', async t => {
+test('WorkerService queues and executes action', async t => {
+  clearUp();
   const w = new TestWorkerService(ea);
-  t.falsy(w.isWaiting);
+  t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'work1', data: {a:1}});
 
   setTimeout(() => {
-    t.truthy(w.isWaiting);
+    t.ok(w.isWaiting);
     t.deepEqual(actions, [{id: 0, type: 'work1', data: {a:1}}]);
-    t.is(published.length, 0);
+    t.equal(published.length, 0);
 
     w._workerSaid({
       data: {
@@ -52,21 +51,22 @@ test.serial('WorkerService queues and executes action', async t => {
 
   const result = await j;
   t.deepEqual(result, {result: 1});
-  t.falsy(w.isWaiting);
-  t.is(actions.length, 1);
-  t.is(published.length, 0);
+  t.notOk(w.isWaiting);
+  t.equal(actions.length, 1);
+  t.equal(published.length, 0);
 });
 
-test.serial('WorkerService queues and executes action with failure', async t => {
+test('WorkerService queues and executes action with failure', async t => {
+  clearUp();
   const w = new TestWorkerService(ea);
-  t.falsy(w.isWaiting);
+  t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'work1', data: {a:1}});
 
   setTimeout(() => {
-    t.truthy(w.isWaiting);
+    t.ok(w.isWaiting);
     t.deepEqual(actions, [{id: 0, type: 'work1', data: {a:1}}]);
-    t.is(published.length, 0);
+    t.equal(published.length, 0);
 
     w._workerSaid({
       data: {
@@ -77,21 +77,22 @@ test.serial('WorkerService queues and executes action with failure', async t => 
     });
   });
 
-  await t.throwsAsync(async () => await j, {message: 'lorem'});
-  t.is(published.length, 0);
+  await t.rejects(async () => await j, {message: 'lorem'});
+  t.equal(published.length, 0);
 });
 
-test.serial('WorkerService queues and executes action with unknown failure, ignores unknown message', async t => {
+test('WorkerService queues and executes action with unknown failure, ignores unknown message', async t => {
+  clearUp();
   const w = new TestWorkerService(ea);
-  t.falsy(w.isWaiting);
+  t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'work1', data: {a:1}});
 
 
   setTimeout(() => {
-    t.truthy(w.isWaiting);
+    t.ok(w.isWaiting);
     t.deepEqual(actions, [{id: 0, type: 'work1', data: {a:1}}]);
-    t.is(published.length, 0);
+    t.equal(published.length, 0);
 
     w._workerSaid({
       data: {
@@ -106,24 +107,25 @@ test.serial('WorkerService queues and executes action with unknown failure, igno
     });
   });
 
-  await t.throwsAsync(async () => await j, {message: 'unknown error'});
+  await t.rejects(async () => await j, {message: 'unknown error'});
   t.deepEqual(published, [
     ['warning', 'While waiting for acknowledgement id:0 from service worker, received unexpected result {"type":"a"}.']
   ]);
 });
 
-test.serial('WorkerService queues and executes actions', async t => {
+test('WorkerService queues and executes actions', async t => {
+  clearUp();
   const w = new TestWorkerService(ea);
-  t.falsy(w.isWaiting);
+  t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'work1', data: {a:1}});
   const j2 = w.perform({type: 'work2', data: {a:2}});
   const j3 = w.perform({type: 'work3', data: {a:3}});
 
   setTimeout(() => {
-    t.truthy(w.isWaiting);
+    t.ok(w.isWaiting);
     t.deepEqual(actions, [{id: 0, type: 'work1', data: {a:1}}]);
-    t.is(published.length, 0);
+    t.equal(published.length, 0);
 
     w._workerSaid({
       data: {
@@ -156,46 +158,47 @@ test.serial('WorkerService queues and executes actions', async t => {
 
   const result = await j;
   t.deepEqual(result, {result: 1});
-  t.truthy(w.isWaiting);
+  t.ok(w.isWaiting);
   t.deepEqual(actions, [
     {id: 0, type: 'work1', data: {a:1}},
     {id: 1, type: 'work2', data: {a:2}}
   ]);
-  t.is(published.length, 0);
+  t.equal(published.length, 0);
 
   const result2 = await j2;
   t.deepEqual(result2, {result: 2});
-  t.truthy(w.isWaiting);
+  t.ok(w.isWaiting);
   t.deepEqual(actions, [
     {id: 0, type: 'work1', data: {a:1}},
     {id: 1, type: 'work2', data: {a:2}},
     {id: 2, type: 'work3', data: {a:3}}
   ]);
-  t.is(published.length, 0);
+  t.equal(published.length, 0);
 
   const result3 = await j3;
   t.deepEqual(result3, {result: 3});
-  t.falsy(w.isWaiting);
+  t.notOk(w.isWaiting);
   t.deepEqual(actions, [
     {id: 0, type: 'work1', data: {a:1}},
     {id: 1, type: 'work2', data: {a:2}},
     {id: 2, type: 'work3', data: {a:3}}
   ]);
-  t.is(published.length, 0);
+  t.equal(published.length, 0);
 });
 
-test.serial('WorkerService queues and executes actions, with failed results and unknown messages', async t => {
+test('WorkerService queues and executes actions, with failed results and unknown messages', async t => {
+  clearUp();
   const w = new TestWorkerService(ea);
-  t.falsy(w.isWaiting);
+  t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'work1', data: {a:1}});
   const j2 = w.perform({type: 'work2', data: {a:2}});
   const j3 = w.perform({type: 'work3', data: {a:3}});
 
   setTimeout(() => {
-    t.truthy(w.isWaiting);
+    t.ok(w.isWaiting);
     t.deepEqual(actions, [{id: 0, type: 'work1', data: {a:1}}]);
-    t.is(published.length, 0);
+    t.equal(published.length, 0);
 
     w._workerSaid({
       data: {
@@ -233,30 +236,29 @@ test.serial('WorkerService queues and executes actions, with failed results and 
 
   const result = await j;
   t.deepEqual(result, {result: 1});
-  t.truthy(w.isWaiting);
+  t.ok(w.isWaiting);
   t.deepEqual(actions, [
     {id: 0, type: 'work1', data: {a:1}},
     {id: 1, type: 'work2', data: {a:2}}
   ]);
-  t.is(published.length, 0);
+  t.equal(published.length, 0);
 
-  await t.throwsAsync(async() => await j2, {message: 'lorem'});
-  t.truthy(w.isWaiting);
+  await t.rejects(async() => await j2, {message: 'lorem'});
+  t.ok(w.isWaiting);
   t.deepEqual(actions, [
     {id: 0, type: 'work1', data: {a:1}},
     {id: 1, type: 'work2', data: {a:2}},
     {id: 2, type: 'work3', data: {a:3}}
   ]);
-  t.is(published.length, 0);
+  t.equal(published.length, 0);
 
   const result3 = await j3;
   t.deepEqual(result3, {result: 3});
-  t.falsy(w.isWaiting);
+  t.notOk(w.isWaiting);
   t.deepEqual(actions, [
     {id: 0, type: 'work1', data: {a:1}},
     {id: 1, type: 'work2', data: {a:2}},
     {id: 2, type: 'work3', data: {a:3}}
   ]);
-  t.is(published.length, 0);
+  t.equal(published.length, 0);
 });
-

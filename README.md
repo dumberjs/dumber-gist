@@ -34,6 +34,23 @@ Clear tracing cache. In rare situation, you might need to run clear-cache after 
 
     npm run clear-cache
 
-## Test
+## Headless browser (electron) test
 
     npm test
+
+Details in package.json -> scripts -> pretest & test.
+
+## Visible browser (chrome) test
+
+    npm run browser-test
+
+This runs in Chrome, if you want to use other browser, update package.json "browser-test" script. Read [browser-do](https://github.com/3cp/browser-do) for available browsers.
+
+By default, browser-do closes the browser after tests finish, to keep browser running, use `--keep-open` option on browser-do command.
+
+## Code coverage
+
+    npm run coverage
+
+Then open `coverage/lcov-report/index.html` for detailed report.
+

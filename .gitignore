@@ -16,3 +16,5 @@ Thumbs.db
 /dist
 /output
 /worker-bundle.*
+/.nyc_output
+/coverage
