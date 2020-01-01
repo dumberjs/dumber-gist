@@ -6,9 +6,7 @@ import {WorkerService} from '../worker-service';
 @inject(EventAggregator, WorkerService)
 export class EditSession {
   _gist = null;
-  _originalFiles = [];
   files = [];
-  _originalDescription = '';
   description = '';
 
   // mutation value 0 and -1 is reserved
@@ -32,19 +30,21 @@ export class EditSession {
     }
   }
 
+  mutationChanged() {
+    this.isRendered = _.every(this.files, 'isRendered');
+    this.isChanged = _.some(this.files, 'isChanged') ||
+      this.files.length !== this._gist.files.length ||
+      this.description !== this._gist.description;
+  }
+
   loadGist(gist) {
     this._gist = gist;
-    this._originalFiles = _.map(gist.files, f => ({
-      filename: f.filename,
-      content: f.content
-    }));
-    this.files = _.map(this._originalFiles, f => ({
+    this.files = _.map(this._gist.files, f => ({
       filename: f.filename,
       content: f.content,
       isRendered: false,
       isChanged: false
     }));
-    this._originalDescription = gist.description;
     this.description = gist.description;
 
     // set mutation to 0 or -1 to indicate
@@ -58,7 +58,7 @@ export class EditSession {
 
   updateFile({filename, content}) {
     const f = _.find(this.files, {filename});
-    const oldF = _.find(this._originalFiles, {filename});
+    const oldF = _.find(this._gist.files, {filename});
 
     if (f) {
       if (f.content === content) return;
@@ -96,7 +96,7 @@ export class EditSession {
         const oldFilename = file.filename;
         file.filename = newFilePath;
         file.isRendered = false;
-        const oldF = _.find(this._originalFiles, {filename: newFilePath});
+        const oldF = _.find(this._gist.files, {filename: newFilePath});
         file.isChanged = !oldF || oldF.content !== file.content;
 
         this.ea.publish('renamed-file', {
@@ -176,7 +176,7 @@ export class EditSession {
       const json = JSON.parse(f.content);
       deps = json.dependencies;
       return false; // exit early
-    })
+    });
 
     const result = await this.ws.perform({
       type: 'init',
@@ -194,12 +194,5 @@ export class EditSession {
 
     this.files.forEach(f => f.isRendered = true);
     this.isRendered = true;
-  }
-
-  mutationChanged() {
-    this.isRendered = _.every(this.files, 'isRendered');
-    this.isChanged = _.some(this.files, 'isChanged') ||
-      this.files.length !== this._originalFiles.length ||
-      this.description !== this._originalDescription;
   }
 }
