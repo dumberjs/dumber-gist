@@ -95,7 +95,12 @@ export class DumberSession {
         const transpiledFile = await this.transpiler.transpile(file, files);
         if (!transpiledFile) continue;
 
-        console.log('Capture ' + transpiledFile.filename);
+        let log = 'Capture ' + file.filename;
+        if (transpiledFile.filename !== file.filename) {
+          log += ` (transpiled to ${transpiledFile.filename})`;
+        }
+        console.log(log);
+
         await this.instance.capture({
           path: transpiledFile.filename,
           moduleId: transpiledFile.moduleId,
