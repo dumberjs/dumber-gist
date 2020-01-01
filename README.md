@@ -40,6 +40,10 @@ Clear tracing cache. In rare situation, you might need to run clear-cache after 
 
 Details in package.json -> scripts -> pretest & test.
 
+Many unit tests can run in Node.js environment too, which is better for debug and development.
+
+    npx tape -r @babel/register test/src/edit-session.spec.js | npx tap-nirvana
+
 ## Visible browser (chrome) test
 
     npm run browser-test

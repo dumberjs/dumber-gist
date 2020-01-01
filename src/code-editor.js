@@ -1,6 +1,6 @@
 import {inject, bindable, BindingEngine} from 'aurelia-framework';
 import path from 'path';
-import {EditSession} from './edit-session';
+import {EditSession} from './edit/edit-session';
 import CodeMirror from 'codemirror';
 // import "codemirror/addon/selection/active-line";
 import "codemirror/addon/dialog/dialog";

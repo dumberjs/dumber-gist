@@ -92,7 +92,7 @@ test('DumberSession initialises new dumber instance', async t => {
     skipModuleLoader: true,
     depsFinder: undefined,
     cache: dumberCache,
-    prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
+    prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'],
     deps: [
       {name: 'vue', main: 'dist/vue.js', version: '2.1.0', lazyMain: true}
     ]
@@ -124,7 +124,7 @@ test('DumberSession reuses existing dumber instance', async t => {
     skipModuleLoader: true,
     depsFinder: undefined,
     cache: dumberCache,
-    prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
+    prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'],
     deps: []
   });
   const instance1 = session.instance;
@@ -175,7 +175,7 @@ test('DumberSession replaces existing dumber instance with different config', as
     skipModuleLoader: true,
     depsFinder: undefined,
     cache: dumberCache,
-    prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
+    prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'],
     deps: [
       {name: 'vue', main: 'dist/vue.js', version: '2.1.0', lazyMain: true}
     ]
@@ -202,7 +202,7 @@ test('DumberSession replaces existing dumber instance with different config', as
     skipModuleLoader: true,
     depsFinder: auFindDeps,
     cache: dumberCache,
-    prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
+    prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'],
     deps: [
       {name: 'aurelia-binding', version: '2.0.0', lazyMain: true},
       {name: 'aurelia-bootstrapper', version: '2.3.3', lazyMain: true},
@@ -236,7 +236,7 @@ test('DumberSession initialises new dumber instance with aurelia v1 deps finder'
     skipModuleLoader: true,
     depsFinder: auFindDeps,
     cache: dumberCache,
-    prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
+    prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'],
     deps: []
   });
 });

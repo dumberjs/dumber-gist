@@ -2,7 +2,7 @@
 import {inject, computedFrom} from 'aurelia-framework';
 import {DndService} from 'bcx-aurelia-dnd';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {EditSession} from './edit-session';
+import {EditSession} from './edit/edit-session';
 import {combo} from 'aurelia-combo';
 import _ from 'lodash';
 

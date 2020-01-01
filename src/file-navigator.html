@@ -8,7 +8,7 @@
 
   <div class="all-nodes ${dndClass}" ref="dndElement">
     <file-node
-      repeat.for="node of session.fileTree"
+      repeat.for="node of fileTree.tree"
       node.bind="node"
       indent.bind="0"
       collapse-flags.bind="collapseFlags"

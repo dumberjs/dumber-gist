@@ -2,17 +2,19 @@ import {inject, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {DialogService} from 'aurelia-dialog';
 import {CreateFileDialog} from './dialogs/create-file-dialog';
-import {EditSession} from './edit-session';
+import {EditSession} from './edit/edit-session';
+import {FileTree} from './edit/file-tree';
 import {DndService} from 'bcx-aurelia-dnd';
 
-@inject(EventAggregator, DialogService, EditSession, DndService)
+@inject(EventAggregator, DialogService, EditSession, FileTree, DndService)
 export class FileNavigator {
   collapseFlags = {};
 
-  constructor(ea, dialogService, session, dndService) {
+  constructor(ea, dialogService, session, fileTree, dndService) {
     this.ea = ea;
     this.dialogService = dialogService;
     this.session = session;
+    this.fileTree = fileTree;
     this.dndService = dndService;
   }
 

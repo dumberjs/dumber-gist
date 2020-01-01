@@ -5,7 +5,7 @@ import {EditNameDialog} from './dialogs/edit-name-dialog';
 import {CreateFileDialog} from './dialogs/create-file-dialog';
 import {ConfirmationDialog} from './dialogs/confirmation-dialog';
 import {FileContextmenu} from './dialogs/file-contextmenu';
-import {EditSession} from './edit-session';
+import {EditSession} from './edit/edit-session';
 import {DndService} from 'bcx-aurelia-dnd';
 
 @inject(EventAggregator, DialogService, EditSession, DndService)

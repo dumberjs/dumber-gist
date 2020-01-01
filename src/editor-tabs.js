@@ -1,6 +1,6 @@
 import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {EditSession} from './edit-session';
+import {EditSession} from './edit/edit-session';
 import _ from 'lodash';
 
 @inject(EventAggregator, EditSession)

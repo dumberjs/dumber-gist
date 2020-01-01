@@ -11,6 +11,7 @@
     "@babel/plugin-proposal-decorators": "^7.7.4",
     "@babel/plugin-syntax-dynamic-import": "7.7.4",
     "@babel/preset-env": "^7.7.7",
+    "@babel/register": "^7.7.7",
     "aurelia-combo": "^1.0.5",
     "aurelia-deps-finder": "^2.1.0",
     "aurelia-dialog": "^2.0.0-rc.8",
@@ -48,6 +49,7 @@
     "sass-lint": "^1.13.1",
     "sass.js": "^0.11.1",
     "semver": "^7.1.1",
+    "tap-nirvana": "^1.1.0",
     "tape": "^4.11.0",
     "tape-promise": "^4.0.0",
     "toastr": "^2.1.4",
@@ -66,8 +68,8 @@
     "build:dev": "gulp clean && gulp build",
     "build": "gulp clean && cross-env NODE_ENV=production gulp build && cross-env NODE_ENV=production gulp build-worker",
     "clear-cache": "gulp clear-cache",
-    "test": "browser-do --tap < output/entry-bundle.js",
-    "browser-test": "npm run build:test && browser-do --tap --browser chrome < output/entry-bundle.js"
+    "test": "browser-do --tap < output/entry-bundle.js | tap-nirvana",
+    "browser-test": "npm run build:test && browser-do --tap --browser chrome < output/entry-bundle.js | tap-nirvana"
   },
   "dependencies": {
     "aurelia-bootstrapper": "^2.3.3"
