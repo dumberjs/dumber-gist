@@ -80,7 +80,7 @@ export class LessTranspiler {
       //   outputSourceFiles: true
       // }
     });
-    console.log('result ' + JSON.stringify(result, null , 2));
+
     const {css} = result;
     const newFilename = filename.slice(0, -ext.length) + '.css';
     // const sourceMap = JSON.parse(map);
