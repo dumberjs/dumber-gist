@@ -1,11 +1,11 @@
 <template class="tabs">
   <div
-    repeat.for="filename of session.editingFilenames"
-    class="tab ${session.focusedEditingIndex === $index ? 'active' : ''}"
-    click.trigger="session.focusedEditingIndex = $index & leftClick"
+    repeat.for="filename of openedFiles.filenames"
+    class="tab ${openedFiles.focusedIndex === $index ? 'active' : ''}"
+    click.trigger="openedFiles.focusedIndex = $index & leftClick"
   >
     <i class.bind="filename | fileIcon"></i>
     ${filename | lastPart}
-    <i class="fas fa-times close-file" click.trigger="session.closeFile(filename) & leftClick"></i>
+    <i class="fas fa-times close-file" click.trigger="closeFile(filename) & leftClick"></i>
   </div>
 </template>

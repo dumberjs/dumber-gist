@@ -1,4 +1,4 @@
-import {inject, observable, computedFrom} from 'aurelia-framework';
+import {inject, observable} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import _ from 'lodash';
 import {WorkerService} from '../worker-service';
@@ -11,9 +11,9 @@ export class EditSession {
   _originalDescription = '';
   description = '';
 
-  @observable mutation = 0;
-  editingFilenames = [];
-  focusedEditingIndex = -1;
+  // mutation value 0 and -1 is reserved
+  // for just newly loaded gist.
+  @observable mutation = -1;
   isRendered = false;
   isChanged = false;
 
@@ -24,7 +24,9 @@ export class EditSession {
 
   _mutate() {
     if (this.mutation >= 9999) {
-      this.mutation = 0;
+      this.mutation = 1;
+    } else if (this.mutation < 0) {
+      this.mutation = 1;
     } else {
       this.mutation += 1;
     }
@@ -44,43 +46,13 @@ export class EditSession {
     }));
     this._originalDescription = gist.description;
     this.description = gist.description;
-    this._reset();
 
-    this._mutate();
-  }
-
-  openFile(file) {
-    if (file.folder) return;
-    const filename = file.filename || file;
-    const idx = this.editingFilenames.indexOf(filename);
-    if (idx === -1) {
-      this.editingFilenames.push(filename);
-      this.focusedEditingIndex = this.editingFilenames.length - 1;
+    // set mutation to 0 or -1 to indicate
+    // newly loaded gist.
+    if (this.mutation === 0) {
+      this.mutation = -1;
     } else {
-      this.focusedEditingIndex = idx;
-    }
-    this.ea.publish('edit-file', file);
-  }
-
-  closeFile(file) {
-    const filename = file.filename || file;
-    const idx = this.editingFilenames.indexOf(filename);
-    if (idx !== -1) {
-      this.editingFilenames.splice(idx, 1);
-      if (this.focusedEditingIndex > idx) {
-        this.focusedEditingIndex -= 1;
-        if (this.focusedEditingIndex < 0 && this.editingFilenames.length) {
-          this.focusedEditingIndex = 0;
-        }
-      } else if (this.focusedEditingIndex === idx) {
-        if (this.focusedEditingIndex >= this.editingFilenames.length) {
-          this.focusedEditingIndex = this.editingFilenames.length - 1;
-        } else {
-          // force reload
-          this.focusedEditingIndex += 1;
-          this.focusedEditingIndex -= 1;
-        }
-      }
+      this.mutation = 0;
     }
   }
 
@@ -120,21 +92,17 @@ export class EditSession {
           return false;
         }
 
-        const isEditing = this.editingFilenames.includes(file.filename);
-
-        if (isEditing) {
-          this.closeFile(file);
-        }
-
         isChanged = true;
+        const oldFilename = file.filename;
         file.filename = newFilePath;
         file.isRendered = false;
         const oldF = _.find(this._originalFiles, {filename: newFilePath});
         file.isChanged = !oldF || oldF.content !== file.content;
 
-        if (isEditing) {
-          this.openFile(file);
-        }
+        this.ea.publish('renamed-file', {
+          newFilename: newFilePath,
+          oldFilename
+        });
       } else if (files) {
         _.each(files, n => {
           isChanged = _updateFilePath(n, newFilePath + '/' + n.name) || isChanged;
@@ -164,7 +132,7 @@ export class EditSession {
     };
 
     this.files.push(file);
-    if (!skipOpen) this.openFile(file);
+    if (!skipOpen) this.ea.publish('open-file', filename);
     this._mutate();
   }
 
@@ -173,7 +141,6 @@ export class EditSession {
     let isChanged = false;
     while ((idx = _.findLastIndex(this.files, f => f.filename.startsWith(filePath))) !== -1) {
       isChanged = true;
-      this.closeFile(this.files[idx]);
       this.files.splice(idx, 1);
     }
 
@@ -185,7 +152,6 @@ export class EditSession {
   deleteFile(filename) {
     const idx = _.findIndex(this.files, {filename});
     if (idx !== -1) {
-      this.closeFile(this.files[idx]);
       this.files.splice(idx, 1);
       this._mutate();
     }
@@ -230,40 +196,10 @@ export class EditSession {
     this.isRendered = true;
   }
 
-  @computedFrom('editingFilenames', 'focusedEditingIndex', 'mutation')
-  get editingFile() {
-    if (this.focusedEditingIndex >= 0) {
-      const fn = this.editingFilenames[this.focusedEditingIndex];
-      if (fn) {
-        return _.find(this.files, {filename: fn});
-      }
-    }
-  }
-
-  _reset() {
-    this.editingFilenames = [];
-    this.focusedEditingIndex = -1;
-  }
-
   mutationChanged() {
-    this._trimEditingFiles();
-
     this.isRendered = _.every(this.files, 'isRendered');
     this.isChanged = _.some(this.files, 'isChanged') ||
       this.files.length !== this._originalFiles.length ||
       this.description !== this._originalDescription;
-  }
-
-  _trimEditingFiles() {
-    const toRemove = [];
-    _.each(this.editingFilenames, (fn, i) => {
-      if (!_.find(this.files, {filename: fn})) {
-        toRemove.unshift(i);
-      }
-    });
-    toRemove.forEach(i => this.editingFilenames.splice(i, 1));
-    if (this.editingFilenames.length - 1 < this.focusedEditingIndex) {
-      this.focusedEditingIndex = this.editingFilenames.length - 1;
-    }
   }
 }

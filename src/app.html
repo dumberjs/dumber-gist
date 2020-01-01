@@ -45,8 +45,8 @@
       >
         <editor-tabs></editor-tabs>
         <code-editor
-          if.bind="session.editingFile"
-          file.bind="session.editingFile"
+          if.bind="openedFiles.editingFile"
+          file.bind="openedFiles.editingFile"
           read-only.bind="false"
           line-wrapping.bind="true"
           ></code-editor>

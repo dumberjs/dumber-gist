@@ -1,13 +1,17 @@
 import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {EditSession} from './edit/edit-session';
+import {OpenedFiles} from './edit/opened-files';
 import _ from 'lodash';
 
-@inject(EventAggregator, EditSession)
+@inject(EventAggregator, OpenedFiles)
 export class EditorTabs {
-  constructor(ea, session) {
+  constructor(ea, openedFiles) {
     this.ea = ea;
-    this.session = session;
+    this.openedFiles = openedFiles;
+  }
+
+  closeFile(filename) {
+    this.ea.publish('close-file', filename);
   }
 }
 

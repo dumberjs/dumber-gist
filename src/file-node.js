@@ -6,18 +6,20 @@ import {CreateFileDialog} from './dialogs/create-file-dialog';
 import {ConfirmationDialog} from './dialogs/confirmation-dialog';
 import {FileContextmenu} from './dialogs/file-contextmenu';
 import {EditSession} from './edit/edit-session';
+import {OpenedFiles} from './edit/opened-files';
 import {DndService} from 'bcx-aurelia-dnd';
 
-@inject(EventAggregator, DialogService, EditSession, DndService)
+@inject(EventAggregator, DialogService, EditSession, OpenedFiles, DndService)
 export class FileNode {
   @bindable node;
   @bindable indent = 0;
   @bindable collapseFlags;
 
-  constructor(ea, dialogService, session, dndService) {
+  constructor(ea, dialogService, session, openedFiles, dndService) {
     this.ea = ea;
     this.dialogService = dialogService;
     this.session = session;
+    this.openedFiles = openedFiles;
     this.dndService = dndService;
   }
 
@@ -87,7 +89,7 @@ export class FileNode {
   edit() {
     const {file} = this.node;
     if (!file) return;
-    this.session.openFile(file);
+    this.ea.publish('open-file', file.filename);
   }
 
   editName(event) {
@@ -141,9 +143,9 @@ export class FileNode {
     });
   }
 
-  @computedFrom('node', 'node.filePath', 'session.editingFile')
+  @computedFrom('node', 'node.filePath', 'openedFiles.editingFile')
   get cssClass() {
-    const target = this.session.editingFile;
+    const target = this.openedFiles.editingFile;
     if (!target) return '';
     if (this.node.filePath === target.filename) return 'active';
     return '';

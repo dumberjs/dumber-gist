@@ -1,5 +1,6 @@
-import {inject, bindable, BindingEngine} from 'aurelia-framework';
+import {inject, bindable} from 'aurelia-framework';
 import path from 'path';
+import {EventAggregator} from 'aurelia-event-aggregator';
 import {EditSession} from './edit/edit-session';
 import CodeMirror from 'codemirror';
 // import "codemirror/addon/selection/active-line";
@@ -34,14 +35,15 @@ const MODES = {
   '.svg': 'xml'
 };
 
-@inject(EditSession, BindingEngine)
+@inject(EventAggregator, EditSession)
 export class CodeEditor {
   @bindable file;
   @bindable readOnly = false;
   @bindable lineWrapping = false;
   mode = '';
 
-  constructor(session) {
+  constructor(ea, session) {
+    this.ea = ea;
     this.session = session;
     this.onChange = this.onChange.bind(this);
     this.closeEditor = this.closeEditor.bind(this);
@@ -49,7 +51,7 @@ export class CodeEditor {
 
   closeEditor() {
     if (this.file) {
-      this.session.closeFile(this.file.filename);
+      this.ea.publish('close-file', this.file.filename);
     }
   }
 

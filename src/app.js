@@ -3,6 +3,7 @@ import {inject, computedFrom} from 'aurelia-framework';
 import {DndService} from 'bcx-aurelia-dnd';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {EditSession} from './edit/edit-session';
+import {OpenedFiles} from './edit/opened-files';
 import {combo} from 'aurelia-combo';
 import _ from 'lodash';
 
@@ -11,7 +12,7 @@ toastr.options.positionClass = 'toast-top-center';
 const MIN_PANEL_WIDTH = 150;
 const MIN_DEV_TOOLS_HEIGHT = 25;
 
-@inject(EventAggregator, DndService, EditSession)
+@inject(EventAggregator, DndService, EditSession, OpenedFiles)
 export class App {
   showSideBarInSmallLayout = false;
   showEditorsInSmallLayout = true;
@@ -28,10 +29,11 @@ export class App {
   windowWidth = null;
   windowHeight = null;
 
-  constructor(ea, dndService, session) {
+  constructor(ea, dndService, session, openedFiles) {
     this.ea = ea;
     this.dndService = dndService;
     this.session = session;
+    this.openedFiles = openedFiles;
     // For dev only
     session.loadGist({
       description: '',
@@ -51,7 +53,7 @@ export class App {
         if (this.intension.devTools) this.devToolsHeight += this.intension.devTools;
         this.resetIntention();
       }),
-      this.ea.subscribe('edit-file', () => {
+      this.ea.subscribe('opened-file', () => {
         this.showSideBarInSmallLayout = false;
         this.showEditorsInSmallLayout = true;
         if (this.windowWidth <= 450) {
@@ -291,9 +293,9 @@ export class App {
   // TODO test ctrl-w in Win10 Chrome
   @combo('ctrl+w')
   closeActiveTab() {
-    const {editingFile} = this.session;
+    const {editingFile} = this.openedFiles;
     if (editingFile) {
-      this.session.closeFile(editingFile.filename);
+      this.ea.publish('close-file', editingFile.filename);
     }
   }
 

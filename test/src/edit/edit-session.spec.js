@@ -13,13 +13,13 @@ const ea = {
   publish(event, data) {
     published.push([event, data]);
   }
-}
+};
 
 const workerService = {
   async perform(action) {
     actions.push(action);
   }
-}
+};
 
 test('EditSession loads gist', t => {
   clearUp();
@@ -47,8 +47,6 @@ test('EditSession loads gist', t => {
   t.equal(es.description, 'desc');
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
-  t.equal(es.editingFilenames.length, 0);
-  t.notOk(es.editingFile);
   t.end();
 });
 
