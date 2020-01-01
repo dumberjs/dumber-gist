@@ -77,7 +77,7 @@ export class DumberSession {
       // Because we want to share cache on domain gist-code.com
       // for all instance of ${app-id}.gist-code.com
       cache: dumberCache,
-      prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader@1.0.0/dist/index.min.js'],
+      prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'],
       deps: deps
     });
     console.log('Created dumber instance');
