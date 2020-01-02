@@ -17,7 +17,6 @@ export class App {
   showSideBarInSmallLayout = false;
   showEditorsInSmallLayout = true;
   showBrowserWindowInSmallLayout = true;
-  duringFileDrop = false;
 
   isBundling = false;
   bundlerError = null;
@@ -75,67 +74,7 @@ export class App {
         toastr.warning(message);
       }),
     ];
-    this._setupFileDrop();
     window.addEventListener('resize', () => this.onResize());
-  }
-
-  _setupFileDrop() {
-    let toFinish;
-    const cancelFinish = () => {
-      if (toFinish) {
-        clearTimeout(toFinish);
-        toFinish = null;
-      }
-    };
-
-    const finish = () => {
-      cancelFinish();
-      toFinish = setTimeout(() => this.duringFileDrop = false, 50);
-    };
-
-    const scanFiles = item => {
-      if (item.isDirectory) {
-        const reader = item.createReader();
-        reader.readEntries(entries => {
-          entries.forEach(entry => {
-            scanFiles(entry);
-          })
-        });
-      } else if (item.isFile) {
-        item.file(file => {
-          const reader = new FileReader();
-          reader.onload = e => {
-            const content = e.target.result;
-            const filename = _.trim(item.fullPath, '/');
-            // Create but not open it in editor
-            this.session.createFile(filename, content, true);
-          };
-          reader.readAsText(file);
-        });
-      }
-    };
-
-    document.addEventListener('dragenter', e => {
-      e.stopPropagation();
-      e.preventDefault();
-      cancelFinish();
-      this.duringFileDrop = true;
-    });
-    document.addEventListener('dragover', e => {
-      e.stopPropagation();
-      e.preventDefault();
-      finish();
-    });
-    document.addEventListener('drop', e => {
-      e.stopPropagation();
-      e.preventDefault();
-      finish();
-      const {items} = e.dataTransfer;
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i].webkitGetAsEntry();
-        scanFiles(item);
-      }
-    });
   }
 
   async bundle() {

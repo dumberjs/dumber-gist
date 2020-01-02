@@ -8,6 +8,7 @@
   <require from="./browser-bar"></require>
   <require from="./browser-frame"></require>
   <require from="./browser-dev-tools"></require>
+  <require from="./file-drop-indicator"></require>
 
   <div class="app" ref="dndElement">
     <div class="app-top-bar">
@@ -76,7 +77,5 @@
     </div>
   </div>
 
-  <div class="file-drop-indicator" if.bind="duringFileDrop">
-    <span>Drop files here</span>
-  </div>
+  <file-drop-indicator></file-drop-indicator>
 </template>
