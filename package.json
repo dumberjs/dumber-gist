@@ -39,6 +39,7 @@
     "gulp-sass": "^4.0.2",
     "gulp-terser": "^1.2.0",
     "htmlhint": "0.11.0",
+    "is-utf8": "^0.2.1",
     "jquery": "^3.4.1",
     "less": "^3.10.3",
     "localforage": "^1.7.3",
