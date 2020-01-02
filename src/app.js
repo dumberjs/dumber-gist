@@ -1,4 +1,3 @@
-/* globals toastr */
 import {inject, computedFrom} from 'aurelia-framework';
 import {DndService} from 'bcx-aurelia-dnd';
 import {EventAggregator} from 'aurelia-event-aggregator';
@@ -6,8 +5,6 @@ import {EditSession} from './edit/edit-session';
 import {OpenedFiles} from './edit/opened-files';
 import {combo} from 'aurelia-combo';
 import _ from 'lodash';
-
-toastr.options.positionClass = 'toast-top-center';
 
 const MIN_PANEL_WIDTH = 150;
 const MIN_DEV_TOOLS_HEIGHT = 25;
@@ -58,21 +55,7 @@ export class App {
         if (this.windowWidth <= 450) {
           this.showBrowserWindowInSmallLayout = false;
         }
-      }),
-      this.ea.subscribe('success', (message) => {
-        toastr.success(message);
-      }),
-      this.ea.subscribe('info', (message) => {
-        toastr.info(message);
-      }),
-      this.ea.subscribe('error', (message) => {
-        console.error(message);
-        toastr.error(message);
-      }),
-      this.ea.subscribe('warning', (message) => {
-        console.warn(message);
-        toastr.warning(message);
-      }),
+      })
     ];
     window.addEventListener('resize', () => this.onResize());
   }
