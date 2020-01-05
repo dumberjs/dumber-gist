@@ -4,6 +4,6 @@
     class="iframe"
     src="https://${id}.gist-code.com"></iframe>
   <div class="dnd-helper" if.bind="dndService.isProcessing"></div>
-  <i if.bind="isBundling" class="spinner fas fa-circle-notch fa-spin"></i>
+  <i if.bind="isBundling & debounce:500" class="spinner fas fa-circle-notch fa-spin"></i>
   <div if.bind="bundlerError" class="error">${bundlerError}</div>
 </template>

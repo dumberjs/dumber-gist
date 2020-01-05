@@ -168,6 +168,7 @@ export class EditSession {
   }
 
   async render() {
+    const start = (new Date()).getTime();
     // This flag is only for app didn't provide package.json
     // which contains aurelia-bootstrapper.
     const isAurelia1 = _.some(this.files, f => {
@@ -205,6 +206,9 @@ export class EditSession {
     });
 
     await this.ws.perform({type: 'build'});
+
+    const seconds = ((new Date()).getTime() - start) / 1000;
+    console.log(`Rendering finished in ${seconds} secs.`);
 
     this.files.forEach(f => f.isRendered = true);
     this.isRendered = true;
