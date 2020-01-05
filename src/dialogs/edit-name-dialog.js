@@ -1,32 +1,68 @@
 import {DialogController} from 'aurelia-dialog';
+import Validation from 'bcx-validation';
+import {EditSession} from '../edit/edit-session';
 import {inject, computedFrom} from 'aurelia-framework';
 import _ from 'lodash';
 
-@inject(DialogController)
+@inject(DialogController, Validation, EditSession)
 export class EditNameDialog {
-  constructor(controller) {
+  triedOnce = false;
+  name = '';
+
+  constructor(controller, validation, session) {
     this.controller = controller;
+    this.validation = validation;
+    this.session = session;
   }
 
   activate(model) {
-    this.filePath = model.filePath;
-    this._originalfilePath = model.filePath;
+    this.name = model.filePath;
+    this._originalFilePath = model.filePath;
     this.isFolder = model.isFolder;
+
+    this.validator = this.validation.generateValidator({
+      name: [
+        'mandatory',
+        {
+          validate: /^[a-zA-Z0-9_/.@-]+$/,
+          message: 'only accept letters, numbers, dash(-), underscore(_), dot(.), at-sign(@) or slash(/) in file path'
+        },
+        name => {
+          if (name === this._originalFilePath) return;
+          if (_.find(this.session.files, {filename: name})) {
+            return `there is an existing file "${name}"`;
+          }
+          if (_.find(this.session.files, f => f.filename.startsWith(name + '/'))) {
+            return `there is an existing folder "${name}"`;
+          }
+        }
+      ]
+    });
   }
 
   attached() {
-    let startIdx = this.filePath.lastIndexOf('/') + 1;
-    const part = this.filePath.split('.')[0];
+    let startIdx = this.name.lastIndexOf('/') + 1;
+    const part = this.name.split('.')[0];
     this.input.setSelectionRange(startIdx, part.length);
   }
 
   save() {
-    if (!this.filePath || !this.isChanged) return;
-    this.controller.ok(_.trim(this.filePath, '/'));
+    if (!this.isChanged) return;
+    this.triedOnce = true;
+    if (this.errors) return;
+    this.controller.ok(_.trim(this.name, '/'));
   }
 
-  @computedFrom('filePath', '_originalfilePath')
+  @computedFrom('triedOnce', 'name')
+  get errors() {
+    if (this.triedOnce) {
+      const errors = this.validator(this);
+      return _.capitalize(_.get(errors, 'name', []).join(', '));
+    }
+  }
+
+  @computedFrom('name', '_originalFilePath')
   get isChanged() {
-    return this.filePath !== this._originalfilePath;
+    return this.name !== this._originalFilePath;
   }
 }

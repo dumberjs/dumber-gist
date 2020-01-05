@@ -35,7 +35,7 @@ ux-dialog-container>div {
 ux-dialog-container>div>div {
   display: block;
   min-width: 200px;
-  width: fit-content;
+  max-width: 300px;
   height: 100%;
   margin: auto;
 }

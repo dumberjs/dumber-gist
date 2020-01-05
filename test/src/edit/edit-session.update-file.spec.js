@@ -77,7 +77,7 @@ test('EditSession updates file after rendering', async t => {
   t.ok(es.isRendered);
   t.notOk(es.isChanged);
 
-  es.updateFile({filename: 'src/main.js', content:'main2'});
+  es.updateFile('src/main.js', 'main2');
   es.mutationChanged();
 
   t.notOk(es.isRendered);
@@ -164,7 +164,7 @@ test('EditSession skips unchanged update after rendering', async t => {
   t.ok(es.isRendered);
   t.notOk(es.isChanged);
 
-  es.updateFile({filename: 'src/main.js', content:'main'});
+  es.updateFile('src/main.js', 'main');
   es.mutationChanged();
 
   t.ok(es.isRendered);
@@ -246,7 +246,7 @@ test('EditSession skips update on file not existing after rendering', async t =>
   t.ok(es.isRendered);
   t.notOk(es.isChanged);
 
-  es.updateFile({filename: 'src/app.js', content:'app'});
+  es.updateFile('src/app.js', 'app');
   es.mutationChanged();
 
   t.deepEqual(published, [

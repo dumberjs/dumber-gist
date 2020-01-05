@@ -309,7 +309,8 @@ test('OpenedFiles renames opened file case 1', t => {
   fs.openFile('src/main.js');
   fs.openFile('package.json');
 
-  fs.afterRenameFile('src/index.js', 'src/main.js');
+  session.files[0].filename = 'src/index.js';
+  fs.afterRenameFile('src/main.js', 'src/index.js');
 
   t.deepEqual(fs.filenames, ['index.html', 'src/index.js', 'package.json']);
   t.equal(fs.focusedIndex, 2);
@@ -349,7 +350,7 @@ test('OpenedFiles renames opened file case 2', t => {
   fs.focusedIndex = 1;
 
   session.files[0].filename = 'src/index.js';
-  fs.afterRenameFile('src/index.js', 'src/main.js');
+  fs.afterRenameFile('src/main.js', 'src/index.js');
 
   t.deepEqual(fs.filenames, ['index.html', 'src/index.js', 'package.json']);
   t.equal(fs.focusedIndex, 1);

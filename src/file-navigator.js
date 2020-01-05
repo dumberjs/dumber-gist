@@ -1,19 +1,14 @@
 import {inject, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {DialogService} from 'aurelia-dialog';
-import {CreateFileDialog} from './dialogs/create-file-dialog';
-import {EditSession} from './edit/edit-session';
 import {FileTree} from './edit/file-tree';
 import {DndService} from 'bcx-aurelia-dnd';
 
-@inject(EventAggregator, DialogService, EditSession, FileTree, DndService)
+@inject(EventAggregator, FileTree, DndService)
 export class FileNavigator {
   collapseFlags = {};
 
-  constructor(ea, dialogService, session, fileTree, dndService) {
+  constructor(ea, fileTree, dndService) {
     this.ea = ea;
-    this.dialogService = dialogService;
-    this.session = session;
     this.fileTree = fileTree;
     this.dndService = dndService;
   }
@@ -32,18 +27,14 @@ export class FileNavigator {
 
   dndDrop() {
     const {node} = this.dnd.model;
-    this.session.updatePath(node.filePath, node.name);
+    this.ea.publish('update-path', {
+      oldFilePath: node.filePath,
+      newFilePath: node.name
+    });
   }
 
-
   createFile() {
-    this.dialogService.open({
-      viewModel: CreateFileDialog
-    }).whenClosed(response => {
-      if (response.wasCancelled) return;
-      const filename = response.output;
-      this.session.createFile(filename);
-    });
+    this.ea.publish('create-file');
   }
 
   @computedFrom('dnd', 'dnd.isProcessing', 'dnd.canDrop', 'dnd.isHoveringShallowly')

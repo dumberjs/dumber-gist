@@ -6,11 +6,16 @@
         <input type="text" value.bind="name" class="w100" focus.one-time="true">
         <hidden-submit></hidden-submit>
       </form>
-      <small>Use <code>nested/folder/filename.ext</code> to create<br>file under new directory</small>
+      <div if.bind="errors">
+        <small class="text-warning">${errors}.</small>
+      </div>
+      <div>
+        <small>Use <strong class="text-primary">nested/folder/filename.ext</strong> to create<br>file under new directory</small>
+      </div>
     </ux-dialog-body>
     <ux-dialog-footer>
       <button class="btn even-size float-left" click.trigger="controller.cancel() & leftClick">Cancel</button>
-      <button class="btn even-size primary" click.trigger="save() & leftClick" disabled.bind="!name">Create</button>
+      <button class="btn even-size primary" click.trigger="save() & leftClick" disabled.bind="errors">Create</button>
     </ux-dialog-footer>
   </ux-dialog>
 </template>

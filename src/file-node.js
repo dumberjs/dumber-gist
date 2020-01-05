@@ -1,24 +1,19 @@
 import {inject, bindable, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {DialogService} from 'aurelia-dialog';
-import {EditNameDialog} from './dialogs/edit-name-dialog';
-import {CreateFileDialog} from './dialogs/create-file-dialog';
-import {ConfirmationDialog} from './dialogs/confirmation-dialog';
 import {FileContextmenu} from './dialogs/file-contextmenu';
-import {EditSession} from './edit/edit-session';
 import {OpenedFiles} from './edit/opened-files';
 import {DndService} from 'bcx-aurelia-dnd';
 
-@inject(EventAggregator, DialogService, EditSession, OpenedFiles, DndService)
+@inject(EventAggregator, DialogService, OpenedFiles, DndService)
 export class FileNode {
   @bindable node;
   @bindable indent = 0;
   @bindable collapseFlags;
 
-  constructor(ea, dialogService, session, openedFiles, dndService) {
+  constructor(ea, dialogService, openedFiles, dndService) {
     this.ea = ea;
     this.dialogService = dialogService;
-    this.session = session;
     this.openedFiles = openedFiles;
     this.dndService = dndService;
   }
@@ -55,7 +50,10 @@ export class FileNode {
   dndDrop() {
     const sourceNode = this.dnd.model.node;
     const {filePath} = this.node;
-    this.session.updatePath(sourceNode.filePath, filePath + '/' + sourceNode.name);
+    this.ea.publish('update-path', {
+      oldFilePath: sourceNode.filePath,
+      newFilePath: filePath + '/' + sourceNode.name
+    });
   }
 
   onClick() {
@@ -96,49 +94,20 @@ export class FileNode {
     if (event) event.stopPropagation();
     const {filePath, files} = this.node;
     const isFolder = !!files;
-    this.dialogService.open({
-      viewModel: EditNameDialog,
-      model: {filePath, isFolder}
-    }).whenClosed(response => {
-      if (response.wasCancelled) return;
-      const newFilePath = response.output;
-      this.session.updatePath(filePath, newFilePath);
-    });
+    this.ea.publish('edit-name', {filePath, isFolder});
   }
 
   createFile(event) {
     if (event) event.stopPropagation();
     const {filePath} = this.node;
-
-    this.dialogService.open({
-      viewModel: CreateFileDialog,
-      model: {filePath}
-    }).whenClosed(response => {
-      if (response.wasCancelled) return;
-      const filename = response.output;
-      this.session.createFile(filename);
-    });
+    this.ea.publish('create-file', filePath);
   }
 
   delete(event) {
     if (event) event.stopPropagation();
     const {filePath, files} = this.node;
     const isFolder = !!files;
-
-    this.dialogService.open({
-      viewModel: ConfirmationDialog,
-      model: {
-        message: `Delete ${isFolder ? 'folder' : 'file'} "${filePath}"?`
-      }
-    }).whenClosed(response => {
-      if (response.wasCancelled) return;
-
-      if (isFolder) {
-        this.session.deleteFolder(filePath);
-      } else {
-        this.session.deleteFile(filePath);
-      }
-    });
+    this.ea.publish('delete-node', {filePath, isFolder});
   }
 
   @computedFrom('node', 'node.filePath', 'openedFiles.editingFile')

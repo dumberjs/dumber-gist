@@ -19,13 +19,6 @@ export class OpenedFiles {
         this._cleanUp();
       }
     });
-    this.openFile = this.openFile.bind(this);
-    this.closeFile = this.closeFile.bind(this);
-    this.ea.subscribe('open-file', this.openFile);
-    this.ea.subscribe('close-file', this.closeFile);
-    this.ea.subscribe('renamed-file', ({newFilename, oldFilename}) => {
-      this.afterRenameFile(newFilename, oldFilename);
-    })
   }
 
   openFile(filename) {
@@ -67,7 +60,7 @@ export class OpenedFiles {
     this.ea.publish('closed-file', filename);
   }
 
-  afterRenameFile(newFilename, oldFilename) {
+  afterRenameFile(oldFilename, newFilename) {
     const idx = this.filenames.indexOf(oldFilename);
 
     if (idx !== -1) {

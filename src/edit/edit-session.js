@@ -50,7 +50,7 @@ export class EditSession {
     this.mutation = this.mutation === 0 ? -1 : 0;
   }
 
-  updateFile({filename, content}) {
+  updateFile(filename, content) {
     const f = _.find(this.files, {filename});
     const oldF = _.find(this._gist.files, {filename});
 

@@ -1,16 +1,14 @@
 import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {EditSession} from './edit/edit-session';
 import isUtf8 from 'is-utf8';
 import _ from 'lodash';
 
-@inject(EventAggregator, EditSession)
+@inject(EventAggregator)
 export class FileDropIndicator {
   duringFileDrop = false;
 
-  constructor(ea, session) {
+  constructor(ea) {
     this.ea = ea;
-    this.session = session;
   }
 
   attached() {
@@ -49,7 +47,7 @@ export class FileDropIndicator {
             const content = e.target.result;
             if (isUtf8(Buffer.from(content))) {
               // Create but not open it in editor
-              this.session.createFile(filename, content, true);
+              this.ea.publish('import-file', {filename, content});
             } else {
               this.ea.publish('error', `Cannot import binary file "${filename}" because gist only supports text file.`);
             }

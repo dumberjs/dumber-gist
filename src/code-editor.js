@@ -1,7 +1,6 @@
 import {inject, bindable} from 'aurelia-framework';
 import path from 'path';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {EditSession} from './edit/edit-session';
 import CodeMirror from 'codemirror';
 // import "codemirror/addon/selection/active-line";
 import "codemirror/addon/dialog/dialog";
@@ -35,23 +34,31 @@ const MODES = {
   '.svg': 'xml'
 };
 
-@inject(EventAggregator, EditSession)
+@inject(EventAggregator)
 export class CodeEditor {
   @bindable file;
   @bindable readOnly = false;
   @bindable lineWrapping = false;
   mode = '';
 
-  constructor(ea, session) {
+  constructor(ea) {
     this.ea = ea;
-    this.session = session;
     this.onChange = this.onChange.bind(this);
     this.closeEditor = this.closeEditor.bind(this);
+    this.newFile = this.newFile.bind(this);
   }
 
   closeEditor() {
     if (this.file) {
       this.ea.publish('close-file', this.file.filename);
+    }
+  }
+
+  newFile() {
+    if (this.file) {
+      let inDir = path.dirname(this.file.filename);
+      if (inDir === '.') inDir = '';
+      this.ea.publish('create-file', inDir);
     }
   }
 
@@ -92,7 +99,8 @@ export class CodeEditor {
     if (!cm || !file) return;
 
     const value = cm.getValue();
-    this.session.updateFile({filename: file.filename, content: value});
+
+    this.ea.publish('update-file', {filename: file.filename, content: value})
   }
 
   updateMode() {
@@ -125,6 +133,7 @@ export class CodeEditor {
         lint: true,
         extraKeys: {
           'Ctrl-W': this.closeEditor,
+          'Ctrl-N': this.newFile
         }
       });
 
