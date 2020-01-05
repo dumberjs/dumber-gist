@@ -21,9 +21,7 @@ export class EditSession {
   }
 
   _mutate() {
-    if (this.mutation >= 9999) {
-      this.mutation = 1;
-    } else if (this.mutation < 0) {
+    if (this.mutation >= 9999 || this.mutation < 0) {
       this.mutation = 1;
     } else {
       this.mutation += 1;
@@ -49,52 +47,38 @@ export class EditSession {
 
     // set mutation to 0 or -1 to indicate
     // newly loaded gist.
-    if (this.mutation === 0) {
-      this.mutation = -1;
-    } else {
-      this.mutation = 0;
-    }
+    this.mutation = this.mutation === 0 ? -1 : 0;
   }
 
   updateFile({filename, content}) {
     const f = _.find(this.files, {filename});
     const oldF = _.find(this._gist.files, {filename});
 
-    if (f) {
-      if (f.content === content) return;
-      f.content = content;
-      f.isRendered = false;
-      f.isChanged = !oldF || oldF.content !== content;
-    } else {
-      this.files.push({
-        filename,
-        content,
-        isRendered: false,
-        isChanged: true
-      });
+    if (!f) {
+      this.ea.publish('error', 'Cannot update ' + filename + ' because it does not exist.');
+      return;
     }
 
+    if (f.content === content) return;
+    f.content = content;
+    f.isRendered = false;
+    f.isChanged = !oldF || oldF.content !== content;
     this._mutate();
   }
 
-  updateFilePath(node, newFilePath) {
-    const _updateFilePath = (node, newFilePath) => {
-      if (node.filePath === newFilePath) return;
+  updatePath(filePath, newFilePath) {
+    if (filePath === newFilePath) return;
+    let isUpdated = false;
 
-      let isChanged = false;
-      const {file, files} = node;
+    _.each(this.files, file => {
+      const oldFilename = file.filename;
+      let newFilename;
 
-      if (file) {
-        const existingF = _.find(this.files, {filename: newFilePath});
-        if (existingF) {
-          // ignore
-          this.ea.publish('error', 'Cannot rename ' + file.filename + ' to ' + newFilePath + ' because there is an existing file.');
-          return false;
-        }
+      if (file.filename === filePath) {
+        newFilename = newFilePath;
 
-        isChanged = true;
-        const oldFilename = file.filename;
-        file.filename = newFilePath;
+      } else if (file.filename.startsWith(filePath + '/')) {
+        newFilename = newFilePath + '/' + file.filename.slice(filePath.length + 1);
         file.isRendered = false;
         const oldF = _.find(this._gist.files, {filename: newFilePath});
         file.isChanged = !oldF || oldF.content !== file.content;
@@ -103,15 +87,30 @@ export class EditSession {
           newFilename: newFilePath,
           oldFilename
         });
-      } else if (files) {
-        _.each(files, n => {
-          isChanged = _updateFilePath(n, newFilePath + '/' + n.name) || isChanged;
+      }
+
+      if (newFilename) {
+        const existingF = _.find(this.files, {filename: newFilename});
+        if (existingF) {
+          // ignore
+          this.ea.publish('error', `Cannot rename ${oldFilename} to ${newFilename} because there is an existing file.`);
+          return;
+        }
+
+        isUpdated = true;
+        file.isRendered = false;
+        const oldF = _.find(this._gist.files, {filename: newFilename});
+        file.isChanged = !oldF || oldF.content !== file.content;
+        file.filename = newFilename;
+
+        this.ea.publish('renamed-file', {
+          newFilename,
+          oldFilename
         });
       }
-      return isChanged;
-    }
+    });
 
-    if (_updateFilePath(node, newFilePath)) {
+    if (isUpdated) {
       this._mutate();
     }
   }
@@ -121,6 +120,13 @@ export class EditSession {
     if (existingF) {
       // ignore
       this.ea.publish('error', 'Cannot create ' + filename + ' because there is an existing file.');
+      return;
+    }
+
+    const existingFolder = _.find(this.files, f => f.filename.startsWith(filename + '/'));
+    if (existingFolder) {
+      // ignore
+      this.ea.publish('error', 'Cannot create ' + filename + ' because there is an existing folder.');
       return;
     }
 
@@ -136,24 +142,28 @@ export class EditSession {
     this._mutate();
   }
 
-  deleteFolder(filePath) {
-    let idx;
-    let isChanged = false;
-    while ((idx = _.findLastIndex(this.files, f => f.filename.startsWith(filePath))) !== -1) {
-      isChanged = true;
-      this.files.splice(idx, 1);
-    }
-
-    if (isChanged) {
-      this._mutate();
-    }
-  }
-
   deleteFile(filename) {
     const idx = _.findIndex(this.files, {filename});
     if (idx !== -1) {
       this.files.splice(idx, 1);
       this._mutate();
+    } else {
+      this.ea.publish('error', 'Cannot delete ' + filename + ' because the file does not exist.');
+    }
+  }
+
+  deleteFolder(filePath) {
+    let idx;
+    let isUpdated = false;
+    while ((idx = _.findLastIndex(this.files, f => f.filename.startsWith(filePath + '/'))) !== -1) {
+      isUpdated = true;
+      this.files.splice(idx, 1);
+    }
+
+    if (isUpdated) {
+      this._mutate();
+    } else {
+      this.ea.publish('error', 'Cannot delete folder ' + filePath + ' because it does not exist.');
     }
   }
 
@@ -185,9 +195,13 @@ export class EditSession {
 
     await this.ws.perform({
       type: 'update',
-      files: result.isNew ?
-        this.files.map(f => f) :
-        this.files.filter(f => !f.isRendered)
+      files: _(this.files)
+        .filter(f => result.isNew || !f.isRendered)
+        .map(f => ({
+          filename: f.filename,
+          content: f.content
+        }))
+        .value()
     });
 
     await this.ws.perform({type: 'build'});

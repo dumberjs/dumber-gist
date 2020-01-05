@@ -32,7 +32,7 @@ export class FileNavigator {
 
   dndDrop() {
     const {node} = this.dnd.model;
-    this.session.updateFilePath(node, node.name);
+    this.session.updatePath(node.filePath, node.name);
   }
 
 

@@ -55,7 +55,7 @@ export class FileNode {
   dndDrop() {
     const sourceNode = this.dnd.model.node;
     const {filePath} = this.node;
-    this.session.updateFilePath(sourceNode, filePath + '/' + sourceNode.name);
+    this.session.updatePath(sourceNode.filePath, filePath + '/' + sourceNode.name);
   }
 
   onClick() {
@@ -102,7 +102,7 @@ export class FileNode {
     }).whenClosed(response => {
       if (response.wasCancelled) return;
       const newFilePath = response.output;
-      this.session.updateFilePath(this.node, newFilePath);
+      this.session.updatePath(filePath, newFilePath);
     });
   }
 
@@ -124,8 +124,6 @@ export class FileNode {
     if (event) event.stopPropagation();
     const {filePath, files} = this.node;
     const isFolder = !!files;
-
-    // TODO confirm dialog
 
     this.dialogService.open({
       viewModel: ConfirmationDialog,

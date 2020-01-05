@@ -29,7 +29,7 @@ const workerService = {
   }
 };
 
-test('EditSession loads gist', t => {
+test('EditSession deletes file after rendering', async t => {
   clearUp();
   const es = new EditSession(ea, workerService);
 
@@ -52,19 +52,12 @@ test('EditSession loads gist', t => {
   };
 
   es.loadGist(gist);
-  t.equal(es.description, 'desc');
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
-  t.end();
-});
-
-test('EditSession detects changed description', t => {
-  clearUp();
-  const es = new EditSession(ea, workerService);
-
-  const gist = {
-    description: 'desc',
-    files: [
+  await es.render();
+  t.deepEqual(actions, [
+    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'update', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -77,71 +70,42 @@ test('EditSession detects changed description', t => {
         filename: 'package.json',
         content: '{"dependencies":{}}'
       }
-    ]
-  };
+    ]},
+    {type: 'build'}
+  ]);
 
-  es.loadGist(gist);
-  t.equal(es.description, 'desc');
-  t.notOk(es.isRendered);
+  t.ok(es.isRendered);
   t.notOk(es.isChanged);
 
-  es.description = 'desc2';
-  es._mutationCounter += 1;
+  es.deleteFile('src/main.js');
   es.mutationChanged();
 
-  t.equal(es.description, 'desc2');
-  t.notOk(es.isRendered);
+  t.ok(es.isRendered);
   t.ok(es.isChanged);
-  t.end();
-});
-
-test('EditSession renders with aurelia 1 detection', async t => {
-  clearUp();
-  const es = new EditSession(ea, workerService);
-  const auMain = `export function configure(au) {
-  au.use.standardConfiguration();
-  au.start().then(() => au.setRoot());
-}
-`;
-
-  const gist = {
-    description: 'desc',
-    files: [
-      {
-        filename: 'src/main.js',
-        content: auMain
-      },
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      }
-    ]
-  };
-
-  es.loadGist(gist);
-  t.notOk(es.isRendered);
-  t.notOk(es.isChanged);
+  t.deepEqual(es.files, [
+    {
+      filename: 'index.html',
+      content: 'index-html',
+      isRendered: true,
+      isChanged: false
+    },
+    {
+      filename: 'package.json',
+      content: '{"dependencies":{}}',
+      isRendered: true,
+      isChanged: false
+    }
+  ]);
 
   await es.render();
-  t.ok(es.isRendered);
-  t.notOk(es.isChanged);
-  t.deepEqual(actions, [
-    {type: 'init', config: {isAurelia1: true, deps: {}}},
-    {type: 'update', files: [
-      {
-        filename: 'src/main.js',
-        content: auMain
-      },
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      }
-    ]},
+  t.deepEqual(actions.slice(3), [
+    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'update', files: []},
     {type: 'build'}
   ]);
 });
 
-test('EditSession renders pass on deps from package.json', async t => {
+test('EditSession ignores deleting file not existing after rendering', async t => {
   clearUp();
   const es = new EditSession(ea, workerService);
 
@@ -158,7 +122,7 @@ test('EditSession renders pass on deps from package.json', async t => {
       },
       {
         filename: 'package.json',
-        content: '{"dependencies":{"foo":"^1.0.0","bar":"~2.1.0"}}'
+        content: '{"dependencies":{}}'
       }
     ]
   };
@@ -166,12 +130,9 @@ test('EditSession renders pass on deps from package.json', async t => {
   es.loadGist(gist);
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
-
   await es.render();
-  t.ok(es.isRendered);
-  t.notOk(es.isChanged);
   t.deepEqual(actions, [
-    {type: 'init', config: {isAurelia1: false, deps: {foo: '^1.0.0', bar: '~2.1.0'}}},
+    {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -183,10 +144,48 @@ test('EditSession renders pass on deps from package.json', async t => {
       },
       {
         filename: 'package.json',
-        content: '{"dependencies":{"foo":"^1.0.0","bar":"~2.1.0"}}'
+        content: '{"dependencies":{}}'
       }
     ]},
     {type: 'build'}
   ]);
-});
 
+  t.ok(es.isRendered);
+  t.notOk(es.isChanged);
+
+  es.deleteFile('src/app.js');
+  es.mutationChanged();
+  t.deepEqual(published, [
+    ['error', 'Cannot delete src/app.js because the file does not exist.']
+  ]);
+
+  t.ok(es.isRendered);
+  t.notOk(es.isChanged);
+  t.deepEqual(es.files, [
+    {
+      filename: 'src/main.js',
+      content: 'main',
+      isRendered: true,
+      isChanged: false
+    },
+    {
+      filename: 'index.html',
+      content: 'index-html',
+      isRendered: true,
+      isChanged: false
+    },
+    {
+      filename: 'package.json',
+      content: '{"dependencies":{}}',
+      isRendered: true,
+      isChanged: false
+    }
+  ]);
+
+  await es.render();
+  t.deepEqual(actions.slice(3), [
+    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'update', files: []},
+    {type: 'build'}
+  ]);
+});
