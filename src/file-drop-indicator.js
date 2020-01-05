@@ -47,7 +47,7 @@ export class FileDropIndicator {
           const reader = new FileReader();
           reader.onload = e => {
             const content = e.target.result;
-            if (isUtf8(content)) {
+            if (isUtf8(Buffer.from(content))) {
               // Create but not open it in editor
               this.session.createFile(filename, content, true);
             } else {
