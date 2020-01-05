@@ -53,7 +53,16 @@ export class ActionDispatcher {
     this.session.updatePath(oldFilePath, newFilePath);
   }
 
+  // TODO test ctrl-n in Win10 Chrome
   @combo('ctrl+n')
+  createFileWithKeyboard(e) {
+    if (e && e.stopPropagation) {
+      e.stopPropagation();
+    }
+
+    this.createFile();
+  }
+
   createFile(inDir = '') {
     this.dialogService.open({
       viewModel: CreateFileDialog,

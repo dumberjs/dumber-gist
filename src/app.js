@@ -9,6 +9,7 @@ import _ from 'lodash';
 const MIN_PANEL_WIDTH = 150;
 const MIN_DEV_TOOLS_HEIGHT = 25;
 
+// Handle layout calculation and global bundling state
 @inject(EventAggregator, DndService, EditSession, OpenedFiles)
 export class App {
   showSideBarInSmallLayout = false;
@@ -214,7 +215,11 @@ export class App {
 
   // TODO test ctrl-w in Win10 Chrome
   @combo('ctrl+w')
-  closeActiveTab() {
+  closeActiveTab(e) {
+    if (e && e.stopPropagation) {
+      e.stopPropagation();
+    }
+
     const {editingFile} = this.openedFiles;
     if (editingFile) {
       this.ea.publish('close-file', editingFile.filename);

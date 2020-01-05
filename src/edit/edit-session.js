@@ -29,6 +29,7 @@ export class EditSession {
   }
 
   mutationChanged() {
+    // FIXME: isRendered should check deleted files.
     this.isRendered = _.every(this.files, 'isRendered');
     this.isChanged = _.some(this.files, 'isChanged') ||
       this.files.length !== this._gist.files.length ||
