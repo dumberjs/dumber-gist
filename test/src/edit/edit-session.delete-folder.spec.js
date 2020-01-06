@@ -59,6 +59,7 @@ test('EditSession deletes folder after rendering', async t => {
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions, [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: [
@@ -112,7 +113,8 @@ test('EditSession deletes folder after rendering', async t => {
   ]);
 
   await es.render();
-  t.deepEqual(actions.slice(3), [
+es.mutationChanged();
+    t.deepEqual(actions.slice(3), [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: []},
     {type: 'build'}
@@ -161,6 +163,7 @@ test('EditSession deletes nested folder after rendering', async t => {
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions, [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: [
@@ -232,6 +235,7 @@ test('EditSession deletes nested folder after rendering', async t => {
   ]);
 
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions.slice(3), [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: []},
@@ -282,6 +286,7 @@ test('EditSession ignores deleting unknown folder after rendering', async t => {
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions, [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: [
@@ -375,6 +380,7 @@ test('EditSession ignores deleting unknown folder after rendering', async t => {
   ]);
 
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions.slice(3), [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: []},

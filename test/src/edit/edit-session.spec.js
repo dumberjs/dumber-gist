@@ -123,6 +123,7 @@ test('EditSession renders with aurelia 1 detection', async t => {
   t.notOk(es.isChanged);
 
   await es.render();
+  es.mutationChanged();
   t.ok(es.isRendered);
   t.notOk(es.isChanged);
   t.deepEqual(actions, [
@@ -168,6 +169,7 @@ test('EditSession renders pass on deps from package.json', async t => {
   t.notOk(es.isChanged);
 
   await es.render();
+  es.mutationChanged();
   t.ok(es.isRendered);
   t.notOk(es.isChanged);
   t.deepEqual(actions, [

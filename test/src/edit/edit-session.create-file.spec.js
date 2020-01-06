@@ -55,6 +55,7 @@ test('EditSession creates file after rendering', async t => {
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions, [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: [
@@ -110,6 +111,7 @@ test('EditSession creates file after rendering', async t => {
   ]);
 
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions.slice(3), [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: [
@@ -148,6 +150,7 @@ test('EditSession cannot creates file to overwrite existing file', async t => {
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions, [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: [
@@ -201,6 +204,7 @@ test('EditSession cannot creates file to overwrite existing file', async t => {
   ]);
 
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions.slice(3), [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: []},
@@ -234,6 +238,7 @@ test('EditSession cannot creates file with name conflict on existing folder', as
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions, [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: [
@@ -287,6 +292,7 @@ test('EditSession cannot creates file with name conflict on existing folder', as
   ]);
 
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions.slice(3), [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: []},

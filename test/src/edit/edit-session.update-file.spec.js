@@ -26,6 +26,10 @@ const workerService = {
     if (action.type === 'init') {
       return {isNew};
     }
+
+    return new Promise(resolve => {
+      setTimeout(resolve, 50);
+    });
   }
 };
 
@@ -55,6 +59,7 @@ test('EditSession updates file after rendering', async t => {
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions, [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: [
@@ -104,6 +109,7 @@ test('EditSession updates file after rendering', async t => {
   ]);
 
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions.slice(3), [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: [
@@ -142,6 +148,7 @@ test('EditSession skips unchanged update after rendering', async t => {
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions, [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: [
@@ -191,6 +198,7 @@ test('EditSession skips unchanged update after rendering', async t => {
   ]);
 
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions.slice(3), [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: []},
@@ -224,6 +232,7 @@ test('EditSession skips update on file not existing after rendering', async t =>
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions, [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: [
@@ -277,6 +286,7 @@ test('EditSession skips update on file not existing after rendering', async t =>
   ]);
 
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions.slice(3), [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: []},
@@ -285,4 +295,117 @@ test('EditSession skips update on file not existing after rendering', async t =>
 
   t.ok(es.isRendered);
   t.notOk(es.isChanged);
+});
+
+test('EditSession updates file again during rendering', async t => {
+  clearUp();
+  const es = new EditSession(ea, workerService);
+
+  const gist = {
+    description: 'desc',
+    files: [
+      {
+        filename: 'src/main.js',
+        content: 'main'
+      },
+      {
+        filename: 'index.html',
+        content: 'index-html'
+      },
+      {
+        filename: 'package.json',
+        content: '{"dependencies":{}}'
+      }
+    ]
+  };
+
+  es.loadGist(gist);
+  t.notOk(es.isRendered);
+  t.notOk(es.isChanged);
+  await es.render();
+  es.mutationChanged();
+  t.deepEqual(actions, [
+    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'update', files: [
+      {
+        filename: 'src/main.js',
+        content: 'main'
+      },
+      {
+        filename: 'index.html',
+        content: 'index-html'
+      },
+      {
+        filename: 'package.json',
+        content: '{"dependencies":{}}'
+      }
+    ]},
+    {type: 'build'}
+  ]);
+
+  t.ok(es.isRendered);
+  t.notOk(es.isChanged);
+
+  es.updateFile('src/main.js', 'main2');
+  es.mutationChanged();
+
+  t.notOk(es.isRendered);
+  t.ok(es.isChanged);
+  t.deepEqual(es.files, [
+    {
+      filename: 'src/main.js',
+      content: 'main2',
+      isRendered: false,
+      isChanged: true,
+    },
+    {
+      filename: 'index.html',
+      content: 'index-html',
+      isRendered: true,
+      isChanged: false
+    },
+    {
+      filename: 'package.json',
+      content: '{"dependencies":{}}',
+      isRendered: true,
+      isChanged: false
+    }
+  ]);
+
+  // update file again after next render
+  setTimeout(() => {
+    es.updateFile('src/main.js', 'main3');
+  });
+
+  await es.render();
+  es.mutationChanged();
+
+  t.deepEqual(actions.slice(3), [
+    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'update', files: [
+      {
+        filename: 'src/main.js',
+        content: 'main2'
+      }
+    ]},
+    {type: 'build'}
+  ]);
+  t.notOk(es.isRendered); // has new change to render
+  t.ok(es.isChanged);
+
+  await es.render();
+  es.mutationChanged();
+
+  t.deepEqual(actions.slice(6), [
+    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'update', files: [
+      {
+        filename: 'src/main.js',
+        content: 'main3'
+      }
+    ]},
+    {type: 'build'}
+  ]);
+  t.ok(es.isRendered);
+  t.ok(es.isChanged);
 });

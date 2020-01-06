@@ -55,6 +55,7 @@ test('EditSession deletes file after rendering', async t => {
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions, [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: [
@@ -98,6 +99,7 @@ test('EditSession deletes file after rendering', async t => {
   ]);
 
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions.slice(3), [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: []},
@@ -131,6 +133,7 @@ test('EditSession ignores deleting file not existing after rendering', async t =
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions, [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: [
@@ -183,6 +186,7 @@ test('EditSession ignores deleting file not existing after rendering', async t =
   ]);
 
   await es.render();
+  es.mutationChanged();
   t.deepEqual(actions.slice(3), [
     {type: 'init', config: {isAurelia1: false, deps: {}}},
     {type: 'update', files: []},
