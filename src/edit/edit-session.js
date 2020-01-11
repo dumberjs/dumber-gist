@@ -5,7 +5,7 @@ import {WorkerService} from '../worker-service';
 
 @inject(EventAggregator, WorkerService)
 export class EditSession {
-  _gist = null;
+  gist = null;
   files = [];
   description = '';
 
@@ -31,14 +31,15 @@ export class EditSession {
   mutationChanged() {
     // FIXME: isRendered should check deleted files.
     this.isRendered = _.every(this.files, 'isRendered');
-    this.isChanged = _.some(this.files, 'isChanged') ||
-      this.files.length !== this._gist.files.length ||
-      this.description !== this._gist.description;
+    this.isChanged = !this.gist ||
+      _.some(this.files, 'isChanged') ||
+      this.files.length !== this.gist.files.length ||
+      this.description !== this.gist.description;
   }
 
   loadGist(gist) {
-    this._gist = gist;
-    this.files = _.map(this._gist.files, f => ({
+    this.gist = gist;
+    this.files = _.map(this.gist.files, f => ({
       filename: f.filename,
       content: f.content,
       isRendered: false,
@@ -51,9 +52,23 @@ export class EditSession {
     this.mutation = this.mutation === 0 ? -1 : 0;
   }
 
+  importData(data) {
+    if (data) {
+      this.description = data.description;
+      this.files = _.map(data.files, f => ({
+        filename: f.filename,
+        content: f.content,
+        isRendered: false,
+        isChanged: f.isChanged
+      }));
+      this.gist = data.gist;
+      this._mutate();
+    }
+  }
+
   updateFile(filename, content) {
     const f = _.find(this.files, {filename});
-    const oldF = _.find(this._gist.files, {filename});
+    const oldF = this.gist && _.find(this.gist.files, {filename});
 
     if (!f) {
       this.ea.publish('error', 'Cannot update ' + filename + ' because it does not exist.');
@@ -81,7 +96,7 @@ export class EditSession {
       } else if (file.filename.startsWith(filePath + '/')) {
         newFilename = newFilePath + '/' + file.filename.slice(filePath.length + 1);
         file.isRendered = false;
-        const oldF = _.find(this._gist.files, {filename: newFilePath});
+        const oldF = this.gist && _.find(this.gist.files, {filename: newFilePath});
         file.isChanged = !oldF || oldF.content !== file.content;
 
         this.ea.publish('renamed-file', {
@@ -100,7 +115,7 @@ export class EditSession {
 
         isUpdated = true;
         file.isRendered = false;
-        const oldF = _.find(this._gist.files, {filename: newFilename});
+        const oldF = this.gist && _.find(this.gist.files, {filename: newFilename});
         file.isChanged = !oldF || oldF.content !== file.content;
         file.filename = newFilename;
 

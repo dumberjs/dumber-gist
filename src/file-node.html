@@ -12,7 +12,7 @@
       </span>
       <i class="fas file-action fa-pencil-alt" click.trigger="editName($event) & leftClick"></i>
       <i if.bind="node.files" class="fas file-action fa-plus" click.trigger="createFile($event) & leftClick"></i>
-      <i class="fas file-action fa-trash-alt" click.trigger="delete($event) & leftClick"></i>
+      <i class="fas file-action fa-trash-alt" if.bind="deletable" click.trigger="delete($event) & leftClick"></i>
       <small if.bind="node.isChanged && (!node.files || collapseFlags[node.filePath])" class="fas fa-circle text-primary"></small>
     </div>
     <div class="nested-file-node-${indent}" if.bind="node.files && !collapseFlags[node.filePath]">

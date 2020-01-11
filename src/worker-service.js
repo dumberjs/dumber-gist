@@ -1,19 +1,13 @@
-import crypto from 'crypto';
 import {inject, computedFrom} from 'aurelia-framework';
+import {SessionId} from './session-id';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import localforage from 'localforage';
 
-@inject(EventAggregator)
+@inject(EventAggregator, SessionId)
 export class WorkerService {
-  constructor(ea) {
+  constructor(ea, sessionId) {
     this.ea = ea;
-    // id is the unique identifier for every gist-code instance.
-    // Then worker and app are behind https://${id}.gist-code.com.
-    if (process.env.NODE_ENV !== 'production') {
-      this.id = 'app';
-    } else {
-      this.id = crypto.randomBytes(20).toString('hex');
-    }
+    this.sessionId = sessionId;
 
     // FIFO queue
     this._jobs = [];
@@ -38,7 +32,7 @@ export class WorkerService {
     // in second iframe are provided by caches generated
     // by service worker.
     const iframe = document.createElement('iframe');
-    iframe.setAttribute('src', `https://${this.id}.gist-code.com/boot-up-worker.html`);
+    iframe.setAttribute('src', `https://${this.sessionId.id}.gist-code.com/boot-up-worker.html`);
     iframe.setAttribute('style', 'display: none');
     document.body.appendChild(iframe);
     this.iframe = iframe;

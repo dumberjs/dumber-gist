@@ -76,6 +76,17 @@ html {
   user-select: none;
 }
 
+.spinner {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 4rem;
+  margin-top: -2rem;
+  margin-left: -2rem;
+  color: $cyan-dark;
+}
+
 .app-top-bar {
   flex: 0 0 auto;
   display: flex;
@@ -242,7 +253,8 @@ html {
 .btn {
   display: inline-block;
   border: 0;
-  padding: .6rem .8rem;
+  padding: .2rem .8rem;
+  line-height: 2rem;
   border-radius: $border-radius;
   margin: 0;
   text-decoration: none;
@@ -253,6 +265,20 @@ html {
   text-align: center;
   transition: background-color 200ms ease-in-out, transform 150ms ease;
   appearance: none;
+
+  img {
+    display: inline-block;
+    vertical-align: baseline;
+    width: 2rem;
+    height: 2rem;
+    margin: 0 -.4rem -.2rem;
+  }
+
+  .fab, .fas, .far, .fal {
+    line-height: 2rem;
+    vertical-align: baseline;
+    font-size: 1.8rem;
+  }
 
   &.even-size {
     min-width: 6rem;
@@ -581,8 +607,6 @@ $node-start-offset: .6rem;
 
 .context-menu {
   position: fixed;
-  top: 0;
-  left: 0;
   border-radius: $border-radius;
   padding: .25rem 0;
   color: $gray-200;
@@ -660,17 +684,6 @@ input[type='text'] {
     right: 0;
     bottom: 0;
     left: 0;
-  }
-
-  .spinner {
-    display: inline-block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    font-size: 4rem;
-    margin-top: -2rem;
-    margin-left: -2rem;
-    color: $cyan-dark;
   }
 
   .error {

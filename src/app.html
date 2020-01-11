@@ -1,85 +1,10 @@
 <template>
   <require from="toastr/build/toastr.min.css"></require>
   <require from="./app.scss"></require>
-  <require from="./panel-resizer"></require>
-  <require from="./file-navigator"></require>
-  <require from="./editor-tabs"></require>
-  <require from="./code-editor"></require>
-  <require from="./browser-bar"></require>
-  <require from="./browser-frame"></require>
-  <require from="./browser-dev-tools"></require>
-  <require from="./file-drop-indicator"></require>
-  <require from="./toastrie"></require>
-  <require from="./action-dispatcher"></require>
+  <require from="./gist-code-app"></require>
 
-  <div class="app" ref="dndElement">
-    <div class="app-top-bar">
-      <div class="app-buttons d-small">
-        <button
-          class="btn ${showSideBarInSmallLayout ? 'primary' : 'clean'}"
-          click.trigger="showSideBarInSmallLayout = !showSideBarInSmallLayout & leftClick"><i class="fas fa-bars"></i></button>
-      </div>
-      <div class="app-title">Gist Code</div>
-      <div class="app-buttons ml-auto">
-        <button
-          class="btn d-small ${showEditorsInSmallLayout ? 'primary' : 'clean'}"
-          click.trigger="toggleEditors() & leftClick"><i class="far fa-edit"></i></button>
-        <button
-          class="btn d-small ${showBrowserWindowInSmallLayout ? 'primary' : 'clean'}"
-          click.trigger="toggleBrowserWindow() & leftClick"><i class="far fa-window-maximize"></i></button>
-
-        <button class="btn"><i class="fab fa-github"></i></button>
-      </div>
-    </div>
-    <div class="app-content">
-      <div
-        class="app-side-bar ${showSideBarInSmallLayout ? 'show-side-bar' : ''}"
-        css="width: ${effectiveSideBarWidth}px;"
-      >
-        <file-navigator></file-navigator>
-        <panel-resizer
-          class="d-small-hide"
-          panel="side-bar"
-          dblclick.trigger="onResize(true) & leftClick"></panel-resizer>
-      </div>
-      <div
-        class="app-editors ${showEditorsInSmallLayout ? 'show-editors' : 'hide-editors'} ${showEditorsInSmallLayout && !showBrowserWindowInSmallLayout ? 'sole-panel' : ''}"
-        css="width: ${effectiveEditorsWidth}px;"
-      >
-        <editor-tabs></editor-tabs>
-        <code-editor
-          if.bind="openedFiles.editingFile"
-          file.bind="openedFiles.editingFile"
-          read-only.bind="false"
-          line-wrapping.bind="true"
-          ></code-editor>
-        <panel-resizer
-          class="d-tiny-hide"
-          panel="editors"
-          dblclick.trigger="onResize(true) & leftClick"></panel-resizer>
-      </div>
-      <div class="app-browser-window ${showBrowserWindowInSmallLayout ? 'show-browser-window' : 'hide-browser-window'} ${!showEditorsInSmallLayout && showBrowserWindowInSmallLayout ? 'sole-panel' : ''}">
-        <browser-bar
-          is-bundling.bind="isBundling"
-          bundle.call="bundle()"></browser-bar>
-        <browser-frame
-          is-bundling.bind="isBundling"
-          bundler-error.bind="bundlerError"></browser-frame>
-        <browser-dev-tools
-          height.bind="effectiveDevToolsHeight"
-          toggle-dev-tools.call="toggleDevTools()"
-        >
-          <panel-resizer
-            class="panel-resizer-horizontal"
-            panel="dev-tools"
-            dblclick.trigger="toggleDevTools() & leftClick"
-            ></panel-resizer>
-        </browser-dev-tools>
-      </div>
-    </div>
+  <gist-code-app></gist-code-app>
+  <div class="context-overlay" if.bind="!oauth.initialised || user.loading">
+    <i class="spinner fas fa-circle-notch fa-spin"></i>
   </div>
-
-  <file-drop-indicator></file-drop-indicator>
-  <toastrie></toastrie>
-  <action-dispatcher></action-dispatcher>
 </template>

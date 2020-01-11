@@ -1,0 +1,4 @@
+<template>
+  <button class="btn" if.bind="!user.authenticated" click.trigger="login() & leftClick"><i class="fab fa-github"></i></button>
+  <button class="btn" else click.trigger="userMenu($event) & leftClick"><img src.bind="user.avatar_url" alt.bind="user.login"></button>
+</template>

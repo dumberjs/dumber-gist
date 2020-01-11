@@ -1,16 +1,16 @@
 import {inject, bindable} from 'aurelia-framework';
 import {DndService} from 'bcx-aurelia-dnd';
-import {WorkerService} from './worker-service';
+import {SessionId} from './session-id';
 
-@inject(DndService, WorkerService)
+@inject(DndService, SessionId)
 export class BrowserFrame {
   @bindable isBundling;
   @bindable bundlerError;
   rendered = false;
 
-  constructor(dndService, workerService) {
+  constructor(dndService, sessionId) {
     this.dndService = dndService;
-    this.id = workerService.id;
+    this.id = sessionId.id;
   }
 
   isBundlingChanged(isBundling, oldIsBundling) {
