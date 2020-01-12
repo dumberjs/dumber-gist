@@ -1,4 +1,5 @@
-<template>
-  <button class="btn" if.bind="!user.authenticated" click.trigger="login() & leftClick"><i class="fab fa-github"></i></button>
-  <button class="btn" else click.trigger="userMenu($event) & leftClick"><img src.bind="user.avatar_url" alt.bind="user.login"></button>
+<template ref="el" class="github-account">
+  <require from="./github-account.scss"></require>
+  <i if.bind="!user.authenticated" click.trigger="login() & leftClick" class="fab fa-github"></i>
+  <img src.bind="user.avatar_url" alt.bind="user.login" else click.trigger="userMenu($event) & leftClick">
 </template>

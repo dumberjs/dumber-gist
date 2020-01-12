@@ -14,8 +14,8 @@
       </div>
     </ux-dialog-body>
     <ux-dialog-footer>
-      <button class="btn even-size float-left" click.trigger="controller.cancel() & leftClick">Cancel</button>
-      <button class="btn even-size primary" click.trigger="save() & leftClick" disabled.bind="errors">Create</button>
+      <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
+      <button class="btn ml-auto primary" click.trigger="save() & leftClick" disabled.bind="errors">Create</button>
     </ux-dialog-footer>
   </ux-dialog>
 </template>

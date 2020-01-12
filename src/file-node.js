@@ -78,6 +78,7 @@ export class FileNode {
         top: e.pageY,
         items: [
           {title: 'Rename...', code: 'rename'},
+          {separator: true},
           {title: 'Delete', code: 'delete', class: 'text-error'}
         ]
       }

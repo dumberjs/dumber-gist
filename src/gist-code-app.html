@@ -19,14 +19,14 @@
       <div class="app-title">Gist Code</div>
       <div class="app-buttons ml-auto mr-auto">
         <button
-          class="btn d-small ${showEditorsInSmallLayout ? 'primary' : 'clean'}"
-          click.trigger="toggleEditors() & leftClick"><i class="far fa-edit"></i></button>
+          class="btn btn-not-last even-size d-small ${showEditorsInSmallLayout ? 'primary' : 'clean'}"
+          click.trigger="toggleEditors() & leftClick"><i class="fas fa-code"></i></button>
         <button
-          class="btn d-small ${showBrowserWindowInSmallLayout ? 'primary' : 'clean'}"
-          click.trigger="toggleBrowserWindow() & leftClick"><i class="far fa-window-maximize"></i></button>
+          class="btn btn-not-first even-size d-small ${showBrowserWindowInSmallLayout ? 'primary' : 'clean'}"
+          click.trigger="toggleBrowserWindow() & leftClick"><i class="fas fa-window-maximize"></i></button>
       </div>
 
-      <div class="app-buttons ml-auto" as-element="github-account"></div>
+      <github-account class="ml-auto"></github-account>
     </div>
     <div class="app-content">
       <div

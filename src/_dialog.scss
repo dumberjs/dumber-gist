@@ -8,7 +8,7 @@ ux-dialog-container, ux-dialog-overlay {
 
 ux-dialog-overlay {
   opacity: 0;
-  background-color: rgba(0, 0, 0, .3);
+  // background-color: rgba(0, 0, 0, .1);
 }
 
 ux-dialog-overlay.active {
@@ -115,23 +115,17 @@ ux-dialog-header + ux-dialog-body {
 }
 
 ux-dialog > ux-dialog-footer {
-  display: block;
+  display: flex;
   flex: 0 0;
   padding: 1rem;
   background-color: $gray-900;
   text-align: right;
   border-bottom-left-radius: $border-radius;
   border-bottom-right-radius: $border-radius;
-
-  &::after {
-    display: block;
-    content: "";
-    clear: both;
-  }
 }
 
 ux-dialog > ux-dialog-footer .btn {
-  min-width: 5rem;
+  min-width: 6rem;
 }
 
 ux-dialog > ux-dialog-footer .btn+.btn {

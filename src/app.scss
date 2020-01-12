@@ -107,7 +107,8 @@ html {
 
   .app-buttons {
     margin: .5rem;
-    white-space: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
   }
 }
 
@@ -251,7 +252,7 @@ html {
 }
 
 .btn {
-  display: inline-block;
+  display: block;
   border: 0;
   padding: .2rem .8rem;
   line-height: 2rem;
@@ -266,22 +267,23 @@ html {
   transition: background-color 200ms ease-in-out, transform 150ms ease;
   appearance: none;
 
-  img {
-    display: inline-block;
-    vertical-align: baseline;
-    width: 2rem;
-    height: 2rem;
-    margin: 0 -.4rem -.2rem;
+  &.btn-not-first {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  &.btn-not-last {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
   .fab, .fas, .far, .fal {
     line-height: 2rem;
     vertical-align: baseline;
-    font-size: 1.8rem;
   }
 
   &.even-size {
-    min-width: 6rem;
+    min-width: 4rem;
   }
 
   &:hover, &:focus {
@@ -297,7 +299,7 @@ html {
   }
 
   &.clean {
-    background-color: transparent;
+    background-color: $dark-shadow;
     color: $white;
 
     &:hover, &:focus {
@@ -609,26 +611,23 @@ $node-start-offset: .6rem;
   position: fixed;
   border-radius: $border-radius;
   padding: .25rem 0;
-  color: $gray-900;
+  color: $gray-1000;
 
   background-color: $gray-500;
   box-shadow: 0 0 5px $dark-shadow;
 
   .context-menu-item {
-    cursor: pointer;
     padding: .5rem 1rem;
 
-    &.context-menu-item-big {
-      padding: .8rem 1.2rem;
-      font-size: 1.2rem;
-    }
-
-    &:not(:last-child) {
-      border-bottom: 1px solid $gray-500;
-    }
-
-    &:hover {
+    &.context-menu-item-action:hover {
       background-color: $white;
+      cursor: pointer;
+    }
+
+    &.context-menu-item-separator {
+      padding: 0;
+      margin: .25rem 0;
+      border-bottom: 1px solid $gray-600;
     }
   }
 }

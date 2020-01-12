@@ -18,15 +18,20 @@ export class GithubAccount {
     this.oauth.login(this.sessionId.id);
   }
 
-  userMenu(e) {
-    const rect = e.target.getBoundingClientRect();
+  userMenu() {
+    if (!this.user.login) return;
+
+    const rect = this.el.getBoundingClientRect();
     this.dialogService.open({
       viewModel: ContextMenu,
       model: {
-        right: 7,
+        right: 5,
         top: rect.bottom + 4,
         items: [
-          {title: 'Logout', code: 'logout'}
+          {html: `Signed in as <strong>${this.user.login}</strong>`},
+          {separator: true},
+          {title: 'Your gists', code: 'gists'},
+          {title: 'Sign out', code: 'logout'}
         ]
       }
     }).whenClosed(response => {
