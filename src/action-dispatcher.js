@@ -81,7 +81,7 @@ export class ActionDispatcher {
     }).whenClosed(response => {
       if (response.wasCancelled) return;
       const newFilePath = response.output;
-      this.updatePath(filePath, newFilePath);
+      this.session.updatePath(filePath, newFilePath);
     });
   }
 
