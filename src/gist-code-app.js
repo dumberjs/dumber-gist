@@ -18,7 +18,7 @@ export class GistCodeApp {
 
   isBundling = false;
   bundlerError = null;
-  intension = {sideBar: 0, editors: 0, devTools: 0};
+  intention = {sideBar: 0, editors: 0, devTools: 0};
 
   sideBarWidth = 400;
   editorsWidth = 500;
@@ -40,9 +40,9 @@ export class GistCodeApp {
     this._subscribers = [
       this.ea.subscribe('dnd:willStart', () => this.resetIntention()),
       this.ea.subscribe('dnd:didEnd', () => {
-        if (this.intension.sideBar) this.sideBarWidth += this.intension.sideBar;
-        if (this.intension.editors) this.editorsWidth += this.intension.editors;
-        if (this.intension.devTools) this.devToolsHeight += this.intension.devTools;
+        if (this.intention.sideBar) this.sideBarWidth += this.intention.sideBar;
+        if (this.intention.editors) this.editorsWidth += this.intention.editors;
+        if (this.intention.devTools) this.devToolsHeight += this.intention.devTools;
         this.resetIntention();
       }),
       this.ea.subscribe('opened-file', () => {
@@ -111,9 +111,9 @@ export class GistCodeApp {
   }
 
   resetIntention() {
-    this.intension.sideBar = 0;
-    this.intension.editors = 0;
-    this.intension.devTools = 0;
+    this.intention.sideBar = 0;
+    this.intention.editors = 0;
+    this.intention.devTools = 0;
   }
 
   dndCanDrop(model) {
@@ -121,7 +121,7 @@ export class GistCodeApp {
   }
 
   _buildIntension(location) {
-    const intension = {sideBar: 0, editors: 0, devTools: 0};
+    const intention = {sideBar: 0, editors: 0, devTools: 0};
     const {mouseStartAt, mouseEndAt} = location;
     const diff = mouseEndAt.x - mouseStartAt.x;
     const diffY = mouseStartAt.y - mouseEndAt.y;
@@ -134,11 +134,11 @@ export class GistCodeApp {
         newWidth = this.windowWidth - 2 * MIN_PANEL_WIDTH;
       }
       const effetiveDiff = newWidth - this.sideBarWidth;
-      intension.sideBar = effetiveDiff;
+      intention.sideBar = effetiveDiff;
 
       let newWidth2 = this.editorsWidth - effetiveDiff;
       if (newWidth2 < MIN_PANEL_WIDTH) newWidth2 = MIN_PANEL_WIDTH;
-      intension.editors = newWidth2 - this.editorsWidth;
+      intention.editors = newWidth2 - this.editorsWidth;
     } else if (this.dnd.model.panel === 'editors') {
       let newWidth = this.editorsWidth + diff;
       if (newWidth < MIN_PANEL_WIDTH) {
@@ -154,7 +154,7 @@ export class GistCodeApp {
           }
         }
       }
-      intension.editors = newWidth - this.editorsWidth;
+      intention.editors = newWidth - this.editorsWidth;
     } else if (this.dnd.model.panel === 'dev-tools') {
       let newHeight = this.devToolsHeight + diffY;
 
@@ -166,17 +166,17 @@ export class GistCodeApp {
         newHeight = 0;
       }
 
-      intension.devTools = newHeight - this.devToolsHeight;
+      intention.devTools = newHeight - this.devToolsHeight;
     }
 
-    return intension;
+    return intention;
   }
 
   dndHover(location) {
-    const intension = this._buildIntension(location);
-    if (this.intension.sideBar !== intension.sideBar) this.intension.sideBar = intension.sideBar;
-    if (this.intension.editors !== intension.editors) this.intension.editors = intension.editors;
-    if (this.intension.devTools !== intension.devTools) this.intension.devTools = intension.devTools;
+    const intention = this._buildIntension(location);
+    if (this.intention.sideBar !== intention.sideBar) this.intention.sideBar = intention.sideBar;
+    if (this.intention.editors !== intention.editors) this.intention.editors = intention.editors;
+    if (this.intention.devTools !== intention.devTools) this.intention.devTools = intention.devTools;
   }
 
   dndDrop() {
@@ -221,21 +221,21 @@ export class GistCodeApp {
     }
   }
 
-  @computedFrom('sideBarWidth', 'intension.sideBar')
+  @computedFrom('sideBarWidth', 'intention.sideBar')
   get effectiveSideBarWidth() {
-    const width = this.sideBarWidth + this.intension.sideBar;
+    const width = this.sideBarWidth + this.intention.sideBar;
     return width;
   }
 
-  @computedFrom('editorsWidth', 'intension.editors')
+  @computedFrom('editorsWidth', 'intention.editors')
   get effectiveEditorsWidth() {
-    const width = this.editorsWidth + this.intension.editors;
+    const width = this.editorsWidth + this.intention.editors;
     return width;
   }
 
-  @computedFrom('devToolsHeight', 'intension.devTools')
+  @computedFrom('devToolsHeight', 'intention.devTools')
   get effectiveDevToolsHeight() {
-    const hight = this.devToolsHeight + this.intension.devTools;
+    const hight = this.devToolsHeight + this.intention.devTools;
     return hight;
   }
 }
