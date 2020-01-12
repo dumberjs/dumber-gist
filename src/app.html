@@ -8,8 +8,8 @@
   <div class="flash" if.bind="loading">
     <div>
       <h1><i>Gist Code</i></h1>
-      <h2 class="text-warning" if.bind="slow">
-        It seems our free heroku app gist-code-oauth is sleeping. It will take about 5 to 10 seconds for it to wake up.
+      <h2 if.bind="slow">
+        It seems that our free Heroku app <span class="text-warning">gist-code-oauth is probably sleeping</span>. It can take 5 to 10 seconds to wake up.
       </h2>
     </div>
   </div>
