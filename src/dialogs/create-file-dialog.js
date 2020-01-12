@@ -3,6 +3,9 @@ import Validation from 'bcx-validation';
 import {EditSession} from '../edit/edit-session';
 import {inject, computedFrom} from 'aurelia-framework';
 import _ from 'lodash';
+import path from 'path';
+
+const BINARY_EXTS = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.ico', '.wasm'];
 
 @inject(DialogController, Validation, EditSession)
 export class CreateFileDialog {
@@ -24,6 +27,11 @@ export class CreateFileDialog {
           }
           if (_.find(session.files, f => f.filename.startsWith(name + '/'))) {
             return `there is an existing folder "${name}"`;
+          }
+        },
+        name => {
+          if (BINARY_EXTS.includes(path.extname(name))) {
+            return `GitHub gist only supports text file, try svg if you need images`;
           }
         }
       ]
