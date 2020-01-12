@@ -609,21 +609,26 @@ $node-start-offset: .6rem;
   position: fixed;
   border-radius: $border-radius;
   padding: .25rem 0;
-  color: $gray-200;
+  color: $gray-900;
 
-  background-color: $gray-800;
+  background-color: $gray-500;
   box-shadow: 0 0 5px $dark-shadow;
 
   .context-menu-item {
     cursor: pointer;
     padding: .5rem 1rem;
 
+    &.context-menu-item-big {
+      padding: .8rem 1.2rem;
+      font-size: 1.2rem;
+    }
+
     &:not(:last-child) {
-      border-bottom: 1px solid $gray-900;
+      border-bottom: 1px solid $gray-500;
     }
 
     &:hover {
-      background-color: $black;
+      background-color: $white;
     }
   }
 }
