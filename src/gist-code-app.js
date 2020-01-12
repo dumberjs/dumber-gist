@@ -7,7 +7,7 @@ import {combo} from 'aurelia-combo';
 import _ from 'lodash';
 
 const MIN_PANEL_WIDTH = 150;
-const MIN_DEV_TOOLS_HEIGHT = 25;
+const MIN_DEV_TOOLS_HEIGHT = 40;
 
 // Handle layout calculation and global bundling state
 @inject(EventAggregator, DndService, EditSession, OpenedFiles)
