@@ -1,18 +1,19 @@
+import {inject} from 'aurelia-framework';
+import {InitParams} from './init-params';
 import crypto from 'crypto';
-import queryString from 'query-string';
 
+@inject(InitParams)
 export class SessionId {
-  constructor(mockSearch) {
-    this._search = mockSearch || location.search;
+  constructor(params) {
+    this.params = params;
     this.id = this._generateId();
   }
 
   // id is the unique identifier for every gist-code instance.
   // Then worker and app are behind https://${id}.gist-code.com.
   _generateId() {
-    const params = queryString.parse(this._search);
-    if (params.sessionId) {
-      return params.sessionId;
+    if (this.params.sessionId) {
+      return this.params.sessionId;
     }
 
     if (process.env.NODE_ENV !== 'production') {

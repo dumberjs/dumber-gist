@@ -2,9 +2,19 @@
   <require from="toastr/build/toastr.min.css"></require>
   <require from="./app.scss"></require>
   <require from="./gist-code-app"></require>
+  <require from="./toastrie"></require>
+  <require from="./action-dispatcher"></require>
 
-  <gist-code-app></gist-code-app>
-  <div class="context-overlay" if.bind="!oauth.initialised || user.loading">
-    <i class="spinner fas fa-circle-notch fa-spin"></i>
+  <div class="flash" if.bind="loading">
+    <div>
+      <h1><i>Gist Code</i></h1>
+      <h2 class="text-warning" if.bind="slow">
+        It seems our free heroku app gist-code-oauth is sleeping. It will take about 5 to 10 seconds for it to wake up.
+      </h2>
+    </div>
   </div>
+  <gist-code-app else></gist-code-app>
+
+  <toastrie></toastrie>
+  <action-dispatcher></action-dispatcher>
 </template>

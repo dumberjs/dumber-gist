@@ -5,7 +5,7 @@ import {WorkerService} from '../worker-service';
 
 @inject(EventAggregator, WorkerService)
 export class EditSession {
-  gist = null;
+  gist = {description: '', files: []};
   files = [];
   description = '';
 
@@ -31,8 +31,7 @@ export class EditSession {
   mutationChanged() {
     // FIXME: isRendered should check deleted files.
     this.isRendered = _.every(this.files, 'isRendered');
-    this.isChanged = !this.gist ||
-      _.some(this.files, 'isChanged') ||
+    this.isChanged = _.some(this.files, 'isChanged') ||
       this.files.length !== this.gist.files.length ||
       this.description !== this.gist.description;
   }
@@ -68,7 +67,7 @@ export class EditSession {
 
   updateFile(filename, content) {
     const f = _.find(this.files, {filename});
-    const oldF = this.gist && _.find(this.gist.files, {filename});
+    const oldF = _.find(this.gist.files, {filename});
 
     if (!f) {
       this.ea.publish('error', 'Cannot update ' + filename + ' because it does not exist.');
@@ -96,7 +95,7 @@ export class EditSession {
       } else if (file.filename.startsWith(filePath + '/')) {
         newFilename = newFilePath + '/' + file.filename.slice(filePath.length + 1);
         file.isRendered = false;
-        const oldF = this.gist && _.find(this.gist.files, {filename: newFilePath});
+        const oldF = _.find(this.gist.files, {filename: newFilePath});
         file.isChanged = !oldF || oldF.content !== file.content;
 
         this.ea.publish('renamed-file', {
@@ -115,7 +114,7 @@ export class EditSession {
 
         isUpdated = true;
         file.isRendered = false;
-        const oldF = this.gist && _.find(this.gist.files, {filename: newFilename});
+        const oldF = _.find(this.gist.files, {filename: newFilename});
         file.isChanged = !oldF || oldF.content !== file.content;
         file.filename = newFilename;
 

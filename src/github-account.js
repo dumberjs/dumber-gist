@@ -2,18 +2,20 @@ import {inject} from 'aurelia-framework';
 import {DialogService} from 'aurelia-dialog';
 import {Oauth} from './github/oauth';
 import {User} from './github/user';
+import {SessionId} from './session-id';
 import {ContextMenu} from './dialogs/context-menu';
 
-@inject(DialogService, Oauth, User)
+@inject(DialogService, SessionId, Oauth, User)
 export class GithubAccount {
-  constructor(dialogService, oauth, user) {
+  constructor(dialogService, sessionId, oauth, user) {
     this.dialogService = dialogService;
+    this.sessionId = sessionId;
     this.oauth = oauth;
     this.user = user;
   }
 
   login() {
-    this.oauth.login();
+    this.oauth.login(this.sessionId.id);
   }
 
   userMenu(e) {
@@ -22,7 +24,7 @@ export class GithubAccount {
       viewModel: ContextMenu,
       model: {
         right: 7,
-        top: rect.bottom,
+        top: rect.bottom + 4,
         items: [
           {title: 'Logout', code: 'logout'}
         ]

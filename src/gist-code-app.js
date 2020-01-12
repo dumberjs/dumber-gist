@@ -31,11 +31,6 @@ export class GistCodeApp {
     this.dndService = dndService;
     this.session = session;
     this.openedFiles = openedFiles;
-    // For dev only
-    session.loadGist({
-      description: '',
-      files: []
-    });
     this.onResize = _.debounce(this.onResize.bind(this), 100);
     this.onResize();
   }
