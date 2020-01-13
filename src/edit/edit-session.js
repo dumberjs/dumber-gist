@@ -53,14 +53,23 @@ export class EditSession {
 
   importData(data) {
     if (data) {
-      this.description = data.description;
-      this.files = _.map(data.files, f => ({
-        filename: f.filename,
-        content: f.content,
-        isRendered: false,
-        isChanged: f.isChanged
-      }));
-      this.gist = data.gist;
+      if (data.description) {
+        this.description = data.description;
+      }
+
+      if (data.files) {
+        this.files = _.map(data.files, f => ({
+          filename: f.filename,
+          content: f.content,
+          isRendered: false,
+          isChanged: !!f.isChanged
+        }));
+      }
+
+      if (data.gist) {
+        this.gist = data.gist;
+      }
+
       this._mutate();
     }
   }

@@ -2,12 +2,14 @@ import {inject} from 'aurelia-framework';
 import {DialogService} from 'aurelia-dialog';
 import {EditSession} from './edit/edit-session';
 import {SelectSkeletonDialog} from './dialogs/select-skeleton-dialog';
+import {SkeletonGenerator} from './skeletons/skeleton-generator';
 
-@inject(DialogService, EditSession)
+@inject(DialogService, EditSession, SkeletonGenerator)
 export class QuickStart {
-  constructor(dialogService, session) {
+  constructor(dialogService, session, skeletonGenerator) {
     this.dialogService = dialogService;
     this.session = session;
+    this.skeletonGenerator = skeletonGenerator;
   }
 
   start() {
@@ -16,8 +18,8 @@ export class QuickStart {
       viewModel: SelectSkeletonDialog
     }).whenClosed(response => {
       if (response.wasCancelled) return;
-      const skeleton = response.output;
-      console.log('skeleton', skeleton);
+      const {framework, transpiler} = response.output;
+      this.skeletonGenerator.generate(framework, transpiler);
     })
   }
 }
