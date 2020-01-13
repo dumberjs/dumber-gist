@@ -10,6 +10,8 @@ export class ConfirmationDialog {
 
   activate(model) {
     this.message = model.message;
+    this.confirmationLabel = model.confirmationLabel || 'Yes';
+    this.cancelationLabel = model.cancelationLabel || 'No';
   }
 
   @combo('enter')

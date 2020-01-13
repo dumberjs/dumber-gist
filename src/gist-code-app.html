@@ -1,4 +1,5 @@
 <template>
+  <require from="./gist"></require>
   <require from="./github-account"></require>
   <require from="./panel-resizer"></require>
   <require from="./file-navigator"></require>
@@ -7,7 +8,6 @@
   <require from="./browser-bar"></require>
   <require from="./browser-frame"></require>
   <require from="./browser-dev-tools"></require>
-  <require from="./file-drop-indicator"></require>
 
   <div class="app" ref="dndElement">
     <div class="app-top-bar">
@@ -16,7 +16,9 @@
           class="btn ${showSideBarInSmallLayout ? 'primary' : 'clean'}"
           click.trigger="showSideBarInSmallLayout = !showSideBarInSmallLayout & leftClick"><i class="fas fa-bars"></i></button>
       </div>
-      <div class="app-title">Gist Code</div>
+
+      <gist></gist>
+
       <div class="app-buttons ml-auto mr-auto">
         <button
           class="btn btn-not-last even-size d-small ${showEditorsInSmallLayout ? 'primary' : 'clean'}"
@@ -75,6 +77,4 @@
       </div>
     </div>
   </div>
-
-  <file-drop-indicator></file-drop-indicator>
 </template>

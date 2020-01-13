@@ -4,9 +4,10 @@
   <require from="./gist-code-app"></require>
   <require from="./toastrie"></require>
   <require from="./action-dispatcher"></require>
+  <require from="./file-drop-indicator"></require>
 
   <div class="flash" if.bind="loading">
-    <div>
+    <div style="margin: 1rem;">
       <h1><i>Gist Code</i></h1>
       <h2 if.bind="slow">
         It seems that our free Heroku app <span class="text-warning">gist-code-oauth is probably sleeping</span>. It can take 5 to 10 seconds to wake up.
@@ -15,6 +16,7 @@
   </div>
   <gist-code-app else></gist-code-app>
 
+  <file-drop-indicator></file-drop-indicator>
   <toastrie></toastrie>
   <action-dispatcher></action-dispatcher>
 </template>

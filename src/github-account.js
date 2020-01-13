@@ -15,7 +15,7 @@ export class GithubAccount {
   }
 
   login() {
-    this.oauth.login(this.sessionId.id);
+    this.oauth.login();
   }
 
   userMenu() {

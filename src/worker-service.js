@@ -42,7 +42,7 @@ export class WorkerService {
 
     const handleMessage = event => {
       if (event.data && event.data.type === 'worker-up') {
-        console.log('gist-code Service Worker is up!');
+        console.info('gist-code Service Worker is up!');
         removeEventListener('message', handleMessage);
         addEventListener('message', this._workerSaid);
         resolveWorker();

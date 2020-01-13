@@ -33,6 +33,7 @@ export class GistCodeApp {
     this.openedFiles = openedFiles;
     this.onResize = _.debounce(this.onResize.bind(this), 100);
     this.onResize();
+    this._onResize = this._onResize.bind(this);
   }
 
   attached() {
@@ -53,7 +54,7 @@ export class GistCodeApp {
         }
       })
     ];
-    window.addEventListener('resize', () => this.onResize());
+    window.addEventListener('resize', this._onResize);
   }
 
   async bundle() {
@@ -75,7 +76,11 @@ export class GistCodeApp {
   detached() {
     this.dndService.removeTarget(this);
     this._subscribers.forEach(s => s.dispose());
-    window.removeEventListener('resize');
+    window.removeEventListener('resize', this._onResize);
+  }
+
+  _onResize() {
+    this.onResize();
   }
 
   onResize(reset) {

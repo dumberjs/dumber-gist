@@ -11,6 +11,7 @@ export class FileTree {
     this._updateTree = this._updateTree.bind(this);
     this.session = session;
     bindingEngine.propertyObserver(session, 'mutation').subscribe(this._updateTree);
+    this._updateTree();
   }
 
   _updateTree() {

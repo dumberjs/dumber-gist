@@ -95,16 +95,6 @@ html {
   background-color: $gray-800;
   border-bottom: 2px solid $gray-1000;
 
-  .app-title {
-    margin: .5rem .5rem .5rem 0;
-    color: $gray-200;
-    white-space: nowrap;
-
-    @media (min-width: $small) {
-      margin-left: .5rem;
-    }
-  }
-
   .app-buttons {
     margin: .5rem;
     display: flex;
@@ -252,10 +242,10 @@ html {
 }
 
 .btn {
-  display: block;
+  display: inline-block;
   border: 0;
   padding: .2rem .8rem;
-  line-height: 2rem;
+  line-height: 1.6rem;
   border-radius: $border-radius;
   margin: 0;
   text-decoration: none;
@@ -267,23 +257,33 @@ html {
   transition: background-color 200ms ease-in-out, transform 150ms ease;
   appearance: none;
 
+  + .btn {
+    margin-left: .25rem;
+  }
+
   &.btn-not-first {
+    margin: 0;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
 
   &.btn-not-last {
+    margin: 0;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
 
   .fab, .fas, .far, .fal {
-    line-height: 2rem;
+    line-height: 1.6rem;
     vertical-align: baseline;
   }
 
   &.even-size {
-    min-width: 4rem;
+    min-width: 3rem;
+
+    @media (max-width: $tiny - .02) {
+      min-width: 2rem;
+    }
   }
 
   &:hover, &:focus {
@@ -298,12 +298,33 @@ html {
     transform: scale(.95);
   }
 
+  &.disabled {
+    color: $gray-600;
+    cursor: default;
+
+    &:active {
+      transform: none;
+    }
+
+    &:hover, &:focus {
+      background-color: $gray-100;
+    }
+  }
+
   &.clean {
     background-color: $dark-shadow;
     color: $white;
 
     &:hover, &:focus {
       background-color: $bright-shadow;
+    }
+
+    &.disabled {
+      color: $gray-700;
+
+      &:hover, &:focus {
+        background-color: $dark-shadow;
+      }
     }
   }
 
@@ -314,6 +335,14 @@ html {
     &:hover, &:focus {
       background-color: darken($blue, 15%);
     }
+
+    &.disabled {
+      color: $gray-700;
+
+      &:hover, &:focus {
+        background-color: $blue;
+      }
+    }
   }
 
   &.success {
@@ -322,6 +351,14 @@ html {
 
     &:hover, &:focus {
       background-color: darken($green, 15%);
+    }
+
+    &.disabled {
+      color: $gray-700;
+
+      &:hover, &:focus {
+        background-color: $green;
+      }
     }
   }
 
@@ -332,6 +369,14 @@ html {
     &:hover, &:focus {
       background-color: darken($yellow, 15%);
     }
+
+    &.disabled {
+      color: $gray-700;
+
+      &:hover, &:focus {
+        background-color: $yellow;
+      }
+    }
   }
 
   &.error {
@@ -340,6 +385,14 @@ html {
 
     &:hover, &:focus {
       background-color: darken($red, 15%);
+    }
+
+    &.disabled {
+      color: $gray-700;
+
+      &:hover, &:focus {
+        background-color: $red;
+      }
     }
   }
 }

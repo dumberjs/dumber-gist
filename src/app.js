@@ -21,6 +21,6 @@ export class App {
 
   @computedFrom('oauth.initialised', 'user.loading')
   get loading() {
-    return !this.oauth.initialised || this.user.loading
+    return !this.oauth.initialised || this.user.loading;
   }
 }
