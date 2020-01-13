@@ -1,0 +1,34 @@
+@import "../variables";
+
+.select-section {
+  .section-header {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: $gray-500;
+  }
+
+  .section-body {
+    margin: .5rem 0;
+
+    .selection {
+      cursor: pointer;
+      border-radius: $border-radius;
+      display: flex;
+      padding: .4rem 1rem;
+      flex-wrap: nowrap;
+      align-items: center;
+      color: $gray-500;
+
+      img {
+        width: 1.6rem;
+        height: 1.6rem;
+        margin-right: .5rem;
+      }
+
+      &.selected {
+        background-color: $deep-dark-shadow;
+        color: $white;
+      }
+    }
+  }
+}

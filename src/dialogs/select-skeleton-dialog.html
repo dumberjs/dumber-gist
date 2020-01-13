@@ -1,0 +1,39 @@
+<template>
+  <require from="./select-skeleton-dialog.scss"></require>
+  <ux-dialog>
+    <ux-dialog-body>
+      <div class="select-section">
+        <div class="section-header">SPA Framework</div>
+        <div class="section-body">
+          <div
+            repeat.for="f of frameworks"
+            class="selection ${f.value === framework ? 'selected' : ''}"
+            click.trigger="framework = f.value & leftClick"
+          >
+            <img if.bind="f.icon" src.bind="f.icon" alt.bind="f.label">
+            ${f.label}
+          </div>
+        </div>
+      </div>
+
+      <div class="select-section">
+        <div class="section-header">JavaScript Language</div>
+        <div class="section-body">
+          <div
+            repeat.for="f of transpilers"
+            class="selection ${f.value === transpiler ? 'selected' : ''}"
+            click.trigger="transpiler = f.value & leftClick"
+          >
+            <img if.bind="f.icon" src.bind="f.icon" alt.bind="f.label">
+            ${f.label}
+          </div>
+        </div>
+      </div>
+
+    </ux-dialog-body>
+    <ux-dialog-footer>
+      <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
+      <button class="btn ml-auto primary" click.trigger="ok() & leftClick">Create</button>
+    </ux-dialog-footer>
+  </ux-dialog>
+</template>

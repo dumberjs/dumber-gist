@@ -4,6 +4,7 @@
 
 html {
   font-size: 14px;
+  line-height: 1.5;
 }
 
 @media (max-width: $tiny - .02) {
@@ -311,6 +312,10 @@ html {
     }
   }
 
+  &.clean, &.primary, &.success, &.warning, &.error {
+    text-shadow: 0 0 8px $deep-dark-shadow;
+  }
+
   &.clean {
     background-color: $dark-shadow;
     color: $white;
@@ -333,7 +338,7 @@ html {
     color: $white;
 
     &:hover, &:focus {
-      background-color: darken($blue, 15%);
+      background-color: $blue-dark;
     }
 
     &.disabled {
@@ -350,7 +355,7 @@ html {
     color: $white;
 
     &:hover, &:focus {
-      background-color: darken($green, 15%);
+      background-color: $green-dark;
     }
 
     &.disabled {
@@ -367,7 +372,7 @@ html {
     color: $white;
 
     &:hover, &:focus {
-      background-color: darken($yellow, 15%);
+      background-color: $yellow-dark;
     }
 
     &.disabled {
@@ -384,7 +389,7 @@ html {
     color: $white;
 
     &:hover, &:focus {
-      background-color: darken($red, 15%);
+      background-color: $red-dark;
     }
 
     &.disabled {

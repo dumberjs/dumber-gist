@@ -1,5 +1,6 @@
 <template class="file-navigator">
   <require from="./file-node"></require>
+  <require from="./quick-start"></require>
 
   <div class="section-node">
     <strong class="mr-auto">Files</strong>
@@ -13,5 +14,7 @@
       indent.bind="0"
       collapse-flags.bind="collapseFlags"
       ></file-node>
+
+    <quick-start if.bind="fileTree.tree.length === 0"></quick-start>
   </div>
 </template>
