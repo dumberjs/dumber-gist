@@ -18,10 +18,25 @@
       flex-wrap: nowrap;
       align-items: center;
       color: $gray-500;
+      line-height: 1;
+
+      small {
+        font-size: .8rem;
+        color: $gray-600;
+        line-height: 1.2;
+      }
 
       img {
-        width: 1.6rem;
-        height: 1.6rem;
+        width: 2rem;
+        height: 2rem;
+        margin-right: .6rem;
+      }
+
+      .fab, .fas, .far, .fal {
+        font-size: 1.8rem;
+        color: $blue;
+        line-height: 2rem;
+        margin-left: .1rem;
         margin-right: .5rem;
       }
 

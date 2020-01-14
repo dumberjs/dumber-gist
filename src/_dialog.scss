@@ -66,7 +66,7 @@ ux-dialog {
 ux-dialog > ux-dialog-header {
   display: block;
   flex: 0 0;
-  padding: 1rem 1rem .75rem;
+  padding: .75rem 1rem;
   font-weight: bold;
   font-size: 1.2rem;
   border-top-left-radius: $border-radius;
@@ -85,7 +85,7 @@ ux-dialog > ux-dialog-header {
     border: 0;
     color: $gray-500;
     padding: 0 .5rem .4rem;
-    margin: -.75rem -.75rem -.75rem 0;
+    margin: -.5rem -.75rem -.75rem 0;
     font-size: 2.2rem;
     line-height: 1;
     border-radius: $border-radius;
@@ -104,7 +104,7 @@ ux-dialog > ux-dialog-header {
 ux-dialog > ux-dialog-body {
   display: block;
   flex: 0 1;
-  padding: 1rem;
+  padding: .75rem 1rem;
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;

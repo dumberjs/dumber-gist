@@ -58,15 +58,11 @@ export class Gist {
     return files.length > 0;
   }
 
-  @computedFrom('session.gist', 'user')
+  @computedFrom('session.gist')
   get forkable() {
     const {gist} = this.session;
-    const {user} = this;
-    if (!gist.id) return false;
-    // Give a choice for popup
-    if (!user.authenticated) return true;
-    // existing gist
-    return gist.owner.login !== user.login;
+    // Give a choice for popup even when user is not authenticated
+    return !!gist.id;
   }
 
   @computedFrom('session.gist')

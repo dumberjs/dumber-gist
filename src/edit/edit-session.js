@@ -213,40 +213,29 @@ export class EditSession {
       return false; // exit early
     });
 
-    const allFiles = _(this.files)
-        .map(f => ({
-          filename: f.filename,
-          content: f.content
-        }))
-        .value()
-
-    const touchedFiles = _(this.files)
-        .reject('isRendered')
-        .map(f => ({
-          filename: f.filename,
-          content: f.content
-        }))
-        .value()
+    const allFiles = _.map(this.files, f => ({
+      filename: f.filename,
+      content: f.content
+    }));
 
     // Note all files are "copied" synchronously before sending
     // any async actions to service worker.
     // So that user can continue updating app code, future render()
     // will capture new changes.
 
-    const result = await this.ws.perform({
+    await this.ws.perform({
       type: 'init',
       config: {isAurelia1, deps}
     });
 
-    const renderFiles = result.isNew ? allFiles : touchedFiles;
     await this.ws.perform({
       type: 'update',
-      files: renderFiles
+      files: allFiles
     });
 
     await this.ws.perform({type: 'build'});
 
-    renderFiles.forEach(f => {
+    allFiles.forEach(f => {
       const unchangedFile = _.find(this.files, {filename: f.filename, content: f.content});
       if (unchangedFile) {
         // Only set isRendered for unchanged file

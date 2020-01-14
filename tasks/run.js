@@ -16,7 +16,7 @@ const serve = gulp.series(
       port: 443,
       ghostMode: false,
       online: false,
-      open: !process.env.CI,
+      open: false, // !process.env.CI,
       logLevel: 'silent', // or 'debug'
       server: {
         baseDir: ['.'],

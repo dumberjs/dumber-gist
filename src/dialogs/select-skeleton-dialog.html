@@ -10,8 +10,12 @@
             class="selection ${f.value === framework ? 'selected' : ''}"
             click.trigger="framework = f.value & leftClick"
           >
-            <img if.bind="f.icon" src.bind="f.icon" alt.bind="f.label">
-            ${f.label}
+            <i if.bind="f.icon" class.bind="f.icon"></i>
+            <img if.bind="f.image" src.bind="f.image" alt.bind="f.label">
+            <span>
+              <strong>${f.label}</strong>
+              <small if.bind="f.description"><br>${f.description}</small>
+            </span>
           </div>
         </div>
       </div>
@@ -24,8 +28,21 @@
             class="selection ${f.value === transpiler ? 'selected' : ''}"
             click.trigger="transpiler = f.value & leftClick"
           >
-            <img if.bind="f.icon" src.bind="f.icon" alt.bind="f.label">
-            ${f.label}
+            <i if.bind="f.icon" class.bind="f.icon"></i>
+            <img if.bind="f.image" src.bind="f.image" alt.bind="f.label">
+            <span>
+              <strong>${f.label}</strong>
+              <small if.bind="f.description"><br>${f.description}</small>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="select-section">
+        <div class="section-header">CSS Language</div>
+        <div class="section-body">
+          <div class="selection selected">
+            <small>All css/scss/sass/less formats are supported, you can even use more than one formats in the same project.</small>
           </div>
         </div>
       </div>

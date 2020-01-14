@@ -1,11 +1,19 @@
 import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {EditSession} from '../edit/edit-session';
+import none from './none';
 import aurelia from './aurelia';
+import aurelia2 from './aurelia2';
+import react from './react';
+import vue from './vue';
 import _ from 'lodash';
 
 const skeletons = {
-  aurelia
+  none,
+  aurelia,
+  aurelia2,
+  react,
+  vue
 };
 
 @inject(EventAggregator, EditSession)

@@ -6,6 +6,7 @@
   "version": "0.0.1",
   "license": "MIT",
   "devDependencies": {
+    "@aurelia/plugin-conventions": "dev",
     "@babel/core": "^7.7.7",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/plugin-proposal-decorators": "^7.7.4",
@@ -60,7 +61,7 @@
   },
   "scripts": {
     "css-lint": "sass-lint -c .sass-lint.yml 'src/**/*.scss'",
-    "js-lint": "eslint src test",
+    "js-lint": "eslint src worker test",
     "html-lint": "htmlhint -c .htmlhintrc src",
     "lint": "npm run js-lint && npm run css-lint && npm run html-lint",
     "pretest": "npm run lint && npm run build:test",

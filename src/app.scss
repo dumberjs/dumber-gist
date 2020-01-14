@@ -669,23 +669,31 @@ $node-start-offset: .6rem;
   position: fixed;
   border-radius: $border-radius;
   padding: .25rem 0;
-  color: $gray-1000;
+  color: $gray-200;
 
-  background-color: $gray-500;
-  box-shadow: 0 0 5px $dark-shadow;
+  background-color: $gray-900;
+  box-shadow: 0 0 0 1px $gray-700;
 
   .context-menu-item {
-    padding: .5rem 1rem;
+    padding: .25rem 1rem;
+
+    &.context-menu-item-action {
+      cursor: pointer;
+
+      &.danger {
+        color: $red;
+      }
+    }
 
     &.context-menu-item-action:hover {
-      background-color: $white;
-      cursor: pointer;
+      background-color: $cyan-dark;
+      color: $white !important;
     }
 
     &.context-menu-item-separator {
       padding: 0;
       margin: .25rem 0;
-      border-bottom: 1px solid $gray-600;
+      border-bottom: 1px solid $gray-800;
     }
   }
 }
@@ -697,12 +705,12 @@ $node-start-offset: .6rem;
   flex-wrap: nowrap;
   background-color: $gray-1000;
   align-items: center;
-  padding: 0 .5rem 0 1rem;
+  padding: 0 .5rem;
 
   .browser-bar-icon {
     flex: 0 0 auto;
-    margin: .8rem .5rem;
-    line-height: 1.15;
+    margin: 1rem .8rem;
+    cursor: pointer;
   }
 
   .browser-bar-address-input {

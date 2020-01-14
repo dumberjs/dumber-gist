@@ -16,7 +16,8 @@ const indexHtml = ext => `<!DOCTYPE html>
 <!--
 Gist Code uses dumber bundler, the default bundle file
 is /dist/entry-bundle.js.
-For Aurelia, the starting module is aurelia-bootstrapper,
+The starting module is aurelia-bootstrapper (data-main
+attribute on script) for Aurelia,
 it then loads up user module "main" (aurelia-app
 attribute on <body>) which is your src/main${ext}.
 -->
@@ -43,17 +44,18 @@ export function configure(aurelia: Aurelia) {
 `;
 
 const appHtml = `<template>
-  <h>\${message}</h>
+  <!-- Try to create a css/scss/sass/less file then require it here -->
+  <h1>\${message}</h1>
 </template>
 `;
 
 const appJs = `export class App {
-  message = 'Hello Aurelia';
+  message = 'Hello Aurelia!';
 }
 `;
 
 const appTs = `export class App {
-  public message: string = 'Hello Aurelia';
+  public message: string = 'Hello Aurelia!';
 }
 `;
 

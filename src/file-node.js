@@ -5,12 +5,6 @@ import {ContextMenu} from './dialogs/context-menu';
 import {OpenedFiles} from './edit/opened-files';
 import {DndService} from 'bcx-aurelia-dnd';
 
-function deletable(filePath) {
-  // The two files are required for gist-code to run.
-  return filePath !== 'index.html' &&
-    filePath !== 'package.json';
-}
-
 @inject(EventAggregator, DialogService, OpenedFiles, DndService)
 export class FileNode {
   @bindable node;
@@ -77,9 +71,8 @@ export class FileNode {
         left: e.pageX,
         top: e.pageY,
         items: [
-          {title: 'Rename...', code: 'rename'},
-          {separator: true},
-          {title: 'Delete', code: 'delete', class: 'text-error'}
+          {title: 'Rename', code: 'rename', icon: 'fas fa-pencil-alt'},
+          {title: 'Delete', code: 'delete', danger: true, icon: 'fas fa-trash-alt'}
         ]
       }
     }).whenClosed(response => {
@@ -113,7 +106,6 @@ export class FileNode {
   delete(event) {
     if (event) event.stopPropagation();
     const {filePath, files} = this.node;
-    if (!deletable(filePath)) return;
     const isFolder = !!files;
     this.ea.publish('delete-node', {filePath, isFolder});
   }
@@ -132,11 +124,5 @@ export class FileNode {
     if (!dnd || !dnd.isProcessing) return '';
     if (!dnd.canDrop || !dnd.isHoveringShallowly) return '';
     return 'can-drop';
-  }
-
-  @computedFrom('node', 'node.filePath')
-  get deletable() {
-    const {filePath} = this.node;
-    return deletable(filePath);
   }
 }
