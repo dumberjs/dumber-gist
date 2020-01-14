@@ -7,14 +7,17 @@ Thumbs.db
 .vscode
 
 # Dependencies
-/node_modules
-/package-lock.json
-/pnpm-lock.yaml
-/yarn.lock
+node_modules
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
 
 # Compiled files
-/dist
-/output
-/worker-bundle.*
-/.nyc_output
-/coverage
+dist
+output
+/client-worker/worker-bundle.*
+.nyc_output
+coverage
+
+# Cache files
+/cache
