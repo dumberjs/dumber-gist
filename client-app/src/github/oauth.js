@@ -6,7 +6,7 @@ import {PersistSession} from './persist-session';
 
 export const client_id = 'd154f3cc22c30d65b28c';
 const oauthUri = 'https://github.com/login/oauth/authorize';
-const tokenUri = 'https://gist-code-oauth.herokuapp.com/access-token';
+const tokenUri = 'https://github-oauth.gist-code.com/access_token';
 
 @inject(AccessToken, SessionId, PersistSession)
 export class Oauth {
