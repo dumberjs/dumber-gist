@@ -15,7 +15,9 @@ yarn.lock
 # Compiled files
 dist
 output
+/client-app/index.html
 /client-worker/worker-bundle.*
+/client-worker/boot-up-worker.html
 .nyc_output
 coverage
 

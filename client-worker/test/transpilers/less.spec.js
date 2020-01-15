@@ -1,5 +1,5 @@
 import test from 'tape-promise/tape';
-import {LessTranspiler} from '../../../worker/transpilers/less';
+import {LessTranspiler} from '../../src/transpilers/less';
 
 test('LessTranspiler matches less files', t => {
   const jt = new LessTranspiler();

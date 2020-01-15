@@ -1,5 +1,5 @@
 import test from 'tape-promise/tape';
-import {TextTranspiler} from '../../../worker/transpilers/text';
+import {TextTranspiler} from '../../src/transpilers/text';
 
 test('TextTranspiler matches html/css/svg/xml/json files', t => {
   const jt = new TextTranspiler();

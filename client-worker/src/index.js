@@ -1,4 +1,4 @@
-import 'aurelia-polyfills';
+import "core-js/stable";
 import {DumberSession} from './dumber-session';
 import findDeps from 'aurelia-deps-finder';
 import {Container} from 'aurelia-dependency-injection';

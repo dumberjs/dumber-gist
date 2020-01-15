@@ -1,5 +1,5 @@
 import test from 'tape-promise/tape';
-import {Transpiler} from '../../worker/transpiler';
+import {Transpiler} from '../src/transpiler';
 
 test('Transpiler transpiles ts file', async t => {
   const jt = new Transpiler();

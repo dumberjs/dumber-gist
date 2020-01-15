@@ -17,10 +17,8 @@
   "env": {
     "es2017": true,
     "browser": true,
-    "node": true,
-    "serviceworker": true
+    "node": true
   },
   "globals": {
-    "requirejs": true
   }
 }

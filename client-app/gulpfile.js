@@ -9,5 +9,5 @@ for (const p of fps) {
   exports[path.parse(p).name] = require('./tasks/' + p);
 }
 
-// default gulp task is "run"
-exports.default = exports.run;
+// default gulp task is "watch"
+exports.default = exports.watch;

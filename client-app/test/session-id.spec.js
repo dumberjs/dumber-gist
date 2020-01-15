@@ -1,5 +1,5 @@
 import test from 'tape-promise/tape';
-import {SessionId} from '../../src/session-id';
+import {SessionId} from '../src/session-id';
 
 test('SessionId reuses sessionId from search param', t => {
   const s = new SessionId({sessionId: 'abc'});

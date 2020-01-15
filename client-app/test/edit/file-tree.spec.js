@@ -1,5 +1,5 @@
 import test from 'tape-promise/tape';
-import {FileTree} from '../../../src/edit/file-tree';
+import {FileTree} from '../../src/edit/file-tree';
 
 const bindingEngine = {
   propertyObserver() {

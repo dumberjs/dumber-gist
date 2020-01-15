@@ -46,7 +46,7 @@ function build() {
   return merge2(
     gulp.src('src/**/*.json', {since: gulp.lastRun(build)}),
     gulp.src('src/**/*.html', {since: gulp.lastRun(build)}),
-    buildJs(isTest ? '{src,worker,test}/**/*.js' : 'src/**/*.js'),
+    buildJs(isTest ? '{src,test}/**/*.js' : 'src/**/*.js'),
     buildCss('src/**/*.scss')
   )
 

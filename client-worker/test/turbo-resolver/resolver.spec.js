@@ -1,7 +1,7 @@
 import test from 'tape-promise/tape';
 import _ from 'lodash';
-import {NpmHttpRegistry} from '../../../worker/turbo-resolver/registries/npm-http';
-import {Resolver} from '../../../worker/turbo-resolver/resolver';
+import {NpmHttpRegistry} from '../../src/turbo-resolver/registries/npm-http';
+import {Resolver} from '../../src/turbo-resolver/resolver';
 
 test('Resolver resolves au1 deps', async t => {
   const r = new Resolver(new NpmHttpRegistry());

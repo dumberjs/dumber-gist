@@ -1,5 +1,5 @@
 import test from 'tape-promise/tape';
-import {WorkerService} from '../../src/worker-service';
+import {WorkerService} from '../src/worker-service';
 
 let actions = [];
 let published = [];

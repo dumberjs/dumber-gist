@@ -1,5 +1,5 @@
 import test from 'tape-promise/tape';
-import {SassTranspiler} from '../../../worker/transpilers/sass';
+import {SassTranspiler} from '../../src/transpilers/sass';
 
 test('SassTranspiler matches sass/scss files', t => {
   const jt = new SassTranspiler();

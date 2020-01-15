@@ -1,5 +1,5 @@
 import test from 'tape-promise/tape';
-import {JsTranspiler} from '../../../worker/transpilers/js';
+import {JsTranspiler} from '../../src/transpilers/js';
 
 test('JsTranspiler matches js/ts/jsx/tsx files', t => {
   const jt = new JsTranspiler();

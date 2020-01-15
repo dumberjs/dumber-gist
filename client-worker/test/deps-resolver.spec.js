@@ -1,6 +1,6 @@
 import test from 'tape-promise/tape';
 import _ from 'lodash';
-import {DepsResolver} from '../../worker/deps-resolver';
+import {DepsResolver} from '../src/deps-resolver';
 
 class TurboResolver {
   async resolve(deps) {

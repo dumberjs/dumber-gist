@@ -1,5 +1,5 @@
 import test from 'tape-promise/tape';
-import {NpmHttpRegistry} from '../../../../worker/turbo-resolver/registries/npm-http';
+import {NpmHttpRegistry} from '../../../src/turbo-resolver/registries/npm-http';
 
 const r = new NpmHttpRegistry();
 

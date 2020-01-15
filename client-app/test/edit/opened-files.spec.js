@@ -1,5 +1,5 @@
 import test from 'tape-promise/tape';
-import {OpenedFiles} from '../../../src/edit/opened-files';
+import {OpenedFiles} from '../../src/edit/opened-files';
 
 const bindingEngine = {
   propertyObserver() {

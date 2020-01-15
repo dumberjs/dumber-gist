@@ -4,7 +4,7 @@ import {
   DEFAULT_INDEX_HTML,
   DEFAULT_BUNDLE_JS,
   DumberUninitializedError,
-  DumberSession} from '../../worker/dumber-session';
+  DumberSession} from '../src/dumber-session';
 
 class Dumber {
   constructor(config) {

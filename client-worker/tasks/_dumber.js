@@ -1,13 +1,9 @@
-const gulp = require('gulp');
-const babel = require('gulp-babel');
-const plumber = require('gulp-plumber');
-const terser = require('gulp-terser');
-const gulpif = require('gulp-if');
-const {isProduction} = require('./_env');
 const dumber = require('gulp-dumber');
 const fs = require('fs');
+const {isProduction, isTest} = require('./_env');
 
-const dr = dumber({
+module.exports = dumber({
+  skipModuleLoader: true,
   src: 'worker',
   // requirejs baseUrl, dumber default is "/dist"
   baseUrl: '/',
@@ -15,7 +11,8 @@ const dr = dumber({
   hash: isProduction,
   entryBundle: 'worker-bundle',
   prepend: [
-    require.resolve('sass.js/dist/sass.sync.js')
+    require.resolve('sass.js/dist/sass.sync.js'),
+    '../../../dumberjs/dumber-module-loader/dist/index.debug.js'
   ],
   deps: [
     // semver main index.js uses lazyRequire, we need explicit
@@ -23,7 +20,9 @@ const dr = dumber({
     {name: 'semver', main: 'preload.js'}
   ],
   append: [
-    "requirejs(['index']);"
+    isTest ?
+      `requirejs(['../test/setup', /^\\.\\.\\/test\\/.+\\.spec$/]).catch(console.error);` :
+      "requirejs(['index']);"
   ],
 
   onManifest: function(filenameMap) {
@@ -35,14 +34,3 @@ const dr = dumber({
     fs.writeFileSync('boot-up-worker.html', indexHtml);
   }
 });
-
-function buildWorker() {
-  return gulp.src('worker/**/*.js', {sourcemaps: !isProduction, since: gulp.lastRun(buildWorker)})
-    .pipe(gulpif(!isProduction, plumber()))
-    .pipe(babel())
-    .pipe(dr())
-    .pipe(gulpif(isProduction, terser({compress: false})))
-    .pipe(gulp.dest('.', {sourcemaps: isProduction ? false : '.'}));
-}
-
-module.exports = buildWorker;
