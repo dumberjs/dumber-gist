@@ -59,8 +59,8 @@
     "build:test": "gulp clean && cross-env NODE_ENV=test gulp build",
     "coverage": "npm run test && nyc report --reporter=lcov --reporter=text",
     "start": "gulp",
-    "build:dev": "gulp clean && gulp build",
-    "build": "gulp clean && cross-env NODE_ENV=production gulp build",
+    "build": "gulp clean && gulp build",
+    "build:prod": "gulp clean && cross-env NODE_ENV=production gulp build",
     "clear-cache": "gulp clear-cache",
     "test": "browser-do --tap < output/entry-bundle.js | tap-nirvana",
     "browser-test": "npm run build:test && browser-do --tap --browser chrome < output/entry-bundle.js | tap-nirvana"

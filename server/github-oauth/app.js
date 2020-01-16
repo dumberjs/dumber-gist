@@ -1,29 +1,22 @@
 const http = require('http');
 const {receiveData, fetch} = require('../request');
 
-const port = 5000;
-const client_id = process.env.GIST_CODE_CLIENTID || '';
-const client_secret = process.env.GIST_CODE_SECRET || '';
+const PORT = 5000;
+const CLIENT_ID = process.env.GIST_CODE_CLIENTID;
+const CLIENT_SECRET = process.env.GIST_CODE_SECRET;
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': 'https://gist-code.com',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Credentials': false,
-  'Access-Control-Max-Age': '86400', // 24 hours
-  'Access-Control-Allow-Headers': 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept'
-};
-
-function valid(origin) {
-  return typeof origin === 'string' &&
-    origin.match(/^https:\/\/(\w+\.)?gist-code\.com/);
+if (!CLIENT_ID || !CLIENT_SECRET) {
+  throw new Error('no client_id or client_secret');
 }
 
+// Note CORS headers are now added by nginx
 async function handleRequest(req, res) {
   const origin = req.headers.origin;
+  res.setHeader('Content-Type', 'text/plain');
 
-  if (valid(origin)) {
+  if (origin === 'https://gist-code.com') {
     if (req.method === 'OPTIONS') {
-      res.writeHead(200, corsHeaders);
+      res.writeHead(200);
       res.end();
       return;
     }
@@ -31,9 +24,10 @@ async function handleRequest(req, res) {
     if (req.method === 'POST' && /^\/access_token$/.test(req.url)) {
       try {
         const data = await receiveData(req);
+        console.error('data ' + JSON.stringify(data));
         const params = {
-          client_id: client_id,
-          client_secret: client_secret,
+          client_id: CLIENT_ID,
+          client_secret: CLIENT_SECRET,
           code: data.code,
           redirect_uri: data.redirect_uri,
           state: data.state
@@ -43,19 +37,19 @@ async function handleRequest(req, res) {
           method: 'POST',
           params
         });
-        res.writeHead(200, Object.assign({}, result.headers, corsHeaders));
+        res.writeHead(200, result.headers);
         res.end(result.body, 'utf8');
       } catch(error) {
-        res.writeHead(500, { 'Content-Type': 'text/plain' });
+        res.writeHead(500);
         res.end(error.message, 'utf8');
       }
       return;
     }
   }
 
-  res.writeHead(404, { 'Content-Type': 'text/plain' });
+  res.writeHead(404);
   res.end(`Not Found: ${req.method} ${req.url}\n`, 'utf8');
 }
 
 console.log('Start gist-code github-oauth server ...');
-http.createServer(handleRequest).listen(port);
+http.createServer(handleRequest).listen(PORT);

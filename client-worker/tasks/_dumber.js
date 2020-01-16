@@ -3,16 +3,13 @@ const fs = require('fs');
 const {isProduction, isTest} = require('./_env');
 
 module.exports = dumber({
-  skipModuleLoader: true,
-  src: 'worker',
   // requirejs baseUrl, dumber default is "/dist"
   baseUrl: '/',
   // Turn on hash for production build
   hash: isProduction,
   entryBundle: 'worker-bundle',
   prepend: [
-    require.resolve('sass.js/dist/sass.sync.js'),
-    '../../../dumberjs/dumber-module-loader/dist/index.debug.js'
+    require.resolve('sass.js/dist/sass.sync.js')
   ],
   deps: [
     // semver main index.js uses lazyRequire, we need explicit

@@ -8,15 +8,7 @@ export class App {
   constructor(oauth, user, urlHandler) {
     this.oauth = oauth;
     this.user = user;
-
-    this.slow = false;
     urlHandler.start();
-  }
-
-  attached() {
-    setTimeout(() => {
-      if (this.loading) this.slow = true;
-    }, 2000);
   }
 
   @computedFrom('oauth.initialised', 'user.loading')
