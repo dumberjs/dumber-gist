@@ -22,4 +22,9 @@ output
 coverage
 
 # Cache files
-/cache
+/server/cache
+
+# Phusion Passenger
+/server/dumber-cache/public
+/server/dumber-cache/tmp
+/server/github-oauth/tmp

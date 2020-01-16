@@ -1,0 +1,14 @@
+{
+  "name": "gist-code-server",
+  "version": "0.1.0",
+  "description": "GitHub OAuth server, and cache server for gist-code",
+  "private": true,
+  "main": "github-oauth.js",
+  "scripts": {
+    "lint": "eslint dumber-cache github-oauth request.js"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^6.8.0"
+  }
+}
