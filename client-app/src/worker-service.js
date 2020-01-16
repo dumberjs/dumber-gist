@@ -1,13 +1,15 @@
 import {inject, computedFrom} from 'aurelia-framework';
 import {SessionId} from './session-id';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import localforage from 'localforage';
+import {AccessToken} from './github/access-token';
 
-@inject(EventAggregator, SessionId)
+const CACHE_URI = 'https://cache.gist-code.com';
+@inject(EventAggregator, SessionId, AccessToken)
 export class WorkerService {
-  constructor(ea, sessionId) {
+  constructor(ea, sessionId, accessToken) {
     this.ea = ea;
     this.sessionId = sessionId;
+    this.accessToken = accessToken;
 
     // FIFO queue
     this._jobs = [];
@@ -59,14 +61,33 @@ export class WorkerService {
 
     if (data.type === 'get-cache') {
       const {hash} = event.data;
-      localforage.getItem(hash)
+      fetch(CACHE_URI + '/' + hash, {mode: 'cors'})
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error(response.statusText);
+        })
         .then(
           object => this._workerDo({type: 'got-cache', hash, object}),
           () => this._workerDo({type: 'got-cache', hash})
         );
       return;
     } else if (data.type === 'set-cache') {
-      localforage.setItem(event.data.hash, event.data.object);
+      if (this.accessToken.value) {
+        fetch(CACHE_URI, {
+          mode: 'cors',
+          method: 'POST',
+          body: JSON.stringify({
+            token: this.accessToken.value,
+            hash: event.data.hash,
+            object: event.data.object
+          }),
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+          }
+        }).then(() => {}, () => {});
+      }
       return;
     }
 

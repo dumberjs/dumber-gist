@@ -1,7 +1,6 @@
 import {inject} from 'aurelia-framework';
 import {SessionId} from '../session-id';
 import {EditSession} from '../edit/edit-session';
-import localforage from 'localforage';
 import _ from 'lodash';
 
 const KEY = 'gist-code-session:';
@@ -29,18 +28,24 @@ export class PersistSession {
   }
 
   tryRestoreSession() {
-    return localforage.getItem(KEY)
-      .then(data => {
-        const sessionData = data[this.id];
-        if (sessionData) {
-          this.editSession.importData(sessionData);
-        }
-        return localforage.removeItem(KEY);
-      })
-      .catch();
+    try {
+      let data = localStorage.getItem(KEY);
+      if (!data) return;
+      localStorage.removeItem(KEY);
+      data = JSON.parse(data);
+
+      const sessionData = data[this.id];
+      if (!sessionData) return;
+
+      this.editSession.importData(sessionData);
+    } catch (e) {
+      console.warn('tryRestoreSession: ' + e.message);
+    }
   }
 
   saveSession() {
-    return localforage.setItem(KEY, {[this.id]: this._sessionData()});
+    localStorage.setItem(KEY, JSON.stringify({
+      [this.id]: this._sessionData()
+    }));
   }
 }

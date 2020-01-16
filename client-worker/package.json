@@ -30,7 +30,6 @@
     "gulp-plumber": "^1.2.1",
     "gulp-terser": "^1.2.0",
     "less": "^3.10.3",
-    "localforage": "^1.7.3",
     "lodash": "^4.17.15",
     "nyc": "^15.0.0",
     "query-string": "^6.9.0",

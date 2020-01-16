@@ -80,13 +80,13 @@ async function handleRequest(req, res) {
     if (req.method === 'POST') {
       try {
         const d = await receiveData(req)
-        const {token, hash, data} = d;
-        if (!token || !hash || !data) {
+        const {token, hash, object} = d;
+        if (!token || !hash || !object) {
           throw new Error('In complete request');
         }
 
         await getUser(token);
-        setCache(hash, data);
+        setCache(hash, object);
 
         res.writeHead(204);
         res.end();

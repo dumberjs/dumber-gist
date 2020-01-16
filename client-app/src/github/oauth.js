@@ -52,8 +52,14 @@ export class Oauth {
       state: this.sessionId.id
     };
 
-    let url = `${tokenUri}?${queryString.stringify(args)}`;
-    return fetch(url, {mode: 'cors', method: 'POST'})
+    return fetch(tokenUri, {
+      mode: 'cors',
+      method: 'POST',
+      body: JSON.stringify(args),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
       .then(response => response.text())
       .then(body => queryString.parse(body))
       .then(token => this.accessToken.setToken(token))
