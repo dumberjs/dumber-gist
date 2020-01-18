@@ -32,7 +32,7 @@
     "less": "^3.10.3",
     "lodash": "^4.17.15",
     "nyc": "^15.0.0",
-    "query-string": "^6.10.0",
+    "query-string": "^6.10.1",
     "sass.js": "^0.11.1",
     "semver": "^7.1.1",
     "tap-nirvana": "^1.1.0",
