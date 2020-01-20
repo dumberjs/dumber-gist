@@ -3,6 +3,7 @@ import {SessionId} from './session-id';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {AccessToken} from './github/access-token';
 import {cacheUrl} from '../host-name';
+import localforage from 'localforage';
 
 @inject(EventAggregator, SessionId, AccessToken)
 export class WorkerService {
@@ -60,34 +61,53 @@ export class WorkerService {
     if (!data || !data.type) return;
 
     if (data.type === 'get-cache') {
-      const {hash} = event.data;
-      fetch(cacheUrl + '/' + hash, {mode: 'cors'})
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error(response.statusText);
-        })
-        .then(
-          object => this._workerDo({type: 'got-cache', hash, object}),
-          () => this._workerDo({type: 'got-cache', hash})
-        );
+      const {hash, meta} = event.data;
+      let _getCache;
+
+      if (meta.packageName) {
+        // Use shared cache for npm packages
+        _getCache = fetch(cacheUrl + '/' + hash, {mode: 'cors'})
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error(response.statusText);
+          });
+      } else {
+        // Use local cache for local files
+        _getCache = localforage.getItem(hash)
+      }
+
+      _getCache.then(
+        object => this._workerDo({type: 'got-cache', hash, object}),
+        () => this._workerDo({type: 'got-cache', hash})
+      );
+
       return;
     } else if (data.type === 'set-cache') {
-      if (this.accessToken.value) {
-        fetch(cacheUrl, {
-          mode: 'cors',
-          method: 'POST',
-          body: JSON.stringify({
-            token: this.accessToken.value,
-            hash: event.data.hash,
-            object: event.data.object
-          }),
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8'
-          }
-        }).then(() => {}, () => {});
+      const {hash, object} = event.data;
+
+      if (object.packageName) {
+        // Globally share traced result for npm packages
+        if (this.accessToken.value) {
+          fetch(cacheUrl, {
+            mode: 'cors',
+            method: 'POST',
+            body: JSON.stringify({
+              token: this.accessToken.value,
+              hash: hash,
+              object: object
+            }),
+            headers: {
+              'Content-Type': 'application/json; charset=utf-8'
+            }
+          }).then(() => {}, () => {});
+        }
+      } else {
+        // Use local cache for local files
+        localforage.setItem(hash, object).then(() => {}, () => {});
       }
+
       return;
     }
 

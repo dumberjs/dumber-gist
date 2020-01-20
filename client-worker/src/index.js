@@ -52,7 +52,7 @@ addEventListener('message', async function(event) {
       // worker is in domain ${app-id}.gist.dumber.app, the cache will be
       // limited to be reused by this single app.
       const dumberCache = {
-        getCache: hash => {
+        getCache: (hash, meta) => {
           if (!cacheGetters[hash]) {
             let resolve;
             const getter = new Promise((_resolve, reject) => {
@@ -61,7 +61,7 @@ addEventListener('message', async function(event) {
             });
             cacheGetters[hash] = {getter, resolve};
           }
-          source.postMessage({type: 'get-cache', hash});
+          source.postMessage({type: 'get-cache', hash, meta});
           return cacheGetters[hash].getter;
         },
         setCache: function(hash, object) {
