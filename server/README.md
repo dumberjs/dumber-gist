@@ -1,8 +1,8 @@
-# Gist Code back-end support
+# Dumber gist back-end support
 
 This back-end only does caching and GitHub OAuth.
 
-GitHub oauth server for gist-code
+GitHub oauth server for dumber-gist
 
 ## Running in dev mode
 

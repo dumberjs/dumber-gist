@@ -9,8 +9,8 @@ export class SessionId {
     this.id = this._generateId();
   }
 
-  // id is the unique identifier for every gist-code instance.
-  // Then worker and app are behind https://${id}.gist-code.com.
+  // id is the unique identifier for every dumber-gist instance.
+  // Then worker and app are behind https://${id}.gist.dumber.app.
   _generateId() {
     if (this.params.sessionId) {
       return this.params.sessionId;
@@ -21,13 +21,13 @@ export class SessionId {
       // For local dev, change local /etc/hosts
       // add following content:
       //
-      // # Use localhost for gist-code
-      // 127.0.0.1       gist-code.com app.gist-code.com
+      // # Use localhost for dumber-gist
+      // 127.0.0.1       gist.dumber.dev app.gist.dumber.dev cache.gist.dumber.dev github-oauth.gist.dumber.dev
       //
       return 'app';
     }
 
-    // Random id for every gist-code instance to avoid
+    // Random id for every dumber-gist instance to avoid
     // cross talk.
     return crypto.randomBytes(20).toString('hex');
   }

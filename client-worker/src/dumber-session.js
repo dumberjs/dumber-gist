@@ -73,8 +73,8 @@ export class DumberSession {
       skipModuleLoader: true,
       depsFinder: isAurelia1 ? this.auFindDeps : undefined,
       // Cache is implemented in main window.
-      // Because we want to share cache on domain gist-code.com
-      // for all instance of ${app-id}.gist-code.com
+      // Because we want to share cache on domain gist.dumber.app
+      // for all instance of ${app-id}.gist.dumber.app
       cache: dumberCache,
       prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'],
       deps: deps

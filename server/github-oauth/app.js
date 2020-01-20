@@ -4,6 +4,7 @@ const {receiveData, fetch} = require('../request');
 const PORT = 5000;
 const CLIENT_ID = process.env.GIST_CODE_CLIENTID;
 const CLIENT_SECRET = process.env.GIST_CODE_SECRET;
+const HOST = process.env.NODE_ENV === 'production' ? 'https://gist.dumber.app' : 'https://gist.dumber.dev';
 
 if (!CLIENT_ID || !CLIENT_SECRET) {
   throw new Error('no client_id or client_secret');
@@ -14,7 +15,7 @@ async function handleRequest(req, res) {
   const origin = req.headers.origin;
   res.setHeader('Content-Type', 'text/plain');
 
-  if (origin === 'https://gist-code.com') {
+  if (origin === HOST) {
     if (req.method === 'OPTIONS') {
       res.writeHead(200);
       res.end();
@@ -51,5 +52,5 @@ async function handleRequest(req, res) {
   res.end(`Not Found: ${req.method} ${req.url}\n`, 'utf8');
 }
 
-console.log('Start gist-code github-oauth server ...');
+console.log('Start dumber-gist github-oauth server ...');
 http.createServer(handleRequest).listen(PORT);

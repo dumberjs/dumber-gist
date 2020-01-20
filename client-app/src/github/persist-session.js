@@ -3,7 +3,7 @@ import {SessionId} from '../session-id';
 import {EditSession} from '../edit/edit-session';
 import _ from 'lodash';
 
-const KEY = 'gist-code-session:';
+const KEY = 'dumber-gist-session:';
 
 // Save session data before user attempt login,
 // restore them after logged in (or cancelled login).

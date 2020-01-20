@@ -1,6 +1,6 @@
 {
-  "name": "gist-code",
-  "description": "Gist code client side app",
+  "name": "dumber-gist-app",
+  "description": "Dumber gist client side app",
   "keywords": [],
   "private": true,
   "version": "0.0.1",

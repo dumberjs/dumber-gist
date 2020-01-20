@@ -3,10 +3,11 @@ import queryString from 'query-string';
 import {AccessToken} from './access-token';
 import {SessionId} from '../session-id';
 import {PersistSession} from './persist-session';
+import {clientUrl, oauthUrl} from '../../host-name';
 
 export const client_id = 'd154f3cc22c30d65b28c';
 const oauthUri = 'https://github.com/login/oauth/authorize';
-const tokenUri = 'https://github-oauth.gist-code.com/access_token';
+const tokenUri = `${oauthUrl}/access_token`;
 
 @inject(AccessToken, SessionId, PersistSession)
 export class Oauth {
@@ -25,7 +26,7 @@ export class Oauth {
 
     const args = {
       client_id,
-      redirect_uri: `https://gist-code.com?sessionId=${this.sessionId.id}`,
+      redirect_uri: `${clientUrl}?sessionId=${this.sessionId.id}`,
       scope: 'gist',
       state: this.sessionId.id
     };
@@ -47,7 +48,7 @@ export class Oauth {
 
   async exchangeAccessToken(code) {
     let args = {
-      redirect_uri: `https://gist-code.com?sessionId=${this.sessionId.id}`,
+      redirect_uri: `${clientUrl}?sessionId=${this.sessionId.id}`,
       code,
       state: this.sessionId.id
     };

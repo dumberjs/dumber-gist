@@ -1,6 +1,6 @@
 {
-  "name": "gist-code-worker",
-  "description": "Gist code client side server worker",
+  "name": "dumber-gist-worker",
+  "description": "Dumber gist client side server worker",
   "keywords": [],
   "private": true,
   "version": "0.0.1",

@@ -11,7 +11,7 @@ const MIN_DEV_TOOLS_HEIGHT = 40;
 
 // Handle layout calculation and global bundling state
 @inject(EventAggregator, DndService, EditSession, OpenedFiles)
-export class GistCodeApp {
+export class GistApp {
   showSideBarInSmallLayout = false;
   showEditorsInSmallLayout = true;
   showBrowserWindowInSmallLayout = true;

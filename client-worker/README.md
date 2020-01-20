@@ -1,1 +1,1 @@
-# gist-code client side service worker
+# Dumber gist client side service worker

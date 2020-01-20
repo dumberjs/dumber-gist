@@ -29,7 +29,7 @@ addEventListener('message', async function(event) {
   const {id, type} = action;
   if (!type) return;
 
-  // Got traced cache from main page gist-code.com
+  // Got traced cache from main page gist.dumber.app
   // See comments below for more details.
   if (type === 'got-cache') {
     const {hash, object} = action;
@@ -46,10 +46,10 @@ addEventListener('message', async function(event) {
     let data;
 
     if (type === 'init') {
-      // Let main page gist-code.com to cache traced result so that cached
-      // result can be reused for all gist-code apps.
+      // Let main page gist.dumber.app to cache traced result so that cached
+      // result can be reused for all dumber-gist apps.
       // We cannot use service worker to cache traced result, because service
-      // worker is in domain ${app-id}.gist-code.com, the cache will be
+      // worker is in domain ${app-id}.gist.dumber.app, the cache will be
       // limited to be reused by this single app.
       const dumberCache = {
         getCache: hash => {

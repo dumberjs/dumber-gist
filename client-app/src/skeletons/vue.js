@@ -9,11 +9,11 @@ const indexHtml = ext => `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Gist Code</title>
+  <title>Dumber Gist</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 </head>
 <!--
-Gist Code uses dumber bundler, the default bundle file
+Dumber Gist uses dumber bundler, the default bundle file
 is /dist/entry-bundle.js.
 The starting module is "main" (data-main attribute on script)
 which is your src/main${ext}.

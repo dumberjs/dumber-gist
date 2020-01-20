@@ -1,1 +1,1 @@
-# gist-code client side app
+# Dumber gist client side app

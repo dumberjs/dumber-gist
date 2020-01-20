@@ -5,7 +5,7 @@ const {receiveData, fetch} = require('../request');
 
 const PORT = 5001;
 const CACHE_DIR = path.join(__dirname, 'public');
-
+const HOST = process.env.NODE_ENV === 'production' ? 'https://gist.dumber.app' : 'https://gist.dumber.dev';
 const knownTokens = {};
 
 async function getUser(token) {
@@ -15,7 +15,7 @@ async function getUser(token) {
   const {statusCode, body} = await fetch('https://api.github.com/user', {
     headers: {
       Authorization: `token ${token}`,
-      'User-Agent': 'Gist-Code/0.0.1 (http://gist-code.com)'
+      'User-Agent': `dumber-gist/0.0.1 (${HOST})`
     }
   });
 
@@ -58,7 +58,7 @@ async function handleRequest(req, res) {
   const origin = req.headers.origin;
   res.setHeader('Content-Type', 'text/plain');
 
-  if (origin === 'https://gist-code.com') {
+  if (origin === HOST) {
     if (req.method === 'OPTIONS') {
       res.writeHead(200);
       res.end();
@@ -92,5 +92,5 @@ async function handleRequest(req, res) {
   res.end(`Not Found: ${req.method} ${req.url}\n`, 'utf8');
 }
 
-console.log('Start gist-code dumber-cache server ...');
+console.log('Start dumber-gist cache server ...');
 http.createServer(handleRequest).listen(PORT);

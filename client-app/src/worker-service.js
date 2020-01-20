@@ -2,8 +2,8 @@ import {inject, computedFrom} from 'aurelia-framework';
 import {SessionId} from './session-id';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {AccessToken} from './github/access-token';
+import {cacheUrl} from '../host-name';
 
-const CACHE_URI = 'https://cache.gist-code.com';
 @inject(EventAggregator, SessionId, AccessToken)
 export class WorkerService {
   constructor(ea, sessionId, accessToken) {
@@ -27,14 +27,14 @@ export class WorkerService {
   }
 
   _bootUpWorker() {
-    // The first invisible iframe in gist-code.
+    // The first invisible iframe in dumber gist.
     // It's to boot up service worker.
     // The second iframe (user app itself) is then
     // created by ./browser-frame.js, all contents
     // in second iframe are provided by caches generated
     // by service worker.
     const iframe = document.createElement('iframe');
-    iframe.setAttribute('src', `https://${this.sessionId.id}.gist-code.com/boot-up-worker.html`);
+    iframe.setAttribute('src', `https://${this.sessionId.id}.gist.dumber.dev/boot-up-worker.html`);
     iframe.setAttribute('style', 'display: none');
     document.body.appendChild(iframe);
     this.iframe = iframe;
@@ -44,7 +44,7 @@ export class WorkerService {
 
     const handleMessage = event => {
       if (event.data && event.data.type === 'worker-up') {
-        console.info('gist-code Service Worker is up!');
+        console.info('Dumber Gist Service Worker is up!');
         removeEventListener('message', handleMessage);
         addEventListener('message', this._workerSaid);
         resolveWorker();
@@ -61,7 +61,7 @@ export class WorkerService {
 
     if (data.type === 'get-cache') {
       const {hash} = event.data;
-      fetch(CACHE_URI + '/' + hash, {mode: 'cors'})
+      fetch(cacheUrl + '/' + hash, {mode: 'cors'})
         .then(response => {
           if (response.ok) {
             return response.json();
@@ -75,7 +75,7 @@ export class WorkerService {
       return;
     } else if (data.type === 'set-cache') {
       if (this.accessToken.value) {
-        fetch(CACHE_URI, {
+        fetch(cacheUrl, {
           mode: 'cors',
           method: 'POST',
           body: JSON.stringify({

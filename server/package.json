@@ -1,7 +1,7 @@
 {
-  "name": "gist-code-server",
+  "name": "dumber-gist-server",
   "version": "0.1.0",
-  "description": "GitHub OAuth server, and cache server for gist-code",
+  "description": "GitHub OAuth server, and cache server for dumber-gist",
   "private": true,
   "main": "github-oauth.js",
   "scripts": {
