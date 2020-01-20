@@ -22,13 +22,13 @@ export class SessionId {
       // add following content:
       //
       // # Use localhost for dumber-gist
-      // 127.0.0.1       gist.dumber.dev app.gist.dumber.dev cache.gist.dumber.dev github-oauth.gist.dumber.dev
+      // 127.0.0.1       gist.dumber.dev 0123456789abcdef0123456789abcdef.gist.dumber.dev cache.gist.dumber.dev github-oauth.gist.dumber.dev
       //
-      return 'app';
+      return '0123456789abcdef0123456789abcdef';
     }
 
-    // Random id for every dumber-gist instance to avoid
+    // Random id (32 chars) for every dumber-gist instance to avoid
     // cross talk.
-    return crypto.randomBytes(20).toString('hex');
+    return crypto.randomBytes(16).toString('hex');
   }
 }

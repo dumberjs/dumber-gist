@@ -2,8 +2,8 @@ const http = require('http');
 const {receiveData, fetch} = require('../request');
 
 const PORT = 5000;
-const CLIENT_ID = process.env.GIST_CODE_CLIENTID;
-const CLIENT_SECRET = process.env.GIST_CODE_SECRET;
+const CLIENT_ID = process.env.DUMBER_GIST_CLIENTID;
+const CLIENT_SECRET = process.env.DUMBER_GIST_SECRET;
 const HOST = process.env.NODE_ENV === 'production' ? 'https://gist.dumber.app' : 'https://gist.dumber.dev';
 
 if (!CLIENT_ID || !CLIENT_SECRET) {

@@ -9,6 +9,6 @@ test('SessionId reuses sessionId from search param', t => {
 
 test('SessionId generates sessionId', t => {
   const s = new SessionId({});
-  t.equal(s.id, 'app');
+  t.equal(s.id, '0123456789abcdef0123456789abcdef');
   t.end();
 });
