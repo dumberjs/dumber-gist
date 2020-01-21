@@ -5,7 +5,7 @@ const {receiveData, fetch} = require('../request');
 
 const PORT = 5001;
 const CACHE_DIR = path.join(__dirname, 'public');
-const HOST = process.env.NODE_ENV === 'production' ? 'https://gist.dumber.app' : 'https://gist.dumber.dev';
+const HOST = process.env.NODE_ENV === 'production' ? 'https://gist.dumber.app' : 'https://gist.dumber.local';
 const knownTokens = {};
 
 async function getUser(token) {

@@ -4,7 +4,7 @@ const {receiveData, fetch} = require('../request');
 const PORT = 5000;
 const CLIENT_ID = process.env.DUMBER_GIST_CLIENTID;
 const CLIENT_SECRET = process.env.DUMBER_GIST_SECRET;
-const HOST = process.env.NODE_ENV === 'production' ? 'https://gist.dumber.app' : 'https://gist.dumber.dev';
+const HOST = process.env.NODE_ENV === 'production' ? 'https://gist.dumber.app' : 'https://gist.dumber.local';
 
 if (!CLIENT_ID || !CLIENT_SECRET) {
   throw new Error('no client_id or client_secret');

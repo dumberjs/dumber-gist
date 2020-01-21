@@ -2,7 +2,7 @@ import {inject, computedFrom} from 'aurelia-framework';
 import {SessionId} from './session-id';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {AccessToken} from './github/access-token';
-import {cacheUrl} from './host-name';
+import {host, cacheUrl} from './host-name';
 import localforage from 'localforage';
 
 @inject(EventAggregator, SessionId, AccessToken)
@@ -35,7 +35,7 @@ export class WorkerService {
     // in second iframe are provided by caches generated
     // by service worker.
     const iframe = document.createElement('iframe');
-    iframe.setAttribute('src', `https://${this.sessionId.id}.gist.dumber.dev/boot-up-worker.html`);
+    iframe.setAttribute('src', `https://${this.sessionId.id}.${host}/boot-up-worker.html`);
     iframe.setAttribute('style', 'display: none');
     document.body.appendChild(iframe);
     this.iframe = iframe;

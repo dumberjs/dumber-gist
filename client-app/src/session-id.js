@@ -22,7 +22,7 @@ export class SessionId {
       // add following content:
       //
       // # Use localhost for dumber-gist
-      // 127.0.0.1       gist.dumber.dev 0123456789abcdef0123456789abcdef.gist.dumber.dev cache.gist.dumber.dev github-oauth.gist.dumber.dev
+      // 127.0.0.1       gist.dumber.local 0123456789abcdef0123456789abcdef.gist.dumber.local cache.gist.dumber.local github-oauth.gist.dumber.local
       //
       return '0123456789abcdef0123456789abcdef';
     }
