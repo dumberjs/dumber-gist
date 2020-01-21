@@ -1,8 +1,5 @@
-<template class="browser-frame">
-  <iframe
-    if.bind="rendered"
-    class="iframe"
-    src="https://${id}.${host}"></iframe>
+<template class="browser-frame" ref="container">
+  <div ref="reference"></div>
   <div class="dnd-helper" if.bind="dndService.isProcessing"></div>
   <i if.bind="isBundling & debounce:500" class="spinner fas fa-circle-notch fa-spin"></i>
   <div if.bind="bundlerError" class="error">${bundlerError}</div>
