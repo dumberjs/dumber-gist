@@ -83,7 +83,7 @@ You may encounter permission issue that nginx cannot open port 443, try
 sudo brew services restart nginx
 ```
 
-I don't need sudo for port 443 to work for me. I don't remember what I did on my mac long long time before to allow port below 1024.
+I don't need sudo for port 443 to work for me. I don't remember what I did long time ago to allow port below 1024.
 
 If you use sudo to start nginx, don't worry, as a security feature, nginux will downgrade itself to a user (default to the user of the app) after it was started.
 
