@@ -25,7 +25,6 @@ async function handleRequest(req, res) {
     if (req.method === 'POST' && /^\/access_token$/.test(req.url)) {
       try {
         const data = await receiveData(req);
-        console.error('data ' + JSON.stringify(data));
         const params = {
           client_id: CLIENT_ID,
           client_secret: CLIENT_SECRET,
