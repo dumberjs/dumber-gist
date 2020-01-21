@@ -47,7 +47,7 @@ function setCache(hash, object) {
     {flag: 'wx'}, // x means fail if file already exists
     err => {
       if (err && !err.code === 'EEXIST') {
-        console.log(`Failed to write cache ${filePath}: ${err.message}`);
+        console.error(`Failed to write cache ${filePath}: ${err.code} ${err.message}`);
       }
     }
   );
