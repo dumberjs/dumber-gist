@@ -1,7 +1,7 @@
 import {inject, bindable} from 'aurelia-framework';
 import {DndService} from 'bcx-aurelia-dnd';
 import {SessionId} from './session-id';
-import {host} from '../host-name';
+import {host} from './host-name';
 
 @inject(DndService, SessionId)
 export class BrowserFrame {

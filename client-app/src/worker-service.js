@@ -2,7 +2,7 @@ import {inject, computedFrom} from 'aurelia-framework';
 import {SessionId} from './session-id';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {AccessToken} from './github/access-token';
-import {cacheUrl} from '../host-name';
+import {cacheUrl} from './host-name';
 import localforage from 'localforage';
 
 @inject(EventAggregator, SessionId, AccessToken)

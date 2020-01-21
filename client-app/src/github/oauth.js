@@ -3,7 +3,7 @@ import queryString from 'query-string';
 import {AccessToken} from './access-token';
 import {SessionId} from '../session-id';
 import {PersistSession} from './persist-session';
-import {clientUrl, oauthUrl} from '../../host-name';
+import {clientUrl, oauthUrl} from '../host-name';
 
 export const client_id = 'd154f3cc22c30d65b28c';
 const oauthUri = 'https://github.com/login/oauth/authorize';
