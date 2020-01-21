@@ -5,7 +5,11 @@ import {SessionId} from '../session-id';
 import {PersistSession} from './persist-session';
 import {clientUrl, oauthUrl} from '../host-name';
 
-export const client_id = 'd154f3cc22c30d65b28c';
+// github oauth client id/secret
+export const client_id =
+  process.env.NODE_ENV === 'production' ?
+  '366fabacbad89519ff19' :
+  'a505c051c5291a3f3618';
 const oauthUri = 'https://github.com/login/oauth/authorize';
 const tokenUri = `${oauthUrl}/access_token`;
 
