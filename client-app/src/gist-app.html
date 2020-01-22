@@ -1,13 +1,13 @@
 <template>
-  <require from="./gist"></require>
+  <require from="./gist-bar"></require>
   <require from="./github-account"></require>
   <require from="./panel-resizer"></require>
-  <require from="./file-navigator"></require>
-  <require from="./editor-tabs"></require>
-  <require from="./code-editor"></require>
-  <require from="./browser-bar"></require>
-  <require from="./browser-frame"></require>
-  <require from="./browser-dev-tools"></require>
+  <require from="./navigation/file-navigator"></require>
+  <require from="./edit/editor-tabs"></require>
+  <require from="./edit/code-editor"></require>
+  <require from="./embedded-browser/browser-bar"></require>
+  <require from="./embedded-browser/browser-frame"></require>
+  <require from="./embedded-browser/browser-dev-tools"></require>
 
   <div class="app" ref="dndElement">
     <div class="app-top-bar">
@@ -17,7 +17,7 @@
           click.trigger="showSideBarInSmallLayout = !showSideBarInSmallLayout & leftClick"><i class="fas fa-bars"></i></button>
       </div>
 
-      <gist></gist>
+      <gist-bar></gist-bar>
 
       <div class="app-buttons ml-auto mr-auto">
         <button

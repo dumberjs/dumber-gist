@@ -1,6 +1,6 @@
 import {inject, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {FileTree} from './edit/file-tree';
+import {FileTree} from '../edit/file-tree';
 import {DndService} from 'bcx-aurelia-dnd';
 
 @inject(EventAggregator, FileTree, DndService)

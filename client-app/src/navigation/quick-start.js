@@ -1,8 +1,8 @@
 import {inject} from 'aurelia-framework';
 import {DialogService} from 'aurelia-dialog';
-import {EditSession} from './edit/edit-session';
+import {EditSession} from '../edit/edit-session';
 import {SelectSkeletonDialog} from './dialogs/select-skeleton-dialog';
-import {SkeletonGenerator} from './skeletons/skeleton-generator';
+import {SkeletonGenerator} from '../skeletons/skeleton-generator';
 
 @inject(DialogService, EditSession, SkeletonGenerator)
 export class QuickStart {

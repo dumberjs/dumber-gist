@@ -7,7 +7,7 @@ import {Oauth} from './github/oauth';
 import {User} from './github/user';
 
 @inject(EventAggregator, DialogService, EditSession, Oauth, User)
-export class Gist {
+export class GistBar {
   constructor(ea, dialogService, session, oauth, user) {
     this.ea = ea;
     this.dialogService = dialogService;

@@ -1,7 +1,7 @@
 import {inject, bindable} from 'aurelia-framework';
 import {DndService} from 'bcx-aurelia-dnd';
-import {SessionId} from './session-id';
-import {host} from './host-name';
+import {SessionId} from '../session-id';
+import {host} from '../host-name';
 import _ from 'lodash';
 
 @inject(DndService, SessionId)

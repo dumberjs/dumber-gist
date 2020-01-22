@@ -1,8 +1,8 @@
 import {inject, bindable, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {DialogService} from 'aurelia-dialog';
-import {ContextMenu} from './dialogs/context-menu';
-import {OpenedFiles} from './edit/opened-files';
+import {ContextMenu} from '../dialogs/context-menu';
+import {OpenedFiles} from '../edit/opened-files';
 import {DndService} from 'bcx-aurelia-dnd';
 
 @inject(EventAggregator, DialogService, OpenedFiles, DndService)

@@ -1,6 +1,6 @@
 import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {OpenedFiles} from './edit/opened-files';
+import {OpenedFiles} from './opened-files';
 import _ from 'lodash';
 
 @inject(EventAggregator, OpenedFiles)

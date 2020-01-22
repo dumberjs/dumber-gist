@@ -1,5 +1,5 @@
 import {inject, bindable} from 'aurelia-framework';
-import {EditSession} from './edit/edit-session';
+import {EditSession} from '../edit/edit-session';
 
 @inject(EditSession)
 export class BrowserBar {
