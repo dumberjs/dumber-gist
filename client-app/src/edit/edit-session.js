@@ -51,7 +51,7 @@ export class EditSession {
     this._hash = getFilesHash(this.files);
   }
 
-  @computedFrom('_hash', '_originalHash')
+  @computedFrom('_hash', '_originalHash', 'description', 'this._gist')
   get isChanged() {
     return this._hash !== this._originalHash ||
       this.description !== this._gist.description;

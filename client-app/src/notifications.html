@@ -1,0 +1,23 @@
+<template>
+  <require from="./notifications.scss"></require>
+  <div
+    repeat.for="noti of notifications"
+    class="notification-wrapper au-animate"
+  >
+    <div
+      class="notification ${noti.style}"
+      mouseenter.trigger="stopFutureRemove(noti.id)"
+      mouseleave.trigger="noti.style !== 'danger' && setFutureRemove(noti.id)"
+    >
+      <div class="notification-title" if.bind="noti.title">
+        <i if.bind="noti.icon" class="${noti.icon} mr-2"></i>${noti.title}
+      </div>
+      <div class="notification-message">
+        ${noti.message}
+      </div>
+      <div class="close-button" click.trigger="removeNotification(noti.id) & leftClick"></div>
+
+      <span if.bind="noti.count > 1" class="notification-count badge">${noti.count}</span>
+    </div>
+  </div>
+</template>

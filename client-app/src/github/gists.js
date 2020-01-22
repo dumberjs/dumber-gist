@@ -1,5 +1,52 @@
 import {inject} from 'aurelia-framework';
 import {ApiClient} from './api-client';
+import _ from 'lodash';
+
+// GitHub gist saves file name in Windows format,
+// It's very very strange that the author of GitHub
+// gist didn't normalize file path to Unix format.
+function toWindows(name) {
+  return name.replace(/\//g, '\\');
+}
+
+function toUnix(name) {
+  return name.replace(/\\/g, '/');
+}
+
+function fromGist(gist) {
+  const {files} = gist;
+  const normalizedFiles = {};
+
+  _.each(files, (f, filename)=> {
+    const fn = toUnix(filename);
+    normalizedFiles[fn] = {
+      ...f,
+      filename: fn
+    };
+  });
+
+  return {
+    ...gist,
+    files: normalizedFiles
+  };
+}
+
+function toGist(gist) {
+  const {files} = gist;
+  const strangeFiles = {};
+
+  _.each(files, (f, filename)=> {
+    const fn = toWindows(filename);
+    strangeFiles[fn] = {
+      content: f.content
+    };
+  });
+
+  return {
+    ...gist,
+    files: strangeFiles
+  };
+}
 
 @inject(ApiClient)
 export class Gists {
@@ -24,7 +71,8 @@ export class Gists {
           return Promise.reject('Gist not found.');
         }
         return Promise.reject('Error loading Gist.');
-      });
+      })
+      .then(fromGist);
   }
 
   update(id, gist) {
@@ -33,7 +81,7 @@ export class Gists {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(gist)
+      body: JSON.stringify(toGist(gist))
     };
     return this.api.fetch(`gists/${id}`, init)
       .then(response => {
@@ -42,7 +90,8 @@ export class Gists {
         }
         // todo: handle rate limit, etc
         throw new Error('unable to patch gist');
-      });
+      })
+      .then(fromGist);
   }
 
   create(gist) {
@@ -51,7 +100,7 @@ export class Gists {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(gist)
+      body:JSON.stringify(toGist(gist))
     };
     return this.api.fetch(`gists`, init)
       .then(response => {
@@ -60,7 +109,8 @@ export class Gists {
         }
         // todo: handle rate limit, etc
         throw new Error('unable to create gist');
-      });
+      })
+      .then(fromGist);
   }
 
   fork(id) {

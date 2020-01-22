@@ -1,0 +1,144 @@
+@import "variables";
+
+@keyframes notifadein {
+  0%   {
+    opacity: 0;
+    max-height: 0;
+  }
+
+  100% {
+    opacity: 1;
+    max-height: 300px;
+  }
+}
+
+@keyframes notifadeout {
+  0%   {
+    opacity: 1;
+    max-height: 300px;
+  }
+
+  100% {
+    opacity: 0;
+    max-height: 0;
+  }
+}
+
+notifications {
+  display: block;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  z-index: 9999;
+}
+
+@media (max-width: $tiny) {
+  notifications {
+    bottom: 5px;
+    right: 5px;
+    left: 5px;
+    width: auto;
+  }
+}
+
+.notification-wrapper {
+  position: relative;
+  max-height: 310px;
+
+  &.au-enter {
+    opacity: 0;
+    max-height: 0;
+  }
+
+  &.au-enter-active {
+    animation: notifadein 0.2s;
+  }
+
+  &.au-leave-active {
+    animation: notifadeout 0.2s;
+  }
+}
+
+.notification {
+  margin: .3rem;
+  border-radius: 3px;
+
+  position: relative;
+  background-color: $charcoal;
+  box-shadow: 0 0 .5rem $dark-shadow;
+  font-weight: 500;
+  color: $white;
+
+  &.clean, &.clean .notification-count.badge {
+    background-color: $white;
+    color: $charcoal;
+  }
+
+  &.success, &.success .notification-count.badge {
+    background-color: $green;
+  }
+
+  &.info, &.info .notification-count.badge {
+    background-color: $blue;
+  }
+
+  &.warning, &.warning .notification-count.badge {
+    background-color: #ff9900;
+  }
+
+  &.danger, &.danger .notification-count.badge {
+    background-color: $red;
+  }
+
+  &.dark, &.dark .notification-count.badge {
+    background-color: #23262b;
+  }
+
+  &:hover .close-button {
+    display: block;
+  }
+
+  .close-button {
+    display: none;
+    position: absolute;
+    cursor: pointer;
+    top: .2rem;
+    right: .5rem;
+    font-size: 1.8rem;
+    line-height: 1;
+
+    &::after {
+      content: '×';
+    }
+  }
+
+  .notification-title {
+    padding: .5rem 1.5rem 0 .8rem;
+    font-size: 1.2rem;
+    line-height: 1.8rem;
+  }
+
+  .notification-message {
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 200px;
+    padding: .5rem 1.5rem .5rem .8rem;
+    margin: 0;
+    word-wrap: break-word;
+    font-size: 1rem;
+    line-height: 1.4rem;
+  }
+
+  .notification-count.badge {
+    display: inline-block;
+    position: absolute;
+    color: $white;
+    top: 0;
+    left: 0;
+    margin-top: -1rem;
+    margin-left: -.5rem;
+    box-shadow: 0 0 0 2px $gray-200;
+  }
+
+}

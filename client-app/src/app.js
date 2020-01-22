@@ -8,11 +8,14 @@ export class App {
   constructor(oauth, user, urlHandler) {
     this.oauth = oauth;
     this.user = user;
+    this.urlHandler = urlHandler;
     urlHandler.start();
   }
 
-  @computedFrom('oauth.initialised', 'user.loading')
+  @computedFrom('oauth.initialised', 'urlHandler.initialised', 'user.loading')
   get loading() {
-    return !this.oauth.initialised || this.user.loading;
+    return !this.oauth.initialised ||
+      !this.urlHandler.initialised ||
+      this.user.loading;
   }
 }

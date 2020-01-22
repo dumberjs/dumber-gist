@@ -6,16 +6,21 @@ import {EditNameDialog} from './dialogs/edit-name-dialog';
 import {ConfirmationDialog} from './dialogs/confirmation-dialog';
 import {EditSession} from './edit/edit-session';
 import {OpenedFiles} from './edit/opened-files';
+import {Gists} from './github/gists';
+import {User} from './github/user';
 import {combo} from 'aurelia-combo';
+import _ from 'lodash';
 
 @noView()
-@inject(EventAggregator, DialogService, EditSession, OpenedFiles)
+@inject(EventAggregator, DialogService, EditSession, OpenedFiles, User, Gists)
 export class ActionDispatcher {
-  constructor(ea, dialogService, session, openedFiles) {
+  constructor(ea, dialogService, session, openedFiles, user, gists) {
     this.ea = ea;
     this.dialogService = dialogService;
     this.session = session;
     this.openedFiles = openedFiles;
+    this.user = user;
+    this.gists = gists;
 
     this.updateFile = this.updateFile.bind(this);
     this.updatePath = this.updatePath.bind(this);
@@ -23,6 +28,8 @@ export class ActionDispatcher {
     this.editName = this.editName.bind(this);
     this.importFile = this.importFile.bind(this);
     this.deleteNode = this.deleteNode.bind(this);
+    this.saveGist = this.saveGist.bind(this);
+    this.forkGist = this.forkGist.bind(this);
   }
 
   attached() {
@@ -37,7 +44,9 @@ export class ActionDispatcher {
       this.ea.subscribe('close-file', fn => this.openedFiles.closeFile(fn)),
       this.ea.subscribe('renamed-file', ({oldFilename, newFilename}) => {
         this.openedFiles.afterRenameFile(oldFilename, newFilename);
-      })
+      }),
+      this.ea.subscribe('save-gist', this.saveGist),
+      this.ea.subscribe('fork-gist', this.forkGist),
     ];
   }
 
@@ -103,5 +112,47 @@ export class ActionDispatcher {
         this.session.deleteFile(filePath);
       }
     });
+  }
+
+  async saveGist() {
+    const {gist, description, files} = this.session;
+    const {authenticated, login} = this.user;
+    if (!authenticated) return;
+
+    // TODO dialog to ask public and description
+
+    const filesMap = {};
+    _.each(files, f => {
+      filesMap[f.filename] = {
+        content: f.content
+      };
+    });
+
+    const newGist = {description, files: filesMap, public: true};
+    try {
+      let updatedGist;
+
+      if (!gist.id) {
+        // new gist
+        updatedGist = await this.gists.create(newGist);
+      } else {
+        // existing gist
+        if (gist.owner && gist.owner.login !== login) return;
+        updatedGist = await this.gists.update(gist.id, newGist);
+      }
+
+      this.ea.publish('success', 'Gist is saved.');
+      this.session.importData({
+        description: updatedGist.description,
+        files: updatedGist.files,
+        gist: updatedGist
+      });
+    } catch (e) {
+      this.ea.publish('error', 'Failed to save gist: ' + e.message);
+    }
+  }
+
+  forkGist() {
+
   }
 }

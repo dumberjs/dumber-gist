@@ -603,8 +603,6 @@ $node-start-offset: .6rem;
 
   &.active {
     background-color: $gray-800;
-    border-top: 2px solid $blue;
-    border-bottom: 2px solid $gray-800; // to balance text
     color: $gray-400;
 
     .close-file {
@@ -822,12 +820,6 @@ input[type='text'] {
   }
 }
 
-.badge {
-  padding: .2rem .5rem .25rem;
-  border-radius: .8rem;
-  font-size: .8rem;
-}
-
 .bg-cyan {
   background-color: $cyan;
 }
@@ -899,9 +891,15 @@ input[type='text'] {
 }
 
 .badge {
-  padding: 0 .5rem;
-  border-radius: $border-radius;
+  padding: .2rem .5rem .25rem;
+  border-radius: .8rem;
+  font-size: .8rem;
 }
+
+// .badge {
+//   padding: 0 .5rem;
+//   border-radius: $border-radius;
+// }
 
 .select-section {
   .section-header {

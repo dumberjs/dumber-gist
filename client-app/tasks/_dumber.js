@@ -25,8 +25,6 @@ module.exports = dumber({
   hash: isProduction && !isTest,
 
   prepend: [
-    require.resolve('jquery/dist/jquery.min.js'),
-    require.resolve('toastr/toastr.js'),
   ],
 
   // append after amd loader and all module definitions in entry bundle.

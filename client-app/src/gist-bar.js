@@ -30,10 +30,13 @@ export class GistBar {
   }
 
   save() {
+    console.log('saveable', this.saveable);
+    console.log('files.length', this.session.files.length);
     if (!this.saveable) return;
     if (!this.user.authenticated) {
       return this.loginPopup();
     }
+    this.ea.publish('save-gist');
   }
 
   fork() {
@@ -41,13 +44,14 @@ export class GistBar {
     if (!this.user.authenticated) {
       return this.loginPopup();
     }
+    this.ea.publish('fork-gist');
   }
 
   share() {
     if (!this.shareable) return;
   }
 
-  @computedFrom('session.gist', 'session.isChanged', 'user')
+  @computedFrom('session.gist', 'session.mutation', 'user.authenticated')
   get saveable() {
     const {gist, isChanged, files} = this.session;
     const {user} = this;

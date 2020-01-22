@@ -18,15 +18,19 @@ export class UrlHandler {
     this.gists = gists;
     this.session = session;
     this.search = mockSearch || location.search;
+    this.initialised = false;
 
     this.syncUrl = this.syncUrl.bind(this);
     this.subscriber = bindingEngine.propertyObserver(session, 'gist').subscribe(this.syncUrl);
   }
 
-  start() {
-    this.init().catch(err => {
+  async start() {
+    try {
+      await this.init();
+    } catch (err) {
       this.ea.publish('error', err.message);
-    });
+    }
+    this.initialised = true;
   }
 
   async init() {
