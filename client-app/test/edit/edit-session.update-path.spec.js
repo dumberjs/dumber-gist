@@ -219,6 +219,104 @@ test('EditSession skips file path not existing after rendering', async t => {
   ]);
 });
 
+test('EditSession skips existing target file path after rendering', async t => {
+  clearUp();
+  const es = new EditSession(ea, workerService);
+
+  const gist = {
+    description: 'desc',
+    files: [
+      {
+        filename: 'src/main.js',
+        content: 'main'
+      },
+      {
+        filename: 'index.html',
+        content: 'index-html'
+      },
+      {
+        filename: 'package.json',
+        content: '{"dependencies":{}}'
+      }
+    ]
+  };
+
+  es.loadGist(gist);
+  t.notOk(es.isRendered);
+  t.notOk(es.isChanged);
+  await es.render();
+  es.mutationChanged();
+  t.deepEqual(actions, [
+    {type: 'init', config: {deps: {}}},
+    {type: 'update', files: [
+      {
+        filename: 'src/main.js',
+        content: 'main'
+      },
+      {
+        filename: 'index.html',
+        content: 'index-html'
+      },
+      {
+        filename: 'package.json',
+        content: '{"dependencies":{}}'
+      }
+    ]},
+    {type: 'build'}
+  ]);
+
+  t.ok(es.isRendered);
+  t.notOk(es.isChanged);
+
+  es.updatePath('src/main.js', 'index.html');
+  es.mutationChanged();
+
+  t.deepEqual(published, [
+    ['error', 'Cannot rename src/main.js to index.html because there is an existing file.']
+  ]);
+
+  t.ok(es.isRendered);
+  t.notOk(es.isChanged);
+  t.deepEqual(es.files, [
+    {
+      filename: 'src/main.js',
+      content: 'main',
+      isChanged: false
+    },
+    {
+      filename: 'index.html',
+      content: 'index-html',
+      isChanged: false
+    },
+    {
+      filename: 'package.json',
+      content: '{"dependencies":{}}',
+      isChanged: false
+    }
+  ]);
+
+  await es.render();
+  es.mutationChanged();
+  t.deepEqual(actions.slice(3), [
+    {type: 'init', config: {deps: {}}},
+    {type: 'update', files: [
+      {
+        filename: 'src/main.js',
+        content: 'main'
+      },
+      {
+        filename: 'index.html',
+        content: 'index-html'
+      },
+      {
+        filename: 'package.json',
+        content: '{"dependencies":{}}'
+      }
+    ]},
+    {type: 'build'}
+  ]);
+});
+
 test('EditSession update folder path after rendering', async t => {
   clearUp();
   const es = new EditSession(ea, workerService);
