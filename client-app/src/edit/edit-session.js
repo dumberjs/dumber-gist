@@ -1,23 +1,39 @@
-import {inject, observable} from 'aurelia-framework';
+import {inject, observable, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import _ from 'lodash';
 import {WorkerService} from '../worker-service';
+import crypto from 'crypto';
+
+function getFilesHash(files) {
+  const str = _(files)
+    .map(f => `${f.filename}|${f.content}`)
+    .join('\n');
+
+  return crypto.createHash('md5').update(str).digest('hex');
+}
 
 @inject(EventAggregator, WorkerService)
 export class EditSession {
-  gist = {description: '', files: []};
+  _gist = {description: '', files: []};
   files = [];
   description = '';
 
   // mutation value 0 and -1 is reserved
   // for just newly loaded gist.
   @observable mutation = -1;
-  isRendered = false;
-  isChanged = false;
 
   constructor(ea, ws) {
     this.ea = ea;
     this.ws = ws;
+  }
+
+  get gist() {
+    return this._gist;
+  }
+
+  set gist(newGist) {
+    this._gist = newGist;
+    this._originalHash = getFilesHash(newGist.files);
   }
 
   _mutate() {
@@ -29,11 +45,18 @@ export class EditSession {
   }
 
   mutationChanged() {
-    // FIXME: isRendered should check deleted files.
-    this.isRendered = _.every(this.files, 'isRendered');
-    this.isChanged = _.some(this.files, 'isChanged') ||
-      this.files.length !== this.gist.files.length ||
-      this.description !== this.gist.description;
+    this._hash = getFilesHash(this.files);
+  }
+
+  @computedFrom('_hash', '_originalHash')
+  get isChanged() {
+    return this._hash !== this._originalHash ||
+      this.description !== this._gist.description;
+  }
+
+  @computedFrom('_hash', '_renderedHash')
+  get isRendered() {
+    return this._hash === this._renderedHash;
   }
 
   loadGist(gist) {
@@ -41,7 +64,6 @@ export class EditSession {
     this.files = _.map(this.gist.files, f => ({
       filename: f.filename,
       content: f.content,
-      isRendered: false,
       isChanged: false
     }));
     this.description = gist.description;
@@ -61,7 +83,6 @@ export class EditSession {
         this.files = _.map(data.files, f => ({
           filename: f.filename,
           content: f.content,
-          isRendered: false,
           isChanged: !!f.isChanged
         }));
       }
@@ -85,7 +106,6 @@ export class EditSession {
 
     if (f.content === content) return;
     f.content = content;
-    f.isRendered = false;
     f.isChanged = !oldF || oldF.content !== content;
     this._mutate();
   }
@@ -103,7 +123,6 @@ export class EditSession {
 
       } else if (file.filename.startsWith(filePath + '/')) {
         newFilename = newFilePath + '/' + file.filename.slice(filePath.length + 1);
-        file.isRendered = false;
         const oldF = _.find(this.gist.files, {filename: newFilePath});
         file.isChanged = !oldF || oldF.content !== file.content;
 
@@ -122,7 +141,6 @@ export class EditSession {
         }
 
         isUpdated = true;
-        file.isRendered = false;
         const oldF = _.find(this.gist.files, {filename: newFilename});
         file.isChanged = !oldF || oldF.content !== file.content;
         file.filename = newFilename;
@@ -157,7 +175,6 @@ export class EditSession {
     const file = {
       filename: filename,
       content,
-      isRendered: false,
       isChanged: true
     };
 
@@ -193,56 +210,29 @@ export class EditSession {
 
   async render() {
     const start = (new Date()).getTime();
-    // This flag is only for app didn't provide package.json
-    // which contains aurelia-bootstrapper.
-    const isAurelia1 = _.some(this.files, f => {
-      const m = f.content.match(/\bconfigure\s*\(\s*(\w)+\s*\)/);
-      if (!m) return false;
-      const auVar = m[1];
 
-      return _.includes(f.content, `${auVar}.start`) &&
-        _.includes(f.content, `${auVar}.setRoot`);
-    });
+    // Note all files are copied before rendering.
+    // So that user can continue updating app code, future render()
+    // will capture new changes.
+
+    const files = _.map(this.files, f => ({
+      filename: f.filename,
+      content: f.content
+    }));
 
     // Get dependencies from package.json
     let deps = {};
-    _.each(this.files, f => {
+    _.each(files, f => {
       if (f.filename !== 'package.json') return;
       const json = JSON.parse(f.content);
       deps = json.dependencies;
       return false; // exit early
     });
 
-    const allFiles = _.map(this.files, f => ({
-      filename: f.filename,
-      content: f.content
-    }));
-
-    // Note all files are "copied" synchronously before sending
-    // any async actions to service worker.
-    // So that user can continue updating app code, future render()
-    // will capture new changes.
-
-    await this.ws.perform({
-      type: 'init',
-      config: {isAurelia1, deps}
-    });
-
-    await this.ws.perform({
-      type: 'update',
-      files: allFiles
-    });
-
+    await this.ws.perform({type: 'init', config: {deps}});
+    await this.ws.perform({type: 'update', files});
     await this.ws.perform({type: 'build'});
-
-    allFiles.forEach(f => {
-      const unchangedFile = _.find(this.files, {filename: f.filename, content: f.content});
-      if (unchangedFile) {
-        // Only set isRendered for unchanged file
-        unchangedFile.isRendered = true;
-      }
-    });
-    this._mutate();
+    this._renderedHash = getFilesHash(files);
 
     const seconds = ((new Date()).getTime() - start) / 1000;
     console.log(`Rendering finished in ${seconds} secs.`);

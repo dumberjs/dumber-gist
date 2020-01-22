@@ -71,7 +71,7 @@ test('EditSession imports data', t => {
   t.equal(es.description, 'new-desc');
   t.equal(es.files.length, 0);
   t.equal(es.gist, newGist);
-  t.ok(es.isRendered);
+  t.notOk(es.isRendered);
   t.ok(es.isChanged);
   t.end();
 });
@@ -119,13 +119,11 @@ test('EditSession imports data with only files', t => {
     {
       filename: 'foo.js',
       content: 'foo',
-      isRendered: false,
       isChanged: true
     },
     {
       filename: 'index.html',
       content: 'html',
-      isRendered: false,
       isChanged: false
     }
   ]);

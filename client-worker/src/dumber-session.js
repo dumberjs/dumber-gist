@@ -66,8 +66,13 @@ export class DumberSession {
     );
 
     const deps = await this.depsResolver.resolve(config.deps);
-    console.log('Dumber deps', deps);
-    const isAurelia1 = config.isAurelia1 || _.some(deps, {name: 'aurelia-bootstrapper'});
+    console.log('Resolved Dependencies ' + deps.length);
+    _.each(deps, ({name, version}) => {
+      console.log(` ${version.padEnd(10)} ${name}`);
+    });
+    console.log();
+
+    const isAurelia1 = _.some(deps, {name: 'aurelia-bootstrapper'});
     this.config = config;
     this.instance = new this.Dumber({
       skipModuleLoader: true,
@@ -79,6 +84,7 @@ export class DumberSession {
       prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'],
       deps: deps
     });
+
     console.log('Created dumber instance');
     return {isNew: true};
   }

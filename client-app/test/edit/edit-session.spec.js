@@ -95,53 +95,6 @@ test('EditSession detects changed description', t => {
   t.end();
 });
 
-test('EditSession renders with aurelia 1 detection', async t => {
-  clearUp();
-  const es = new EditSession(ea, workerService);
-  const auMain = `export function configure(au) {
-  au.use.standardConfiguration();
-  au.start().then(() => au.setRoot());
-}
-`;
-
-  const gist = {
-    description: 'desc',
-    files: [
-      {
-        filename: 'src/main.js',
-        content: auMain
-      },
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      }
-    ]
-  };
-
-  es.loadGist(gist);
-  t.notOk(es.isRendered);
-  t.notOk(es.isChanged);
-
-  await es.render();
-  es.mutationChanged();
-  t.ok(es.isRendered);
-  t.notOk(es.isChanged);
-  t.deepEqual(actions, [
-    {type: 'init', config: {isAurelia1: true, deps: {}}},
-    {type: 'update', files: [
-      {
-        filename: 'src/main.js',
-        content: auMain
-      },
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      }
-    ]},
-    {type: 'build'}
-  ]);
-});
-
 test('EditSession renders pass on deps from package.json', async t => {
   clearUp();
   const es = new EditSession(ea, workerService);
@@ -173,7 +126,7 @@ test('EditSession renders pass on deps from package.json', async t => {
   t.ok(es.isRendered);
   t.notOk(es.isChanged);
   t.deepEqual(actions, [
-    {type: 'init', config: {isAurelia1: false, deps: {foo: '^1.0.0', bar: '~2.1.0'}}},
+    {type: 'init', config: {deps: {foo: '^1.0.0', bar: '~2.1.0'}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',

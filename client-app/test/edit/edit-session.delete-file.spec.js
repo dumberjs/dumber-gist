@@ -57,7 +57,7 @@ test('EditSession deletes file after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -81,19 +81,17 @@ test('EditSession deletes file after rendering', async t => {
   es.deleteFile('src/main.js');
   es.mutationChanged();
 
-  t.ok(es.isRendered);
+  t.notOk(es.isRendered);
   t.ok(es.isChanged);
   t.deepEqual(es.files, [
     {
       filename: 'index.html',
       content: 'index-html',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'package.json',
       content: '{"dependencies":{}}',
-      isRendered: true,
       isChanged: false
     }
   ]);
@@ -101,8 +99,17 @@ test('EditSession deletes file after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(3), [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
-    {type: 'update', files: []},
+    {type: 'init', config: {deps: {}}},
+    {type: 'update', files: [
+      {
+        filename: 'index.html',
+        content: 'index-html'
+      },
+      {
+        filename: 'package.json',
+        content: '{"dependencies":{}}'
+      }
+    ]},
     {type: 'build'}
   ]);
 });
@@ -135,7 +142,7 @@ test('EditSession ignores deleting file not existing after rendering', async t =
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -168,19 +175,16 @@ test('EditSession ignores deleting file not existing after rendering', async t =
     {
       filename: 'src/main.js',
       content: 'main',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'index.html',
       content: 'index-html',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'package.json',
       content: '{"dependencies":{}}',
-      isRendered: true,
       isChanged: false
     }
   ]);
@@ -188,8 +192,21 @@ test('EditSession ignores deleting file not existing after rendering', async t =
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(3), [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
-    {type: 'update', files: []},
+    {type: 'init', config: {deps: {}}},
+    {type: 'update', files: [
+      {
+        filename: 'src/main.js',
+        content: 'main'
+      },
+      {
+        filename: 'index.html',
+        content: 'index-html'
+      },
+      {
+        filename: 'package.json',
+        content: '{"dependencies":{}}'
+      }
+    ]},
     {type: 'build'}
   ]);
 });

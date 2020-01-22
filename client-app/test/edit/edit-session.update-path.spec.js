@@ -57,7 +57,7 @@ test('EditSession updates path after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -87,19 +87,16 @@ test('EditSession updates path after rendering', async t => {
     {
       filename: 'src/app.js',
       content: 'main',
-      isRendered: false,
-      isChanged: true,
+      isChanged: true
     },
     {
       filename: 'index.html',
       content: 'index-html',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'package.json',
       content: '{"dependencies":{}}',
-      isRendered: true,
       isChanged: false
     }
   ]);
@@ -107,11 +104,19 @@ test('EditSession updates path after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(3), [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/app.js',
         content: 'main'
+      },
+      {
+        filename: 'index.html',
+        content: 'index-html'
+      },
+      {
+        filename: 'package.json',
+        content: '{"dependencies":{}}'
       }
     ]},
     {type: 'build'}
@@ -146,7 +151,7 @@ test('EditSession skips file path not existing after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -178,19 +183,16 @@ test('EditSession skips file path not existing after rendering', async t => {
     {
       filename: 'src/main.js',
       content: 'main',
-      isRendered: true,
-      isChanged: false,
+      isChanged: false
     },
     {
       filename: 'index.html',
       content: 'index-html',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'package.json',
       content: '{"dependencies":{}}',
-      isRendered: true,
       isChanged: false
     }
   ]);
@@ -198,8 +200,21 @@ test('EditSession skips file path not existing after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(3), [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
-    {type: 'update', files: []},
+    {type: 'init', config: {deps: {}}},
+    {type: 'update', files: [
+      {
+        filename: 'src/main.js',
+        content: 'main'
+      },
+      {
+        filename: 'index.html',
+        content: 'index-html'
+      },
+      {
+        filename: 'package.json',
+        content: '{"dependencies":{}}'
+      }
+    ]},
     {type: 'build'}
   ]);
 });
@@ -240,7 +255,7 @@ test('EditSession update folder path after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -278,31 +293,26 @@ test('EditSession update folder path after rendering', async t => {
     {
       filename: 'src/main.js',
       content: 'main',
-      isRendered: true,
-      isChanged: false,
+      isChanged: false
     },
     {
       filename: 'src/foo2/index.js',
       content: 'foo-index',
-      isRendered: false,
       isChanged: true
     },
     {
       filename: 'src/foo2/bar/lo.js',
       content: 'foo-bar-lo',
-      isRendered: false,
       isChanged: true
     },
     {
       filename: 'index.html',
       content: 'index-html',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'package.json',
       content: '{"dependencies":{}}',
-      isRendered: true,
       isChanged: false
     }
   ]);
@@ -310,8 +320,12 @@ test('EditSession update folder path after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(3), [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
+      {
+        filename: 'src/main.js',
+        content: 'main'
+      },
       {
         filename: 'src/foo2/index.js',
         content: 'foo-index'
@@ -319,6 +333,14 @@ test('EditSession update folder path after rendering', async t => {
       {
         filename: 'src/foo2/bar/lo.js',
         content: 'foo-bar-lo'
+      },
+      {
+        filename: 'index.html',
+        content: 'index-html'
+      },
+      {
+        filename: 'package.json',
+        content: '{"dependencies":{}}'
       }
     ]},
     {type: 'build'}
@@ -368,7 +390,7 @@ test('EditSession update file path without side effect after rendering', async t
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -410,37 +432,31 @@ test('EditSession update file path without side effect after rendering', async t
     {
       filename: 'src/main.js',
       content: 'main',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'src/foo/index.js',
       content: 'foo-index',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'src/foo/bar/lo.js',
       content: 'foo-bar-lo',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'src/fo2',
       content: 'fo',
-      isRendered: false,
       isChanged: true
     },
     {
       filename: 'index.html',
       content: 'index-html',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'package.json',
       content: '{"dependencies":{}}',
-      isRendered: true,
       isChanged: false
     }
   ]);
@@ -448,11 +464,31 @@ test('EditSession update file path without side effect after rendering', async t
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(3), [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
+      {
+        filename: 'src/main.js',
+        content: 'main'
+      },
+      {
+        filename: 'src/foo/index.js',
+        content: 'foo-index'
+      },
+      {
+        filename: 'src/foo/bar/lo.js',
+        content: 'foo-bar-lo'
+      },
       {
         filename: 'src/fo2',
         content: 'fo'
+      },
+      {
+        filename: 'index.html',
+        content: 'index-html'
+      },
+      {
+        filename: 'package.json',
+        content: '{"dependencies":{}}'
       }
     ]},
     {type: 'build'}

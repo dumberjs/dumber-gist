@@ -211,36 +211,6 @@ test('DumberSession replaces existing dumber instance with different config', as
   });
 });
 
-test('DumberSession initialises new dumber instance with aurelia v1 deps finder', async t => {
-  const serviceCache = new ServiceCache();
-  const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver, transpiler);
-  t.notOk(session.isInitialised);
-  t.deepEqual(serviceCache.map, {});
-
-  const config = {isAurelia1: true};
-  const data = await session.init(config, dumberCache);
-  t.deepEqual(data, {isNew: true});
-  t.ok(session.isInitialised);
-  t.deepEqual(serviceCache.map, {
-    '/': {
-      content: DEFAULT_INDEX_HTML,
-      contentType: 'text/html; charset=utf-8'
-    },
-    '/dist/entry-bundle.js': {
-      content: DEFAULT_BUNDLE_JS,
-      contentType: 'application/javascript'
-    }
-  });
-  t.deepEqual(session.config, config);
-  t.deepEqual(session.instance.config, {
-    skipModuleLoader: true,
-    depsFinder: auFindDeps,
-    cache: dumberCache,
-    prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'],
-    deps: []
-  });
-});
-
 test('DumberSession builds', async t => {
   const serviceCache = new ServiceCache();
   const session = new DumberSession(Dumber, auFindDeps, serviceCache, depsResolver, transpiler);

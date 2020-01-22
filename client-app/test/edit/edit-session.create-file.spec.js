@@ -57,7 +57,7 @@ test('EditSession creates file after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -87,25 +87,21 @@ test('EditSession creates file after rendering', async t => {
     {
       filename: 'src/main.js',
       content: 'main',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'index.html',
       content: 'index-html',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'package.json',
       content: '{"dependencies":{}}',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'src/app.js',
       content: 'app',
-      isRendered: false,
       isChanged: true
     }
   ]);
@@ -113,8 +109,20 @@ test('EditSession creates file after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(3), [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
+      {
+        filename: 'src/main.js',
+        content: 'main'
+      },
+      {
+        filename: 'index.html',
+        content: 'index-html'
+      },
+      {
+        filename: 'package.json',
+        content: '{"dependencies":{}}'
+      },
       {
         filename: 'src/app.js',
         content: 'app'
@@ -152,7 +160,7 @@ test('EditSession cannot creates file to overwrite existing file', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -186,19 +194,16 @@ test('EditSession cannot creates file to overwrite existing file', async t => {
     {
       filename: 'src/main.js',
       content: 'main',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'index.html',
       content: 'index-html',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'package.json',
       content: '{"dependencies":{}}',
-      isRendered: true,
       isChanged: false
     }
   ]);
@@ -206,8 +211,21 @@ test('EditSession cannot creates file to overwrite existing file', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(3), [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
-    {type: 'update', files: []},
+    {type: 'init', config: {deps: {}}},
+    {type: 'update', files: [
+      {
+        filename: 'src/main.js',
+        content: 'main'
+      },
+      {
+        filename: 'index.html',
+        content: 'index-html'
+      },
+      {
+        filename: 'package.json',
+        content: '{"dependencies":{}}'
+      }
+    ]},
     {type: 'build'}
   ]);
 });
@@ -240,7 +258,7 @@ test('EditSession cannot creates file with name conflict on existing folder', as
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -274,19 +292,16 @@ test('EditSession cannot creates file with name conflict on existing folder', as
     {
       filename: 'src/main.js',
       content: 'main',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'index.html',
       content: 'index-html',
-      isRendered: true,
       isChanged: false
     },
     {
       filename: 'package.json',
       content: '{"dependencies":{}}',
-      isRendered: true,
       isChanged: false
     }
   ]);
@@ -294,8 +309,21 @@ test('EditSession cannot creates file with name conflict on existing folder', as
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(3), [
-    {type: 'init', config: {isAurelia1: false, deps: {}}},
-    {type: 'update', files: []},
+    {type: 'init', config: {deps: {}}},
+    {type: 'update', files: [
+      {
+        filename: 'src/main.js',
+        content: 'main'
+      },
+      {
+        filename: 'index.html',
+        content: 'index-html'
+      },
+      {
+        filename: 'package.json',
+        content: '{"dependencies":{}}'
+      }
+    ]},
     {type: 'build'}
   ]);
 });
