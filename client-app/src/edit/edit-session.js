@@ -15,6 +15,9 @@ function getFilesHash(files) {
 @inject(EventAggregator, WorkerService)
 export class EditSession {
   _gist = {description: '', files: []};
+  _originalHash = '';
+  _hash = '';
+  _renderedHash = '';
   files = [];
   description = '';
 
