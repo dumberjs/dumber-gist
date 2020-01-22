@@ -15,7 +15,25 @@ const ea = {
   }
 }
 
+const dumberCache = {
+  async getCache(hash, meta) {
+    actions.push({type: '_get-cache', hash, meta});
+    if (hash === '123') {
+      return {got: '123'};
+    } else {
+      throw new Error();
+    }
+  },
+  async setCache(hash, object) {
+    actions.push({type: '_set-cache', hash, object});
+  }
+};
+
 class TestWorkerService extends WorkerService {
+  constructor() {
+    super(ea, null, dumberCache);
+  }
+
   _bootUpWorker() {
     this._workerUp = Promise.resolve();
     this.iframe = {
@@ -30,7 +48,7 @@ class TestWorkerService extends WorkerService {
 
 test('WorkerService queues and executes action', async t => {
   clearUp();
-  const w = new TestWorkerService(ea);
+  const w = new TestWorkerService();
   t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'work1', data: {a:1}});
@@ -58,7 +76,7 @@ test('WorkerService queues and executes action', async t => {
 
 test('WorkerService queues and executes action with failure', async t => {
   clearUp();
-  const w = new TestWorkerService(ea);
+  const w = new TestWorkerService();
   t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'work1', data: {a:1}});
@@ -83,7 +101,7 @@ test('WorkerService queues and executes action with failure', async t => {
 
 test('WorkerService queues and executes action with unknown failure, ignores unknown message', async t => {
   clearUp();
-  const w = new TestWorkerService(ea);
+  const w = new TestWorkerService();
   t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'work1', data: {a:1}});
@@ -115,7 +133,7 @@ test('WorkerService queues and executes action with unknown failure, ignores unk
 
 test('WorkerService queues and executes actions', async t => {
   clearUp();
-  const w = new TestWorkerService(ea);
+  const w = new TestWorkerService();
   t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'work1', data: {a:1}});
@@ -188,7 +206,7 @@ test('WorkerService queues and executes actions', async t => {
 
 test('WorkerService queues and executes actions, with failed results and unknown messages', async t => {
   clearUp();
-  const w = new TestWorkerService(ea);
+  const w = new TestWorkerService();
   t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'work1', data: {a:1}});
@@ -261,4 +279,51 @@ test('WorkerService queues and executes actions, with failed results and unknown
     {id: 2, type: 'work3', data: {a:3}}
   ]);
   t.equal(published.length, 0);
+});
+
+test('WorkerService does fail get-cache', t => {
+  clearUp();
+
+  const w = new TestWorkerService();
+  t.notOk(w.isWaiting);
+
+  w._workerSaid({data: {
+    type: 'get-cache',
+    hash: '456',
+    meta: {a: 1, b: 2}
+  }});
+
+  setTimeout(() => {
+    t.notOk(w.isWaiting);
+    t.deepEqual(actions, [
+      { type: '_get-cache', hash: '456', meta: {a: 1, b: 2} },
+      { type: 'got-cache', hash: '456' },
+    ]);
+    t.deepEqual(published, [
+      ['miss-cache', {hash: '456', meta: {a: 1, b: 2}}]
+    ]);
+    t.end();
+  });
+});
+
+test('WorkerService does set-cache', t => {
+  clearUp();
+
+  const w = new TestWorkerService();
+  t.notOk(w.isWaiting);
+
+  w._workerSaid({data: {
+    type: 'set-cache',
+    hash: '123',
+    object: {a: 1, b: 2}
+  }});
+
+  setTimeout(() => {
+    t.notOk(w.isWaiting);
+    t.deepEqual(actions, [
+      { type: '_set-cache', hash: '123', object: {a: 1, b: 2} },
+    ]);
+    t.equal(published.length, 0);
+    t.end();
+  });
 });

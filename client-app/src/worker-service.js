@@ -1,16 +1,15 @@
 import {inject, computedFrom} from 'aurelia-framework';
 import {SessionId} from './session-id';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {AccessToken} from './github/access-token';
-import {host, cacheUrl} from './host-name';
-import localforage from 'localforage';
+import {DumberCache} from './dumber-cache';
+import {host} from './host-name';
 
-@inject(EventAggregator, SessionId, AccessToken)
+@inject(EventAggregator, SessionId, DumberCache)
 export class WorkerService {
-  constructor(ea, sessionId, accessToken) {
+  constructor(ea, sessionId, dumberCache) {
     this.ea = ea;
     this.sessionId = sessionId;
-    this.accessToken = accessToken;
+    this.dumberCache = dumberCache;
 
     // FIFO queue
     this._jobs = [];
@@ -31,9 +30,9 @@ export class WorkerService {
     // The first invisible iframe in dumber gist.
     // It's to boot up service worker.
     // The second iframe (user app itself) is then
-    // created by ./browser-frame.js, all contents
+    // created by ./embedded-browser/browser-frame.js, all contents
     // in second iframe are provided by caches generated
-    // by service worker.
+    // in service worker.
     const iframe = document.createElement('iframe');
     iframe.setAttribute('src', `https://${this.sessionId.id}.${host}/boot-up-worker.html`);
     iframe.setAttribute('style', 'display: none');
@@ -62,52 +61,17 @@ export class WorkerService {
 
     if (data.type === 'get-cache') {
       const {hash, meta} = event.data;
-      let _getCache;
-
-      if (meta.packageName) {
-        // Use shared cache for npm packages
-        _getCache = fetch(cacheUrl + '/' + hash, {mode: 'cors'})
-          .then(response => {
-            if (response.ok) {
-              return response.json();
-            }
-            throw new Error(response.statusText);
-          });
-      } else {
-        // Use local cache for local files
-        _getCache = localforage.getItem(hash)
-      }
-
-      _getCache.then(
+      this.dumberCache.getCache(hash, meta).then(
         object => this._workerDo({type: 'got-cache', hash, object}),
-        () => this._workerDo({type: 'got-cache', hash})
+        () => {
+          this.ea.publish('miss-cache', {hash, meta});
+          this._workerDo({type: 'got-cache', hash});
+        }
       );
-
       return;
     } else if (data.type === 'set-cache') {
       const {hash, object} = event.data;
-
-      if (object.packageName) {
-        // Globally share traced result for npm packages
-        if (this.accessToken.value) {
-          fetch(cacheUrl, {
-            mode: 'cors',
-            method: 'POST',
-            body: JSON.stringify({
-              token: this.accessToken.value,
-              hash: hash,
-              object: object
-            }),
-            headers: {
-              'Content-Type': 'application/json; charset=utf-8'
-            }
-          }).then(() => {}, () => {});
-        }
-      } else {
-        // Use local cache for local files
-        localforage.setItem(hash, object).then(() => {}, () => {});
-      }
-
+      this.dumberCache.setCache(hash, object).then(() => {}, () => {});
       return;
     }
 
