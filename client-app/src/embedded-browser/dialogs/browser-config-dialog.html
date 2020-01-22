@@ -1,0 +1,35 @@
+<template>
+  <ux-dialog class="wide-dialog">
+    <ux-dialog-body>
+      <div class="select-section">
+        <div class="section-body">
+          <div
+            class="selection ${model.autoRefresh ? 'selected' : ''}"
+            click.trigger="model.autoRefresh = true & leftClick"
+          >
+            <i class="icon fas ${model.autoRefresh ? 'text-primary fa-check-square' : 'text-muted fa-square'}"></i>
+            <span>
+              <strong>Automatically refresh the embedded browser</strong>
+              <small><br>Rendering is de-bounced for <span class="badge bg-dark">500ms</span></small>
+            </span>
+          </div>
+          <div
+            class="selection ${!model.autoRefresh ? 'selected' : ''}"
+            click.trigger="model.autoRefresh = false & leftClick"
+          >
+            <i class="icon fas ${!model.autoRefresh ? 'text-primary fa-check-square' : 'text-muted fa-square'}"></i>
+            <span>
+              <strong>Manually refresh the embedded browser</strong>
+              <small><br>Either click the refresh button <i class="badge bg-dark fas fa-sync-alt"></i> or use keybord shortcut <span class="badge bg-dark">Ctrl-S</span> or <span class="badge bg-dark">⌘S</span></small>
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </ux-dialog-body>
+    <ux-dialog-footer>
+      <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
+      <button class="btn ml-auto primary" click.trigger="ok() & leftClick">Save</button>
+    </ux-dialog-footer>
+  </ux-dialog>
+</template>

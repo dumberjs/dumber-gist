@@ -1,6 +1,5 @@
 <template>
-  <require from="./select-skeleton-dialog.scss"></require>
-  <ux-dialog>
+  <ux-dialog class="wide-dialog">
     <ux-dialog-body>
       <div class="select-section">
         <div class="section-header">SPA Framework</div>
@@ -10,7 +9,7 @@
             class="selection ${f.value === framework ? 'selected' : ''}"
             click.trigger="framework = f.value & leftClick"
           >
-            <i if.bind="f.icon" class.bind="f.icon"></i>
+            <i if.bind="f.icon" class="icon" class.bind="f.icon"></i>
             <img if.bind="f.image" src.bind="f.image" alt.bind="f.label">
             <span>
               <strong>${f.label}</strong>
@@ -28,7 +27,7 @@
             class="selection ${f.value === transpiler ? 'selected' : ''}"
             click.trigger="transpiler = f.value & leftClick"
           >
-            <i if.bind="f.icon" class.bind="f.icon"></i>
+            <i if.bind="f.icon" class="icon" class.bind="f.icon"></i>
             <img if.bind="f.image" src.bind="f.image" alt.bind="f.label">
             <span>
               <strong>${f.label}</strong>

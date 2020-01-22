@@ -1,4 +1,4 @@
-import {inject, computedFrom} from 'aurelia-framework';
+import {inject, computedFrom, BindingEngine} from 'aurelia-framework';
 import {DndService} from 'bcx-aurelia-dnd';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {EditSession} from './edit/edit-session';
@@ -10,12 +10,13 @@ const MIN_PANEL_WIDTH = 150;
 const MIN_DEV_TOOLS_HEIGHT = 40;
 
 // Handle layout calculation and global bundling state
-@inject(EventAggregator, DndService, EditSession, OpenedFiles)
+@inject(EventAggregator, BindingEngine, DndService, EditSession, OpenedFiles)
 export class GistApp {
   showSideBarInSmallLayout = false;
   showEditorsInSmallLayout = true;
   showBrowserWindowInSmallLayout = true;
 
+  autoRefresh = true;
   isBundling = false;
   bundlerError = null;
   intention = {sideBar: 0, editors: 0, devTools: 0};
@@ -26,7 +27,7 @@ export class GistApp {
   windowWidth = null;
   windowHeight = null;
 
-  constructor(ea, dndService, session, openedFiles) {
+  constructor(ea, bindingEngine, dndService, session, openedFiles) {
     this.ea = ea;
     this.dndService = dndService;
     this.session = session;
@@ -34,6 +35,13 @@ export class GistApp {
     this.onResize = _.debounce(this.onResize.bind(this), 100);
     this.onResize();
     this._onResize = this._onResize.bind(this);
+
+    this.debouncedBundle = _.debounce(this.bundle, 500);
+    bindingEngine.propertyObserver(session, 'mutation').subscribe(() => {
+      if (this.autoRefresh) {
+        this.debouncedBundle();
+      }
+    });
   }
 
   attached() {
@@ -58,8 +66,11 @@ export class GistApp {
   }
 
   async bundle() {
-    if (this.isBundling) return;
     if (this.session.isRendered) return;
+    if (this.isBundling) {
+      this._needMore = true;
+      return;
+    }
 
     this.isBundling = true;
     this.bundlerError = null;
@@ -71,6 +82,10 @@ export class GistApp {
     }
 
     this.isBundling = false;
+
+    if (this._needMore) {
+      return this.bundle();
+    }
   }
 
   detached() {

@@ -60,6 +60,7 @@
       <div class="app-browser-window ${showBrowserWindowInSmallLayout ? 'show-browser-window' : 'hide-browser-window'} ${!showEditorsInSmallLayout && showBrowserWindowInSmallLayout ? 'sole-panel' : ''}">
         <browser-bar
           is-bundling.bind="isBundling"
+          auto-refresh.bind="autoRefresh"
           bundle.call="bundle()"></browser-bar>
         <browser-frame
           is-bundling.bind="isBundling"

@@ -1,11 +1,11 @@
-<template class="tabs">
+<template class="section-bar">
   <div
     repeat.for="filename of openedFiles.filenames"
     class="tab ${openedFiles.focusedIndex === $index ? 'active' : ''}"
     click.trigger="openedFiles.focusedIndex = $index & leftClick"
   >
-    <i class.bind="filename | fileIcon"></i>
-    ${filename | lastPart}
+    <i class.bind="filename | fileIcon" class="mr"></i>
+    <span>${filename | lastPart}</span>
     <i class="fas fa-times close-file" click.trigger="closeFile(filename) & leftClick"></i>
   </div>
 </template>

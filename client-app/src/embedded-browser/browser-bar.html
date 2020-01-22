@@ -1,6 +1,7 @@
-<template class="browser-bar">
-  <i class="browser-bar-icon fas fa-chevron-left ${isBundling ? 'text-muted' : ''}"></i>
-  <i class="browser-bar-icon fas fa-chevron-right ${isBundling ? 'text-muted' : ''}"></i>
-  <i class="browser-bar-icon fas fa-sync-alt ${isBundling || session.isRendered ? 'text-muted' : ''} ${isBundling ? 'fa-spin' : ''}" click.trigger="bundle() & leftClick"></i>
-  <input type="text" tabindex="-1" class="browser-bar-address-input" disabled.bind="isBundling">
+<template class="section-bar">
+  <i class="ml bar-action fas fa-chevron-left ${!isBundling && hasBackHistory ? 'enabled' : ''}" click.trigger="goBack() & leftClick"></i>
+  <i class="bar-action fas fa-chevron-right ${!isBundling && hasForwardHistory ? 'enabled' : ''}" click.trigger="goForward() & leftClick"></i>
+  <i class="bar-action fas fa-sync-alt ${!isBundling && !session.isRendered ? 'enabled' : ''} ${isBundling ? 'fa-spin' : ''} ${!isBundling && autoRefresh ? 'with-auto-label' : ''}" click.trigger="bundle() & leftClick"></i>
+  <input type="text" tabindex="-1" class="ml mr address-input" disabled.bind="isBundling">
+  <i class="mr bar-action fas fa-cog enabled" click.trigger="config() & leftClick"></i>
 </template>

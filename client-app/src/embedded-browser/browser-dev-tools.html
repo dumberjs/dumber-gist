@@ -1,17 +1,16 @@
 <template class="browser-dev-tools">
-  <div class="tabs">
+  <div class="section-bar">
     <div
       repeat.for="tool of tools"
       class="tab ${activeTool === tool.value ? 'active' : ''}"
       click.trigger="activeTool = tool.value & leftClick"
     >
-      ${tool.label}
-      <span class="badge bg-warning text-dark">12</span>
+      <span>${tool.label}</span>
+      <span class="badge bg-warning text-dark ml">12</span>
     </div>
 
     <i
-      class="ml-auto fas fa-chevron-${height ? 'down' : 'up'}"
-      style="padding: .5rem 1rem;"
+      class="ml-auto mr fas enabled bar-action fa-chevron-${height ? 'down' : 'up'}"
       click.trigger="toggleDevTools() & leftClick"></i>
   </div>
   <div class="dev-details-panel">
