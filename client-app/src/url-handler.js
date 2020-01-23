@@ -46,6 +46,10 @@ export class UrlHandler {
       if (open) {
         if (!Array.isArray(open)) open = [open];
         _.each(open, fn => this.ea.publish('open-file', fn));
+      } else {
+        // Try open readme file if there is one
+        this.ea.publish('open-file', 'README.md');
+        this.ea.publish('open-file', 'readme.md');
       }
     }
   }
