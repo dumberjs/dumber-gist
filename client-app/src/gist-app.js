@@ -3,6 +3,7 @@ import {DndService} from 'bcx-aurelia-dnd';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {EditSession} from './edit/edit-session';
 import {OpenedFiles} from './edit/opened-files';
+import {User} from './github/user';
 import {clientUrl} from './host-name';
 import {combo} from 'aurelia-combo';
 import _ from 'lodash';
@@ -19,7 +20,7 @@ const insideIframe = (function() {
 })();
 
 // Handle layout calculation and global bundling state
-@inject(EventAggregator, BindingEngine, DndService, EditSession, OpenedFiles)
+@inject(EventAggregator, BindingEngine, DndService, EditSession, OpenedFiles, User)
 export class GistApp {
   insideIframe = insideIframe;
   clientUrl = clientUrl;
@@ -39,11 +40,13 @@ export class GistApp {
   windowWidth = null;
   windowHeight = null;
 
-  constructor(ea, bindingEngine, dndService, session, openedFiles) {
+  constructor(ea, bindingEngine, dndService, session, openedFiles, user) {
     this.ea = ea;
     this.dndService = dndService;
     this.session = session;
     this.openedFiles = openedFiles;
+    this.user = user;
+
     this.onResize = _.debounce(this.onResize.bind(this), 100);
     this.onResize();
     this._onResize = this._onResize.bind(this);

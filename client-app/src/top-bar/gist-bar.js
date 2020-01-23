@@ -51,6 +51,8 @@ export class GistBar {
           cancelationLabel: 'Discard Changes'
         });
         await this.save();
+      } else {
+        await this.helper.confirm('Start a new gist draft?');
       }
       this.ea.publish('new-draft');
     } catch (e) {
@@ -82,11 +84,12 @@ export class GistBar {
   get saveable() {
     const {gist, isChanged, files} = this.session;
     const {user} = this;
+    if (!isChanged) return false;
+    if (files.length === 0) return false;
     // Give a choice for popup
     if (!user.authenticated) return true;
     if (gist.owner && gist.owner.login !== user.login) return false;
-    if (!isChanged) return false;
-    return files.length > 0;
+    return true;
   }
 
   @computedFrom('session.gist')
@@ -100,5 +103,12 @@ export class GistBar {
   get shareable() {
     const {gist} = this.session;
     return !!gist.id;
+  }
+
+  @computedFrom('session.gist')
+  get gistId() {
+    const {gist} = this.session;
+    if (!gist.id) return;
+    return gist.owner.login + '/' + gist.id;
   }
 }

@@ -124,6 +124,7 @@ html {
     margin: .5rem;
     display: flex;
     flex-wrap: nowrap;
+    align-items: center;
   }
 }
 
@@ -634,7 +635,7 @@ $node-start-offset: .6rem;
   background-color: $black;
 
   > .folder-node > .node-title {
-    transform: scale(1.2);
+    transform: scale(1.05);
 
     > .node-name {
       text-decoration: underline;

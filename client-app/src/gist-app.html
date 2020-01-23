@@ -10,7 +10,7 @@
   <require from="./embedded-browser/browser-dev-tools"></require>
 
   <div class="app" ref="dndElement">
-    <div class="app-top-bar">
+    <div class="app-top-bar ${user.authenticated ? 'bg-dark' : ''}">
       <div class="app-buttons d-small">
         <button
           class="btn ${showSideBarInSmallLayout ? 'primary' : 'clean'}"
