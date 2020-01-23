@@ -30,6 +30,7 @@ export class GistBar {
   async open() {
     try {
       if (this.saveable) {
+        // TODO new dialog
         await this.helper.confirm('You have unsaved changes. Do you want to save them first before opening another GitHub Gist?', {
           confirmationLabel: 'Save Changes',
           cancelationLabel: 'Discard Changes'
@@ -46,6 +47,7 @@ export class GistBar {
     if (!this.shareable) return; // already in a draft
     try {
       if (this.saveable) {
+        // TODO new dialog
         await this.helper.confirm('You have unsaved changes. Do you want to save them first before creating new draft?', {
           confirmationLabel: 'Save Changes',
           cancelationLabel: 'Discard Changes'
