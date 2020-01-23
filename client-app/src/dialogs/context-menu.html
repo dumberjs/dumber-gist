@@ -5,13 +5,20 @@
     contextmenu.trigger="controller.cancel()"></div>
   <div class="context-menu" style.bind="style">
     <div
-      class="context-menu-item ${item.danger ? 'danger' : ''} ${item.code ? 'context-menu-item-action' : ''} ${item.separator ? 'context-menu-item-separator' : ''}"
+      class="context-menu-item ${item.danger ? 'danger' : ''} ${item.code || item.href ? 'context-menu-item-action' : ''} ${item.separator ? 'context-menu-item-separator' : ''}"
       repeat.for="item of items"
-      click.trigger="item.code && controller.ok(item.code) & leftClick"
+      click.trigger="clickItem(item, $event) & leftClick"
     >
-      <i if.bind="item.icon" class.bind="item.icon" style="margin-right: .25rem;"></i>
-      <span if.bind="item.title">${item.title}</span>
-      <span if.bind="item.html" innerhtml.bind="item.html"></span>
+      <a if.bind="item.href" target="_blank" href.bind="item.href">
+        <i if.bind="item.icon" class.bind="item.icon" style="margin-right: .25rem;"></i>
+        <span if.bind="item.title">${item.title}</span>
+        <span if.bind="item.html" innerhtml.bind="item.html"></span>
+      </a>
+      <span else>
+        <i if.bind="item.icon" class.bind="item.icon" style="margin-right: .25rem;"></i>
+        <span if.bind="item.title">${item.title}</span>
+        <span if.bind="item.html" innerhtml.bind="item.html"></span>
+      </span>
     </div>
   </div>
 </template>

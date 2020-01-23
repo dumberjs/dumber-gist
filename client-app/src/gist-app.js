@@ -75,6 +75,9 @@ export class GistApp {
         if (this.windowWidth <= 450) {
           this.showBrowserWindowInSmallLayout = false;
         }
+      }),
+      this.ea.subscribe('bundle', () => {
+        this.bundle();
       })
     ];
     window.addEventListener('resize', this._onResize);
@@ -83,6 +86,7 @@ export class GistApp {
     }
   }
 
+  @combo('ctrl+s')
   async bundle() {
     if (this.session.isRendered) return;
     if (this.isBundling) {

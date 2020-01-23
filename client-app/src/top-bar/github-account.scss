@@ -3,12 +3,14 @@
   margin: .5rem;
   line-height: 1;
 
-  .fa-github {
+  .fa-github, .fa-question-circle {
     font-size: 1.6rem;
     cursor: pointer;
+    vertical-align: middle;
   }
 
   img {
+    vertical-align: middle;
     cursor: pointer;
     width: 1.6rem;
     height: 1.6rem;

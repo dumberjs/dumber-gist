@@ -46,6 +46,7 @@ export class CodeEditor {
     this.onChange = this.onChange.bind(this);
     this.closeEditor = this.closeEditor.bind(this);
     this.newFile = this.newFile.bind(this);
+    this.bundle = this.bundle.bind(this);
   }
 
   closeEditor() {
@@ -60,6 +61,10 @@ export class CodeEditor {
       if (inDir === '.') inDir = '';
       this.ea.publish('create-file', inDir);
     }
+  }
+
+  bundle() {
+    this.ea.publish('bundle');
   }
 
   fileChanged(file) {
@@ -133,7 +138,8 @@ export class CodeEditor {
         lint: true,
         extraKeys: {
           'Ctrl-W': this.closeEditor,
-          'Ctrl-N': this.newFile
+          'Ctrl-N': this.newFile,
+          'Ctrl-S': this.bundle
         }
       });
 

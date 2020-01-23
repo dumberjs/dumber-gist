@@ -22,10 +22,10 @@ export class Helper {
     });
   }
 
-  waitFor(title, promise) {
+  waitFor(title, promise, opts = {}) {
     return this.dialogService.open({
       viewModel: WaitingDialog,
-      model: {title}
+      model: {...opts, title}
     }).then(openDialogResult => {
       return promise.finally(() => {
         openDialogResult.controller.cancel();

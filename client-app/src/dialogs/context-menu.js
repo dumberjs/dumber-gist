@@ -17,4 +17,14 @@ export class ContextMenu {
     if (right) style.right = right + 'px';
     this.style = style;
   }
+
+  clickItem(item) {
+    if (item.href) {
+      return true; // let browser handle the link
+    }
+
+    if (item.code) {
+      this.controller.ok(item.code);
+    }
+  }
 }

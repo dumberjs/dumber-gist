@@ -1,9 +1,11 @@
 import {inject} from 'aurelia-framework';
+import {EventAggregator} from 'aurelia-event-aggregator';
 import queryString from 'query-string';
 import {AccessToken} from './access-token';
 import {SessionId} from '../session-id';
 import {PersistSession} from './persist-session';
 import {clientUrl, oauthUrl} from '../host-name';
+import {Helper} from '../helper';
 
 // github oauth client id/secret
 export const client_id =
@@ -13,18 +15,36 @@ export const client_id =
 const oauthUri = 'https://github.com/login/oauth/authorize';
 const tokenUri = `${oauthUrl}/access_token`;
 
-@inject(AccessToken, SessionId, PersistSession)
+@inject(EventAggregator, AccessToken, SessionId, PersistSession, Helper)
 export class Oauth {
   initialised = false;
 
-  constructor(accessToken, sessionId, persistSession) {
+  constructor(ea, accessToken, sessionId, persistSession, helper) {
+    this.ea = ea;
     this.accessToken = accessToken;
     this.sessionId = sessionId;
     this.persistSession = persistSession;
+    this.helper = helper;
   }
 
   async login() {
-    this.initialised = false;
+    this.helper.waitFor(
+      'Signing to GitHub ...',
+      new Promise((resolve, reject) => {
+        this._login().then(
+          () => {
+            // Wait for the re-route.
+            setTimeout(resolve, 5000);
+          },
+          reject
+        );
+      }),
+      { delay: 0 }
+    )
+    .then(() => {}, () => {});
+  }
+
+  async _login() {
     // Save session data to be restored after login
     await this.persistSession.saveSession();
 
@@ -43,6 +63,7 @@ export class Oauth {
 
   async logout() {
     this.accessToken.setToken(null);
+    this.ea.publish('info', 'Signed out from GitHub');
   }
 
   async init(code) {

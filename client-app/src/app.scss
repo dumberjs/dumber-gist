@@ -760,6 +760,22 @@ $node-start-offset: .6rem;
       margin: .25rem 0;
       border-bottom: 1px solid $gray-800;
     }
+
+    a {
+      text-decoration: none;
+
+      &:visited, &:hover {
+        text-decoration: none;
+      }
+
+      &:visited {
+        color: $gray-200;
+      }
+
+      &:hover {
+        color: $white;
+      }
+    }
   }
 }
 

@@ -35,7 +35,7 @@
           click.trigger="toggleBrowserWindow() & leftClick"><i class="fas fa-window-maximize"></i></button>
       </div>
 
-      <github-account class="ml-auto"></github-account>
+      <github-account if.bind="!insideIframe"></github-account>
     </div>
     <div class="app-content">
       <div
