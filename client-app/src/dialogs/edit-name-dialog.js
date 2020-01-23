@@ -27,8 +27,8 @@ export class EditNameDialog {
       name: [
         'mandatory',
         {
-          validate: /^[a-zA-Z0-9_/.@-]+$/,
-          message: 'only accept letters, numbers, dash(-), underscore(_), dot(.), at-sign(@) or slash(/) in file path'
+          validate: /^[a-zA-Z0-9_/.-]+$/,
+          message: 'only accept letters, numbers, dash(-), underscore(_), dot(.), or slash(/) in file path'
         },
         name => {
           if (name === this._originalFilePath) return;
