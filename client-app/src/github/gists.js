@@ -2,9 +2,11 @@ import {inject} from 'aurelia-framework';
 import {ApiClient} from './api-client';
 import _ from 'lodash';
 
-// GitHub gist saves file name in Windows format,
-// It's very very strange that the author of GitHub
-// gist didn't normalize file path to Unix format.
+// GitHub gist doesn't allow file in folder.
+// Followed gist-run, we use windows path separator
+// to bypass the file name check.
+// GitHub gist will treat the file name as the whole
+// base file name without any folder.
 function toWindows(name) {
   return name.replace(/\//g, '\\');
 }
