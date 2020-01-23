@@ -6,7 +6,7 @@ import {OpenedFiles} from './edit/opened-files';
 import {combo} from 'aurelia-combo';
 import _ from 'lodash';
 
-const MIN_PANEL_WIDTH = 150;
+const MIN_PANEL_WIDTH = 160;
 const MIN_DEV_TOOLS_HEIGHT = 40;
 
 // Handle layout calculation and global bundling state

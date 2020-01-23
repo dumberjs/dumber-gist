@@ -47,7 +47,7 @@ export class GistBar {
     if (!this.shareable) return;
   }
 
-  @computedFrom('session.gist', 'session.mutation', 'user.authenticated')
+  @computedFrom('session.gist', 'session.mutation', 'session.description', 'user.authenticated')
   get saveable() {
     const {gist, isChanged, files} = this.session;
     const {user} = this;

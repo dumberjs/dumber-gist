@@ -1,0 +1,25 @@
+<template class="gist-info">
+  <require from="./gist-info.scss"></require>
+  <div class="info-item">
+    <div class="info-item-label">Owner</div>
+    <div class="info-item-value">
+      <span if.bind="owner">
+        <img src.bind="owner.avatar_url" alt.bind="owner.login">
+        ${owner.login}
+        <span if.bind="ownedByMe" class="text-muted">(me)</span>
+      </span>
+      <span else>&lt;Not Set&gt;</span>
+    </div>
+  </div>
+  <div class="info-item">
+    <div class="info-item-label">
+      Description
+      <small if.bind="session.description !== session.gist.description" class="fas fa-circle text-primary"></small>
+    </div>
+    <div class="info-item-value">
+      <textarea
+        ref="textarea"
+        value.bind="session.description"></textarea>
+    </div>
+  </div>
+</template>

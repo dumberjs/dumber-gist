@@ -1,6 +1,7 @@
 <template class="file-navigator">
   <require from="./file-node"></require>
   <require from="./quick-start"></require>
+  <require from="./gist-info"></require>
 
   <div class="section-bar">
     <strong class="ml-2 mr-auto">Files</strong>
@@ -17,4 +18,14 @@
 
     <quick-start if.bind="fileTree.tree.length === 0"></quick-start>
   </div>
+
+  <div class="section-bar">
+    <strong class="ml-2 mr-auto">GitHub Gist</strong>
+    <span if.bind="isNew" class="text-muted mr-3">&lt;Draft&gt;</span>
+    <span else class="text-muted mr-3">
+      <span if.bind="isPrivate"><i class="fas fa-user-lock"></i> Private</span>
+      <span else>Public</span>
+    </span>
+  </div>
+  <gist-info></gist-info>
 </template>

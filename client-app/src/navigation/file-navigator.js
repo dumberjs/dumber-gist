@@ -1,16 +1,19 @@
 import {inject, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
+import {EditSession} from '../edit/edit-session';
 import {FileTree} from '../edit/file-tree';
 import {DndService} from 'bcx-aurelia-dnd';
+import _ from 'lodash';
 
-@inject(EventAggregator, FileTree, DndService)
+@inject(EventAggregator, DndService, EditSession, FileTree)
 export class FileNavigator {
   collapseFlags = {};
 
-  constructor(ea, fileTree, dndService) {
+  constructor(ea, dndService, session, fileTree) {
     this.ea = ea;
-    this.fileTree = fileTree;
     this.dndService = dndService;
+    this.session = session;
+    this.fileTree = fileTree;
   }
 
   attached() {
@@ -43,5 +46,15 @@ export class FileNavigator {
     if (!dnd || !dnd.isProcessing) return '';
     if (!dnd.canDrop || !dnd.isHoveringShallowly) return '';
     return 'can-drop';
+  }
+
+  @computedFrom('session.gist')
+  get isNew() {
+    return !_.get(this.session, 'gist.id');
+  }
+
+  @computedFrom('session.gist')
+  get isPrivate() {
+    return !_.get(this.session, 'gist.public');
   }
 }
