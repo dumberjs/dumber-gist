@@ -3,7 +3,7 @@ import {EventAggregator} from 'aurelia-event-aggregator';
 import {DialogService} from 'aurelia-dialog';
 import {CreateFileDialog} from './dialogs/create-file-dialog';
 import {EditNameDialog} from './dialogs/edit-name-dialog';
-import {ConfirmationDialog} from './dialogs/confirmation-dialog';
+import {Helper} from './helper';
 import {EditSession} from './edit/edit-session';
 import {OpenedFiles} from './edit/opened-files';
 import {Gists} from './github/gists';
@@ -12,15 +12,16 @@ import {combo} from 'aurelia-combo';
 import _ from 'lodash';
 
 @noView()
-@inject(EventAggregator, DialogService, EditSession, OpenedFiles, User, Gists)
+@inject(EventAggregator, DialogService, EditSession, OpenedFiles, User, Gists, Helper)
 export class ActionDispatcher {
-  constructor(ea, dialogService, session, openedFiles, user, gists) {
+  constructor(ea, dialogService, session, openedFiles, user, gists, helper) {
     this.ea = ea;
     this.dialogService = dialogService;
     this.session = session;
     this.openedFiles = openedFiles;
     this.user = user;
     this.gists = gists;
+    this.helper = helper;
 
     this.updateFile = this.updateFile.bind(this);
     this.updatePath = this.updatePath.bind(this);
@@ -99,19 +100,17 @@ export class ActionDispatcher {
   }
 
   deleteNode({filePath, isFolder}) {
-    this.dialogService.open({
-      viewModel: ConfirmationDialog,
-      model: {
-        message: `Delete ${isFolder ? 'folder' : 'file'} "${filePath}"?`
-      }
-    }).whenClosed(response => {
-      if (response.wasCancelled) return;
-      if (isFolder) {
-        this.session.deleteFolder(filePath);
-      } else {
-        this.session.deleteFile(filePath);
-      }
-    });
+    this.helper.confirm(`Delete ${isFolder ? 'folder' : 'file'} "${filePath}"?`)
+    .then(
+      () => {
+        if (isFolder) {
+          this.session.deleteFolder(filePath);
+        } else {
+          this.session.deleteFile(filePath);
+        }
+      },
+      () => {}
+    );
   }
 
   async saveGist() {
@@ -130,16 +129,18 @@ export class ActionDispatcher {
 
     const newGist = {description, files: filesMap, public: true};
     try {
-      let updatedGist;
+      let updateGist;
 
       if (!gist.id) {
         // new gist
-        updatedGist = await this.gists.create(newGist);
+        updateGist = this.gists.create(newGist);
       } else {
         // existing gist
         if (gist.owner && gist.owner.login !== login) return;
-        updatedGist = await this.gists.update(gist.id, newGist);
+        updateGist = this.gists.update(gist.id, newGist);
       }
+
+      const updatedGist = await this.helper.waitFor('Saving ...', updateGist);
 
       this.ea.publish('success', 'Gist is saved.');
       this.session.importData({

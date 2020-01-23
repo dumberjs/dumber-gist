@@ -1,37 +1,33 @@
 import {inject, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {DialogService} from 'aurelia-dialog';
-import {ConfirmationDialog} from './dialogs/confirmation-dialog';
+import {Helper} from './helper';
 import {EditSession} from './edit/edit-session';
 import {Oauth} from './github/oauth';
 import {User} from './github/user';
 
-@inject(EventAggregator, DialogService, EditSession, Oauth, User)
+@inject(EventAggregator, DialogService, EditSession, Oauth, User, Helper)
 export class GistBar {
-  constructor(ea, dialogService, session, oauth, user) {
+  constructor(ea, dialogService, session, oauth, user, helper) {
     this.ea = ea;
     this.dialogService = dialogService;
     this.session = session;
     this.oauth = oauth;
     this.user = user;
+    this.helper = helper;
   }
 
   loginPopup() {
-    this.dialogService.open({
-      viewModel: ConfirmationDialog,
-      model: {
-        message: `Please Sign in with GitHub to save/fork a gist.`,
-        confirmationLabel: 'Sign in with GitHub'
-      }
-    }).whenClosed(response => {
-      if (response.wasCancelled) return;
-      this.oauth.login();
-    });
+    this.helper.confirm(
+      `Please Sign in with GitHub to save/fork a gist.`,
+      {confirmationLabel: 'Sign in with GitHub'}
+    ).then(
+      () => this.oauth.login(),
+      () => {}
+    );
   }
 
   save() {
-    console.log('saveable', this.saveable);
-    console.log('files.length', this.session.files.length);
     if (!this.saveable) return;
     if (!this.user.authenticated) {
       return this.loginPopup();

@@ -63,6 +63,9 @@ export class GistApp {
       })
     ];
     window.addEventListener('resize', this._onResize);
+    if (_.get(this.session, 'files.length')) {
+      this.bundle();
+    }
   }
 
   async bundle() {

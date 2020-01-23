@@ -11,13 +11,13 @@ export class OpenedFiles {
   constructor(ea, session, bindingEngine) {
     this.ea = ea;
     this.session = session;
-    bindingEngine.propertyObserver(session, 'mutation').subscribe(mutation => {
-      if (mutation <= 0) {
-        // just loaded new gist
-        this._reset();
-      } else {
-        this._cleanUp();
-      }
+    bindingEngine.propertyObserver(session, 'mutation').subscribe(() => {
+      // if (mutation <= 0) {
+      //   // just loaded new gist
+      //   this._reset();
+      // } else {
+      this._cleanUp();
+      // }
     });
   }
 
@@ -83,10 +83,10 @@ export class OpenedFiles {
     }
   }
 
-  _reset() {
-    this.filenames = [];
-    this.focusedIndex = -1;
-  }
+  // _reset() {
+  //   this.filenames = [];
+  //   this.focusedIndex = -1;
+  // }
 
   _cleanUp() {
     const toRemove = [];

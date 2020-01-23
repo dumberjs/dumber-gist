@@ -9,7 +9,7 @@ export class ConfirmationDialog {
   }
 
   activate(model) {
-    this.message = model.message;
+    this.question = model.question;
     this.confirmationLabel = model.confirmationLabel || 'Yes';
     this.cancelationLabel = model.cancelationLabel || 'No';
   }
