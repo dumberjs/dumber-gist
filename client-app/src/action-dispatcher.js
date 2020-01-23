@@ -24,6 +24,7 @@ export class ActionDispatcher {
     this.helper = helper;
 
     this.updateFile = this.updateFile.bind(this);
+    this.newDraft = this.newDraft.bind(this);
     this.updatePath = this.updatePath.bind(this);
     this.createFile = this.createFile.bind(this);
     this.editName = this.editName.bind(this);
@@ -35,6 +36,7 @@ export class ActionDispatcher {
 
   attached() {
     this._subscribers = [
+      this.ea.subscribe('new-draft', this.newDraft),
       this.ea.subscribe('update-file', this.updateFile),
       this.ea.subscribe('update-path', this.updatePath),
       this.ea.subscribe('create-file', this.createFile),
@@ -71,6 +73,11 @@ export class ActionDispatcher {
     }
 
     this.createFile();
+  }
+
+  newDraft() {
+    this.session.loadGist({description: '', files: []});
+    this.ea.publish('info', 'Started a new gist draft');
   }
 
   createFile(inDir = '') {
@@ -122,6 +129,12 @@ export class ActionDispatcher {
 
     const filesMap = {};
     _.each(files, f => {
+      if (!_.trim(f.content)) {
+        const error = `Can not save empty file ${JSON.stringify(f.filename)}`;
+        this.ea.publish('error', error);
+        throw new Error(error);
+      }
+
       filesMap[f.filename] = {
         content: f.content
       };

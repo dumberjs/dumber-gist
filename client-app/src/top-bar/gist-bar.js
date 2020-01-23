@@ -1,10 +1,10 @@
 import {inject, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {DialogService} from 'aurelia-dialog';
-import {Helper} from './helper';
-import {EditSession} from './edit/edit-session';
-import {Oauth} from './github/oauth';
-import {User} from './github/user';
+import {Helper} from '../helper';
+import {EditSession} from '../edit/edit-session';
+import {Oauth} from '../github/oauth';
+import {User} from '../github/user';
 
 @inject(EventAggregator, DialogService, EditSession, Oauth, User, Helper)
 export class GistBar {
@@ -27,7 +27,38 @@ export class GistBar {
     );
   }
 
-  save() {
+  async open() {
+    try {
+      if (this.saveable) {
+        await this.helper.confirm('You have unsaved changes. Do you want to save them first before opening another GitHub Gist?', {
+          confirmationLabel: 'Save Changes',
+          cancelationLabel: 'Discard Changes'
+        });
+        await this.save();
+      }
+      // TODO open gist
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  async new() {
+    if (!this.shareable) return; // already in a draft
+    try {
+      if (this.saveable) {
+        await this.helper.confirm('You have unsaved changes. Do you want to save them first before creating new draft?', {
+          confirmationLabel: 'Save Changes',
+          cancelationLabel: 'Discard Changes'
+        });
+        await this.save();
+      }
+      this.ea.publish('new-draft');
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  async save() {
     if (!this.saveable) return;
     if (!this.user.authenticated) {
       return this.loginPopup();

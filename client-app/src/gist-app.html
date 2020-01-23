@@ -1,6 +1,6 @@
 <template>
-  <require from="./gist-bar"></require>
-  <require from="./github-account"></require>
+  <require from="./top-bar/gist-bar"></require>
+  <require from="./top-bar/github-account"></require>
   <require from="./panel-resizer"></require>
   <require from="./navigation/file-navigator"></require>
   <require from="./edit/editor-tabs"></require>
@@ -17,7 +17,14 @@
           click.trigger="showSideBarInSmallLayout = !showSideBarInSmallLayout & leftClick"><i class="fas fa-bars"></i></button>
       </div>
 
-      <gist-bar></gist-bar>
+      <div class="app-buttons mr-auto" if.bind="insideIframe">
+        <a
+          if.bind="session.gist.id"
+          class="btn clean even-size"
+          target="_blank"
+          href="${clientUrl}/?gist=${session.gist.id}">Open Dumber Gist</a>
+      </div>
+      <gist-bar else></gist-bar>
 
       <div class="app-buttons ml-auto mr-auto">
         <button

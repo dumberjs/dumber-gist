@@ -33,6 +33,9 @@ export class GistInfo {
     return _.get(this.session, 'gist.owner.login') === _.get(this.user, 'login');
   }
 
+  // https://stephanwagner.me/auto-resizing-textarea-with-vanilla-javascript
+  // We don't need `element.offsetHeight - element.clientHeight` because
+  // our textarea has no border.
   fitSize() {
     if (!this.textarea) return;
     // Auto fit text area height to content size

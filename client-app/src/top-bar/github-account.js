@@ -1,9 +1,9 @@
 import {inject} from 'aurelia-framework';
 import {DialogService} from 'aurelia-dialog';
-import {Oauth} from './github/oauth';
-import {User} from './github/user';
-import {SessionId} from './session-id';
-import {ContextMenu} from './dialogs/context-menu';
+import {Oauth} from '../github/oauth';
+import {User} from '../github/user';
+import {SessionId} from '../session-id';
+import {ContextMenu} from '../dialogs/context-menu';
 
 @inject(DialogService, SessionId, Oauth, User)
 export class GithubAccount {

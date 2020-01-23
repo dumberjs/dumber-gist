@@ -1,0 +1,25 @@
+<template class="app-buttons mr-auto">
+  <button
+    class="btn clean even-size"
+    click.trigger="open() & leftClick"><i class="fas fa-inbox"></i><span class="d-small-hide">&nbsp;Open</span></button>
+
+  <button
+    class="btn clean even-size ${shareable ? '' : 'disabled'}"
+    if.bind="shareable"
+    click.trigger="new() & leftClick"><i class="fas fa-plus"></i><span class="d-small-hide">&nbsp;Draft</span></button>
+
+  <button
+    class="btn clean even-size ${saveable ? '' : 'disabled'}"
+    disabled.bind="!saveable"
+    click.trigger="save() & leftClick"><i class="fas fa-save"></i><span class="d-small-hide">&nbsp;Save</span></button>
+
+  <button
+    class="btn clean even-size ${forkable ? '' : 'disabled'}"
+    disabled.bind="!forkable"
+    click.trigger="fork() & leftClick"><i class="fas fa-code-branch"></i><span class="d-small-hide">&nbsp;Fork</span></button>
+
+  <button
+    class="btn clean even-size ${shareable ? '' : 'disabled'}"
+    disabled.bind="!shareable"
+    click.trigger="share() & leftClick"><i class="fas fa-share-square"></i><span class="d-small-hide">&nbsp;Share</span></button>
+</template>
