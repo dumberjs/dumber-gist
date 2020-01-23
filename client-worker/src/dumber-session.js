@@ -12,13 +12,13 @@ export const DEFAULT_INDEX_HTML = `<!DOCTYPE html>
 <title>App</title>
 </head>
 <body>
-<h3>Please create an index.html file to render</h3>
+<p>Please create an index.html file to render</p>
 </body>
 </html>
 `;
 
 export const DEFAULT_BUNDLE_JS = `
-var m = document.createElement('h3');
+var m = document.createElement('p');
 m.textContent = 'Error: /dist/entry-bundle.js is not ready.';
 document.body.appendChild(m);
 `;

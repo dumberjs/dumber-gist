@@ -24,4 +24,5 @@
     click.trigger="share() & leftClick"><i class="fas fa-share-square"></i><span class="d-small-hide">&nbsp;Share</span></button>
 
   <span if.bind="gistId" class="ml-2 text-muted d-small-hide">${gistId}</span>
+  <span else class="ml-2 text-muted d-small-hide">&lt;draft gist, unsaved&gt;</span>
 </template>
