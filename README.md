@@ -44,7 +44,7 @@ It will be deployed to a small box in Digital Ocean. Technical, this single VM s
 
 ### Local DNS for gist.dumber.local
 
-Add following line to `/etc/hosts`, this turns on few DNS entry locally.
+Add following line to `/etc/hosts`, this turns on few DNS entries locally.
 
 ```sh
 # Use localhost for dumber-gist
