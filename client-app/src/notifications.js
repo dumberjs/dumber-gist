@@ -44,7 +44,11 @@ export class Notifications {
 
   handleNoti(message, event) {
     const style = eventMap[event] || event;
-    this.addNoti(style, message);
+    if (typeof message === 'string') {
+      this.addNoti(style, message);
+    } else if (typeof message === 'object') {
+      this.addNoti(style, message.title, message.message);
+    }
   }
 
   addNoti(style, title, message) {
