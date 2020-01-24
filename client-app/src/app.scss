@@ -75,6 +75,30 @@ html {
   margin-right: auto !important;
 }
 
+.pl {
+  padding-left: .25rem !important;
+}
+
+.pl-2 {
+  padding-left: .5rem !important;
+}
+
+.pl-3 {
+  padding-left: .75rem !important;
+}
+
+.pr {
+  padding-right: .25rem !important;
+}
+
+.pr-2 {
+  padding-right: .5rem !important;
+}
+
+.pr-3 {
+  padding-right: .75rem !important;
+}
+
 .float-left {
   float: left;
 }
@@ -99,6 +123,10 @@ html {
   bottom: 0;
   left: 0;
   user-select: none;
+}
+
+.selectable {
+  user-select: auto;
 }
 
 .spinner {
@@ -433,6 +461,10 @@ html {
 
 .text-muted {
   color: $gray-600 !important;
+}
+
+.text-white {
+  color: $white !important;
 }
 
 .text-cyan {

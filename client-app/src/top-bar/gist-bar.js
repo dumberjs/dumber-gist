@@ -5,6 +5,7 @@ import {Helper} from '../helper';
 import {EditSession} from '../edit/edit-session';
 import {Oauth} from '../github/oauth';
 import {User} from '../github/user';
+import _ from 'lodash';
 
 @inject(EventAggregator, DialogService, EditSession, Oauth, User, Helper)
 export class GistBar {
@@ -109,8 +110,11 @@ export class GistBar {
 
   @computedFrom('session.gist')
   get gistId() {
-    const {gist} = this.session;
-    if (!gist.id) return;
-    return gist.owner.login + '/' + gist.id;
+    return _.get(this.session, 'gist.id', '');
+  }
+
+  @computedFrom('session.gist')
+  get owner() {
+    return _.get(this.session, 'gist.owner.login', '');
   }
 }
