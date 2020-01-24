@@ -6,8 +6,10 @@ import {Gists} from '../../github/gists';
 import {Helper} from '../../helper';
 import _ from 'lodash';
 
-const gistIdRegex = /^[0-9a-f]{32}$/;
-const gistUrlRegex = /^https:\/\/gist.github.com\/([0-9a-zA-Z](([0-9a-zA-Z-]*)?[0-9a-zA-Z])?\/)?[0-9a-f]{32}$/;
+const gistIdRegex = /^[0-9a-f]{7,32}$/;
+const gistUrlRegex = /^https:\/\/gist.github.com\/([0-9a-zA-Z](([0-9a-zA-Z-]*)?[0-9a-zA-Z])?\/)?[0-9a-f]{7,32}$/;
+
+const idRegex = /[0-9a-f]+$/;
 
 @inject(EventAggregator, DialogController, Validation, Gists, Helper)
 export class OpenGistDialog {
@@ -36,7 +38,10 @@ export class OpenGistDialog {
   open() {
     this.triedOnce = true;
     if (this.errors) return;
-    const id = this.gistUrl.trim().slice(-32);
+
+    const m = this.gistUrl.trim().match(idRegex);
+    if (!m) return;
+    const id = m[0];
 
     this.helper.waitFor(
       `Loading Gist ${id.slice(0, 7)} ...`,

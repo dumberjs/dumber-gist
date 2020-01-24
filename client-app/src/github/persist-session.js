@@ -20,7 +20,6 @@ export class PersistSession {
       files: _.map(this.editSession.files, f => ({
         filename: f.filename,
         content: f.content,
-        isRendered: false,
         isChanged: !!f.isChanged
       })),
       gist: this.editSession.gist

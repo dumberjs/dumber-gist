@@ -4,6 +4,7 @@ import {DialogService} from 'aurelia-dialog';
 import {ConfirmOpenDialog} from './dialogs/confirm-open-dialog';
 import {OpenGistDialog} from './dialogs/open-gist-dialog';
 import {ConfirmDraftDialog} from './dialogs/confirm-draft-dialog';
+import {ConfirmForkDialog} from './dialogs/confirm-fork-dialog';
 import {Helper} from '../helper';
 import {EditSession} from '../edit/edit-session';
 import {Oauth} from '../github/oauth';
@@ -93,12 +94,23 @@ export class GistBar {
     });
   }
 
-  fork() {
+  async fork() {
     if (!this.forkable) return;
     if (!this.user.authenticated) {
       return this.loginPopup();
     }
-    this.ea.publish('fork-gist');
+
+    try {
+      await this.dialogService.open({
+        viewModel: ConfirmForkDialog,
+        model: {gist: this.session.gist}
+      }).whenClosed(response => {
+        if (response.wasCancelled) throw new Error('cancelled');
+      });
+      this.ea.publish('fork-gist');
+    } catch (e) {
+      // ignore
+    }
   }
 
   share() {
@@ -120,8 +132,12 @@ export class GistBar {
   @computedFrom('session.gist')
   get forkable() {
     const {gist} = this.session;
-    // Give a choice for popup even when user is not authenticated
-    return !!gist.id;
+    if (!gist.id) return false;
+    // Give a choice for popup
+    if (!this.user.authenticated) return true;
+    // Cannot fork own gist
+    if (gist.owner.login === _.get(this.user, 'login')) return false;
+    return true;
   }
 
   @computedFrom('session.gist')

@@ -160,6 +160,7 @@ export class ActionDispatcher {
         files: updatedGist.files,
         gist: updatedGist
       });
+
       this.ea.publish('success', 'Gist is saved.');
       this.ea.publish('saved-gist', {success: true});
     } catch (e) {
@@ -168,7 +169,30 @@ export class ActionDispatcher {
     }
   }
 
-  forkGist() {
+  async forkGist() {
+    const {gist, isChanged, files} = this.session;
+    if (!gist.id) return;
+    if (!this.user.authenticated) return;
+    if (this.user.login === gist.owner.login) return;
 
+    const localFiles = isChanged ? _.clone(files) : null;
+
+    try {
+      const newGist = await this.helper.waitFor(
+        'Forking ...',
+        this.gists.fork(gist.id)
+      );
+
+      this.session.loadGist(newGist);
+      if (localFiles) {
+        this.session.importData({files: localFiles});
+      }
+
+      this.ea.publish('success', 'Gist is forked.');
+      this.ea.publish('forked-gist', {success: true});
+    } catch (e) {
+      this.ea.publish('error', 'Failed to fork gist: ' + e.message);
+      this.ea.publish('forked-gist', {success: false});
+    }
   }
 }

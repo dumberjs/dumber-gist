@@ -1,0 +1,33 @@
+<template>
+  <ux-dialog>
+    <ux-dialog-header>Fork this Gist?</ux-dialog-header>
+    <ux-dialog-body>
+      <div class="gist-info">
+        <div class="info-item">
+          <div class="info-item-label">Owner</div>
+          <div class="info-item-value">
+            <span>
+              <img src.bind="gist.owner.avatar_url" alt.bind="gist.owner.login">
+              ${gist.owner.login}
+              <span if.bind="ownedByMe" class="text-muted">(me)</span>
+            </span>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-label">
+            Description
+          </div>
+          <div class="info-item-value">
+            <textarea
+              readonly
+              value.bind="gist.description"></textarea>
+          </div>
+        </div>
+      </div>
+    </ux-dialog-body>
+    <ux-dialog-footer>
+      <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
+      <button class="btn ml-auto primary" click.trigger="controller.ok() & leftClick">Fork</button>
+    </ux-dialog-footer>
+  </ux-dialog>
+</template>
