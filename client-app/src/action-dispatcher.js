@@ -155,14 +155,16 @@ export class ActionDispatcher {
 
       const updatedGist = await this.helper.waitFor('Saving ...', updateGist);
 
-      this.ea.publish('success', 'Gist is saved.');
       this.session.importData({
         description: updatedGist.description,
         files: updatedGist.files,
         gist: updatedGist
       });
+      this.ea.publish('success', 'Gist is saved.');
+      this.ea.publish('saved-gist', {success: true});
     } catch (e) {
       this.ea.publish('error', 'Failed to save gist: ' + e.message);
+      this.ea.publish('saved-gist', {success: false});
     }
   }
 

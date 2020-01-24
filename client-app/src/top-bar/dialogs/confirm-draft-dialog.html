@@ -1,0 +1,20 @@
+<template>
+  <ux-dialog>
+    <ux-dialog-body>
+      <div style="display:flex; align-items: center;">
+        <i class="fas fa-exclamation-triangle text-warning" style="font-size: 2rem; margin-right: 1rem;"></i>
+        <div>
+          <h3 class="mt mb">You have unsaved changes</h3>
+          <p class="mt mb">Do you want to save them first before creating a gist draft?</p>
+        </div>
+      </div>
+
+      <button class="btn d-block w100 mt mb ml-0 mr-0 success" click.trigger="controller.ok(true) & leftClick">Save Changes, then create a draft</button>
+
+      <button class="btn d-block w100 mt-2 mb ml-0 mr-0 primary" click.trigger="controller.ok(false) & leftClick">Discard Changes, then create a draft</button>
+    </ux-dialog-body>
+    <ux-dialog-footer>
+      <button class="btn ml-auto" click.trigger="controller.cancel() & leftClick">Cancel</button>
+    </ux-dialog-footer>
+  </ux-dialog>
+</template>

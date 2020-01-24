@@ -1,6 +1,8 @@
 import {inject, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {DialogService} from 'aurelia-dialog';
+import {ConfirmOpenDialog} from './dialogs/confirm-open-dialog';
+import {ConfirmDraftDialog} from './dialogs/confirm-draft-dialog';
 import {Helper} from '../helper';
 import {EditSession} from '../edit/edit-session';
 import {Oauth} from '../github/oauth';
@@ -31,12 +33,13 @@ export class GistBar {
   async open() {
     try {
       if (this.saveable) {
-        // TODO new dialog
-        await this.helper.confirm('You have unsaved changes. Do you want to save them first before opening another GitHub Gist?', {
-          confirmationLabel: 'Save Changes',
-          cancelationLabel: 'Discard Changes'
-        });
-        await this.save();
+        await this.dialogService.open({viewModel: ConfirmOpenDialog})
+          .whenClosed(response => {
+            if (response.wasCancelled) throw new Error('cancelled');
+            if (response.output) {
+              return this.save();
+            }
+          });
       }
       // TODO open gist
     } catch (e) {
@@ -48,14 +51,15 @@ export class GistBar {
     if (!this.shareable) return; // already in a draft
     try {
       if (this.saveable) {
-        // TODO new dialog
-        await this.helper.confirm('You have unsaved changes. Do you want to save them first before creating new draft?', {
-          confirmationLabel: 'Save Changes',
-          cancelationLabel: 'Discard Changes'
-        });
-        await this.save();
+        await this.dialogService.open({viewModel: ConfirmOpenDialog})
+          .whenClosed(response => {
+            if (response.wasCancelled) throw new Error('cancelled');
+            if (response.output) {
+              return this.save();
+            }
+          });
       } else {
-        await this.helper.confirm('Start a new gist draft?');
+        await this.helper.confirm('Create a new gist draft?');
       }
       this.ea.publish('new-draft');
     } catch (e) {
@@ -68,7 +72,18 @@ export class GistBar {
     if (!this.user.authenticated) {
       return this.loginPopup();
     }
-    this.ea.publish('save-gist');
+
+    return new Promise((resolve, reject) => {
+      const sub = this.ea.subscribe('saved-gist', result => {
+        if (result.success) {
+          resolve();
+        } else {
+          reject(new Error('Failed to save gist'));
+        }
+        sub.dispose();
+      })
+      this.ea.publish('save-gist');
+    });
   }
 
   fork() {
