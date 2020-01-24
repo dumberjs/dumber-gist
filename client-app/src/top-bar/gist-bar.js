@@ -2,6 +2,7 @@ import {inject, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {DialogService} from 'aurelia-dialog';
 import {ConfirmOpenDialog} from './dialogs/confirm-open-dialog';
+import {OpenGistDialog} from './dialogs/open-gist-dialog';
 import {ConfirmDraftDialog} from './dialogs/confirm-draft-dialog';
 import {Helper} from '../helper';
 import {EditSession} from '../edit/edit-session';
@@ -41,7 +42,13 @@ export class GistBar {
             }
           });
       }
-      // TODO open gist
+
+      await this.dialogService.open({viewModel: OpenGistDialog})
+        .whenClosed(response => {
+          if (response.wasCancelled) return;
+          const gist = response.output;
+          this.session.loadGist(gist);
+        });
     } catch (e) {
       // ignore
     }
@@ -51,7 +58,7 @@ export class GistBar {
     if (!this.shareable) return; // already in a draft
     try {
       if (this.saveable) {
-        await this.dialogService.open({viewModel: ConfirmOpenDialog})
+        await this.dialogService.open({viewModel: ConfirmDraftDialog})
           .whenClosed(response => {
             if (response.wasCancelled) throw new Error('cancelled');
             if (response.output) {

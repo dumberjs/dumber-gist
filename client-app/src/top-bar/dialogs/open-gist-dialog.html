@@ -1,0 +1,27 @@
+<template>
+  <ux-dialog class="wide-dialog">
+    <ux-dialog-header>Open a GitHub Gist</ux-dialog-header>
+    <ux-dialog-body>
+      <form submit.trigger="open()">
+        <input type="text" value.bind="gistUrl" class="w100" placeholder="Gist id or URL" focus.one-time="true">
+        <hidden-submit></hidden-submit>
+      </form>
+      <div if.bind="errors">
+        <small class="text-warning">${errors}.</small>
+      </div>
+      <div class="mt-2">
+        Input gist id like:<br>
+        <span class="badge bg-dark">5f51e932a77c21c6104d0a95a2ee1f61</span>
+      </div>
+      <div class="mt-2">
+        Or full gist URL like:<br>
+        <span class="badge bg-dark">https://gist.github.com/3cp/5f51e932a77c21c6104d0a95a2ee1f61</span><br>
+        <span class="badge bg-dark">https://gist.github.com/5f51e932a77c21c6104d0a95a2ee1f61</span>
+      </div>
+    </ux-dialog-body>
+    <ux-dialog-footer>
+      <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
+      <button class="btn ml-auto primary" click.trigger="open() & leftClick" disabled.bind="errors || !gistUrl">Open</button>
+    </ux-dialog-footer>
+  </ux-dialog>
+</template>

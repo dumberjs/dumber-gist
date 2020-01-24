@@ -69,10 +69,7 @@ export class Gists {
           // todo: handle truncated files
           return response.json();
         }
-        if (response.status === 404) {
-          return Promise.reject('Gist not found.');
-        }
-        return Promise.reject('Error loading Gist.');
+        throw new Error(`Error: ${response.statusText}\nGist ${id}`);
       })
       .then(fromGist);
   }
