@@ -50,7 +50,7 @@ export class GithubAccount {
         right: 5,
         top: rect.bottom + 4,
         items: [
-          {title: 'Dumber gist', icon: "fab fa-github", href: 'https://github.com/dumberjs/dumber-gist'},
+          {title: 'Dumber Gist', icon: "fab fa-github", href: 'https://github.com/dumberjs/dumber-gist'},
           {separator: true},
           {title: 'GitHub Wiki', href: 'https://github.com/dumberjs/dumber-gist/wiki'},
           {title: 'GitHub Issues', href: 'https://github.com/dumberjs/dumber-gist/issues'}

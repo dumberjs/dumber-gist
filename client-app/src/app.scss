@@ -188,15 +188,29 @@ html {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   background-color: $gray-800;
   // border-bottom: 2px solid $gray-1000;
 
   .app-buttons {
-    margin: .5rem;
+    flex: 0 1 auto;
+    margin: .5rem .25rem;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
+
+    > .fas, > .fab, > .far {
+      font-size: 1.6rem;
+      cursor: pointer;
+      margin: 0 .25rem;
+    }
+
+    img {
+      cursor: pointer;
+      width: 1.6rem;
+      height: 1.6rem;
+      margin: 0 .25rem;
+    }
   }
 }
 

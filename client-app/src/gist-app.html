@@ -12,15 +12,16 @@
   <div class="app" ref="dndElement">
     <div class="app-top-bar ${user.authenticated ? 'bg-dark' : ''}">
       <div class="app-buttons d-small">
-        <button
-          class="btn ${showSideBarInSmallLayout ? 'primary' : 'clean'}"
-          click.trigger="showSideBarInSmallLayout = !showSideBarInSmallLayout & leftClick"><i class="fas fa-bars"></i></button>
+        <i
+          class="fas fa-bars ${showSideBarInSmallLayout ? 'text-primary' : 'text-clean'}"
+          click.trigger="showSideBarInSmallLayout = !showSideBarInSmallLayout & leftClick"
+          style="font-size:1.2rem;margin-left:.4rem;"></i>
       </div>
 
       <div class="app-buttons mr-auto" if.bind="insideIframe">
         <a
           if.bind="session.gist.id"
-          class="btn clean even-size"
+          class="btn clean"
           target="_blank"
           href="${clientUrl}/?gist=${session.gist.id}">Open Dumber Gist</a>
       </div>
