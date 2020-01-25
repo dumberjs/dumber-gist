@@ -1,10 +1,20 @@
 # Dumber Gist (dumber-gist)
 
-WIP, very very incomplete.
+WIP, very incomplete.
 
 Write online JS SPA prototype in GitHub gist. Just write code in online editor's `src/` folder, dumber-gist takes care of the rest.
 
 dumber-gist is inspired by [gist-run](https://github.com/gist-run), it is gist-run on [dumber bundler](https://github.com/dumberjs).
+
+## TODO
+
+* [ ] Embedded browser to support SPA routes, back/forward history.
+* [ ] Forward app console logs and dumber bundler logs. Clear logs, set visual levels of logs.
+* [ ] Notify user when they are building cache that's not available at `cache.gist.dumber.app`.
+* [ ] Command-P, Ctrl-P, Shift-Command-P, and Shift-Ctrl-P for files and actions.
+* [ ] Add .vue file support if it's possible to run vue component compiler in browser.
+* [ ] Add Inferno skeleton, tsc needs to handle the modified jsx.
+* [ ] Investigate possibility of Angular and Ember. Might be impossible if their tooling is webpack only.
 
 ## Structure of the project
 
