@@ -27,7 +27,7 @@
       </div>
       <gist-bar else></gist-bar>
 
-      <div class="app-buttons ml-auto mr-auto">
+      <div class="app-buttons ml-auto">
         <button
           class="btn btn-not-last even-size d-small ${showEditorsInSmallLayout ? 'primary' : 'clean'}"
           click.trigger="toggleEditors() & leftClick"><i class="fas fa-code"></i></button>
@@ -36,7 +36,7 @@
           click.trigger="toggleBrowserWindow() & leftClick"><i class="fas fa-window-maximize"></i></button>
       </div>
 
-      <github-account if.bind="!insideIframe"></github-account>
+      <github-account class="ml-auto" if.bind="!insideIframe"></github-account>
     </div>
     <div class="app-content">
       <div

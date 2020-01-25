@@ -2,7 +2,65 @@
   <ux-dialog class="wide-dialog">
     <ux-dialog-header>Share Gist</ux-dialog-header>
     <ux-dialog-body>
+      <div class="select-section">
+        <div class="section-header">Optionally set opening tabs</div>
+        <div class="section-body">
+          <div class="mt ml mr mb">
+            When others visit your shared URL, Dumber Gist can automatically open editor tabs for some selected files.<br><br>
+            <strong class="text-primary">Drag file(s) to the right side, and drag to reorder them.</strong><br>
+            The first in selected list will be the default visible file in editor.
+          </div>
+        </div>
+      </div>
+      <div class="file-cols">
+        <div reorderable-group-for.bind="originalFiles">
+          <div class="file-col-head">All files</div>
+          <div>
+            <div
+              class="file"
+              reorderable-repeat.for="file of originalFiles"
+              reorderable-group="files-selection"
+              dblclick.trigger="selectedFiles.push(originalFiles.splice($index, 1)) & leftClick"
+            >
+              <i class.bind="file | fileIcon"></i>
+              ${file}
+            </div>
+          </div>
+        </div>
+        <div reorderable-group-for.bind="selectedFiles">
+          <div class="file-col-head">Selected</div>
+          <div>
+            <div
+              class="file selected"
+              reorderable-repeat.for="file of selectedFiles"
+              reorderable-group="files-selection"
+              dblclick.trigger="originalFiles.push(selectedFiles.splice($index, 1)) & leftClick"
+            >
+              <i class.bind="file | fileIcon"></i>
+              ${file}
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <div class="select-section">
+        <div class="section-header">Shareable URL</div>
+        <div class="section-body">
+          <div class="selection selected">
+            <span class="before-copy-button">${url}</span>
+            <button class="btn success copy-button" ref="copyUrlBtn">Copy</button>
+          </div>
+        </div>
+      </div>
+      <div class="select-section">
+        <div class="section-header">Shareable URL in iFrame <small>(you may need to adjust the styles)</small></div>
+        <div class="section-body">
+          <div class="selection selected">
+            <span class="before-copy-button">${iframed}</span>
+            <button class="btn success copy-button" ref="copyIframedBtn">Copy</button>
+          </div>
+        </div>
+      </div>
     </ux-dialog-body>
     <ux-dialog-footer>
       <button class="btn ml-auto" click.trigger="controller.cancel() & leftClick">Close</button>
