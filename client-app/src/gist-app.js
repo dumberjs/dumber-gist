@@ -15,6 +15,9 @@ const insideIframe = (function() {
   try {
     return window.self !== window.top;
   } catch (e) {
+    // Probably don't need this catch.
+    // IE will throw on window.top, but
+    // we don't run on IE at all.
     return true;
   }
 })();
