@@ -1025,7 +1025,7 @@ input[type='text'] {
   }
 
   .section-body {
-    margin: .5rem 0;
+    margin: .5rem;
 
     .selection {
       cursor: pointer;
@@ -1130,5 +1130,16 @@ input[type='text'] {
         }
       }
     }
+  }
+}
+
+.cols {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+
+  > * {
+    flex: 1 0 0 !important;
+    min-width: 250px !important;
   }
 }

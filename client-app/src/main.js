@@ -19,5 +19,6 @@ export function configure(aurelia) {
   });
 
   aurelia.use.plugin('aurelia-combo');
+  aurelia.use.plugin('bcx-aurelia-reorderable-repeat');
   aurelia.start().then(() => aurelia.setRoot());
 }

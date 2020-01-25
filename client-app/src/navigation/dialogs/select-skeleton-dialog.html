@@ -1,51 +1,54 @@
 <template>
   <ux-dialog class="wide-dialog">
     <ux-dialog-body>
-      <div class="select-section">
-        <div class="section-header">SPA Framework</div>
-        <div class="section-body">
-          <div
-            repeat.for="f of frameworks"
-            class="selection ${f.value === framework ? 'selected' : ''}"
-            click.trigger="framework = f.value & leftClick"
-          >
-            <i if.bind="f.icon" class="icon" class.bind="f.icon"></i>
-            <img if.bind="f.image" src.bind="f.image" alt.bind="f.label">
-            <span>
-              <strong>${f.label}</strong>
-              <small if.bind="f.description"><br>${f.description}</small>
-            </span>
+      <div class="cols">
+        <div class="select-section">
+          <div class="section-header">SPA Framework</div>
+          <div class="section-body">
+            <div
+              repeat.for="f of frameworks"
+              class="selection ${f.value === framework ? 'selected' : ''}"
+              click.trigger="framework = f.value & leftClick"
+            >
+              <i if.bind="f.icon" class="icon" class.bind="f.icon"></i>
+              <img if.bind="f.image" src.bind="f.image" alt.bind="f.label">
+              <span>
+                <strong>${f.label}</strong>
+                <small if.bind="f.description"><br>${f.description}</small>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="select-section">
+            <div class="section-header">JavaScript Language</div>
+            <div class="section-body">
+              <div
+                repeat.for="f of transpilers"
+                class="selection ${f.value === transpiler ? 'selected' : ''}"
+                click.trigger="transpiler = f.value & leftClick"
+              >
+                <i if.bind="f.icon" class="icon" class.bind="f.icon"></i>
+                <img if.bind="f.image" src.bind="f.image" alt.bind="f.label">
+                <span>
+                  <strong>${f.label}</strong>
+                  <small if.bind="f.description"><br>${f.description}</small>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="select-section">
+            <div class="section-header">CSS Language</div>
+            <div class="section-body">
+              <div class="selection selected">
+                <small>All css/scss/sass/less formats are supported, you can even use more than one formats in the same project.</small>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="select-section">
-        <div class="section-header">JavaScript Language</div>
-        <div class="section-body">
-          <div
-            repeat.for="f of transpilers"
-            class="selection ${f.value === transpiler ? 'selected' : ''}"
-            click.trigger="transpiler = f.value & leftClick"
-          >
-            <i if.bind="f.icon" class="icon" class.bind="f.icon"></i>
-            <img if.bind="f.image" src.bind="f.image" alt.bind="f.label">
-            <span>
-              <strong>${f.label}</strong>
-              <small if.bind="f.description"><br>${f.description}</small>
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div class="select-section">
-        <div class="section-header">CSS Language</div>
-        <div class="section-body">
-          <div class="selection selected">
-            <small>All css/scss/sass/less formats are supported, you can even use more than one formats in the same project.</small>
-          </div>
-        </div>
-      </div>
-
     </ux-dialog-body>
     <ux-dialog-footer>
       <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
