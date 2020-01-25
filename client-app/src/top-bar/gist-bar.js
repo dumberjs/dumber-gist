@@ -5,6 +5,8 @@ import {ConfirmOpenDialog} from './dialogs/confirm-open-dialog';
 import {OpenGistDialog} from './dialogs/open-gist-dialog';
 import {ConfirmDraftDialog} from './dialogs/confirm-draft-dialog';
 import {ConfirmForkDialog} from './dialogs/confirm-fork-dialog';
+import {ConfirmShareDialog} from './dialogs/confirm-share-dialog';
+import {ShareGistDialog} from './dialogs/share-gist-dialog';
 import {Helper} from '../helper';
 import {EditSession} from '../edit/edit-session';
 import {Oauth} from '../github/oauth';
@@ -67,7 +69,7 @@ export class GistBar {
             }
           });
       } else {
-        await this.helper.confirm('Create a new gist draft?');
+        await this.helper.confirm('Close current gist, then create a new draft?');
       }
       this.ea.publish('new-draft');
     } catch (e) {
@@ -113,8 +115,32 @@ export class GistBar {
     }
   }
 
-  share() {
+  async share() {
     if (!this.shareable) return;
+    const {gist} = this.session;
+    if (!gist.public) {
+      this.ea.publish('warning', 'Can not share a private gist');
+      return;
+    }
+
+    try {
+      if (this.saveable) {
+        await this.dialogService.open({viewModel: ConfirmShareDialog})
+          .whenClosed(response => {
+            if (response.wasCancelled) throw new Error('cancelled');
+            if (response.output) {
+              return this.save();
+            }
+          });
+      }
+
+      this.dialogService.open({
+        viewModel: ShareGistDialog,
+        model: {gist: this.session.gist}
+      });
+    } catch (e) {
+      // ignore
+    }
   }
 
   @computedFrom('session.gist', 'session.mutation', 'session.description', 'user.authenticated')
@@ -154,5 +180,10 @@ export class GistBar {
   @computedFrom('session.gist')
   get owner() {
     return _.get(this.session, 'gist.owner.login', '');
+  }
+
+  @computedFrom('session.gist', 'user')
+  get ownedByMe() {
+    return _.get(this.session, 'gist.owner.login') === _.get(this.user, 'login');
   }
 }

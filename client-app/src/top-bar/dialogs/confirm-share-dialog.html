@@ -5,13 +5,13 @@
         <i class="fas fa-exclamation-triangle text-warning" style="font-size: 2rem; margin-right: 1rem;"></i>
         <div>
           <h3 class="mt mb">You have unsaved changes</h3>
-          <p class="mt mb">Do you want to save them first before creating a gist draft?</p>
+          <p class="mt mb">Do you want to save them first before sharing this gist?</p>
         </div>
       </div>
 
-      <button class="btn big d-block w100 mt mb ml-0 mr-0 success" click.trigger="controller.ok(true) & leftClick">Save changes of current gist<br>Then create a new draft</button>
+      <button class="btn big d-block w100 mt mb ml-0 mr-0 success" click.trigger="controller.ok(true) & leftClick">Save changes of current gist<br>Then share it</button>
 
-      <button class="btn big d-block w100 mt-2 mb ml-0 mr-0 primary" click.trigger="controller.ok(false) & leftClick">Discard changes of current gist<br>Then create a new draft</button>
+      <button class="btn big d-block w100 mt-2 mb ml-0 mr-0 primary" click.trigger="controller.ok(false) & leftClick">Discard changes of current gist<br>But share it</button>
     </ux-dialog-body>
     <ux-dialog-footer>
       <button class="btn ml-auto" click.trigger="controller.cancel() & leftClick">Cancel</button>

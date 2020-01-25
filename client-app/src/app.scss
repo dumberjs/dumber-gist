@@ -369,6 +369,11 @@ html {
   transition: background-color 200ms ease-in-out, transform 150ms ease;
   appearance: none;
 
+  &.big {
+    font-size: 1.1rem;
+    padding: .6rem 1.6rem;
+  }
+
   + .btn {
     margin-left: .25rem;
   }
