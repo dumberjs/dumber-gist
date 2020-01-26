@@ -38,7 +38,7 @@ export class ShareGistDialog {
     this.copyIframed = new ClipboardJS(this.copyIframedBtn, {text: () => this.iframed});
 
     this.copyIframed.on('success', () => {
-      this.ea.publish('success', 'iFrame snippet copied');
+      this.ea.publish('success', 'iframe snippet copied');
     });
   }
 
