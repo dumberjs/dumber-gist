@@ -15,7 +15,7 @@
     click.trigger="save() & leftClick"><i class="fas fa-save"></i><span class="d-small-hide">&nbsp;Save</span></button>
 
   <button
-    if.bind="gistId && !ownedByMe"
+    if.bind="gistId"
     class="btn clean even-size ${forkable ? '' : 'disabled'}"
     disabled.bind="!forkable"
     click.trigger="fork() & leftClick"><i class="fas fa-code-branch"></i><span class="d-small-hide">&nbsp;Fork</span></button>

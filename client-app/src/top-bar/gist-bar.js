@@ -102,6 +102,19 @@ export class GistBar {
       return this.loginPopup();
     }
 
+    if (this.ownedByMe) {
+      try {
+        await this.helper.confirm(
+          'GitHub Gist does not allow forking your own gist. Do you want to copy current gist to a new gist?',
+          {confirmationLabel: 'Copy to new gist'}
+        );
+        this.ea.publish('save-gist', {forceNew: true});
+      } catch (e) {
+        // ignore
+      }
+      return;
+    }
+
     try {
       await this.dialogService.open({
         viewModel: ConfirmForkDialog,
@@ -162,7 +175,8 @@ export class GistBar {
     // Give a choice for popup
     if (!this.user.authenticated) return true;
     // Cannot fork own gist
-    if (gist.owner.login === _.get(this.user, 'login')) return false;
+    // Now checked in fork()
+    // if (this.ownedByMe) return false;
     return true;
   }
 

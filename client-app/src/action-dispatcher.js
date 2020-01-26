@@ -3,6 +3,7 @@ import {EventAggregator} from 'aurelia-event-aggregator';
 import {DialogService} from 'aurelia-dialog';
 import {CreateFileDialog} from './dialogs/create-file-dialog';
 import {EditNameDialog} from './dialogs/edit-name-dialog';
+import {NewGistDialog} from './dialogs/new-gist-dialog';
 import {Helper} from './helper';
 import {EditSession} from './edit/edit-session';
 import {OpenedFiles} from './edit/opened-files';
@@ -30,7 +31,6 @@ export class ActionDispatcher {
     this.editName = this.editName.bind(this);
     this.importFile = this.importFile.bind(this);
     this.deleteNode = this.deleteNode.bind(this);
-    this.saveGist = this.saveGist.bind(this);
     this.forkGist = this.forkGist.bind(this);
   }
 
@@ -48,8 +48,10 @@ export class ActionDispatcher {
       this.ea.subscribe('renamed-file', ({oldFilename, newFilename}) => {
         this.openedFiles.afterRenameFile(oldFilename, newFilename);
       }),
-      this.ea.subscribe('save-gist', this.saveGist),
-      this.ea.subscribe('fork-gist', this.forkGist),
+      this.ea.subscribe('save-gist', e => {
+        this.saveGist(e && e.forceNew);
+      }),
+      this.ea.subscribe('fork-gist', this.forkGist)
     ];
   }
 
@@ -120,12 +122,33 @@ export class ActionDispatcher {
     );
   }
 
-  async saveGist() {
-    const {gist, description, files} = this.session;
+  async saveGist(forceNew) {
+    const {gist, files} = this.session;
+    let {description} = this.session;
+    let isPublic = _.get(gist, 'public', true);
     const {authenticated, login} = this.user;
     if (!authenticated) return;
 
-    // TODO dialog to ask public and description
+    const createNew = !gist.id || forceNew;
+
+    if (createNew) {
+      try {
+        await this.dialogService.open({
+          viewModel: NewGistDialog,
+          model: {description, isPublic}
+        }).whenClosed(response => {
+          if (response.wasCancelled) {
+            throw new Error('cancelled')
+          }
+          const {output} = response;
+          description = output.description;
+          isPublic = output.isPublic;
+        })
+      } catch (e) {
+        // cancelled
+        return;
+      }
+    }
 
     const filesMap = {};
     _.each(files, f => {
@@ -140,16 +163,18 @@ export class ActionDispatcher {
       };
     });
 
-    const newGist = {description, files: filesMap, public: true};
+    const newGist = {description, files: filesMap, public: isPublic};
+
     try {
       let updateGist;
-
-      if (!gist.id) {
+      if (createNew) {
         // new gist
         updateGist = this.gists.create(newGist);
       } else {
         // existing gist
-        if (gist.owner && gist.owner.login !== login) return;
+        if (gist.owner && gist.owner.login !== login) {
+          return;
+        }
         updateGist = this.gists.update(gist.id, newGist);
       }
 

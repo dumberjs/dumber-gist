@@ -1,0 +1,35 @@
+<template>
+  <ux-dialog>
+    <ux-dialog-header>Save New Gist</ux-dialog-header>
+    <ux-dialog-body>
+      <form submit.trigger="save()">
+        <div><strong>Gist Description</strong></div>
+        <input type="text" value.bind="model.description" class="w100" focus.one-time="true" ref="input">
+        <div if.bind="errors">
+          <small class="text-warning">${errors}.</small>
+        </div>
+        <div
+          class="mt-3"
+          style="cursor: default;"
+          click.trigger="model.isPublic = true & leftClick"
+        >
+          <i class="icon fas fa-circle ${model.isPublic ? 'text-primary' : 'text-muted'}"></i>
+          <strong>Public Gist</strong>
+        </div>
+        <div
+          class="mt-3"
+          style="cursor: default;"
+          click.trigger="model.isPublic = false & leftClick"
+        >
+          <i class="icon fas fa-circle ${!model.isPublic ? 'text-primary' : 'text-muted'}"></i>
+          <strong>Private Gist</strong><span class="text-muted">&nbsp;(only visible to myself)</span>
+        </div>
+        <hidden-submit></hidden-submit>
+      </form>
+    </ux-dialog-body>
+    <ux-dialog-footer>
+      <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
+      <button class="btn ml-auto primary" click.trigger="save() & leftClick" disabled.bind="errors">Save</button>
+    </ux-dialog-footer>
+  </ux-dialog>
+</template>
