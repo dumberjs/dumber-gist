@@ -39,7 +39,9 @@ export class DumberCache {
   async getCache(hash, meta) {
     if (meta.packageName) {
       // If there is no local cache, use remote cache.
-      return localforage.getItem(hash).catch(() => getRemoteCache(hash));
+      return localforage.getItem(hash)
+        .then(result => result || Promise.reject())
+        .catch(() => getRemoteCache(hash));
     }
 
     // Use local cache for local files
