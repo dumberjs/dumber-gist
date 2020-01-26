@@ -58,7 +58,7 @@ export class GistBar {
   }
 
   async new() {
-    if (!this.shareable) return; // already in a draft
+    if (!this.gistId) return; // already in a draft
     try {
       if (this.saveable) {
         await this.dialogService.open({viewModel: ConfirmDraftDialog})
@@ -129,7 +129,7 @@ export class GistBar {
   }
 
   async share() {
-    if (!this.shareable) return;
+    if (!this.gistId) return;
     const {gist} = this.session;
     if (!gist.public) {
       this.ea.publish('warning', 'Can not share a private gist');
@@ -178,12 +178,6 @@ export class GistBar {
     // Now checked in fork()
     // if (this.ownedByMe) return false;
     return true;
-  }
-
-  @computedFrom('session.gist')
-  get shareable() {
-    const {gist} = this.session;
-    return !!gist.id;
   }
 
   @computedFrom('session.gist')
