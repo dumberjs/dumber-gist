@@ -25,6 +25,7 @@ export class UrlHandler {
   }
 
   async start() {
+    this.initialised = false;
     try {
       await this.init();
     } catch (err) {

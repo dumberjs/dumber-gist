@@ -4,24 +4,28 @@
     <ux-dialog-body>
       <form submit.trigger="save()">
         <div><strong>Gist Description</strong></div>
-        <input type="text" value.bind="model.description" class="w100" focus.one-time="true" ref="input">
+        <textarea
+          ref="textarea"
+          class="w100"
+          focus.one-time="true"
+          value.bind="model.description"></textarea>
         <div if.bind="errors">
           <small class="text-warning">${errors}.</small>
         </div>
         <div
           class="mt-3"
-          style="cursor: default;"
+          style="cursor: pointer;"
           click.trigger="model.isPublic = true & leftClick"
         >
-          <i class="icon fas fa-circle ${model.isPublic ? 'text-primary' : 'text-muted'}"></i>
+          <i class="icon mr fas fa-circle ${model.isPublic ? 'text-primary' : 'text-muted'}"></i>
           <strong>Public Gist</strong>
         </div>
         <div
           class="mt-3"
-          style="cursor: default;"
+          style="cursor: pointer;"
           click.trigger="model.isPublic = false & leftClick"
         >
-          <i class="icon fas fa-circle ${!model.isPublic ? 'text-primary' : 'text-muted'}"></i>
+          <i class="icon mr fas fa-circle ${!model.isPublic ? 'text-primary' : 'text-muted'}"></i>
           <strong>Private Gist</strong><span class="text-muted">&nbsp;(only visible to myself)</span>
         </div>
         <hidden-submit></hidden-submit>
