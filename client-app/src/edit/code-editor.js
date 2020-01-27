@@ -137,6 +137,9 @@ export class CodeEditor {
         gutters: ["CodeMirror-lint-markers"],
         lint: true,
         extraKeys: {
+          // When codemirror has the focus, it consumes almost
+          // all keybord events.
+          // So we need to bind those shortcuts in editor too.
           'Ctrl-W': this.closeEditor,
           'Ctrl-N': this.newFile,
           'Ctrl-S': this.bundle
