@@ -73,14 +73,14 @@ export class Gists {
   }
 
   update(id, gist) {
-    let init = {
+    const opts = {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(toGitHubGist(gist))
     };
-    return this.api.fetch(`gists/${id}`, init)
+    return this.api.fetch(`gists/${id}`, opts)
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -92,14 +92,14 @@ export class Gists {
   }
 
   create(gist) {
-    let init = {
+    const opts = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body:JSON.stringify(toGitHubGist(gist))
     };
-    return this.api.fetch(`gists`, init)
+    return this.api.fetch(`gists`, opts)
       .then(response => {
         if (response.ok) {
           return response.json();
