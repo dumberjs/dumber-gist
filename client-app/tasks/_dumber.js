@@ -25,7 +25,6 @@ module.exports = dumber({
   hash: isProduction && !isTest,
 
   prepend: [
-    'node_modules/clipboard/dist/clipboard.min.js'
   ],
 
   // append after amd loader and all module definitions in entry bundle.

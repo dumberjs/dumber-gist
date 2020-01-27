@@ -1,4 +1,4 @@
-/* global ClipboardJS */
+import ClipboardJS from 'clipboard';
 import {DialogController} from 'aurelia-dialog';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {inject, BindingEngine} from 'aurelia-framework';
@@ -23,6 +23,10 @@ export class ShareGistDialog {
     this.gist = model.gist;
     this.originalFiles = _.map(this.gist.files, 'filename');
     this.subscribers = [
+      // Cannot just @computedFrom('selectedFiles') as computedFrom
+      // only subscribes propertyObserver, we need to respond to
+      // collectionObserver.
+      // Aurelia 2 should be able to remove this glue code.
       this.bindingEngine.collectionObserver(this.selectedFiles).subscribe(this._update)
     ];
     this._update();
