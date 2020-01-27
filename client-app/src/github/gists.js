@@ -15,7 +15,7 @@ function toUnix(name) {
   return name.replace(/\\/g, '/');
 }
 
-function fromGist(gist) {
+function fromGitHubGist(gist) {
   const {files} = gist;
   const normalizedFiles = {};
 
@@ -33,15 +33,13 @@ function fromGist(gist) {
   };
 }
 
-function toGist(gist) {
+function toGitHubGist(gist) {
   const {files} = gist;
   const strangeFiles = {};
 
   _.each(files, (f, filename)=> {
     const fn = toWindows(filename);
-    strangeFiles[fn] = {
-      content: f.content
-    };
+    strangeFiles[fn] = f ? {content: f.content} : null;
   });
 
   return {
@@ -71,7 +69,7 @@ export class Gists {
         }
         throw new Error(`Error: ${response.statusText}\nGist ${id}`);
       })
-      .then(fromGist);
+      .then(fromGitHubGist);
   }
 
   update(id, gist) {
@@ -80,7 +78,7 @@ export class Gists {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(toGist(gist))
+      body: JSON.stringify(toGitHubGist(gist))
     };
     return this.api.fetch(`gists/${id}`, init)
       .then(response => {
@@ -90,7 +88,7 @@ export class Gists {
         // todo: handle rate limit, etc
         throw new Error('unable to patch gist');
       })
-      .then(fromGist);
+      .then(fromGitHubGist);
   }
 
   create(gist) {
@@ -99,7 +97,7 @@ export class Gists {
       headers: {
         'Content-Type': 'application/json'
       },
-      body:JSON.stringify(toGist(gist))
+      body:JSON.stringify(toGitHubGist(gist))
     };
     return this.api.fetch(`gists`, init)
       .then(response => {
@@ -109,7 +107,7 @@ export class Gists {
         // todo: handle rate limit, etc
         throw new Error('unable to create gist');
       })
-      .then(fromGist);
+      .then(fromGitHubGist);
   }
 
   fork(id) {

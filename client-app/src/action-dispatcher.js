@@ -163,6 +163,11 @@ export class ActionDispatcher {
       };
     });
 
+    _.keys(gist.files).forEach(fn => {
+      // Deleted files
+      if (!filesMap[fn]) filesMap[fn] = null;
+    });
+
     const newGist = {description, files: filesMap, public: isPublic};
 
     try {
@@ -189,6 +194,7 @@ export class ActionDispatcher {
       this.ea.publish('success', 'Gist is saved.');
       this.ea.publish('saved-gist', {success: true});
     } catch (e) {
+      console.error(e);
       this.ea.publish('error', 'Failed to save gist: ' + e.message);
       this.ea.publish('saved-gist', {success: false});
     }
