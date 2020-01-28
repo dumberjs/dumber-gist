@@ -21,8 +21,7 @@ export class FileNode {
   attached() {
     this.dndService.addSource(this, {
       element: this.srElement,
-      hideCursor: true,
-      centerPreviewToMousePosition: true
+      hideCursor: true
     });
     this.dndService.addTarget(this);
   }

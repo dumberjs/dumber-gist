@@ -578,11 +578,11 @@ $node-start-offset: .6rem;
   color: $gray-500;
   white-space: nowrap;
   display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 .section-bar {
-  flex-wrap: nowrap;
-  align-items: center;
   flex: 0 0 auto;
   height: 2.8rem;
   background-color: $gray-1000;
@@ -627,7 +627,7 @@ $node-start-offset: .6rem;
 }
 
 .file-node, .folder-node {
-  padding: .4rem $node-start-offset;
+  padding: .4rem .25rem .4rem $node-start-offset;
 
   &:hover {
     background-color: $black;
@@ -677,7 +677,7 @@ $node-start-offset: .6rem;
 .tab {
   flex: 0 1 auto;
   align-self: stretch;
-  padding: 0 .8rem;
+  padding: 0 1rem;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
@@ -728,6 +728,7 @@ $node-start-offset: .6rem;
 
 .can-drop {
   background-color: $black;
+  box-shadow: inset 0 0 0 1px $blue;
 
   > .folder-node > .node-title {
     transform: scale(1.05);
@@ -735,15 +736,6 @@ $node-start-offset: .6rem;
     > .node-name {
       text-decoration: underline;
     }
-  }
-
-
-  @media (min-width: $small) {
-    box-shadow: inset -1px 0 0 1px $blue;
-  }
-
-  @media (max-width: $small - .02) {
-    box-shadow: inset 0 0 0 1px $blue;
   }
 
   @for $i from 0 through 8 {
