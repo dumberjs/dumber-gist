@@ -4,7 +4,6 @@ export class ServiceCache {
   }
 
   async put(url, content, contentType) {
-    console.log(`Service worker caches url ${url}`);
     const cache = await caches.open('v1');
     await cache.put(
       new Request(url, { mode: 'no-cors' }),

@@ -15,7 +15,7 @@ export class NpmHttpRegistry {
     if (!this.fetching[name]) {
       this.fetching[name] = fetch(`${this.registryUrl}/${name}`).then(response => {
         if(!response.ok){
-          console.log(`Could not load npm registry for ${name}: ${response.statusText}`);
+          console.error(`Could not load npm registry for ${name}: ${response.statusText}`);
           throw new Error(response.statusText);
         }
 
