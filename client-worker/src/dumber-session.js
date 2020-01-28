@@ -149,6 +149,15 @@ export class DumberSession {
       deps: deps
     });
 
+    let transpilerOptions = {};
+    if (_.some(deps, {name: 'preact'})) {
+      transpilerOptions.jsxPragma = 'h';
+      transpilerOptions.jsxFrag = 'Fragment';
+    } else if (_.some(deps, {name: 'inferno'})) {
+      transpilerOptions.jsxPragma = 'Inferno.createVNode';
+    }
+    this.transpilerOptions = transpilerOptions;
+
     console.log('Created dumber instance');
     return {isNew: true};
   }
@@ -161,7 +170,7 @@ export class DumberSession {
     for (let i = 0, ii = files.length; i < ii; i++) {
       const file = files[i];
       if (file.filename.startsWith('src/') || !file.filename.match(/[^/]+\.html/)) {
-        const transpiledFile = await this.transpiler.transpile(file, files);
+        const transpiledFile = await this.transpiler.transpile(file, files, this.transpilerOptions);
         if (!transpiledFile) continue;
 
         let log = 'Capture ' + file.filename;

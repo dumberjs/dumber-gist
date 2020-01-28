@@ -17,10 +17,32 @@ export class Foo {
 
   t.equal(file.filename, 'src/foo.js');
   t.equal(file.moduleId, 'foo');
-  t.ok(file.content.includes("this.bar = '';"));
+  t.ok(file.content.includes('_initializerDefineProperty(this, "bar", _descriptor, this)'));
   t.notOk(file.content.includes("sourceMappingURL"));
   t.equal(file.sourceMap.file, 'src/foo.js');
   t.deepEqual(file.sourceMap.sources, ['src/foo.ts']);
+  t.deepEqual(file.sourceMap.sourcesContent, [code]);
+});
+
+test('Transpiler transpiles jsx file in inferno way with fragment', async t => {
+  const jt = new Transpiler();
+  const code = `const descriptions = items.map(item => (
+  <>
+    <dt>{item.name}</dt>
+    <dd>{item.value}</dd>
+  </>
+));`;
+  const file = await jt.transpile({
+    filename: 'src/foo.jsx',
+    content: code
+  }, [], {jsxPragma: 'Inferno.createVNode'});
+
+  t.equal(file.filename, 'src/foo.js');
+  t.ok(file.content.includes(".createVNode"));
+  t.ok(file.content.includes(".createFragment"));
+  t.notOk(file.content.includes("sourceMappingURL"));
+  t.equal(file.sourceMap.file, 'src/foo.js');
+  t.deepEqual(file.sourceMap.sources, ['src/foo.jsx']);
   t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
 

@@ -20,17 +20,17 @@ export class Transpiler {
     return this.transpilers.find(t => t.match(file, files));
   }
 
-  async transpile(file, files) {
+  async transpile(file, files, opts) {
     const transpiler = this.findTranspiler(file, files);
     let result;
 
     if (transpiler) {
-      result = await transpiler.transpile(file, files);
+      result = await transpiler.transpile(file, files, opts);
     }
 
     if (result) {
       if (result.intermediate) {
-        return this.transpile(result, files);
+        return this.transpile(result, files, opts);
       }
 
       let moduleId = path.relative('src', result.filename);

@@ -35,7 +35,7 @@ export class Foo {
   });
 
   t.equal(file.filename, 'src/foo.js');
-  t.ok(file.content.includes("this.bar = '';"));
+  t.ok(file.content.includes('_initializerDefineProperty(this, "bar", _descriptor, this)'));
   t.notOk(file.content.includes("sourceMappingURL"));
   t.equal(file.sourceMap.file, 'src/foo.js');
   t.deepEqual(file.sourceMap.sources, ['src/foo.ts']);
@@ -59,7 +59,7 @@ export class Foo {
   });
 
   t.equal(file.filename, 'src/foo.js');
-  t.ok(file.content.includes("this.bar = '';"));
+  t.ok(file.content.includes('_initializerDefineProperty(this, "bar", _descriptor, this)'));
   t.notOk(file.content.includes("sourceMappingURL"));
   t.equal(file.sourceMap.file, 'src/foo.js');
   t.deepEqual(file.sourceMap.sources, ['src/foo.js']);
@@ -68,7 +68,7 @@ export class Foo {
 
 test('JsTranspiler transpiles tsx file', async t => {
   const jt = new JsTranspiler();
-  const code = 'export default (void) => <p>lorem</p>;';
+  const code = 'export default (name: string) => <p>{name}</p>;';
   const file = await jt.transpile({
     filename: 'src/foo.tsx',
     content: code
@@ -80,6 +80,14 @@ test('JsTranspiler transpiles tsx file', async t => {
   t.equal(file.sourceMap.file, 'src/foo.js');
   t.deepEqual(file.sourceMap.sources, ['src/foo.tsx']);
   t.deepEqual(file.sourceMap.sourcesContent, [code]);
+});
+
+test('JsTranspiler cannot tranpile other file', async t => {
+  const jt = new JsTranspiler();
+  await t.rejects(async () => jt.transpile({
+    filename: 'src/foo.html',
+    content: ''
+  }));
 });
 
 test('JsTranspiler transpiles jsx file', async t => {
@@ -98,10 +106,100 @@ test('JsTranspiler transpiles jsx file', async t => {
   t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
 
-test('JsTranspiler cannot tranpile other file', async t => {
+test('JsTranspiler transpiles jsx file with fragment', async t => {
   const jt = new JsTranspiler();
-  await t.rejects(async () => jt.transpile({
-    filename: 'src/foo.html',
-    content: ''
-  }));
+  const code = `const descriptions = items.map(item => (
+  <>
+    <dt>{item.name}</dt>
+    <dd>{item.value}</dd>
+  </>
+));`;
+  const file = await jt.transpile({
+    filename: 'src/foo.jsx',
+    content: code
+  });
+
+  t.equal(file.filename, 'src/foo.js');
+  t.ok(file.content.includes("React.createElement"));
+  t.ok(file.content.includes("React.Fragment"));
+  t.notOk(file.content.includes("sourceMappingURL"));
+  t.equal(file.sourceMap.file, 'src/foo.js');
+  t.deepEqual(file.sourceMap.sources, ['src/foo.jsx']);
+  t.deepEqual(file.sourceMap.sourcesContent, [code]);
+});
+
+test('JsTranspiler transpiles jsx file in preact way', async t => {
+  const jt = new JsTranspiler();
+  const code = 'export default () => <p>lorem</p>;';
+  const file = await jt.transpile({
+    filename: 'src/foo.jsx',
+    content: code
+  }, [], {jsxPragma: 'h'});
+
+  t.equal(file.filename, 'src/foo.js');
+  t.ok(file.content.includes("h("));
+  t.notOk(file.content.includes("sourceMappingURL"));
+  t.equal(file.sourceMap.file, 'src/foo.js');
+  t.deepEqual(file.sourceMap.sources, ['src/foo.jsx']);
+  t.deepEqual(file.sourceMap.sourcesContent, [code]);
+});
+
+test('JsTranspiler transpiles jsx file in preact way with fragment', async t => {
+  const jt = new JsTranspiler();
+  const code = `const descriptions = items.map(item => (
+  <>
+    <dt>{item.name}</dt>
+    <dd>{item.value}</dd>
+  </>
+));`;
+  const file = await jt.transpile({
+    filename: 'src/foo.jsx',
+    content: code
+  }, [], {jsxPragma: 'h', jsxFrag: 'Fragment'});
+
+  t.equal(file.filename, 'src/foo.js');
+  t.ok(file.content.includes("h("));
+  t.ok(file.content.includes("Fragment"));
+  t.notOk(file.content.includes("sourceMappingURL"));
+  t.equal(file.sourceMap.file, 'src/foo.js');
+  t.deepEqual(file.sourceMap.sources, ['src/foo.jsx']);
+  t.deepEqual(file.sourceMap.sourcesContent, [code]);
+});
+
+test('JsTranspiler transpiles jsx file in inferno way', async t => {
+  const jt = new JsTranspiler();
+  const code = 'export default () => <p>lorem</p>;';
+  const file = await jt.transpile({
+    filename: 'src/foo.jsx',
+    content: code
+  }, [], {jsxPragma: 'Inferno.createVNode'});
+
+  t.equal(file.filename, 'src/foo.js');
+  t.ok(file.content.includes(".createVNode"));
+  t.notOk(file.content.includes("sourceMappingURL"));
+  t.equal(file.sourceMap.file, 'src/foo.js');
+  t.deepEqual(file.sourceMap.sources, ['src/foo.jsx']);
+  t.deepEqual(file.sourceMap.sourcesContent, [code]);
+});
+
+test('JsTranspiler transpiles jsx file in inferno way with fragment', async t => {
+  const jt = new JsTranspiler();
+  const code = `const descriptions = items.map(item => (
+  <>
+    <dt>{item.name}</dt>
+    <dd>{item.value}</dd>
+  </>
+));`;
+  const file = await jt.transpile({
+    filename: 'src/foo.jsx',
+    content: code
+  }, [], {jsxPragma: 'Inferno.createVNode'});
+
+  t.equal(file.filename, 'src/foo.js');
+  t.ok(file.content.includes(".createVNode"));
+  t.ok(file.content.includes(".createFragment"));
+  t.notOk(file.content.includes("sourceMappingURL"));
+  t.equal(file.sourceMap.file, 'src/foo.js');
+  t.deepEqual(file.sourceMap.sources, ['src/foo.jsx']);
+  t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
