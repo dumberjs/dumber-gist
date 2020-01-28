@@ -1,4 +1,4 @@
-<template class="section-bar">
+<template class="section-bar" ref="el">
   <div
     repeat.for="filename of openedFiles.filenames"
     class="tab ${openedFiles.focusedIndex === $index ? 'active' : ''}"

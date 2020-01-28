@@ -122,7 +122,7 @@ export class CodeEditor {
 
   attached() {
     this.mode = MODES[path.extname(this.file.filename)] || '';
-    // Delay 100ms to fix small screen layout issue.
+    // Delay to fix small screen layout issue.
     this._toCreate = setTimeout(() => {
       this.cm = CodeMirror(this.editor, {
         value: this.file.content,
@@ -148,7 +148,7 @@ export class CodeEditor {
 
       this.cm.on('change', this.onChange);
       this._toCreate = null;
-    }, 100);
+    }, 50);
   }
 
   detached() {
