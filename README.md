@@ -8,7 +8,7 @@ dumber-gist is inspired by [gist-run](https://github.com/gist-run), it is gist-r
 
 ## TODO
 
-* [ ] Embedded browser to support SPA routes, back/forward history.
+* [x] Embedded browser to support SPA routes, back/forward history.
 * [ ] Forward app console logs and dumber bundler logs. Clear logs, set visual levels of logs.
 * [ ] Notify user when they are building cache that's not available at `cache.gist.dumber.app`.
 * [ ] Command-P, Ctrl-P, Shift-Command-P, and Shift-Ctrl-P for files and actions.
