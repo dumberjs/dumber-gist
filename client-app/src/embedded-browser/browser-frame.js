@@ -3,18 +3,20 @@ import {EventAggregator} from 'aurelia-event-aggregator';
 import {DndService} from 'bcx-aurelia-dnd';
 import {SessionId} from '../session-id';
 import {host} from '../host-name';
+import {HistoryTracker} from '../history-tracker';
 import _ from 'lodash';
 
-@inject(EventAggregator, DndService, SessionId)
+@inject(EventAggregator, DndService, SessionId, HistoryTracker)
 export class BrowserFrame {
   @bindable isBundling;
   @bindable bundlerError;
 
-  constructor(ea, dndService, sessionId) {
+  constructor(ea, dndService, sessionId, historyTracker) {
     this.ea = ea;
     this.dndService = dndService;
+    this.historyTracker = historyTracker;
     this.src = `https://${sessionId.id}.${host}`;
-    this.rebuildFrame = _.debounce(this.rebuildFrame, 200);
+    this.rebuildFrame = _.debounce(this.rebuildFrame.bind(this), 200);
     this.goBack = this.goBack.bind(this);
     this.goForward = this.goForward.bind(this);
   }
@@ -23,6 +25,7 @@ export class BrowserFrame {
     this.subscribers = [
       this.ea.subscribe('history-back', this.goBack),
       this.ea.subscribe('history-forward', this.goForward),
+      this.ea.subscribe('history-reload', this.rebuildFrame),
     ];
   }
 
@@ -49,15 +52,17 @@ export class BrowserFrame {
   }
 
   rebuildFrame() {
+    this.historyTracker.reset();
+
     const existingFrame = document.getElementById('frame');
-
-    const frame = document.createElement('iframe');
-    frame.className = 'iframe';
-    frame.id = 'frame';
-    // TODO track SPA app route path
-    frame.setAttribute('src', this.src);
-    this.container.insertBefore(frame, existingFrame || this.reference);
-
-    if (existingFrame) setTimeout(() => existingFrame.remove(), 150);
+    if (existingFrame) {
+      existingFrame.contentWindow.location.replace(this.src + this.historyTracker.currentUrl);
+    } else {
+      const frame = document.createElement('iframe');
+      frame.className = 'iframe';
+      frame.id = 'frame';
+      frame.setAttribute('src', this.src + this.historyTracker.currentUrl);
+      this.container.insertBefore(frame, this.reference);
+    }
   }
 }

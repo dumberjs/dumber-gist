@@ -1,27 +1,21 @@
-import {inject, bindable, bindingMode, BindingEngine} from 'aurelia-framework';
+import {inject, bindable, bindingMode} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {DialogService} from 'aurelia-dialog';
 import {BrowserConfigDialog} from './dialogs/browser-config-dialog';
 import {EditSession} from '../edit/edit-session';
 import {HistoryTracker} from '../history-tracker';
 
-@inject(EventAggregator, BindingEngine, DialogService, EditSession, HistoryTracker)
+@inject(EventAggregator, DialogService, EditSession, HistoryTracker)
 export class BrowserBar {
   @bindable isBundling;
   @bindable({defaultBindingMode: bindingMode.twoWay}) autoRefresh;
   @bindable bundle;
 
-  url = '';
-
-  constructor(ea, bindingEngine, dialogService, session, historyTracker) {
+  constructor(ea, dialogService, session, historyTracker) {
     this.ea = ea;
     this.dialogService = dialogService;
     this.session = session;
     this.historyTracker = historyTracker;
-
-    bindingEngine.propertyObserver(this.historyTracker, 'currentUrl').subscribe(newUrl => {
-      this.url = newUrl;
-    });
   }
 
   goBack() {
@@ -47,5 +41,13 @@ export class BrowserBar {
       const {output} = response;
       this.autoRefresh = output.autoRefresh;
     })
+  }
+
+  keyDownInInput(e) {
+    if (e.keyCode === 13) { // return key
+      this.ea.publish('history-reload');
+    }
+
+    return true;
   }
 }

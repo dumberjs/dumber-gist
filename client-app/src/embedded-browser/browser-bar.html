@@ -2,6 +2,12 @@
   <i class="ml bar-action fas fa-chevron-left ${!isBundling && historyTracker.canGoBack ? 'enabled' : ''}" click.trigger="goBack() & leftClick"></i>
   <i class="bar-action fas fa-chevron-right ${!isBundling && historyTracker.canGoForward ? 'enabled' : ''}" click.trigger="goForward() & leftClick"></i>
   <i class="bar-action fas fa-sync-alt ${!isBundling && !session.isRendered ? 'enabled' : ''} ${isBundling ? 'fa-spin' : ''} ${!isBundling && autoRefresh ? 'with-auto-label' : ''}" click.trigger="bundle() & leftClick"></i>
-  <input type="text" tabindex="-1" class="ml mr address-input" disabled.bind="isBundling" value.bind="url">
+  <input
+    type="text"
+    tabindex="-1"
+    class="ml mr address-input"
+    disabled.bind="isBundling"
+    value.bind="historyTracker.currentUrl"
+    keydown.trigger="keyDownInInput($event)">
   <i class="mr bar-action fas fa-cog enabled" click.trigger="config() & leftClick"></i>
 </template>

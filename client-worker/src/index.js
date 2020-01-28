@@ -91,10 +91,31 @@ addEventListener('message', async function(event) {
 addEventListener('fetch', function(event) {
   event.respondWith(
     caches.match(event.request).then(function(response) {
-      // if (!event.request.url.includes('browser')) console.log('fetch ' + event.request.url + ' cached:' + !!response);
       if (response) return response;
-      // TODO to support SPA, get '/' response for '/any/path/with/out/ext'
+
+      if (
+        event.request.method === 'GET' &&
+        event.request.url.startsWith(location.origin + '/')
+      ) {
+        const pathname = event.request.url.slice(location.origin.length);
+        if (isLikeRoute(pathname)) {
+          // Return /index.html for HTML5 routes
+          return caches.match(location.origin + '/');
+        }
+      }
+
       return fetch(event.request);
     })
   );
 });
+
+function isLikeRoute(pathname) {
+  // Remove hash
+  const idx = pathname.indexOf('#');
+  if (idx) pathname = pathname.slice(0, idx);
+  // Remove query string
+  const idx2 = pathname.indexOf('?');
+  if (idx2) pathname = pathname.slice(0, idx2);
+
+  return pathname.indexOf('.') === -1;
+}
