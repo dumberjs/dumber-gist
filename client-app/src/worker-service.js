@@ -2,14 +2,16 @@ import {inject, computedFrom} from 'aurelia-framework';
 import {SessionId} from './session-id';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {DumberCache} from './dumber-cache';
+import {HistoryTracker} from './history-tracker';
 import {host} from './host-name';
 
-@inject(EventAggregator, SessionId, DumberCache)
+@inject(EventAggregator, SessionId, DumberCache, HistoryTracker)
 export class WorkerService {
-  constructor(ea, sessionId, dumberCache) {
+  constructor(ea, sessionId, dumberCache, historyTracker) {
     this.ea = ea;
     this.sessionId = sessionId;
     this.dumberCache = dumberCache;
+    this.historyTracker = historyTracker;
 
     // FIFO queue
     this._jobs = [];
@@ -57,9 +59,11 @@ export class WorkerService {
 
   _workerSaid(event) {
     const {data} = event;
-    if (!data || !data.type) return;
+    if (!data) return;
+    const {type} = data;
+    if (!type) return;
 
-    if (data.type === 'get-cache') {
+    if (type === 'get-cache') {
       const {hash, meta} = event.data;
       this.dumberCache.getCache(hash, meta).then(
         object => this._workerDo({type: 'got-cache', hash, object}),
@@ -69,21 +73,30 @@ export class WorkerService {
         }
       );
       return;
-    } else if (data.type === 'set-cache') {
+    } else if (type === 'set-cache') {
       const {hash, object} = event.data;
       this.dumberCache.setCache(hash, object).then(() => {}, () => {});
+      return;
+    } else if (type === 'history-push-state') {
+      this.historyTracker.pushState(data.title, data.url);
+      return;
+    } else if (type === 'history-replace-state') {
+      this.historyTracker.replaceState(data.title, data.url);
+      return;
+    } else if (type === 'history-go') {
+      this.historyTracker.go(data.delta);
       return;
     }
 
     const {_currentJob} = this;
     if (!_currentJob) return;
 
-    if (data.id !== _currentJob.id || (data.type !== 'ack' && data.type !== 'err')) {
+    if (data.id !== _currentJob.id || (type !== 'ack' && type !== 'err')) {
       this.ea.publish('warning', `While waiting for acknowledgement id:${_currentJob.id} from service worker, received unexpected result ${JSON.stringify(data)}.`);
       return;
     }
 
-    if (data.type === 'err') {
+    if (type === 'err') {
       _currentJob.reject(new Error(data.error || 'unknown error'));
     }
 

@@ -17,10 +17,71 @@ export const DEFAULT_INDEX_HTML = `<!DOCTYPE html>
 </html>
 `;
 
-export const DEFAULT_BUNDLE_JS = `
-var m = document.createElement('p');
+export const DEFAULT_BUNDLE_JS = `var m = document.createElement('p');
 m.textContent = 'Error: /dist/entry-bundle.js is not ready.';
 document.body.appendChild(m);
+`;
+
+export const HISTORY_HACK_JS = `(function() {
+  var oldPushState = history.pushState;
+  var oldReplaceState = history.replaceState;
+  var oldBack = history.back;
+  var oldForward = history.forward;
+  var oldGo = history.go;
+
+  history.pushState = function() {
+    parent.postMessage({
+      type: 'history-push-state',
+      title: arguments[1],
+      url: arguments[2]
+    }, '*');
+    return oldPushState.apply(this, arguments);
+  };
+
+  history.replaceState = function() {
+    parent.postMessage({
+      type: 'history-replace-state',
+      title: arguments[1],
+      url: arguments[2]
+    }, '*');
+    return oldReplaceState.apply(this, arguments);
+  };
+
+  history.back = function() {
+    parent.postMessage({
+      type: 'history-go',
+      delta: -1
+    }, '*');
+    return oldBack.apply(this, arguments);
+  };
+
+  history.forward = function() {
+    parent.postMessage({
+      type: 'history-go',
+      delta: 1
+    }, '*');
+    return oldForward.apply(this, arguments);
+  };
+
+  history.go = function() {
+    parent.postMessage({
+      type: 'history-go',
+      delta: arguments[0]
+    }, '*');
+    return oldGo.apply(this, arguments);
+  };
+
+  addEventListener('message', function (event) {
+    var action = event.data;
+    if (!action || !action.type) return;
+
+    if (action.type === 'history-back') {
+      history.back();
+    } else if (action.type === 'history-forward') {
+      history.forward();
+    }
+  });
+})();
 `;
 
 export class DumberUninitializedError extends Error {
@@ -81,7 +142,10 @@ export class DumberSession {
       // Because we want to share cache on domain gist.dumber.app
       // for all instance of ${app-id}.gist.dumber.app
       cache: dumberCache,
-      prepend: ['https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'],
+      prepend: [
+        HISTORY_HACK_JS,
+        'https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'
+      ],
       deps: deps
     });
 
