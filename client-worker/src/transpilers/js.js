@@ -56,24 +56,22 @@ export class JsTranspiler {
     if (ext === '.ts' || ext === '.tsx') {
       plugins.push(constEnum);
       presets.push([presetTypescript, {
-        isTSX: ext === '.tsx',
+        isTSX: true,
         jsxPragma: jsxPragma.split('.')[0],
         allExtensions: true
       }]);
     }
 
-    if (ext === '.jsx' || ext === '.tsx') {
-      if (jsxPragma.startsWith('Inferno')) {
-        plugins.unshift([inferno, {imports: true}]);
-      } else {
-        plugins.unshift(reactDisplayName);
-        plugins.unshift([transformJsx, {
-          pragma: jsxPragma,
-          pragmaFrag: jsxFrag,
-          useBuiltIns: true
-        }]);
-        plugins.unshift(syntaxJsx);
-      }
+    if (jsxPragma.startsWith('Inferno')) {
+      plugins.unshift([inferno, {imports: true}]);
+    } else {
+      plugins.unshift(reactDisplayName);
+      plugins.unshift([transformJsx, {
+        pragma: jsxPragma,
+        pragmaFrag: jsxFrag,
+        useBuiltIns: true
+      }]);
+      plugins.unshift(syntaxJsx);
     }
 
     const result = transform(content, {

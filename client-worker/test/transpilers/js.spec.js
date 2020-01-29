@@ -153,7 +153,7 @@ test('JsTranspiler transpiles jsx file in preact way with fragment', async t => 
   </>
 ));`;
   const file = await jt.transpile({
-    filename: 'src/foo.jsx',
+    filename: 'src/foo.js',
     content: code
   }, [], {jsxPragma: 'h', jsxFrag: 'Fragment'});
 
@@ -162,7 +162,7 @@ test('JsTranspiler transpiles jsx file in preact way with fragment', async t => 
   t.ok(file.content.includes("Fragment"));
   t.notOk(file.content.includes("sourceMappingURL"));
   t.equal(file.sourceMap.file, 'src/foo.js');
-  t.deepEqual(file.sourceMap.sources, ['src/foo.jsx']);
+  t.deepEqual(file.sourceMap.sources, ['src/foo.js']);
   t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
 
