@@ -52,6 +52,9 @@ test('EditSession loads gist', t => {
   };
 
   es.loadGist(gist);
+  t.deepEqual(published, [
+    ['loaded-gist', undefined]
+  ]);
   t.equal(es.description, 'desc');
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
@@ -81,6 +84,9 @@ test('EditSession detects changed description', t => {
   };
 
   es.loadGist(gist);
+  t.deepEqual(published, [
+    ['loaded-gist', undefined]
+  ]);
   t.equal(es.description, 'desc');
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
@@ -89,6 +95,9 @@ test('EditSession detects changed description', t => {
   es._mutationCounter += 1;
   es.mutationChanged();
 
+  t.deepEqual(published, [
+    ['loaded-gist', undefined]
+  ]);
   t.equal(es.description, 'desc2');
   t.notOk(es.isRendered);
   t.ok(es.isChanged);
@@ -118,11 +127,17 @@ test('EditSession renders pass on deps from package.json', async t => {
   };
 
   es.loadGist(gist);
+  t.deepEqual(published, [
+    ['loaded-gist', undefined]
+  ]);
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
 
   await es.render();
   es.mutationChanged();
+  t.deepEqual(published, [
+    ['loaded-gist', undefined]
+  ]);
   t.ok(es.isRendered);
   t.notOk(es.isChanged);
   t.deepEqual(actions, [

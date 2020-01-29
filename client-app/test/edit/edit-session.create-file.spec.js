@@ -185,6 +185,7 @@ test('EditSession cannot creates file to overwrite existing file', async t => {
   es.mutationChanged();
 
   t.deepEqual(published, [
+    ['loaded-gist', undefined],
     ['error', 'Cannot create src/main.js because there is an existing file.']
   ]);
 
@@ -283,6 +284,7 @@ test('EditSession cannot creates file with name conflict on existing folder', as
   es.mutationChanged();
 
   t.deepEqual(published, [
+    ['loaded-gist', undefined],
     ['error', 'Cannot create src because there is an existing folder.']
   ]);
 

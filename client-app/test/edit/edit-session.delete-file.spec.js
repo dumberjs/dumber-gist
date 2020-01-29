@@ -166,6 +166,7 @@ test('EditSession ignores deleting file not existing after rendering', async t =
   es.deleteFile('src/app.js');
   es.mutationChanged();
   t.deepEqual(published, [
+    ['loaded-gist', undefined],
     ['error', 'Cannot delete src/app.js because the file does not exist.']
   ]);
 

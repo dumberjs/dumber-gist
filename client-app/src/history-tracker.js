@@ -1,5 +1,14 @@
+import {inject} from 'aurelia-framework';
+import {EventAggregator} from 'aurelia-event-aggregator';
+
+@inject(EventAggregator)
 export class HistoryTracker {
-  constructor() {
+  constructor(ea) {
+    this.resetUrl = this.resetUrl.bind(this);
+    this.reset = this.reset.bind(this);
+
+    ea.subscribe('loaded-gist', this.resetUrl);
+    ea.subscribe('imported-data', this.resetUrl);
     this.resetUrl();
     this.reset();
   }
@@ -29,11 +38,13 @@ export class HistoryTracker {
   }
 
   go(delta) {
-    const nextIndex = this.currentIndex + delta;
-    if (nextIndex < this.stack.length) {
-      this.currentIndex = nextIndex;
-      this._updateAll();
+    let nextIndex = this.currentIndex + delta;
+    if (nextIndex < 0) nextIndex = 0;
+    if (nextIndex >= this.stack.length) {
+      nextIndex = this.stack.length - 1;
     }
+    this.currentIndex = nextIndex;
+    this._updateAll();
   }
 
   _updateAll() {

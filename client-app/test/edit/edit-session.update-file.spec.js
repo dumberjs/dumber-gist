@@ -274,6 +274,7 @@ test('EditSession skips update on file not existing after rendering', async t =>
   es.mutationChanged();
 
   t.deepEqual(published, [
+    ['loaded-gist', undefined],
     ['error', 'Cannot update src/app.js because it does not exist.']
   ]);
 

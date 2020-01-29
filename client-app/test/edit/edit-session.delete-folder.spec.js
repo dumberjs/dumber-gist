@@ -352,6 +352,7 @@ test('EditSession ignores deleting unknown folder after rendering', async t => {
   es.mutationChanged();
 
   t.deepEqual(published, [
+    ['loaded-gist', undefined],
     ['error', 'Cannot delete folder foo/bar because it does not exist.']
   ]);
 

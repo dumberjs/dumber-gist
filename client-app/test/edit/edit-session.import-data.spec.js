@@ -68,6 +68,10 @@ test('EditSession imports data', t => {
     gist: newGist
   });
   es.mutationChanged();
+  t.deepEqual(published, [
+    ['loaded-gist', undefined],
+    ['imported-data', undefined]
+  ]);
   t.equal(es.description, 'new-desc');
   t.equal(es.files.length, 0);
   t.equal(es.gist, newGist);
@@ -114,6 +118,10 @@ test('EditSession imports data with only files', t => {
     ]
   });
   es.mutationChanged();
+  t.deepEqual(published, [
+    ['loaded-gist', undefined],
+    ['imported-data', undefined]
+  ]);
   t.equal(es.description, 'desc');
   t.deepEqual(es.files, [
     {

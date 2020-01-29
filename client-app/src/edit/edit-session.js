@@ -74,6 +74,7 @@ export class EditSession {
     // set mutation to 0 or -1 to indicate
     // newly loaded gist.
     this.mutation = this.mutation === 0 ? -1 : 0;
+    this.ea.publish('loaded-gist');
   }
 
   importData(data) {
@@ -95,6 +96,7 @@ export class EditSession {
       }
 
       this._mutate();
+      this.ea.publish('imported-data');
     }
   }
 

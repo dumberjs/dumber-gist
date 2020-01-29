@@ -175,7 +175,9 @@ test('EditSession skips file path not existing after rendering', async t => {
   es.updatePath('src/app.js', 'src/app2.js');
   es.mutationChanged();
 
-  t.deepEqual(published, []);
+  t.deepEqual(published, [
+    ['loaded-gist', undefined],
+  ]);
 
   t.ok(es.isRendered);
   t.notOk(es.isChanged);
@@ -272,6 +274,7 @@ test('EditSession skips existing target file path after rendering', async t => {
   es.mutationChanged();
 
   t.deepEqual(published, [
+    ['loaded-gist', undefined],
     ['error', 'Cannot rename src/main.js to index.html because there is an existing file.']
   ]);
 
