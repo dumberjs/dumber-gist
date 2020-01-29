@@ -25,7 +25,16 @@ class TurboResolver {
         },
         resDependencies: {}
       };
-    } else if (_.isEqual(deps, {'foo': '^1.0.0', 'bar': '^2.0.0'})) {
+    } else if (_.isEqual(deps, {'inferno': '^7.0.0'})) {
+      return {
+        appDependencies: {
+          'inferno': {
+            version: '7.4.0'
+          }
+        },
+        resDependencies: {}
+      };
+    }else if (_.isEqual(deps, {'foo': '^1.0.0', 'bar': '^2.0.0'})) {
       return {
         appDependencies: {
           'foo': {
@@ -56,6 +65,14 @@ test('DepsResolver lists all deps from appDependencies', async t => {
   const deps = await r.resolve({'vue': '^2.0.0'});
   t.deepEqual(deps, [
     {name: 'vue', version: '2.1.0', main: 'dist/vue.js', lazyMain: true}
+  ]);
+});
+
+test('DepsResolver lists all deps from appDependencies, case 2', async t => {
+  const r = new DepsResolver(() => new TurboResolver());
+  const deps = await r.resolve({'inferno': '^7.0.0'});
+  t.deepEqual(deps, [
+    {name: 'inferno', version: '7.4.0', main: 'dist/index.dev.esm.js', lazyMain: true}
   ]);
 });
 

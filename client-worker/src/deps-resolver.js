@@ -51,6 +51,13 @@ export class DepsResolver {
       if (name === 'vue' && semver.major(version) === 2) {
         // Use vue file with builtin template compiler
         dep.main = 'dist/vue.js'
+      } else if (
+        name === 'inferno' ||
+        name === 'inferno-shared' ||
+        name === 'inferno-vnode-flags'
+      ) {
+        // use inferno development build
+        dep.main = 'dist/index.dev.esm.js';
       }
       deps.push(dep);
     });
