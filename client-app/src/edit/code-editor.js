@@ -16,8 +16,8 @@ import "codemirror/mode/vue/vue";
 import "codemirror/mode/jsx/jsx";
 
 const MODES = {
-  '.js': 'javascript',
-  '.ts': 'text/typescript',
+  '.js': 'jsx',
+  '.ts': 'text/typescript-jsx',
   '.json': 'application/json',
 
   '.jsx': 'jsx',
