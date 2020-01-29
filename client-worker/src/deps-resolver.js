@@ -49,7 +49,7 @@ export class DepsResolver {
       }
       const dep = {name, version, lazyMain: true};
       if (name === 'vue' && semver.major(version) === 2) {
-        // Use vue file with builtin template compiler
+        // Use vue file with built-in template compiler
         dep.main = 'dist/vue.js'
       } else if (
         name === 'inferno' ||
