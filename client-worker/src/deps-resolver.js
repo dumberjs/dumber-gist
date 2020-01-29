@@ -1,6 +1,7 @@
 import semver from 'semver';
 import {Factory, inject} from 'aurelia-dependency-injection';
 import {Resolver} from './turbo-resolver/resolver';
+import _ from 'lodash';
 
 // Turn turbo-resolver result into dumber config deps
 @inject(Factory.of(Resolver))
@@ -44,7 +45,13 @@ export class DepsResolver {
         console.warn(`Duplicated package "${name}" versions detected: ${JSON.stringify(version)}`);
         // This is an overly simplified decision on duplicated versions.
         // Only take the last one which is most likely the biggest version (because of the sorting of resDeps keys).
-        version = version[version.length - 1];
+        if (name === 'readable-stream') {
+          // Use readable-stream v2 for nodejs stream stub
+          version = _.last(version.filter(v => semver.major(v) === 2))
+        } else {
+          version = _.last(version);
+        }
+
         console.warn(`Dumber only uses package "${name}" version ${version}`);
       }
       const dep = {name, version, lazyMain: true};
