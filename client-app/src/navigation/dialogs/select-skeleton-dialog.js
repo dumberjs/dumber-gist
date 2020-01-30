@@ -26,6 +26,17 @@ export class SelectSkeletonDialog {
       description: 'Not for production yet.'
     },
     {
+      value: 'inferno',
+      label: 'Inferno',
+      image: 'https://avatars2.githubusercontent.com/u/14214240?s=200&v=4'
+    },
+    {
+      value: 'preact',
+      label: 'Preact',
+      image: 'https://github.githubassets.com/images/icons/emoji/unicode/269b.png',
+      description: 'css-modules is not turned on.'
+    },
+    {
       value: 'react',
       label: 'React',
       image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K'
@@ -33,7 +44,7 @@ export class SelectSkeletonDialog {
     {
       value: 'vue',
       label: 'Vue 2',
-      description: 'SFC (.vue file) is not yet supported.',
+      description: 'SFC (.vue file) is not supported.',
       image: 'https://vuejs.org/images/logo.png'
     }
   ];
