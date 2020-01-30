@@ -11,6 +11,9 @@ export class OpenedFiles {
   constructor(ea, session, bindingEngine) {
     this.ea = ea;
     this.session = session;
+    this._reset = this._reset.bind(this);
+
+    ea.subscribe('loaded-gist', this._reset);
     bindingEngine.propertyObserver(session, 'mutation').subscribe(() => {
       // if (mutation <= 0) {
       //   // just loaded new gist
@@ -83,10 +86,10 @@ export class OpenedFiles {
     }
   }
 
-  // _reset() {
-  //   this.filenames = [];
-  //   this.focusedIndex = -1;
-  // }
+  _reset() {
+    this.filenames = [];
+    this.focusedIndex = -1;
+  }
 
   _cleanUp() {
     const toRemove = [];
