@@ -12,9 +12,10 @@ dumber-gist is inspired by [gist-run](https://github.com/gist-run), it is gist-r
 * [ ] Forward app console logs and dumber bundler logs. Clear logs, set visual levels of logs.
 * [ ] Notify user when they are building cache that's not available at `cache.gist.dumber.app`.
 * [ ] Command-P, Ctrl-P, Shift-Command-P, and Shift-Ctrl-P for files and actions.
-* [ ] Add .vue file support if it's possible to run vue component compiler in browser.
+* [-] Add .vue file support if it's possible to run vue component compiler in browser. **Nearly not possible** as vue component compiler directly uses `fs.read` which assumes nodejs environment.
 * [x] Add Inferno skeleton, tsc needs to handle the modified jsx.
-* [ ] Investigate possibility of Angular and Ember. Might be impossible if their tooling is webpack only.
+* [-] Investigate possibility of Angular and Ember. Might be impossible if their tooling is webpack only. **I would say 99.9% NO** to work on Angular and Ember. Both requires about a dozen special toolings which I don't enjoy to learn and find way to run them in pure browser environment.
+* [ ] Add svelte skeleton. Run svelte compile and preprocess in service worker.
 
 ## Structure of the project
 
