@@ -7,6 +7,7 @@ import aurelia2 from './aurelia2';
 import inferno from './inferno';
 import preact from './preact';
 import react from './react';
+import svelte from './svelte';
 import vue from './vue';
 import _ from 'lodash';
 
@@ -17,6 +18,7 @@ const skeletons = {
   inferno,
   preact,
   react,
+  svelte,
   vue
 };
 

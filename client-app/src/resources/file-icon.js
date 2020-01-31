@@ -10,6 +10,7 @@ export class FileIconValueConverter {
     if (ext === '.json' || ext === '.json5') return 'fas fa-file-code text-warning';
     if (ext === '.css' || ext === '.scss' || ext === '.less') return 'fab fa-css3 text-success';
     if (ext === '.svg' || ext === '.png' || ext === '.jpg' || ext === '.jpeg' || ext === '.gif' || ext === '.ico') return 'fas fa-image text-success';
+    if (ext === '.svelte') return 'fab fa-stripe-s text-error';
 
     return 'fas fa-file text-primary';
   }
