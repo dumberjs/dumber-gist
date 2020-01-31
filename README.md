@@ -1,10 +1,10 @@
-# Dumber Gist (dumber-gist)
+# Dumber Gist
 
 WIP, very incomplete.
 
-Write online JS SPA prototype in GitHub gist. Just write code in online editor's `src/` folder, dumber-gist takes care of the rest.
+An online IDE to write JS SPA prototypes in your own GitHub gists.
 
-dumber-gist is inspired by [gist-run](https://github.com/gist-run), it is gist-run on [dumber bundler](https://github.com/dumberjs).
+Dumber Gist is inspired by [gist-run](https://github.com/gist-run), it is the gist-run on [dumber bundler](https://github.com/dumberjs).
 
 ## TODO
 
