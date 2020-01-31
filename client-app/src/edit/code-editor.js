@@ -31,7 +31,9 @@ const MODES = {
   '.md': 'markdown',
   '.html': 'text/html',
   '.xml': 'xml',
-  '.svg': 'xml'
+  '.svg': 'xml',
+
+  '.svelte': 'text/html'
 };
 
 @inject(EventAggregator)
@@ -131,6 +133,8 @@ export class CodeEditor {
         autofocus: true,
         dragDrop: false, // avoid competing with app.js file drop
         lineNumbers: true,
+        tabSize: 2,
+        indentWithTabs: false,
         readOnly: this.readOnly,
         lineWrapping: this.lineWrapping,
         highlightSelectionMatches: {showToken: /\w|-|_|\./},
@@ -142,7 +146,13 @@ export class CodeEditor {
           // So we need to bind those shortcuts in editor too.
           'Ctrl-W': this.closeEditor,
           'Ctrl-N': this.newFile,
-          'Ctrl-S': this.bundle
+          'Ctrl-S': this.bundle,
+          'Tab': cm => {
+            // https://codemirror.net/doc/manual.html
+            // Map Tab to spaces
+            var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+            cm.replaceSelection(spaces);
+          }
         }
       });
 
