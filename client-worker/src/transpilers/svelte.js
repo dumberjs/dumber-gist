@@ -1,38 +1,99 @@
 import path from 'path';
 import {compile, preprocess} from 'svelte/compiler';
-import _ from 'lodash';
+import {JsTranspiler} from './js';
+import {LessTranspiler} from './less';
+import {SassTranspiler} from './sass';
 
 export class SvelteTranspiler {
+  constructor() {
+    this.jsTranspiler = new JsTranspiler();
+    this.sassTranspiler = new SassTranspiler();
+    this.lessTranspiler = new LessTranspiler();
+
+    this.transpileCss = this.transpileCss.bind(this);
+    this.transpileJs = this.transpileJs.bind(this);
+  }
+
   match(file) {
-    if (file.svelteProcessed) return;
     const ext = path.extname(file.filename);
     return ext === '.svelte';
   }
 
-  async transpile(file) {
+  async transpileCss({content, attributes, filename}, files) {
+    let ext = '.css';
+    if (attributes.lang === 'scss' || (attributes.type && attributes.type.startsWith('text/scss'))) {
+      ext = '.scss';
+    } else if (attributes.lang === 'sass' || (attributes.type && attributes.type.startsWith('text/sass'))) {
+      ext = '.sass';
+    } else if (attributes.lang === 'less' || (attributes.type && attributes.type.startsWith('text/less'))) {
+      ext = '.less';
+    }
+
+    const file = {filename: filename + ext, content};
+    if (ext === '.scss' || ext === '.sass') {
+      const result = await this.sassTranspiler.transpile(
+        file,
+        [...files, file]
+      );
+      return {
+        code: result.content,
+        map: result.sourceMap
+      }
+    } else if (ext === '.less') {
+      const result = await this.lessTranspiler.transpile(
+        file,
+        [...files, file]
+      );
+      return {
+        code: result.content,
+        map: result.sourceMap
+      }
+    } else { // css pass through
+      return {code: content};
+    }
+  }
+
+  async transpileJs({content, filename}) {
+    const result = await this.jsTranspiler.transpile(
+      // Just go through typescript syntax for any js.
+      {filename: filename + '.ts', content}
+    );
+    return {
+      code: result.content,
+      map: result.sourceMap
+    };
+  }
+
+  async transpile(file, files) {
     if (!this.match(file)) throw new Error('Cannot use SvelteTranspiler for file: ' + file.filename);
 
-    const preprocessed = await preprocess(code, {filename: 'src/App.svelte'});
+    const {filename, content} = file;
 
-    const compiled = compile(preprocessed.toString(), {filename: 'src/App.svelte', format: 'esm', outputFilename: 'src/App.svelte.js'});
+    const newFilename = file.filename + '.js';
+    const preprocessed = await preprocess(
+      content,
+      {
+        style: opts => this.transpileCss(opts, files),
+        script: this.transpileJs
+      },
+      {filename: filename}
+    );
 
-    console.log('compiled', compiled);
-    console.log(compiled.js.code);
-    console.log(compiled.js.map);
-  })
+    const compiled = compile(preprocessed.toString(), {
+      filename: filename,
+      format: 'esm',
+      outputFilename: newFilename
+    });
 
+    let {code, map} = compiled.js;
+    map.file = newFilename;
+    map.sources = [filename];
+    map.sourceRoot = '';
 
-    if (result) {
-      const ext = path.extname(file.filename);
-      const newFilename = file.filename + (ext === '.html' ? '.js': '');
-
-      return {
-        filename: newFilename,
-        content: result.code,
-        au2Processed: true,
-        intermediate: true
-        // ignore result.map for now
-      };
-    }
+    return {
+      filename: newFilename,
+      content: code,
+      sourceMap: map
+    };
   }
 }

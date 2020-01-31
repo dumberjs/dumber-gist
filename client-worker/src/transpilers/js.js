@@ -1,6 +1,6 @@
 import path from 'path';
 import {transform} from '@babel/core';
-import transformCjs from '@babel/plugin-transform-modules-commonjs';
+// import transformCjs from '@babel/plugin-transform-modules-commonjs';
 import syntaxDynamicImport from '@babel/plugin-syntax-dynamic-import';
 import objectRestSpread from '@babel/plugin-proposal-object-rest-spread';
 import classProperties from '@babel/plugin-proposal-class-properties';
@@ -32,8 +32,8 @@ const PLUGINS = [
   [nullishCoalescingOperator, {loose: true}],
   [optionalChaining, {loose: true}],
   [privateMethods, {loose: true}],
-  [objectRestSpread, {loose: true}],
-  [transformCjs, {loose: true}],
+  [objectRestSpread, {loose: true}]
+  // [transformCjs, {loose: true}],
 ];
 
 export class JsTranspiler {
@@ -43,9 +43,9 @@ export class JsTranspiler {
   }
 
   async transpile(file, files, opts = {}) {
-    const {filename, content} = file;
     if (!this.match(file)) throw new Error('Cannot use JsTranspiler for file: ' + filename);
 
+    const {filename, content} = file;
     const ext = path.extname(filename);
     const plugins = [...PLUGINS];
     const presets = [];

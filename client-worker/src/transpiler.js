@@ -1,4 +1,5 @@
 import path from 'path';
+import {SvelteTranspiler} from './transpilers/svelte';
 import {Au2Transpiler} from './transpilers/au2';
 import {JsTranspiler} from './transpilers/js';
 import {SassTranspiler} from './transpilers/sass';
@@ -8,6 +9,7 @@ import {TextTranspiler} from './transpilers/text';
 export class Transpiler {
   constructor() {
     this.transpilers = [
+      new SvelteTranspiler(),
       new Au2Transpiler(),
       new JsTranspiler(),
       new SassTranspiler(),
@@ -29,10 +31,6 @@ export class Transpiler {
     }
 
     if (result) {
-      if (result.intermediate) {
-        return this.transpile(result, files, opts);
-      }
-
       let moduleId = path.relative('src', result.filename);
       if (moduleId.endsWith('.js')) moduleId = moduleId.slice(0, -3);
 

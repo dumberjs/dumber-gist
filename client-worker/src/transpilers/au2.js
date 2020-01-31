@@ -1,5 +1,6 @@
 import path from 'path';
 import {preprocess, preprocessOptions} from '@aurelia/plugin-conventions';
+import {JsTranspiler} from './js';
 import _ from 'lodash';
 
 const au2Options = preprocessOptions({
@@ -10,8 +11,11 @@ const au2Options = preprocessOptions({
 const EXTS = ['.html', '.js', '.ts'];
 
 export class Au2Transpiler {
+  constructor() {
+    this.jsTranspiler = new JsTranspiler();
+  }
+
   match(file, files) {
-    if (file.au2Processed) return;
     const ext = path.extname(file.filename);
 
     if (!EXTS.includes(ext)) return;
@@ -44,13 +48,10 @@ export class Au2Transpiler {
       const ext = path.extname(file.filename);
       const newFilename = file.filename + (ext === '.html' ? '.js': '');
 
-      return {
-        filename: newFilename,
-        content: result.code,
-        au2Processed: true,
-        intermediate: true
+      return this.jsTranspiler.transpile(
         // ignore result.map for now
-      };
+        {filename: newFilename, content: result.code}
+      );
     }
   }
 }

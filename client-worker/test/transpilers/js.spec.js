@@ -175,7 +175,7 @@ test('JsTranspiler transpiles jsx file in inferno way', async t => {
   }, [], {jsxPragma: 'Inferno.createVNode'});
 
   t.equal(file.filename, 'src/foo.js');
-  t.ok(file.content.includes(".createVNode"));
+  t.ok(file.content.includes("createVNode"));
   t.notOk(file.content.includes("sourceMappingURL"));
   t.equal(file.sourceMap.file, 'src/foo.js');
   t.deepEqual(file.sourceMap.sources, ['src/foo.jsx']);
@@ -196,8 +196,8 @@ test('JsTranspiler transpiles jsx file in inferno way with fragment', async t =>
   }, [], {jsxPragma: 'Inferno.createVNode'});
 
   t.equal(file.filename, 'src/foo.js');
-  t.ok(file.content.includes(".createVNode"));
-  t.ok(file.content.includes(".createFragment"));
+  t.ok(file.content.includes("createVNode"));
+  t.ok(file.content.includes("createFragment"));
   t.notOk(file.content.includes("sourceMappingURL"));
   t.equal(file.sourceMap.file, 'src/foo.js');
   t.deepEqual(file.sourceMap.sources, ['src/foo.jsx']);
