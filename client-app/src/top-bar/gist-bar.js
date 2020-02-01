@@ -58,7 +58,7 @@ export class GistBar {
   }
 
   async new() {
-    if (!this.gistId) return; // already in a draft
+    if (!this.renewable) return; // already in a draft
     try {
       if (this.saveable) {
         await this.dialogService.open({viewModel: ConfirmDraftDialog})
@@ -154,6 +154,11 @@ export class GistBar {
     } catch (e) {
       // ignore
     }
+  }
+
+  @computedFrom('session.mutation', 'gistId')
+  get renewable() {
+    return _.get(this.session, 'files.length') || this.gistId;
   }
 
   @computedFrom('session.gist', 'session.mutation', 'session.description', 'user.authenticated')

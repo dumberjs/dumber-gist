@@ -4,8 +4,8 @@
     click.trigger="open() & leftClick"><i class="fas fa-inbox"></i><span class="d-small-hide">&nbsp;Open</span></button>
 
   <button
-    class="btn clean even-size ${gistId ? '' : 'disabled'}"
-    if.bind="gistId"
+    class="btn clean even-size ${renewable ? '' : 'disabled'}"
+    if.bind="renewable"
     click.trigger="new() & leftClick"><i class="fas fa-plus"></i><span class="d-small-hide">&nbsp;Draft</span></button>
 
   <button
