@@ -1,20 +1,42 @@
 <template class="browser-dev-tools">
+  <require from="./logs"></require>
+
   <div class="section-bar">
     <div
-      repeat.for="tool of tools"
-      class="tab ${activeTool === tool.value ? 'active' : ''}"
-      click.trigger="activeTool = tool.value & leftClick"
+      class="tab ${activeTool === 'console' ? 'active' : ''}"
+      click.trigger="activateTool('console') & leftClick"
     >
-      <span>${tool.label}</span>
-      <span class="badge bg-warning text-dark ml">12</span>
+      <span>Console</span>
+      <span
+        if.bind="appErrorsCount"
+        class="badge bg-error text-white ml">${appErrorsCount}</span>
     </div>
-
+    <div
+      class="tab ${activeTool === 'bundler' ? 'active' : ''}"
+      click.trigger="activateTool('bundler') & leftClick"
+    >
+      <span>Bundler</span>
+      <span
+        if.bind="dumberErrorsCount"
+        class="badge bg-error text-white ml">${dumberErrorsCount}</span>
+    </div>
     <i
       class="ml-auto mr fas enabled bar-action fa-chevron-${height ? 'down' : 'up'}"
-      click.trigger="toggleDevTools() & leftClick"></i>
+      click.trigger="toggleDevTools({open: false}) & leftClick"></i>
   </div>
   <div class="dev-details-panel">
-    <div class="dev-details" css="height: ${height}px;"></div>
-    <slot></slot>
+    <logs
+      class="dev-details"
+      css="height: ${height}px;"
+      show.bind="activeTool === 'console'"
+      reset-logs.call="resetAppLogs()"
+      logs.bind="consoleLog.appLogs"></logs>
+    <logs
+      class="dev-details"
+      css="height: ${height}px;"
+      show.bind="activeTool === 'bundler'"
+      reset-logs.call="resetDumberLogs()"
+      logs.bind="consoleLog.dumberLogs"></logs>
   </div>
+  <slot></slot>
 </template>

@@ -29,7 +29,7 @@ attribute on <body>) which is your src/main${ext}.
 
 const mainJs = `export function configure(aurelia) {
   aurelia.use.standardConfiguration();
-  aurelia.use.developmentLogging('warn');
+  aurelia.use.developmentLogging('debug');
   aurelia.start().then(() => aurelia.setRoot());
 }
 `;
@@ -38,7 +38,7 @@ const mainTs = `import {Aurelia} from 'aurelia-framework';
 
 export function configure(aurelia: Aurelia) {
   aurelia.use.standardConfiguration();
-  aurelia.use.developmentLogging('warn');
+  aurelia.use.developmentLogging('debug');
   aurelia.start().then(() => aurelia.setRoot());
 }
 `;

@@ -1,0 +1,25 @@
+<template>
+  <require from="./log-line"></require>
+  <div class="logs">
+    <span
+      class="cursor-pointer ml-auto mr badge ${filter ? 'text-muted' : 'bg-light text-dark'}"
+      click.trigger="filter = '' & leftClick">All</span>
+    <span
+      class="cursor-pointer ml mr badge ${filter === 'error' ? 'bg-light text-dark' : 'text-muted'}"
+      click.trigger="filter = 'error' & leftClick">Errors</span>
+    <span
+      class="cursor-pointer ml mr badge ${filter === 'warning' ? 'bg-light text-dark' : 'text-muted'}"
+      click.trigger="filter = 'warning' & leftClick">Warnings</span>
+    <span
+      class="cursor-pointer ml mr-2 badge ${filter === 'logs' ? 'bg-light text-dark' : 'text-muted'}"
+      click.trigger="filter = 'logs' & leftClick">Logs</span>
+
+    <button class="btn small clean" click.trigger="resetLogs() & leftClick">
+      <i class="fas fa-trash-alt"></i>
+    </button>
+  </div>
+  <log-line
+    repeat.for="log of filteredLogs"
+    method.bind="log.method"
+    args.bind="log.args"></log-line>
+</template>

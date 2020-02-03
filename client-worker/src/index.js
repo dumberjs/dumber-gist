@@ -3,6 +3,32 @@ import {DumberSession} from './dumber-session';
 import findDeps from 'aurelia-deps-finder';
 import {Container} from 'aurelia-dependency-injection';
 
+let parentWindow;
+(function patchConsole() {
+  function patch(method) {
+    const old = console[method];
+    console[method] = function() {
+      const [msg, ...args] = Array.prototype.slice.call(arguments, 0);
+      if (
+        typeof msg === 'string' &&
+        msg.startsWith('[dumber] ') &&
+        parentWindow &&
+        parentWindow.postMessage
+      ) {
+        parentWindow.postMessage({
+          type: 'dumber-console',
+          method: method,
+          args: [msg.slice(9), ...args]
+        });
+      }
+      if (old) old.apply(console, arguments);
+    };
+  }
+
+  const methods = ['log', 'error', 'warn', 'dir', 'debug', 'info', 'trace'];
+  methods.forEach(m => patch(m));
+})();
+
 const container = new Container();
 container.registerInstance(findDeps, findDeps);
 const session = container.get(DumberSession);
@@ -25,9 +51,13 @@ addEventListener('activate', event => {
 });
 
 addEventListener('message', async function(event) {
+  const {source} = event;
+  parentWindow = source;
+
   var action = event.data;
   const {id, type} = action;
   if (!type) return;
+
 
   // Got traced cache from main page gist.dumber.app
   // See comments below for more details.
@@ -39,8 +69,6 @@ addEventListener('message', async function(event) {
     }
     return;
   }
-
-  const {source} = event;
 
   try {
     let data;
@@ -83,7 +111,7 @@ addEventListener('message', async function(event) {
 
     source.postMessage({type: 'ack', id, data});
   } catch (e) {
-    console.error(e);
+    console.error('[dumber] ' + e.message);
     source.postMessage({type: 'err', id, error: e.message});
   }
 });

@@ -84,6 +84,28 @@ export const HISTORY_HACK_JS = `(function() {
 })();
 `;
 
+export const CONSOLE_HACK_JS = `(function() {
+  function patch(method) {
+    var old = console[method];
+    console[method] = function() {
+      var args = Array.prototype.slice.call(arguments, 0);
+      parent.postMessage({
+        type: 'app-console',
+        method: method,
+        args: args
+      }, '*');
+      if (old) old.apply(console, arguments);
+    };
+  }
+
+  var methods = ['log', 'error', 'warn', 'dir', 'debug', 'info', 'trace'];
+  var i;
+  for (i = 0; i < methods.length; i++) {
+    patch(methods[i]);
+  }
+})();
+`;
+
 export class DumberUninitializedError extends Error {
   constructor() {
     super('dumber instance is not initialized!')
@@ -109,11 +131,9 @@ export class DumberSession {
   async init(config, dumberCache) {
     if (this.instance && _.isEqual(this.config, config)) {
       // reuse existing dumber
-      console.log('Reuse dumber instance');
       return {isNew: false};
     }
 
-    console.log('Stub index.html and entry-bundle.js');
     await this.serviceCache.reset();
     await this.serviceCache.put(
       '/',
@@ -127,11 +147,11 @@ export class DumberSession {
     );
 
     const deps = await this.depsResolver.resolve(config.deps);
-    console.log('Resolved Dependencies ' + deps.length);
-    _.each(deps, ({name, version}) => {
-      console.log(` ${version.padEnd(10)} ${name}`);
-    });
-    console.log();
+    // console.log('[dumber] Resolved Dependencies ' + deps.length);
+    // _.each(deps, ({name, version}) => {
+    //   console.log(`[dumber] ${version.padEnd(10)} ${name}`);
+    // });
+    // console.log(`[dumber] `);
 
     const isAurelia1 = _.some(deps, {name: 'aurelia-bootstrapper'});
     this.config = config;
@@ -144,6 +164,7 @@ export class DumberSession {
       cache: dumberCache,
       prepend: [
         HISTORY_HACK_JS,
+        CONSOLE_HACK_JS,
         'https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'
       ],
       deps: deps
@@ -157,8 +178,6 @@ export class DumberSession {
       transpilerOptions.jsxPragma = 'Inferno.createVNode';
     }
     this.transpilerOptions = transpilerOptions;
-
-    console.log('Created dumber instance');
     return {isNew: true};
   }
 
@@ -173,7 +192,7 @@ export class DumberSession {
         const transpiledFile = await this.transpiler.transpile(file, files, this.transpilerOptions);
         if (!transpiledFile) continue;
 
-        let log = 'Capture ' + file.filename;
+        let log = '[dumber] Capture ' + file.filename;
         if (transpiledFile.filename !== file.filename) {
           log += ` (transpiled to ${transpiledFile.filename})`;
         }
@@ -196,7 +215,6 @@ export class DumberSession {
           file.content,
           file.filename.endsWith('.html') ? 'text/html; charset=utf-8': 'text/plain'
         );
-        console.log('Cached /' + wantedPath);
       }
     }
   }
@@ -221,6 +239,6 @@ export class DumberSession {
       all.join('\n'),
       'application/javascript'
     );
-    console.log('Done build!');
+    console.log('[dumber] built dist/entry-bundle.js');
   }
 }

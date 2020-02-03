@@ -9,7 +9,7 @@ import {combo} from 'aurelia-combo';
 import _ from 'lodash';
 
 const MIN_PANEL_WIDTH = 160;
-const MIN_DEV_TOOLS_HEIGHT = 40;
+const MIN_DEV_TOOLS_HEIGHT = 50;
 
 const insideIframe = (function() {
   try {
@@ -245,9 +245,11 @@ export class GistApp {
     }
   }
 
-  toggleDevTools() {
+  toggleDevTools(open) {
     if (this.devToolsHeight) {
-      this.devToolsHeight = 0;
+      if (!open) {
+        this.devToolsHeight = 0;
+      }
     } else {
       this.devToolsHeight = 200;
     }

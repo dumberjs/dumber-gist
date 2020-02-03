@@ -15,7 +15,7 @@ Dumber Gist is inspired by [gist-run](https://github.com/gist-run), it is the gi
 * [-] Add .vue file support if it's possible to run vue component compiler in browser. **Nearly not possible** as vue component compiler directly uses `fs.read` which assumes nodejs environment.
 * [x] Add Inferno skeleton, tsc needs to handle the modified jsx.
 * [-] Investigate possibility of Angular and Ember. Might be impossible if their tooling is webpack only. **I would say 99.9% NO** to work on Angular and Ember. Both requires about a dozen special toolings which I don't enjoy to learn and find way to run them in pure browser environment.
-* [ ] Add svelte skeleton. Run svelte compile and preprocess in service worker.
+* [x] Add svelte skeleton. Run svelte compile and preprocess in service worker.
 
 ## Structure of the project
 

@@ -374,6 +374,10 @@ html {
     padding: .6rem 1.6rem;
   }
 
+  &.small {
+    font-size: .8rem;
+  }
+
   + .btn {
     margin-left: .25rem;
   }
@@ -522,6 +526,10 @@ html {
   text-align: center;
 }
 
+.text-bold {
+  font-weight: bold;
+}
+
 .text-muted {
   color: $gray-600 !important;
 }
@@ -615,7 +623,7 @@ $node-start-offset: .6rem;
   }
 
   .address-input {
-    flex: 1 1 auto;
+    flex: 1 0 1px;
   }
 }
 
@@ -925,48 +933,80 @@ input[type='text'] {
   position: relative;
 
   .dev-details {
+    display: block;
+    user-select: auto;
     overflow-y: auto;
+
+    .logs {
+      padding: .25rem;
+      border-bottom: 1px solid $gray-800;
+      display: flex;
+      align-items: center;
+    }
+
+    .log-line {
+      display: block;
+      padding: .25rem .5rem;
+      font-size: .85rem;
+
+      &:not(:last-child) {
+        border-bottom: 1px dashed $gray-800;
+      }
+
+      > .fas, > .far, > .fal, > .fab {
+        width: 1.4rem;
+        text-align: center;
+      }
+    }
   }
 }
 
 .bg-cyan {
-  background-color: $cyan;
+  background-color: $cyan !important;
 }
 
 .bg-dark {
-  background-color: $charcoal;
+  background-color: $charcoal !important;
+}
+
+.bg-light {
+  background-color: $gray-200 !important;
+}
+
+.bg-muted {
+  background-color: $gray-600 !important;
 }
 
 .bg-primary {
-  background-color: $blue;
+  background-color: $blue !important;
 }
 
 .bg-success {
-  background-color: $green;
+  background-color: $green !important;
 }
 
 .bg-warning {
-  background-color: $yellow;
+  background-color: $yellow !important;
 }
 
 .bg-error {
-  background-color: $red;
+  background-color: $red !important;
 }
 
 .bg-primary-light {
-  background-color: $blue-light;
+  background-color: $blue-light !important;
 }
 
 .bg-success-light {
-  background-color: $green-light;
+  background-color: $green-light !important;
 }
 
 .bg-warning-light {
-  background-color: $yellow-light;
+  background-color: $yellow-light !important;
 }
 
 .bg-error-light {
-  background-color: $red-light;
+  background-color: $red-light !important;
 }
 
 .file-drop-indicator {
@@ -1000,15 +1040,10 @@ input[type='text'] {
 }
 
 .badge {
-  padding: .2rem .5rem .25rem;
+  padding: .2rem .5rem .3rem;
   border-radius: .8rem;
-  font-size: .8rem;
+  font-size: .8em;
 }
-
-// .badge {
-//   padding: 0 .5rem;
-//   border-radius: $border-radius;
-// }
 
 .select-section {
   .section-header {
@@ -1196,4 +1231,8 @@ textarea {
     background-color: $gray-300;
     color: $charcoal;
   }
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

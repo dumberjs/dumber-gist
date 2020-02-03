@@ -3,15 +3,17 @@ import {SessionId} from './session-id';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {DumberCache} from './dumber-cache';
 import {HistoryTracker} from './history-tracker';
+import {ConsoleLog} from './embedded-browser/console-log';
 import {host} from './host-name';
 
-@inject(EventAggregator, SessionId, DumberCache, HistoryTracker)
+@inject(EventAggregator, SessionId, DumberCache, HistoryTracker, ConsoleLog)
 export class WorkerService {
-  constructor(ea, sessionId, dumberCache, historyTracker) {
+  constructor(ea, sessionId, dumberCache, historyTracker, consoleLog) {
     this.ea = ea;
     this.sessionId = sessionId;
     this.dumberCache = dumberCache;
     this.historyTracker = historyTracker;
+    this.consoleLog = consoleLog;
 
     // FIFO queue
     this._jobs = [];
@@ -77,6 +79,7 @@ export class WorkerService {
       const {hash, object} = event.data;
       this.dumberCache.setCache(hash, object).then(() => {}, () => {});
       return;
+    // Following types are from embedded app, not service worker
     } else if (type === 'history-push-state') {
       this.historyTracker.pushState(data.title, data.url);
       return;
@@ -85,6 +88,20 @@ export class WorkerService {
       return;
     } else if (type === 'history-go') {
       this.historyTracker.go(data.delta);
+      return;
+    } else if (type === 'app-console') {
+      console.log(data);
+      this.consoleLog.appLogs.push({
+        method: data.method,
+        args: data.args
+      });
+      return;
+    } else if (type === 'dumber-console') {
+      console.log(data);
+      this.consoleLog.dumberLogs.push({
+        method: data.method,
+        args: data.args
+      });
       return;
     }
 
