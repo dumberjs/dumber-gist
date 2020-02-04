@@ -1,6 +1,6 @@
 <template>
   <require from="./log-line"></require>
-  <div class="logs">
+  <div class="logs-control-bar">
     <span
       class="cursor-pointer ml-auto mr badge ${filter ? 'text-muted' : 'bg-light text-dark'}"
       click.trigger="filter = '' & leftClick">All</span>
@@ -18,8 +18,11 @@
       <i class="fas fa-trash-alt"></i>
     </button>
   </div>
-  <log-line
-    repeat.for="log of filteredLogs"
-    method.bind="log.method"
-    args.bind="log.args"></log-line>
+  <div class="logs">
+    <log-line
+      repeat.for="log of filteredLogs"
+      method.bind="log.method"
+      args.bind="log.args"></log-line>
+  </div>
+
 </template>

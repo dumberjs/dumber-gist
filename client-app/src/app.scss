@@ -933,29 +933,38 @@ input[type='text'] {
   position: relative;
 
   .dev-details {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
     user-select: auto;
-    overflow-y: auto;
 
-    .logs {
+    .logs-control-bar {
+      flex: 0 0 auto;
       padding: .25rem;
       border-bottom: 1px solid $gray-800;
       display: flex;
       align-items: center;
     }
 
-    .log-line {
-      display: block;
-      padding: .25rem .5rem;
-      font-size: .85rem;
+    .logs {
+      flex: 1 0 0;
+      overflow-y: auto;
+      background-color: $gray-1000;
 
-      &:not(:last-child) {
-        border-bottom: 1px dashed $gray-800;
-      }
+      .log-line {
+        display: block;
+        padding: .25rem .5rem;
+        font-size: .85rem;
 
-      > .fas, > .far, > .fal, > .fab {
-        width: 1.4rem;
-        text-align: center;
+        &:not(:last-child) {
+          border-bottom: 1px dashed $gray-800;
+        }
+
+        > .fas, > .far, > .fal, > .fab {
+          width: 1.4rem;
+          text-align: center;
+        }
       }
     }
   }

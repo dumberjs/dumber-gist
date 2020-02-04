@@ -4,17 +4,20 @@ import {DndService} from 'bcx-aurelia-dnd';
 import {SessionId} from '../session-id';
 import {host} from '../host-name';
 import {HistoryTracker} from '../history-tracker';
+import {ConsoleLog} from './console-log';
 import _ from 'lodash';
 
-@inject(EventAggregator, DndService, SessionId, HistoryTracker)
+@inject(EventAggregator, DndService, SessionId, HistoryTracker, ConsoleLog)
 export class BrowserFrame {
   @bindable isBundling;
   @bindable bundlerError;
 
-  constructor(ea, dndService, sessionId, historyTracker) {
+  constructor(ea, dndService, sessionId, historyTracker, consoleLog) {
     this.ea = ea;
     this.dndService = dndService;
     this.historyTracker = historyTracker;
+    this.consoleLog = consoleLog;
+
     this.src = `https://${sessionId.id}.${host}`;
     this.rebuildFrame = _.debounce(this.rebuildFrame.bind(this), 200);
     this.goBack = this.goBack.bind(this);
@@ -56,6 +59,10 @@ export class BrowserFrame {
 
     const existingFrame = document.getElementById('frame');
     if (existingFrame) {
+      this.consoleLog.appLogs.push({
+        method: 'system',
+        args: ['Reloading embedded app ...']
+      });
       existingFrame.contentWindow.location.replace(this.src + this.historyTracker.currentUrl);
     } else {
       const frame = document.createElement('iframe');
