@@ -1,10 +1,45 @@
-import {bindable, computedFrom} from 'aurelia-framework';
+import {inject, bindable, computedFrom, BindingEngine} from 'aurelia-framework';
 import _ from 'lodash';
 
+@inject(BindingEngine)
 export class Logs {
   @bindable logs;
   @bindable resetLogs;
   filter = '';
+  userScrolled = false;
+
+  constructor(bindingEngine) {
+    this.bindingEngine = bindingEngine;
+    this.updateScroll = _.debounce(this.updateScroll.bind(this));
+    this.updateUserScrolled = this.updateUserScrolled.bind(this);
+  }
+
+  attached() {
+    this.subscribers = [
+      this.bindingEngine.propertyObserver(this.logs, 'length').subscribe(this.updateScroll)
+    ];
+    this.el.addEventListener('scroll', this.updateUserScrolled);
+  }
+
+  detached() {
+    _.each(this.subscribers, s => s.dispose());
+    this.el.removeEventListener('scroll', this.updateUserScrolled);
+  }
+
+  updateUserScrolled() {
+    this.userScrolled = this.el.scrollTop + this.el.clientHeight < this.el.scrollHeight;
+  }
+
+  updateScroll() {
+    if (this.logs.length === 0) {
+      // Reset
+      this.userScrolled = false;
+    }
+
+    if (!this.userScrolled) {
+      this.el.scrollTop = this.el.scrollHeight;
+    }
+  }
 
   @computedFrom('filter', 'logs.length')
   get filteredLogs() {
@@ -21,6 +56,4 @@ export class Logs {
       return logs;
     }
   }
-
-  // TODO keep scroll to bottom if bottom was previous visible
 }
