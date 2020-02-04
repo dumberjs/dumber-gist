@@ -85,6 +85,12 @@ export class BrowserFrame {
   rebuildFrame() {
     this.historyTracker.reset();
 
+    let path = _.trim(this.historyTracker.currentUrl);
+    if (!path.startsWith('/')) {
+      path = '/' + path;
+    }
+    this.historyTracker.currentUrl = path;
+
     const existingFrame = document.getElementById('frame');
     if (existingFrame) {
       this.consoleLog.appLogs.push({
