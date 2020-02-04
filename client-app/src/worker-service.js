@@ -90,14 +90,12 @@ export class WorkerService {
       this.historyTracker.go(data.delta);
       return;
     } else if (type === 'app-console') {
-      console.log(data);
       this.consoleLog.appLogs.push({
         method: data.method,
         args: data.args
       });
       return;
     } else if (type === 'dumber-console') {
-      console.log(data);
       this.consoleLog.dumberLogs.push({
         method: data.method,
         args: data.args

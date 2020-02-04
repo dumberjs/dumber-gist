@@ -174,14 +174,21 @@ html {
 }
 
 .spinner {
-  display: inline-block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  font-size: 4rem;
-  margin-top: -2rem;
-  margin-left: -2rem;
+  display: block;
+  text-align: center;
+  padding: 1rem;
   color: $cyan-dark;
+  overflow-y: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  user-select: auto;
+
+  .fa-spin {
+    font-size: 4rem;
+  }
 }
 
 .app-top-bar {
@@ -328,7 +335,7 @@ html {
   top: 0;
   bottom: 0;
   right: 0;
-  width: 5px;
+  width: 4px;
   z-index: 2;
   cursor: ew-resize;
   background-color: $gray-800;
@@ -339,8 +346,8 @@ html {
   }
 
   &.panel-resizer-horizontal {
-    top: -3px;
-    height: 5px;
+    top: -1px;
+    height: 4px;
     width: unset;
     left: 0;
     right: 0;
@@ -893,6 +900,7 @@ input[type='text'] {
   position: relative;
 
   .iframe {
+    display: block;
     background-color: #fff;
     position: absolute;
     top: 0;
@@ -914,9 +922,16 @@ input[type='text'] {
   }
 
   .error {
-    margin: 1rem;
-    font-size: 2rem;
+    display: block;
+    padding: .5rem;
     color: $red;
+    overflow-y: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    user-select: auto;
   }
 }
 
@@ -942,7 +957,7 @@ input[type='text'] {
     .logs-control-bar {
       flex: 0 0 auto;
       padding: .25rem;
-      border-bottom: 1px solid $gray-800;
+      // border-bottom: 1px solid $gray-800;
       display: flex;
       align-items: center;
     }

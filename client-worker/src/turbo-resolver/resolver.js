@@ -2,6 +2,7 @@ import semver from 'semver';
 import { Graph } from 'graphlib';
 import {NpmHttpRegistry} from './registries/npm-http';
 import {inject} from 'aurelia-dependency-injection';
+import _ from 'lodash';
 
 @inject(NpmHttpRegistry)
 export class Resolver {
@@ -37,7 +38,7 @@ export class Resolver {
         const errors = this.jobs.filter(j => j.error).map(j => j.error);
 
         if (errors.length) {
-          this._reject(new Error(errors.join('\n')));
+          this._reject(new Error(_.uniq(errors).join('\n')));
         } else {
           this._resolve(this.renderJpack());
         }
@@ -98,7 +99,7 @@ export class Resolver {
     }
 
     if(!version){
-      throw new Error(`No version satisfies "${registryPackage.name}": "${requestedVersion}".`);
+      throw new Error(`jsdelivr has not synced "${registryPackage.name}": "${requestedVersion}".`);
     }
     return version;
   }

@@ -42,7 +42,7 @@ export class DepsResolver {
       let version = packages[name];
       if (Array.isArray(version)) {
         version.sort(semver.compare);
-        console.warn(`Duplicated package "${name}" versions detected: ${JSON.stringify(version)}`);
+        console.warn(`[dumber] duplicated package "${name}" versions detected: ${JSON.stringify(version)}`);
         // This is an overly simplified decision on duplicated versions.
         // Only take the last one which is most likely the biggest version (because of the sorting of resDeps keys).
         if (name === 'readable-stream') {
@@ -52,7 +52,7 @@ export class DepsResolver {
           version = _.last(version);
         }
 
-        console.warn(`Dumber only uses package "${name}" version ${version}`);
+        console.warn(`[dumber] only uses package "${name}" version ${version}`);
       }
       const dep = {name, version, lazyMain: true};
       if (name === 'vue' && semver.major(version) === 2) {

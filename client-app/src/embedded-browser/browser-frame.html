@@ -1,6 +1,17 @@
 <template class="browser-frame" ref="container">
   <div ref="reference"></div>
   <div class="dnd-helper" if.bind="dndService.isProcessing"></div>
-  <i if.bind="isBundling & debounce:500" class="spinner fas fa-circle-notch fa-spin"></i>
-  <div if.bind="bundlerError" class="error">${bundlerError}</div>
+  <div class="spinner" if.bind="isBundling & debounce:500" >
+    <i class="fas fa-circle-notch fa-spin"></i>
+    <p if.bind="missedCache.length">
+      <span>Tracing new version of following packages for the first time...</span><br>
+      <span>Packages: ${missedCache.join(', ')}</span><br>
+      <span>It will be much faster next time when cache was created.</span><br>
+      <span if.bind="!user.authenticated">Please <button class="btn clean small" click.trigger="login() & leftClick">login to GitHub</button> to help to contributing the cache to cache.gist.dumber.app.</span><br>
+      <span if.bind="missedCache.includes('aurelia')" class="text-error">Note it can take up to a minute to trace a new dev release of Aurelia2, due to latency of downloading many small files from jsdelivr.</span><br>
+    </p>
+  </div>
+  <div if.bind="bundlerError" class="error">
+    <span repeat.for="err of errors">${err}<br if.bind="!$last"></span>
+  </div>
 </template>
