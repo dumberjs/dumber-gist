@@ -1,7 +1,7 @@
 import {combo} from 'aurelia-combo';
 import {DialogController} from 'aurelia-dialog';
 import {inject, observable} from 'aurelia-framework';
-import _ from 'lodash';
+import {fuzzyFilter} from './fuzzy-filter';
 
 @inject(DialogController)
 export class OpenFileDialog {
@@ -16,7 +16,7 @@ export class OpenFileDialog {
 
   activate(model) {
     this.filenames = model.filenames;
-    this.filteredFilenames = _.map(this.filenames, f => [f]);
+    this.filteredFilenames = fuzzyFilter(this.filter, this.filenames);
   }
 
   keyDownInFilter(e) {
@@ -87,51 +87,7 @@ export class OpenFileDialog {
   }
 
   filterChanged(filter) {
-    const {filenames} = this;
-    filter = _.trim(filter);
-    const ii = filter.length;
-    if (ii === 0) {
-      this.filteredFilenames = _.map(this.filenames, f => [f]);
-      this.selectedIdx = -1;
-      return;
-    }
-
-    const filtered = [];
-    _.each(filenames, fn => {
-      let idx = 0;
-
-      const matches = [];
-      for (let i = 0; i < ii; i++) {
-        const c = filter[i];
-        const nextIdx = fn.indexOf(c, idx);
-        if (nextIdx === -1) return;
-        if (_.get(_.last(matches), 'end')=== nextIdx) {
-          _.last(matches).end += 1;
-        } else {
-          matches.push({start: nextIdx, end: nextIdx + 1});
-        }
-        idx = nextIdx + 1;
-      }
-
-      // odd is unmatched, even is matched.
-      const segments = [];
-      let start = 0;
-      for (let j = 0, jj = matches.length; j < jj; j++) {
-        const m = matches[j];
-        // unmatched
-        segments.push(fn.slice(start, m.start));
-        // matched
-        segments.push(fn.slice(m.start, m.end));
-        start = m.end;
-      }
-      if (start < fn.length) {
-        segments.push(fn.slice(start));
-      }
-
-      filtered.push(segments);
-    });
-
-    this.filteredFilenames = _.sortBy(filtered, 'length');
+    this.filteredFilenames = fuzzyFilter(filter, this.filenames);
     if (this.filteredFilenames.length) {
       this.selectedIdx = 0;
     } else {
