@@ -15,6 +15,7 @@ const idRegex = /[0-9a-f]+$/;
 export class OpenGistDialog {
   triedOnce = false;
   gistUrl = '';
+  githubUser = '';
 
   constructor(ea, controller, validation, gists, helper) {
     this.ea = ea;
@@ -37,19 +38,28 @@ export class OpenGistDialog {
 
   open() {
     this.triedOnce = true;
-    if (this.errors) return;
+    if (!this.errors) {
+      const m = this.gistUrl.trim().match(idRegex);
+      if (m) {
+        const id = m[0];
 
-    const m = this.gistUrl.trim().match(idRegex);
-    if (!m) return;
-    const id = m[0];
+        return this.helper.waitFor(
+          `Loading Gist ${id.slice(0, 7)} ...`,
+          this.gists.load(id)
+        ).then(
+          gist => this.controller.ok(gist),
+          err => this.ea.publish('error', err.message)
+        );
+      }
+    }
 
-    this.helper.waitFor(
-      `Loading Gist ${id.slice(0, 7)} ...`,
-      this.gists.load(id)
-    ).then(
-      gist => this.controller.ok(gist),
-      err => this.ea.publish('error', err.message)
-    );
+    // Try list gists of githubUser
+    const githubUser = this.githubUser.trim();
+    if (githubUser) {
+      return this.controller.cancel().then(() => {
+        this.ea.publish('list-gists', githubUser);
+      });
+    }
   }
 
   @computedFrom('triedOnce', 'gistUrl')

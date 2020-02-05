@@ -997,6 +997,10 @@ input[type='text'] {
   background-color: $cyan !important;
 }
 
+.bg-black {
+  background-color: $black !important;
+}
+
 .bg-dark {
   background-color: $charcoal !important;
 }
@@ -1289,4 +1293,10 @@ textarea {
     border-radius: $border-radius;
     border-bottom-color: transparent;
   }
+}
+
+.lead {
+  font-size: 1.2rem;
+  padding: .75rem 0;
+  border-top: 2px dashed $gray-700;
 }

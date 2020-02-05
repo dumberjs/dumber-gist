@@ -10,18 +10,25 @@
         <small class="text-warning">${errors}.</small>
       </div>
       <div class="mt-2">
-        Input gist id like:<br>
-        <span class="badge bg-dark">5f51e932a77c21c6104d0a95a2ee1f61</span>
+        <small>Accept gist id like:</small><br>
+        <small class="badge bg-dark">5f51e932a77c21c6104d0a95a2ee1f61</small>
       </div>
-      <div class="mt-2">
-        Or full gist URL like:<br>
-        <span class="badge bg-dark">https://gist.github.com/3cp/5f51e932a77c21c6104d0a95a2ee1f61</span><br>
-        <span class="badge bg-dark">https://gist.github.com/5f51e932a77c21c6104d0a95a2ee1f61</span>
+      <div class="mt-3 mb-3">
+        <small>Accept full gist URL like:</small><br>
+        <small class="badge bg-dark">https://gist.github.com/3cp/5f51e932a77c21c6104d0a95a2ee1f61</small><br>
+        <small class="badge bg-dark">https://gist.github.com/5f51e932a77c21c6104d0a95a2ee1f61</small>
       </div>
+
+      <div class="lead">Or Search all gists of a GitHub user:</div>
+
+      <form submit.trigger="open()">
+        <input type="text" value.bind="githubUser" class="w100" placeholder="GitHub user name">
+        <hidden-submit></hidden-submit>
+      </form>
     </ux-dialog-body>
     <ux-dialog-footer>
       <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
-      <button class="btn ml-auto primary" click.trigger="open() & leftClick" disabled.bind="errors || !gistUrl">Open</button>
+      <button class="btn ml-auto primary" click.trigger="open() & leftClick" disabled.bind="(errors || !gistUrl) && !githubUser">Open</button>
     </ux-dialog-footer>
   </ux-dialog>
 </template>
