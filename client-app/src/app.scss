@@ -891,6 +891,14 @@ input[type='text'] {
   &:focus {
     background-color: $gray-100;
     outline: none;
+
+    &::placeholder {
+      color: $gray-600;
+    }
+  }
+
+  &::placeholder {
+    color: $gray-700;
   }
 }
 
