@@ -1260,3 +1260,17 @@ textarea {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.available-file {
+  padding: .5rem 1rem;
+
+  &:not(:last-child) {
+    border-bottom: 1px dashed $gray-700;
+  }
+
+  &.selected {
+    background-color: $gray-1000;
+    border-radius: $border-radius;
+    border-bottom-color: transparent;
+  }
+}

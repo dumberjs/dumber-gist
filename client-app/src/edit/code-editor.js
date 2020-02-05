@@ -49,6 +49,7 @@ export class CodeEditor {
     this.closeEditor = this.closeEditor.bind(this);
     this.newFile = this.newFile.bind(this);
     this.bundle = this.bundle.bind(this);
+    this.openAny = this.openAny.bind(this);
   }
 
   closeEditor() {
@@ -63,6 +64,10 @@ export class CodeEditor {
       if (inDir === '.') inDir = '';
       this.ea.publish('create-file', inDir);
     }
+  }
+
+  openAny() {
+    this.ea.publish('open-any');
   }
 
   bundle() {
@@ -147,6 +152,7 @@ export class CodeEditor {
           'Ctrl-W': this.closeEditor,
           'Ctrl-N': this.newFile,
           'Ctrl-S': this.bundle,
+          'Ctrl-P': this.openAny,
           'Tab': cm => {
             // https://codemirror.net/doc/manual.html
             // Map Tab to spaces

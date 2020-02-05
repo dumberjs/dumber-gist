@@ -1,0 +1,21 @@
+<template>
+  <ux-dialog class="wide-dialog">
+    <ux-dialog-header>
+      <input
+        type="text"
+        class="w100"
+        value.bind="filter"
+        keydown.trigger="keyDownInFilter($event)"
+        focus.one-time="true">
+    </ux-dialog-header>
+    <ux-dialog-body ref="list">
+      <div
+        repeat.for="fn of filteredFilenames"
+        class="available-file ${selectedIdx === $index ? 'selected' : ''}"
+        click.trigger="open($index) & leftClick"
+      >
+        <span repeat.for="s of fn" class.bind="$even ? 'text-muted' : ''">${s}</span>
+      </div>
+    </ux-dialog-body>
+  </ux-dialog>
+</template>
