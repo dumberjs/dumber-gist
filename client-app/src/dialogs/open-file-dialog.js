@@ -88,7 +88,7 @@ export class OpenFileDialog {
 
   filterChanged(filter) {
     this.filteredFilenames = fuzzyFilter(filter, this.filenames);
-    if (this.filteredFilenames.length) {
+    if (filter && this.filteredFilenames.length) {
       this.selectedIdx = 0;
     } else {
       this.selectedIdx = -1;
