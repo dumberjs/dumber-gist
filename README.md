@@ -11,7 +11,7 @@ Dumber Gist is inspired by [gist-run](https://github.com/gist-run), it is the gi
 * [x] Embedded browser to support SPA routes, back/forward history.
 * [x] Forward app console logs and dumber bundler logs. Clear logs, set visual levels of logs.
 * [x] Notify user when they are building cache that's not available at `cache.gist.dumber.app`.
-* [ ] Command-P, Ctrl-P, Shift-Command-P, and Shift-Ctrl-P for files and actions.
+* [-] Command-P, Ctrl-P, Shift-Command-P, and Shift-Ctrl-P for files and actions. **Update** Command-P, Ctrl-P are done. Probably don't need Shift-Command-P, and Shift-Ctrl-P because there are not many actions available.
 * [-] Add .vue file support if it's possible to run vue component compiler in browser. **Nearly not possible** as vue component compiler directly uses `fs.read` which assumes nodejs environment.
 * [x] Add Inferno skeleton, tsc needs to handle the modified jsx.
 * [-] Investigate possibility of Angular and Ember. Might be impossible if their tooling is webpack only. Both requires about a dozen special tool chain which I didn't find a way to run them in pure browser environment.

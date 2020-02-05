@@ -80,7 +80,7 @@ export class ActionDispatcher {
     this.createFile();
   }
 
-  @combo('ctrl+p')
+  @combo('ctrl+p', 'command+p')
   openAnyWithKeyboard(e) {
     if (e && e.stopPropagation) {
       e.stopPropagation();

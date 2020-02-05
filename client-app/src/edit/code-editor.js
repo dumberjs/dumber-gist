@@ -152,7 +152,9 @@ export class CodeEditor {
           'Ctrl-W': this.closeEditor,
           'Ctrl-N': this.newFile,
           'Ctrl-S': this.bundle,
+          'Cmd-S': this.bundle,
           'Ctrl-P': this.openAny,
+          'Cmd-P': this.openAny,
           'Tab': cm => {
             // https://codemirror.net/doc/manual.html
             // Map Tab to spaces

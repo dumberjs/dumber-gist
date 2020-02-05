@@ -89,7 +89,7 @@ export class GistApp {
     }
   }
 
-  @combo('ctrl+s')
+  @combo('ctrl+s', 'command+s')
   async bundle() {
     if (this.session.isRendered) return;
     if (this.isBundling) {
