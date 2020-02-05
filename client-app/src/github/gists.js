@@ -29,7 +29,8 @@ function fromGitHubGist(gist) {
 
   return {
     ...gist,
-    files: normalizedFiles
+    files: normalizedFiles,
+    filesCount: Object.keys(normalizedFiles).length
   };
 }
 
@@ -70,6 +71,17 @@ export class Gists {
         throw new Error(`Error: ${response.statusText}\nGist ${id}`);
       })
       .then(fromGitHubGist);
+  }
+
+  list(login) {
+    return this.api.fetch(`users/${login}/gists`)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error(`unable to list gists for user ${login}: ${response.statusText}`);
+      })
+      .then(list => list.map(fromGitHubGist));
   }
 
   update(id, gist) {

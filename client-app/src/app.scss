@@ -148,7 +148,7 @@ html {
 }
 
 .float-right {
-  float: left;
+  float: right;
 }
 
 .w100 {
@@ -1085,13 +1085,13 @@ input[type='text'] {
   }
 
   .section-body {
-    margin: .5rem;
+    margin: .5rem 0;
 
     .selection {
       cursor: pointer;
       border-radius: $border-radius;
       display: flex;
-      padding: .6rem 1rem;
+      padding: .6rem;
       flex-wrap: nowrap;
       align-items: center;
       color: $gray-400;
@@ -1184,8 +1184,10 @@ input[type='text'] {
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
+  margin: 0 -.5rem;
 
   > * {
+    margin: 0 .25rem;
     flex: 1 0 0 !important;
     min-width: 250px !important;
   }
@@ -1269,7 +1271,7 @@ textarea {
   cursor: pointer;
 }
 
-.available-file {
+.available-item {
   padding: .5rem 1rem;
 
   &:not(:last-child) {
@@ -1278,6 +1280,12 @@ textarea {
 
   &.selected {
     background-color: $gray-1000;
+    border-radius: $border-radius;
+    border-bottom-color: transparent;
+  }
+
+  &:hover {
+    background-color: $gray-900;
     border-radius: $border-radius;
     border-bottom-color: transparent;
   }

@@ -1,0 +1,23 @@
+<template>
+  <ux-dialog class="wide-dialog">
+    <ux-dialog-header>
+      Gists of ${login}
+    </ux-dialog-header>
+    <ux-dialog-body ref="list" style="padding-left: 0; padding-right: 0;">
+      <div
+        repeat.for="gist of filteredList"
+        class="available-item ${selectedIdx === $index ? 'selected' : ''}"
+        click.trigger="open($index) & leftClick"
+      >
+        <div>
+          <strong class="text-cyan">${gist.description || '(no description)'}</strong><small if.bind="isPrivate" class="text-warning">&nbsp;<i class="fas fa-user-lock"></i> Private</small>
+        </div>
+        <div style="display: flex; flex-wrap: wrap;">
+          <small class="text-muted mr-2">${gist.id}</small>
+          <small class="mr-auto">${gist.filesCount} file${gist.filesCount > 1 ? 's' : ''}</small>
+          <small class="text-muted" style="min-width: 10rem;">${gist.updated_at | showLocalDate}</small>
+        </div>
+      </div>
+    </ux-dialog-body>
+  </ux-dialog>
+</template>

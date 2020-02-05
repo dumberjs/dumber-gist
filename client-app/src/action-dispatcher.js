@@ -5,6 +5,7 @@ import {CreateFileDialog} from './dialogs/create-file-dialog';
 import {OpenFileDialog} from './dialogs/open-file-dialog';
 import {EditNameDialog} from './dialogs/edit-name-dialog';
 import {NewGistDialog} from './dialogs/new-gist-dialog';
+import {ListGistsDialog} from './dialogs/list-gists-dialog';
 import {Helper} from './helper';
 import {EditSession} from './edit/edit-session';
 import {OpenedFiles} from './edit/opened-files';
@@ -34,6 +35,7 @@ export class ActionDispatcher {
     this.deleteNode = this.deleteNode.bind(this);
     this.forkGist = this.forkGist.bind(this);
     this.openAny = this.openAny.bind(this);
+    this.listGists = this.listGists.bind(this);
   }
 
   attached() {
@@ -54,7 +56,8 @@ export class ActionDispatcher {
         this.saveGist(e && e.forceNew);
       }),
       this.ea.subscribe('fork-gist', this.forkGist),
-      this.ea.subscribe('open-any', this.openAny)
+      this.ea.subscribe('open-any', this.openAny),
+      this.ea.subscribe('list-gists', this.listGists)
     ];
   }
 
@@ -257,5 +260,30 @@ export class ActionDispatcher {
       this.ea.publish('error', 'Failed to fork gist: ' + e.message);
       this.ea.publish('forked-gist', {success: false});
     }
+  }
+
+  listGists(login) {
+    if (!login) return;
+
+    if (this.dialogService.hasActiveDialog) return;
+
+    this.helper.waitFor(
+      `Loading ${login}'s gists ...`,
+       this.gists.list(login)
+    )
+    .then(list => {
+      return this.dialogService.open({
+        viewModel: ListGistsDialog,
+        model: {login, list}
+      }).whenClosed(response => {
+        if (response.wasCancelled) return;
+        const id = response.output;
+        return this.helper.waitFor(
+          `Loading Gist ${id.slice(0, 7)} ...`,
+          this.gists.load(id)
+        ).then(gist => this.session.loadGist(gist));
+      });
+    })
+    .catch(err => this.ea.publish('error', err.message));
   }
 }

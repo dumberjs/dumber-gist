@@ -9,10 +9,10 @@
         keydown.trigger="keyDownInFilter($event)"
         focus.one-time="true">
     </ux-dialog-header>
-    <ux-dialog-body ref="list">
+    <ux-dialog-body ref="list" style="padding-left: 0; padding-right: 0;">
       <div
         repeat.for="fn of filteredFilenames"
-        class="available-file ${selectedIdx === $index ? 'selected' : ''}"
+        class="available-item ${selectedIdx === $index ? 'selected' : ''}"
         click.trigger="open($index) & leftClick"
       >
         <span repeat.for="s of fn" class.bind="$even ? 'text-muted' : ''">${s}</span>

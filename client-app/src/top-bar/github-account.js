@@ -1,13 +1,15 @@
 import {inject} from 'aurelia-framework';
+import {EventAggregator} from 'aurelia-event-aggregator';
 import {DialogService} from 'aurelia-dialog';
 import {Oauth} from '../github/oauth';
 import {User} from '../github/user';
 import {SessionId} from '../session-id';
 import {ContextMenu} from '../dialogs/context-menu';
 
-@inject(DialogService, SessionId, Oauth, User)
+@inject(EventAggregator, DialogService, SessionId, Oauth, User)
 export class GithubAccount {
-  constructor(dialogService, sessionId, oauth, user) {
+  constructor(ea, dialogService, sessionId, oauth, user) {
+    this.ea = ea;
     this.dialogService = dialogService;
     this.sessionId = sessionId;
     this.oauth = oauth;
@@ -38,7 +40,11 @@ export class GithubAccount {
       if (response.wasCancelled) return;
 
       const code = response.output;
-      if (code === 'logout') return this.oauth.logout();
+      if (code === 'logout') {
+        return this.oauth.logout();
+      } else if (code === 'gists') {
+        this.ea.publish('list-gists', this.user.login);
+      }
     });
   }
 

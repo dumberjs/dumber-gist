@@ -66,7 +66,7 @@ export class OpenFileDialog {
 
   scrollIfNeeded() {
     setTimeout(() => {
-      const selected = this.list.querySelector('.available-file.selected');
+      const selected = this.list.querySelector('.available-item.selected');
       if (selected) {
         if (selected.scrollIntoViewIfNeeded) {
           selected.scrollIntoViewIfNeeded();
