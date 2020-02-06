@@ -1,6 +1,6 @@
 # Dumber Gist
 
-WIP, very incomplete.
+WIP, incomplete.
 
 An online IDE to write JS SPA prototypes in your own GitHub gists.
 
@@ -10,7 +10,6 @@ Dumber Gist is inspired by [gist-run](https://github.com/gist-run), it is the gi
 
 * [-] Add .vue file support if it's possible to run vue component compiler in browser. **Nearly not possible** as vue component compiler directly uses `fs.read` which assumes nodejs environment.
 * [-] Investigate possibility of Angular and Ember. Might be impossible if their tooling is webpack only. Both requires about a dozen special tool chain which I didn't find a way to run them in pure browser environment.
-* [ ] List my gists, list someone's gists. Show dumber gists only, or show all gists.
 * [ ] Test on windows for keyboard short cuts
 
 ## Structure of the project
