@@ -3,9 +3,23 @@
     <ux-dialog-header>
       Gists of ${login}
     </ux-dialog-header>
-    <ux-dialog-body ref="list" style="padding-left: 0; padding-right: 0;">
+    <ux-dialog-body ref="list" style="padding-left: 0; padding-right: 0; padding-top: 0;">
       <div
-        repeat.for="gist of filteredList"
+        class="selection"
+        click.trigger="hideNoneDumberGists = !hideNoneDumberGists & leftClick"
+      >
+        <i class="icon fas ${hideNoneDumberGists ? 'text-primary fa-check-square' : 'text-muted fa-square'}"></i>
+        <span>
+          <span>Only show those likely to work in Dumber Gist</span>
+          <small><br>Contains index.html and package.json</small>
+        </span>
+      </div>
+
+      <div class="text-center mt-3" if.bind="!filteredGists.length">
+        No ${hideNoneDumberGists ? 'possible dumber' : ''} gists found
+      </div>
+      <div
+        repeat.for="gist of filteredGists"
         class="available-item ${selectedIdx === $index ? 'selected' : ''}"
         click.trigger="open($index) & leftClick"
       >

@@ -1090,42 +1090,42 @@ input[type='text'] {
 
   .section-body {
     margin: .5rem 0;
+  }
+}
 
-    .selection {
-      cursor: pointer;
-      border-radius: $border-radius;
-      display: flex;
-      padding: .6rem;
-      flex-wrap: nowrap;
-      align-items: center;
-      color: $gray-400;
-      line-height: 1;
+.selection {
+  cursor: pointer;
+  border-radius: $border-radius;
+  display: flex;
+  padding: .6rem;
+  flex-wrap: nowrap;
+  align-items: center;
+  color: $gray-400;
+  line-height: 1;
 
-      small {
-        font-size: .8rem;
-        color: $gray-500;
-        line-height: 1.2;
-      }
+  small {
+    font-size: .8rem;
+    color: $gray-500;
+    line-height: 1.2;
+  }
 
-      img {
-        width: 2rem;
-        height: 2rem;
-        margin-right: .6rem;
-      }
+  img {
+    width: 2rem;
+    height: 2rem;
+    margin-right: .6rem;
+  }
 
-      .icon.fab, .icon.fas, .icon.far, .icon.fal {
-        font-size: 1.8rem;
-        color: $blue;
-        line-height: 2rem;
-        margin-left: .1rem;
-        margin-right: .5rem;
-      }
+  .icon.fab, .icon.fas, .icon.far, .icon.fal {
+    font-size: 1.8rem;
+    color: $blue;
+    line-height: 2rem;
+    margin-left: .1rem;
+    margin-right: .5rem;
+  }
 
-      &.selected {
-        background-color: $deep-dark-shadow;
-        color: $white;
-      }
-    }
+  &.selected {
+    background-color: $deep-dark-shadow;
+    color: $white;
   }
 }
 

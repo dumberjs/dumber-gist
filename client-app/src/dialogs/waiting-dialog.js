@@ -2,7 +2,7 @@ import {DialogController} from 'aurelia-dialog';
 import {inject} from 'aurelia-framework';
 import _ from 'lodash';
 
-const DEFAULT_DELAY = 400;
+const DEFAULT_DELAY = 200;
 
 @inject(DialogController)
 export class WaitingDialog {

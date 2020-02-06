@@ -271,10 +271,10 @@ export class ActionDispatcher {
       `Loading ${login}'s gists ...`,
        this.gists.list(login)
     )
-    .then(list => {
+    .then(gists => {
       return this.dialogService.open({
         viewModel: ListGistsDialog,
-        model: {login, list}
+        model: {login, gists}
       }).whenClosed(response => {
         if (response.wasCancelled) return;
         const id = response.output;
