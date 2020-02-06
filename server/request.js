@@ -15,7 +15,7 @@ exports.receiveData = function(request) {
     });
     request.on('error', reject);
   });
-}
+};
 
 exports.fetch = function(uri, opts = {}) {
   const options = {
@@ -51,4 +51,4 @@ exports.fetch = function(uri, opts = {}) {
     }
     req.end();
   });
-}
+};
