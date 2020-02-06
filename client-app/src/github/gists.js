@@ -65,7 +65,7 @@ export class Gists {
     return this.api.fetch(url)
       .then(response => {
         if (response.ok) {
-          // todo: handle truncated files
+          // TODO: handle truncated files
           return response.json();
         }
         throw new Error(`Error: ${response.statusText}\nGist ${id}`);
@@ -97,7 +97,6 @@ export class Gists {
         if (response.ok) {
           return response.json();
         }
-        // todo: handle rate limit, etc
         throw new Error('unable to patch gist');
       })
       .then(fromGitHubGist);
@@ -116,7 +115,6 @@ export class Gists {
         if (response.ok) {
           return response.json();
         }
-        // todo: handle rate limit, etc
         throw new Error('unable to create gist');
       })
       .then(fromGitHubGist);
@@ -128,7 +126,6 @@ export class Gists {
         if (response.ok) {
           return response.json();
         }
-        // todo: handle rate limit, etc
         throw new Error('unable to fork gist');
       })
       .then(fork => this.load(fork.id));
