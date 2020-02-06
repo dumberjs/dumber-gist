@@ -1061,20 +1061,6 @@ input[type='text'] {
   font-size: 4rem;
 }
 
-.flash {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: $gray-900;
-  color: $gray-300;
-  text-align: center;
-}
-
 .badge {
   padding: .2rem .5rem .3rem;
   border-radius: .8rem;

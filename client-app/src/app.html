@@ -5,10 +5,9 @@
   <require from="./file-drop-indicator"></require>
   <require from="./notifications"></require>
 
-  <div class="flash" if.bind="loading">
-    <div style="margin: 1rem;">
-      <h1><i>Dumber Gist</i></h1>
-    </div>
+  <div class="flash-screen" if.bind="loading">
+    <i>Dumber Gist</i>
+    <span>&nbsp;</span>
   </div>
   <gist-app else></gist-app>
 
