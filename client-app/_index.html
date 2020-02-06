@@ -31,7 +31,9 @@
 <body>
   <div aurelia-app="main">
     <div class="flash-screen">
-      <i>Dumber Gist</i>
+      <div>
+        <i>Dumber Gist</i><br>
+      </div>
       <span>&nbsp;</span>
     </div>
   </div>
@@ -53,7 +55,7 @@ if ('serviceWorker' in navigator) {
   console.log(msg);
   var error = document.createElement('h1');
   error.textContent = msg;
-  document.body.appendChild(error);
+  document.querySelector('.flash-screen > div').appendChild(error);
 }
 </script>
 </body>
