@@ -14,7 +14,7 @@ function buildWorker() {
     .pipe(gulpif(!isProduction, plumber()))
     .pipe(babel())
     .pipe(dr())
-    .pipe(gulpif(isProduction, terser({compress: false})))
+    .pipe(gulpif(isProduction, terser({compress: false, mangle: false})))
     .pipe(gulp.dest('.', {sourcemaps: isProduction ? false : (isTest ? true : '.')}));
 }
 
