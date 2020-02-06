@@ -8,8 +8,8 @@ Dumber Gist is inspired by [gist-run](https://github.com/gist-run), it is the gi
 
 ## TODO
 
-* [-] Add .vue file support if it's possible to run vue component compiler in browser. **Nearly not possible** as vue component compiler directly uses `fs.read` which assumes nodejs environment.
-* [-] Investigate possibility of Angular and Ember. Might be impossible if their tooling is webpack only. Both requires about a dozen special tool chain which I didn't find a way to run them in pure browser environment.
+* [-] Add .vue file support if it's possible to run vue component compiler in browser. **Nearly impossible** as vue component compiler directly uses `fs.read` which assumes nodejs environment.
+* [-] Investigate possibility of Angular and Ember. Both requires about a dozen special tool chain which I didn't find a way to run them in pure browser environment.
 * [ ] Test on windows for keyboard short cuts
 
 ## Structure of the project
