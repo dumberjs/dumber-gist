@@ -1,16 +1,10 @@
 # Dumber Gist
 
-WIP, incomplete.
+WIP, http://gist.dumber.app
 
 An online IDE to write JS SPA prototypes in your own GitHub gists.
 
 Dumber Gist is inspired by [gist-run](https://github.com/gist-run), it is the gist-run on [dumber bundler](https://github.com/dumberjs).
-
-## TODO
-
-* [-] Add .vue file support if it's possible to run vue component compiler in browser. **Nearly impossible** as vue component compiler directly uses `fs.read` which assumes nodejs environment.
-* [-] Investigate possibility of Angular and Ember. Both requires about a dozen special tool chain which I didn't find a way to run them in pure browser environment.
-* [ ] Test on windows for keyboard short cuts
 
 ## Structure of the project
 
@@ -40,7 +34,7 @@ The code is based on [gist-run github-oauth-server](https://github.com/gist-run/
 
 A local nginx dev config file for local development against `gist.dumber.local`. This file is for macOS. It requires some changes to work in Linux. See below for more details.
 
-### nginx.prod.conf (TBD)
+### nginx.prod.conf
 
 An example config file for production deployment for `gist.dumber.app`, without real certificate and GitHub client secret.
 
