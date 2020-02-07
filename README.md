@@ -1,6 +1,6 @@
 # Dumber Gist
 
-WIP, http://gist.dumber.app
+WIP, https://gist.dumber.app
 
 An online IDE to write JS SPA prototypes in your own GitHub gists.
 
