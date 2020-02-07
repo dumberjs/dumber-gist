@@ -2,6 +2,9 @@ import {inject} from 'aurelia-framework';
 import localforage from 'localforage';
 import {AccessToken} from './github/access-token';
 import {cacheUrl} from './host-name';
+import _ from 'lodash';
+
+const SMALL_CACHE_SIZE = 200 * 1024; // 200K
 
 async function getRemoteCache(hash) {
   const response = await fetch(cacheUrl + '/' + hash, {mode: 'cors'});
@@ -41,7 +44,16 @@ export class DumberCache {
       // If there is no local cache, use remote cache.
       return localforage.getItem(hash)
         .then(result => result || Promise.reject())
-        .catch(() => getRemoteCache(hash));
+        .catch(() => {
+          return getRemoteCache(hash).then(object => {
+            if (_.get(object, 'contents.length', 0) < SMALL_CACHE_SIZE) {
+              return localforage.setItem(hash, object).then(
+                () => object, () => object
+              );
+            }
+            return object;
+          });
+        });
     }
 
     // Use local cache for local files
@@ -49,21 +61,27 @@ export class DumberCache {
   }
 
   async setCache(hash, object) {
-    if (object.packageName && this.accessToken.value) {
-      // Globally share traced result for npm packages
-      try {
-        return await setRemoteCache(
-          this.accessToken.value,
-          hash,
-          object
-        );
-      } catch (e) {
-        // ignore error
+    if (object.packageName) {
+      if (_.get(object, 'contents.length', 0) < SMALL_CACHE_SIZE) {
+        await localforage.setItem(hash, object);
+      }
+
+      if (this.accessToken.value) {
+        // Globally share traced result for npm packages
+        try {
+          await setRemoteCache(
+            this.accessToken.value,
+            hash,
+            object
+          );
+        } catch (e) {
+          // ignore error
+        }
       }
     } else {
       // Use local cache for local files,
       // and npm files only when not logged in.
-      return localforage.setItem(hash, object);
+      await localforage.setItem(hash, object);
     }
   }
 }
