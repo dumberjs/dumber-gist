@@ -85,7 +85,8 @@ addEventListener('message', async function(event) {
             let resolve;
             const getter = new Promise((_resolve, reject) => {
               resolve = _resolve;
-              setTimeout(reject, 500);
+              // Time out for remote cache;
+              setTimeout(reject, 10000);
             });
             cacheGetters[hash] = {getter, resolve};
           }
