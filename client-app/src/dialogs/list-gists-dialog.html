@@ -24,7 +24,7 @@
         click.trigger="open($index) & leftClick"
       >
         <div>
-          <strong class="text-cyan">${gist.description || '(no description)'}</strong><small if.bind="isPrivate" class="text-warning">&nbsp;<i class="fas fa-user-lock"></i> Private</small>
+          <strong class="text-cyan">${gist.description || '(no description)'}</strong><small if.bind="!gist.public" class="text-warning">&nbsp;<i class="fas fa-user-lock"></i> Private</small>
         </div>
         <div style="display: flex; flex-wrap: wrap;">
           <small class="text-muted mr-2">${gist.id}</small>
