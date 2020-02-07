@@ -1,6 +1,6 @@
-const {NODE_ENV} = process.env;
+const {NODE_ENV, DUMBER_ENV} = process.env;
 
 module.exports = {
-  isProduction: NODE_ENV === 'production',
+  isRelease: DUMBER_ENV === 'production',
   isTest: NODE_ENV === 'test'
 }

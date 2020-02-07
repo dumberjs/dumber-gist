@@ -1,12 +1,12 @@
 const dumber = require('gulp-dumber');
 const fs = require('fs');
-const {isProduction, isTest} = require('./_env');
+const {isRelease, isTest} = require('./_env');
 
 module.exports = dumber({
   // requirejs baseUrl, dumber default is "/dist"
   baseUrl: '/',
   // Turn on hash for production build
-  hash: isProduction,
+  hash: isRelease,
   entryBundle: 'worker-bundle',
   prepend: [
     require.resolve('sass.js/dist/sass.sync.js')
