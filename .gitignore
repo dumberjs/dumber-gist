@@ -14,15 +14,9 @@ yarn.lock
 
 # Compiled files
 dist
-output
-/client-app/index.html
-/client-worker/worker-bundle.*
-/client-worker/boot-up-worker.html
+/client/index.html
 .nyc_output
 coverage
-
-# Cache files
-/server/cache
 
 # Phusion Passenger
 /server/dumber-cache/public

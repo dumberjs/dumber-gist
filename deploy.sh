@@ -1,9 +1,6 @@
 #! /bin/bash --login
 
-cd client-app
-npm run build:prod
-
-cd ../client-worker
+cd client
 npm run build:prod
 
 cd ..

@@ -14,9 +14,17 @@ The main front-end app, it will boot up a service worker. Borrowed many code fro
 
 ### client-worker
 
-The front-end service worker, runs dumber bundler inside browser. Cache traced local files locally in indexedDB (localforage), cache traced npm files in globally shared `https://cache.dumber.app` (`https://cache.dumber.local` for local dev environment).
+The front-end worker, runs dumber bundler inside browser. Cache traced local files locally in indexedDB (localforage), cache traced npm files in globally shared `https://cache.dumber.app` (`https://cache.dumber.local` for local dev environment).
 
 Npm packages are retrieved from [jsdelivr](https://www.jsdelivr.com). Dependencies tree is resolved using code borrowed from [stackblitz turbo-resolver](https://github.com/stackblitz/core/tree/master/turbo-resolver).
+
+### client-service-worker
+
+The front-end service worker, generates responses for embedded app `https://[random-32-chars-hex].gist.dumber.app` (`https://0123456789abcdef0123456789abcdef.gist.dumber.local` for local dev environment).
+
+The static resources are not cached by CloudFlare. Because:
+1. CloudFlare free plan doesn't cache wild card DNS name.
+2. it doesn't make any sense to cache unrepeatable host name.
 
 ### server/dumber-cache
 

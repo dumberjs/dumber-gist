@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Dumber Gist</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/0.5.0/modern-normalize.min.css" integrity="sha256-N6+kUxTWxpqVK+BrPWt3t4jeOWPtp37RZEbm5n9X+8U=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" integrity="sha256-46qynGAkLSFpVbEBog43gvNhfrOj+BmwXdxFgVK/Kvc=" crossorigin="anonymous" />
+  <base href="/">
+  <style>
+    .flash-screen {
+      background-color: #212529;
+      color: #dee2e6;
+      font-size: 24px;
+      line-height: 1.5;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: space-evenly;
+      align-items: center;
+      text-align: center;
+    }
+  </style>
+  <script>const BUNDLER_WORKER = '/dist/bundler-worker.js';</script>
+</head>
+
+<body>
+  <div aurelia-app="main">
+    <div class="flash-screen">
+      <div>
+        <i>Dumber Gist</i><br>
+      </div>
+      <span>&nbsp;</span>
+    </div>
+  </div>
+<script>
+
+if ('serviceWorker' in navigator) {
+  (function() {
+    var script = document.createElement('script');
+    // Load dumber-gist app for https://gist.dumber.app/.
+    script.setAttribute('data-main', 'aurelia-bootstrapper');
+    script.src = '/dist/entry-bundle.js';
+    script.type = 'text/javascript';
+    script.charset = 'utf-8';
+    script.async = true;
+    document.body.appendChild(script);
+  })();
+} else {
+  var msg = 'Service workers are not supported in this browser. Please get a better browser.';
+  console.log(msg);
+  var error = document.createElement('h1');
+  error.textContent = msg;
+  document.querySelector('.flash-screen > div').appendChild(error);
+}
+</script>
+</body>
+</html>
