@@ -7,7 +7,7 @@
       <span>Tracing new version of following packages for the first time...</span><br>
       <span>Packages: ${missedCache.join(', ')}</span><br>
       <span>It will be much faster next time when cache was created.</span><br>
-      <span if.bind="!user.authenticated">Please <button class="btn clean small" click.trigger="login() & leftClick">sign in with your GitHub account</button> to help contributing the cache to cache.gist.dumber.app.</span><br>
+      <span if.bind="!user.authenticated">Please <button class="btn clean small" click.trigger="login() & leftClick">sign in with your GitHub account</button> to help contributing the cache to cache.dumber.app.</span><br>
       <span if.bind="missedCache.includes('aurelia')" class="text-error">Note it can take up to a minute to trace a new dev release of Aurelia2, due to latency of downloading many small files from jsdelivr.</span><br>
     </p>
   </div>

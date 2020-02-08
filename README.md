@@ -14,7 +14,7 @@ The main front-end app, it will boot up a service worker. Borrowed many code fro
 
 ### client-worker
 
-The front-end service worker, runs dumber bundler inside browser. Cache traced local files locally in indexedDB (localforage), cache traced npm files in globally shared `https://cache.gist.dumber.app` (`https://cache.gist.dumber.local` for local dev environment).
+The front-end service worker, runs dumber bundler inside browser. Cache traced local files locally in indexedDB (localforage), cache traced npm files in globally shared `https://cache.dumber.app` (`https://cache.dumber.local` for local dev environment).
 
 Npm packages are retrieved from [jsdelivr](https://www.jsdelivr.com). Dependencies tree is resolved using code borrowed from [stackblitz turbo-resolver](https://github.com/stackblitz/core/tree/master/turbo-resolver).
 
@@ -48,7 +48,7 @@ Add following line to `/etc/hosts`, this turns on few DNS entries locally.
 
 ```sh
 # Use localhost for dumber-gist
-127.0.0.1       gist.dumber.local 0123456789abcdef0123456789abcdef.gist.dumber.local cache.gist.dumber.local github-oauth.gist.dumber.local
+127.0.0.1       gist.dumber.local 0123456789abcdef0123456789abcdef.gist.dumber.local cache.dumber.local github-oauth.gist.dumber.local
 ```
 
 ### nginx and passenger
@@ -103,7 +103,7 @@ Note, in watch mode, there is no special dev server to auto refresh browser wind
 If uses Chrome, start Chrome with:
 
 ```sh
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --unsafely-treat-insecure-origin-as-secure=https://gist.dumber.dev,https://cache.gist.dumber.dev,https://github-oauth.gist.dumber.dev,https://0123456789abcdef0123456789abcdef.gist.dumber.dev
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --unsafely-treat-insecure-origin-as-secure=https://gist.dumber.local,https://cache.dumber.local,https://github-oauth.gist.dumber.local,https://0123456789abcdef0123456789abcdef.gist.dumber.local
 ```
 
 This will bypass ssl check on local self-signed certificate.
