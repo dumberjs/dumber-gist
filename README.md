@@ -8,11 +8,11 @@ Dumber Gist is inspired by [gist-run](https://github.com/gist-run), it is the gi
 
 ## Structure of the project
 
-### client-app
+### client/src
 
 The main front-end app, it will boot up a service worker. Borrowed many code from [gist-run](https://github.com/gist-run).
 
-### client-worker
+### client/src-worker
 
 The front-end worker, runs dumber bundler inside browser. Cache traced local files locally in indexedDB (localforage), cache traced npm files in globally shared `https://cache.dumber.app` (`https://cache.dumber.local` for local dev environment).
 
