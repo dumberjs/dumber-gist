@@ -46,7 +46,9 @@ A local nginx dev config file for local development against `gist.dumber.local`.
 
 An example config file for production deployment for `gist.dumber.app`, without real certificate and GitHub client secret.
 
-It will be deployed to a small box in Digital Ocean. Technical, this single VM structure doesn't scale, the static files (including tracing caches) should be handled by DO spaces (or AWS S3) with CDN network, the tiny cache and oauth back-end can be two simple AWS lambda. But this single VM structure is simplest for local development, also nginx+passenger+nodejs with two extremely simple back-ends should be able to handle very large traffic, even on a $5/month DO box.
+It is deployed to a small box in Digital Ocean. Technical, this single VM structure doesn't scale, but this single VM structure is simplest for local development, also nginx+passenger+nodejs with two extremely simple back-ends should be able to handle very large traffic, even on a $5/month DO box.
+
+In addition, `gist.dumber.app` and `cache.dumber.app` are behind a CloudFlare free plan. Thanks for CloudFlare, all static resources of dumber gist are properly cached in a CDN to enable fast boot up.
 
 ## Local dev (macOS)
 
