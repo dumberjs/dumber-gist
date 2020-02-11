@@ -1,6 +1,6 @@
 const http = require('http');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs').promises;
 const {receiveData, fetch} = require('../request');
 
 const PORT = 5001;
@@ -38,19 +38,27 @@ function cachedFilePath(hash) {
   return path.resolve(CACHE_DIR, folder, fileName);
 }
 
-function setCache(hash, object) {
+async function setCache(hash, object) {
+  object.__dumber_hash = hash;
   const filePath = cachedFilePath(hash);
-  fs.mkdirSync(path.dirname(filePath), {recursive: true});
-  fs.writeFile(
-    filePath,
-    JSON.stringify(object),
-    {flag: 'wx'}, // x means fail if file already exists
-    err => {
-      if (err && !err.code === 'EEXIST') {
-        console.error(`Failed to write cache ${filePath}: ${err.code} ${err.message}`);
-      }
+  await fs.mkdir(path.dirname(filePath), {recursive: true});
+
+  try {
+    // x means fail if file already exists
+    await fs.writeFile(filePath, JSON.stringify(object), {flag: 'wx'});
+  } catch (err) {
+    if (err && !err.code === 'EEXIST') {
+      console.error(`Failed to write cache ${filePath}: ${err.code} ${err.message}`);
     }
-  );
+    return;
+  }
+
+  if (object.path.startsWith('//cdn.jsdelivr.net/npm/')) {
+    // slice to "npm/..."
+    const npmPath = path.resolve(CACHE_DIR, object.path.slice(19));
+    await fs.mkdir(path.dirname(npmPath), {recursive: true});
+    await fs.link(filePath, npmPath);
+  }
 }
 
 // Note CORS headers are now added by nginx

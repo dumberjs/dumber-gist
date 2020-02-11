@@ -70,7 +70,7 @@ test('DepsResolver lists all deps from appDependencies', async t => {
   const r = new DepsResolver(() => new TurboResolver());
   const deps = await r.resolve({'vue': '^2.0.0'});
   t.deepEqual(deps, [
-    {name: 'vue', version: '2.1.0', main: 'dist/vue.js', lazyMain: true}
+    {name: 'vue', version: '2.1.0', main: 'dist/vue.min.js', lazyMain: true}
   ]);
 });
 

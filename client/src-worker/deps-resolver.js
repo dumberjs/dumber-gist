@@ -57,7 +57,7 @@ export class DepsResolver {
       const dep = {name, version, lazyMain: true};
       if (name === 'vue' && semver.major(version) === 2) {
         // Use vue file with built-in template compiler
-        dep.main = 'dist/vue.js'
+        dep.main = 'dist/vue.min.js'
       } else if (
         name === 'inferno' ||
         name === 'inferno-shared' ||

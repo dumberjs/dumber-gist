@@ -2,6 +2,7 @@ import "core-js/stable";
 import {DumberSession} from './dumber-session';
 import findDeps from 'aurelia-deps-finder';
 import {Container} from 'aurelia-dependency-injection';
+import localforage from 'localforage';
 
 (function patchConsole() {
   function patch(method) {
@@ -31,6 +32,19 @@ container.registerInstance(findDeps, findDeps);
 const session = container.get(DumberSession);
 const cacheGetters = {};
 
+async function cacheLocally(hash, object) {
+  try {
+    // Keep a local copy
+    await localforage.setItem(hash, object)
+    if (object.path.startsWith('//cdn.jsdelivr.net/npm/')) {
+      // slice to 'npm/...'
+      await localforage.setItem(object.path.slice(19), hash)
+    }
+  } catch (e) {
+    // ignore
+  }
+}
+
 onmessage = async function(event) {
   var action = event.data;
   const {id, type} = action;
@@ -54,25 +68,33 @@ onmessage = async function(event) {
     if (type === 'init') {
       // Let main page to deal with cache because main page knows GitHub access token.
       const dumberCache = {
-        getCache: (hash, meta) => {
-          if (!cacheGetters[hash]) {
-            let resolve, timeout;
-            const getter = new Promise((_resolve, reject) => {
-              resolve = _resolve;
-              // Time out for remote cache;
-              timeout = setTimeout(reject, 10000);
-            });
-            cacheGetters[hash] = {getter, resolve, timeout};
+        getCache: async (hash, meta) => {
+          try {
+            const result = await localforage.getItem(hash);
+            if (!result) throw new Error();
+            return result;
+          } catch (e) {
+            if (!cacheGetters[hash]) {
+              let resolve, timeout;
+              const getter = new Promise((_resolve, reject) => {
+                resolve = _resolve;
+                // Time out for remote cache;
+                timeout = setTimeout(reject, 10000);
+              });
+              cacheGetters[hash] = {getter, resolve, timeout};
+              postMessage({type: 'get-cache', hash, meta});
+            }
+
+            const object = await cacheGetters[hash].getter;
+            cacheLocally(hash, object);
+            return object;
           }
-          postMessage({type: 'get-cache', hash, meta});
-          return cacheGetters[hash].getter;
         },
         setCache: function(hash, object) {
           postMessage({type: 'set-cache', hash, object});
+          cacheLocally(hash, object);
         },
-        clearCache: function() {
-          postMessage({type: 'clear-cache'});
-        }
+        clearCache: () => {}
       };
 
       data = await session.init(action.config, dumberCache);
@@ -90,3 +112,5 @@ onmessage = async function(event) {
     postMessage({type: 'err', id, error: e.message});
   }
 };
+
+postMessage({type: 'worker-up'});

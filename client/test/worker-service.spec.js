@@ -39,18 +39,19 @@ class TestWorkerService extends WorkerService {
       postMessage: action => {
         actions.push({...action, toBundler: true});
       }
-    }
+    };
+    this._dumberWorkerUp = Promise.resolve();
   }
 
   _bootUpServiceWorker() {
-    this._workerUp = Promise.resolve();
     this.iframe = {
       contentWindow: {
         postMessage: action => {
           actions.push(action);
         }
       }
-    }
+    };
+    this._serviceWorkerUp = Promise.resolve();
   }
 }
 

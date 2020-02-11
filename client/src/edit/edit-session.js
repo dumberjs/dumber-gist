@@ -234,7 +234,7 @@ export class EditSession {
       return false; // exit early
     });
 
-    await this.ws.perform({type: 'init', config: {deps}});
+    await this.ws.perform({type: 'init', config: {deps, dev: process.env.NODE_ENV !== 'production'}});
     await this.ws.perform({type: 'update', files});
     const entryBundle = await this.ws.perform({type: 'build'});
 

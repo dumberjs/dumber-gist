@@ -144,7 +144,7 @@ test('EditSession renders pass on deps from package.json', async t => {
   t.ok(es.isRendered);
   t.notOk(es.isChanged);
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {foo: '^1.0.0', bar: '~2.1.0'}}},
+    {type: 'init', config: {deps: {foo: '^1.0.0', bar: '~2.1.0'}, dev: true}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',

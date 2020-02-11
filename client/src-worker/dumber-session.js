@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import {Factory, inject} from 'aurelia-dependency-injection';
 import Dumber from 'dumber';
+import packageFileReader from './package-file-reader';
 import findDeps from 'aurelia-deps-finder';
 import {DepsResolver} from './deps-resolver';
 import {Transpiler} from './transpiler';
@@ -125,7 +126,8 @@ export class DumberSession {
 
     const isAurelia1 = _.some(deps, {name: 'aurelia-bootstrapper'});
     this.config = config;
-    this.instance = new this.Dumber({
+
+    const opts = {
       skipModuleLoader: true,
       depsFinder: isAurelia1 ? this.auFindDeps : undefined,
       // Cache is implemented in main window.
@@ -138,7 +140,16 @@ export class DumberSession {
         'https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'
       ],
       deps: deps
-    });
+    };
+
+    if (process.env.NODE_ENV !== 'test') {
+      // Use cache.dumber.local for local dev.
+      opts.packageFileReader = packageFileReader(
+        `//cache.dumber.${config.dev ? 'local' : 'app'}/npm/`
+      );
+    }
+
+    this.instance = new this.Dumber(opts);
 
     let transpilerOptions = {};
     if (_.some(deps, {name: 'preact'})) {

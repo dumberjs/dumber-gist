@@ -1,10 +1,12 @@
 import {inject} from 'aurelia-framework';
-import localforage from 'localforage';
 import {AccessToken} from './github/access-token';
 import {cacheUrl} from './host-name';
 
 async function getRemoteCache(hash) {
-  const response = await fetch(cacheUrl + '/' + hash, {mode: 'cors'});
+  const response = await fetch(
+    cacheUrl + '/' + hash.slice(0, 2) + '/' + hash.slice(2),
+    {mode: 'cors'}
+  );
   if (response.ok) return response.json();
   throw new Error(response.statusText);
 }
@@ -37,37 +39,10 @@ export class DumberCache {
   }
 
   async getCache(hash, meta) {
-    try {
-      const result = await localforage.getItem(hash)
-      if (!result) throw new Error();
-      return result;
-    } catch (e) {
-      // If there is no local cache, use remote cache.
-      if (meta.packageName) {
-        const object = await getRemoteCache(hash);
-
-        try {
-          // Keep a local copy
-          await localforage.setItem(hash, object);
-        } catch (e) {
-          // ignore
-        }
-
-        return object;
-      }
-
-      throw e;
-    }
+    if (meta.packageName) return getRemoteCache(hash);
   }
 
   async setCache(hash, object) {
-    try {
-      // Keep a local copy
-      await localforage.setItem(hash, object);
-    } catch (e) {
-      // ignore
-    }
-
     if (object.packageName && this.accessToken.value) {
       // Globally share traced result for npm packages
       try {

@@ -34,7 +34,27 @@ export class WorkerService {
 
   _bootUpBundlerWorker() {
     this.bundler = new Worker(BUNDLER_WORKER);
-    this.bundler.onmessage = this._workerSaid;
+    this.bundler.onerror = err => {
+      this.ea.publish('error', err.message);
+      console.error(err);
+    };
+    this.bundler.onmessageerror = err => {
+      this.ea.publish('error', err.message);
+      console.error(err);
+    };
+
+    let resolveWorker = null;
+    this._dumberWorkerUp = new Promise(resolve => resolveWorker = resolve);
+
+    const handleMessage = event => {
+      if (event.data && event.data.type === 'worker-up') {
+        console.info('Bundler Worker is up!');
+        this.bundler.onmessage = this._workerSaid;
+        resolveWorker();
+      }
+    };
+
+    this.bundler.onmessage = handleMessage;
   }
 
   _bootUpServiceWorker() {
@@ -51,15 +71,14 @@ export class WorkerService {
     this.iframe = iframe;
 
     let resolveWorker = null;
-    this._workerUp = new Promise(resolve => resolveWorker = resolve);
+    this._serviceWorkerUp = new Promise(resolve => resolveWorker = resolve);
 
     const handleMessage = event => {
       if (event.data && event.data.type === 'worker-up') {
-        console.info('Dumber Gist Service Worker is up!');
+        console.info('Service Worker is up!');
         removeEventListener('message', handleMessage);
         addEventListener('message', this._workerSaid);
         resolveWorker();
-        return;
       }
     };
 
@@ -142,7 +161,10 @@ export class WorkerService {
   }
 
   _kickOff() {
-    this._workerUp.then(() => {
+    Promise.all([
+      this._dumberWorkerUp,
+      this._serviceWorkerUp
+    ]).then(() => {
       if (this._currentJob) return;
       if ((this._currentJob = this._jobs.shift()) !== undefined) {
         // kick off first job.

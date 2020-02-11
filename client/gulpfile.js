@@ -96,7 +96,12 @@ const drWorker = dumber({
       `requirejs(['../test-worker/setup', /^\\.\\.\\/test-worker\\/.+\\.spec$/]).catch(console.error);` :
       "requirejs(['index']);"
   ],
-
+  codeSplit: isTest ? undefined : (moduleId, packageName) => {
+    if (!packageName) return 'bundler-local-src';
+    if (packageName === 'typescript') return 'bundler-ts';
+    if (packageName === 'sass.js') return 'bundler-sass';
+    return 'bundler-other-deps';
+  },
   onManifest: function(filenameMap) {
     finalBundleNames['bundler-worker.js'] = filenameMap['bundler-worker.js'];
   }
@@ -154,7 +159,7 @@ exports.build = build;
 
 function watch() {
   gulp.watch('src/**/*', buildApp);
-  gulp.watch('worker/**/*', buildWorker);
+  gulp.watch('src-worker/**/*', buildWorker);
 }
 
 exports.watch = gulp.series(
