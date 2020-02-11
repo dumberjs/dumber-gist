@@ -97,10 +97,8 @@ const drWorker = dumber({
       "requirejs(['index']);"
   ],
   codeSplit: isTest ? undefined : (moduleId, packageName) => {
-    if (!packageName) return 'bundler-local-src';
     if (packageName === 'typescript') return 'bundler-ts';
-    if (packageName === 'sass.js') return 'bundler-sass';
-    return 'bundler-other-deps';
+    if (packageName) return 'bundler-other-deps';
   },
   onManifest: function(filenameMap) {
     finalBundleNames['bundler-worker.js'] = filenameMap['bundler-worker.js'];
