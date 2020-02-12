@@ -171,8 +171,9 @@ html {
   display: block;
   text-align: center;
   padding: 1rem;
-  color: $cyan-dark;
+  background-color: $gray-900;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   position: absolute;
   top: 0;
   right: 0;
@@ -600,6 +601,7 @@ $node-start-offset: .6rem;
   height: 2.8rem;
   background-color: $gray-1000;
   overflow-x: auto;
+  background-color: $gray-900;
 
   .bar-action {
     display: inline-block;
@@ -637,6 +639,7 @@ $node-start-offset: .6rem;
   padding: .25rem 0;
   margin: .25rem 0;
   overflow-y: auto;
+  background-color: $gray-900;
 }
 
 .file-node, .folder-node {
@@ -681,7 +684,6 @@ $node-start-offset: .6rem;
 .file-navigator {
   flex: 1 1 auto;
   overflow: hidden;
-  -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -917,6 +919,7 @@ input[type='text'] {
     padding: .5rem;
     color: $red;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     position: absolute;
     top: 0;
     right: 0;
@@ -956,6 +959,7 @@ input[type='text'] {
     .logs {
       flex: 1 0 0;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       background-color: $gray-1000;
 
       .log-line {
