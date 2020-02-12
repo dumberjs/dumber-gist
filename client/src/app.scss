@@ -706,36 +706,20 @@ $node-start-offset: .6rem;
     text-overflow: ellipsis;
   }
 
-  &:hover {
-    background-color: $black;
-
-    .close-file {
-      visibility: visible;
-    }
-  }
-
   &.active {
     background-color: $gray-800;
     color: $gray-400;
 
     .close-file {
-      visibility: visible;
       color: $gray-500;
-
-      &:hover {
-        color: $white;
-      }
     }
   }
 
   .close-file {
-    visibility: hidden;
+    visibility: visible;
     margin-left: .5rem;
     color: $gray-700;
-
-    &:hover {
-      color: $white;
-    }
+    cursor: pointer;
   }
 }
 
