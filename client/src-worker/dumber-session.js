@@ -117,6 +117,12 @@ export class DumberSession {
       return {isNew: false};
     }
 
+    const cnt = Object.keys(config.deps).length;
+    console.log(`[dumber] Init with ${cnt} dependenc${cnt > 1 ? 'ies' : 'y'}`);
+    _.each(config.deps, (version, name) => {
+      console.info(`[dumber] ${name}@${version} `);
+    });
+
     const deps = await this.depsResolver.resolve(config.deps);
     // console.log('[dumber] Resolved Dependencies ' + deps.length);
     // _.each(deps, ({name, version}) => {
@@ -167,6 +173,8 @@ export class DumberSession {
       throw new DumberUninitializedError();
     }
 
+    console.log(`[dumber] Tracing files...`);
+
     for (let i = 0, ii = files.length; i < ii; i++) {
       const file = files[i];
       if (file.filename.startsWith('src/') || !file.filename.match(/[^/]+\.html/)) {
@@ -204,7 +212,7 @@ export class DumberSession {
     bundle.files.forEach(f => all.push(f.contents));
     all.push('requirejs.config(' + JSON.stringify(bundle.config, null , 2) + ');');
 
-    console.log('[dumber] built dist/entry-bundle.js');
+    console.log('[dumber] Built dist/entry-bundle.js');
     return all.join('\n');
   }
 }

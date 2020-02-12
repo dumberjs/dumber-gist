@@ -531,6 +531,10 @@ html {
   font-weight: bold;
 }
 
+.text-white-light {
+  color: $gray-300 !important;
+}
+
 .text-muted {
   color: $gray-600 !important;
 }
@@ -973,7 +977,7 @@ input[type='text'] {
       .log-line {
         display: block;
         padding: .25rem .5rem;
-        font-size: .85rem;
+        font-size: .9rem;
 
         &:not(:last-child) {
           border-bottom: 1px dashed $gray-800;

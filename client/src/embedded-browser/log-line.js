@@ -13,7 +13,7 @@ export class LogLine {
     if (m === 'info') return 'text-cyan';
     if (m === 'debug') return 'text-muted';
     if (m === 'system') return 'text-muted bg-dark';
-    return '';
+    return 'text-white-light';
   }
 
   @computedFrom('method')

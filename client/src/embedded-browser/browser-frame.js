@@ -97,6 +97,10 @@ export class BrowserFrame {
         method: 'system',
         args: ['Reloading embedded app ...']
       });
+      this.consoleLog.dumberLogs.push({
+        method: 'system',
+        args: ['Reloading embedded app ...']
+      });
       existingFrame.contentWindow.location.replace(this.src + this.historyTracker.currentUrl);
     } else {
       const frame = document.createElement('iframe');
