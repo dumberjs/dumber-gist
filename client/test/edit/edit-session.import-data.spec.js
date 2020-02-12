@@ -32,9 +32,15 @@ const workerService = {
   }
 };
 
+const consoleLog = {
+  dumberLogs: {
+    push() {}
+  }
+}
+
 test('EditSession imports data', t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',
@@ -85,7 +91,7 @@ test('EditSession imports data', t => {
 
 test('EditSession imports data with only files', t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',

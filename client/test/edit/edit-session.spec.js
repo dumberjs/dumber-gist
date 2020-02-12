@@ -32,9 +32,15 @@ const workerService = {
   }
 };
 
+const consoleLog = {
+  dumberLogs: {
+    push() {}
+  }
+}
+
 test('EditSession loads gist', t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',
@@ -66,7 +72,7 @@ test('EditSession loads gist', t => {
 
 test('EditSession detects changed description', t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',
@@ -109,7 +115,7 @@ test('EditSession detects changed description', t => {
 
 test('EditSession renders pass on deps from package.json', async t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',

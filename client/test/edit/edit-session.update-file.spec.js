@@ -38,9 +38,15 @@ const workerService = {
   }
 };
 
+const consoleLog = {
+  dumberLogs: {
+    push() {}
+  }
+}
+
 test('EditSession updates file after rendering', async t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',
@@ -154,7 +160,7 @@ test('EditSession updates file after rendering', async t => {
 
 test('EditSession skips unchanged update after rendering', async t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',
@@ -268,7 +274,7 @@ test('EditSession skips unchanged update after rendering', async t => {
 
 test('EditSession skips update on file not existing after rendering', async t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',
@@ -390,7 +396,7 @@ test('EditSession skips update on file not existing after rendering', async t =>
 
 test('EditSession updates file again during rendering', async t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',

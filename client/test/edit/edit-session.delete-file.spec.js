@@ -32,9 +32,15 @@ const workerService = {
   }
 };
 
+const consoleLog = {
+  dumberLogs: {
+    push() {}
+  }
+}
+
 test('EditSession deletes file after rendering', async t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',
@@ -139,7 +145,7 @@ test('EditSession deletes file after rendering', async t => {
 
 test('EditSession ignores deleting file not existing after rendering', async t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',

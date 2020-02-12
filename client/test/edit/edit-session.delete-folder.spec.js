@@ -32,9 +32,15 @@ const workerService = {
   }
 };
 
+const consoleLog = {
+  dumberLogs: {
+    push() {}
+  }
+}
+
 test('EditSession deletes folder after rendering', async t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',
@@ -156,7 +162,7 @@ es.mutationChanged();
 
 test('EditSession deletes nested folder after rendering', async t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',
@@ -312,7 +318,7 @@ test('EditSession deletes nested folder after rendering', async t => {
 
 test('EditSession ignores deleting unknown folder after rendering', async t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',

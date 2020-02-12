@@ -32,9 +32,15 @@ const workerService = {
   }
 };
 
+const consoleLog = {
+  dumberLogs: {
+    push() {}
+  }
+}
+
 test('EditSession updates path after rendering', async t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',
@@ -148,7 +154,7 @@ test('EditSession updates path after rendering', async t => {
 
 test('EditSession skips file path not existing after rendering', async t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',
@@ -266,7 +272,7 @@ test('EditSession skips file path not existing after rendering', async t => {
 
 test('EditSession skips existing target file path after rendering', async t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',
@@ -385,7 +391,7 @@ test('EditSession skips existing target file path after rendering', async t => {
 
 test('EditSession update folder path after rendering', async t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',
@@ -536,7 +542,7 @@ test('EditSession update folder path after rendering', async t => {
 
 test('EditSession update file path without side effect after rendering', async t => {
   clearUp();
-  const es = new EditSession(ea, workerService);
+  const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
     description: 'desc',

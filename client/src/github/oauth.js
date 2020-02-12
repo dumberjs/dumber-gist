@@ -4,7 +4,7 @@ import queryString from 'querystring';
 import {AccessToken} from './access-token';
 import {SessionId} from '../session-id';
 import {PersistSession} from './persist-session';
-import {clientUrl, oauthUrl} from '../host-name';
+import {clientUrl, oauthUrl} from 'host-name';
 import {Helper} from '../helper';
 
 // github oauth client id/secret

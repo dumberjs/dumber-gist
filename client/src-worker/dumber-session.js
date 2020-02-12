@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import {Factory, inject} from 'aurelia-dependency-injection';
 import Dumber from 'dumber';
-import packageFileReader from './package-file-reader';
-import findDeps from 'aurelia-deps-finder';
+import packageFileReader from './jsdelivr';
+import findDeps from './au1-deps-finder';
 import {DepsResolver} from './deps-resolver';
 import {Transpiler} from './transpiler';
+import {DumberCache} from './dumber-cache';
 
 export const HISTORY_HACK_JS = `(function() {
   var oldPushState = history.pushState;
@@ -96,28 +97,29 @@ export class DumberUninitializedError extends Error {
   }
 }
 
-@inject(Factory.of(Dumber), findDeps, DepsResolver, Transpiler)
+@inject(Factory.of(Dumber), findDeps, DepsResolver, Transpiler, DumberCache)
 export class DumberSession {
-  constructor(Dumber, auFindDeps, depsResolver, transpiler) {
+  constructor(Dumber, auFindDeps, depsResolver, transpiler, dumberCache) {
     this.Dumber = Dumber;
     this.auFindDeps = auFindDeps;
     this.instance = null;
     this.config = null;
     this.depsResolver = depsResolver;
     this.transpiler = transpiler;
+    this.dumberCache = dumberCache;
   }
 
   get isInitialised() {
     return !!this.instance;
   }
 
-  async init(config, dumberCache) {
+  async init(config) {
     if (this.instance && _.isEqual(this.config, config)) {
       // reuse existing dumber
       return {isNew: false};
     }
 
-    const cnt = Object.keys(config.deps).length;
+    const cnt = config.deps ? Object.keys(config.deps).length : 0;
     console.log(`[dumber] Init with ${cnt} dependenc${cnt > 1 ? 'ies' : 'y'}`);
     _.each(config.deps, (version, name) => {
       console.info(`[dumber] ${name}@${version} `);
@@ -139,7 +141,7 @@ export class DumberSession {
       // Cache is implemented in main window.
       // Because we want to share cache on domain gist.dumber.app
       // for all instance of ${app-id}.gist.dumber.app
-      cache: dumberCache,
+      cache: this.dumberCache,
       prepend: [
         HISTORY_HACK_JS,
         CONSOLE_HACK_JS,
@@ -149,10 +151,7 @@ export class DumberSession {
     };
 
     if (process.env.NODE_ENV !== 'test') {
-      // Use cache.dumber.local for local dev.
-      opts.packageFileReader = packageFileReader(
-        `//cache.dumber.${config.dev ? 'local' : 'app'}/npm/`
-      );
+      opts.packageFileReader = packageFileReader;
     }
 
     this.instance = new this.Dumber(opts);

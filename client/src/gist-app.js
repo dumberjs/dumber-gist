@@ -4,7 +4,7 @@ import {EventAggregator} from 'aurelia-event-aggregator';
 import {EditSession} from './edit/edit-session';
 import {OpenedFiles} from './edit/opened-files';
 import {User} from './github/user';
-import {clientUrl} from './host-name';
+import {clientUrl} from 'host-name';
 import {combo} from 'aurelia-combo';
 import _ from 'lodash';
 

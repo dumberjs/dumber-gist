@@ -56,11 +56,11 @@ const transpiler = {
 }
 
 test('DumberSession initialises new dumber instance', async t => {
-  const session = new DumberSession(Dumber, auFindDeps, depsResolver, transpiler);
+  const session = new DumberSession(Dumber, auFindDeps, depsResolver, transpiler, dumberCache);
   t.notOk(session.isInitialised);
 
   const config = {deps: {vue: '^2.0.0'}};
-  const data = await session.init(config, dumberCache);
+  const data = await session.init(config);
   t.deepEqual(data, {isNew: true});
   t.ok(session.isInitialised);
 
@@ -77,11 +77,11 @@ test('DumberSession initialises new dumber instance', async t => {
 });
 
 test('DumberSession reuses existing dumber instance', async t => {
-  const session = new DumberSession(Dumber, auFindDeps, depsResolver, transpiler);
+  const session = new DumberSession(Dumber, auFindDeps, depsResolver, transpiler, dumberCache);
   t.notOk(session.isInitialised);
 
   const config = {};
-  const data = await session.init(config, dumberCache);
+  const data = await session.init(config);
   t.deepEqual(data, {isNew: true});
   t.ok(session.isInitialised);
 
@@ -99,7 +99,7 @@ test('DumberSession reuses existing dumber instance', async t => {
     { filename: 'index.html', content: 'index-html' }
   ]);
 
-  const data2 = await session.init(config, dumberCache);
+  const data2 = await session.init(config);
   t.deepEqual(data2, {isNew: false});
   t.ok(session.isInitialised);
 
@@ -108,11 +108,11 @@ test('DumberSession reuses existing dumber instance', async t => {
 });
 
 test('DumberSession replaces existing dumber instance with different config', async t => {
-  const session = new DumberSession(Dumber, auFindDeps, depsResolver, transpiler);
+  const session = new DumberSession(Dumber, auFindDeps, depsResolver, transpiler, dumberCache);
   t.notOk(session.isInitialised);
 
   const config = {deps: {vue: '^2.0.0'}};
-  const data = await session.init(config, dumberCache);
+  const data = await session.init(config);
   t.deepEqual(data, {isNew: true});
   t.ok(session.isInitialised);
 
@@ -149,7 +149,7 @@ test('DumberSession replaces existing dumber instance with different config', as
 });
 
 test('DumberSession builds', async t => {
-  const session = new DumberSession(Dumber, auFindDeps, depsResolver, transpiler);
+  const session = new DumberSession(Dumber, auFindDeps, depsResolver, transpiler, dumberCache);
 
   await session.init({}, dumberCache);
   await session.update([
@@ -170,7 +170,7 @@ requirejs.config({
 });
 
 test('DumberSession cannot update before init', async t => {
-  const session = new DumberSession(Dumber, auFindDeps, depsResolver, transpiler);
+  const session = new DumberSession(Dumber, auFindDeps, depsResolver, transpiler, dumberCache);
 
   await t.rejects(async () => {
     await session.update([
@@ -183,7 +183,7 @@ test('DumberSession cannot update before init', async t => {
 });
 
 test('DumberSession cannot build before init', async t => {
-  const session = new DumberSession(Dumber, auFindDeps, depsResolver, transpiler);
+  const session = new DumberSession(Dumber, auFindDeps, depsResolver, transpiler, dumberCache);
 
   await t.rejects(async () => {
     await session.build();

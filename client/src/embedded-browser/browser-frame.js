@@ -2,7 +2,7 @@ import {inject, bindable, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {DndService} from 'bcx-aurelia-dnd';
 import {SessionId} from '../session-id';
-import {host} from '../host-name';
+import {host} from 'host-name';
 import {HistoryTracker} from '../history-tracker';
 import {ConsoleLog} from './console-log';
 import {Oauth} from '../github/oauth';

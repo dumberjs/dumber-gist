@@ -2,17 +2,15 @@
 import {inject, computedFrom} from 'aurelia-framework';
 import {SessionId} from './session-id';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {DumberCache} from './dumber-cache';
 import {HistoryTracker} from './history-tracker';
 import {ConsoleLog} from './embedded-browser/console-log';
-import {host} from './host-name';
+import {host} from 'host-name';
 
-@inject(EventAggregator, SessionId, DumberCache, HistoryTracker, ConsoleLog)
+@inject(EventAggregator, SessionId, HistoryTracker, ConsoleLog)
 export class WorkerService {
-  constructor(ea, sessionId, dumberCache, historyTracker, consoleLog) {
+  constructor(ea, sessionId, historyTracker, consoleLog) {
     this.ea = ea;
     this.sessionId = sessionId;
-    this.dumberCache = dumberCache;
     this.historyTracker = historyTracker;
     this.consoleLog = consoleLog;
 
@@ -92,22 +90,8 @@ export class WorkerService {
     const {type} = data;
     if (!type) return;
 
-    if (type === 'get-cache') {
-      const {hash, meta} = event.data;
-      this.dumberCache.getCache(hash, meta).then(
-        object => this._workerDo({type: 'got-cache', hash, object}),
-        () => {
-          this.ea.publish('miss-cache', {hash, meta});
-          this._workerDo({type: 'got-cache', hash});
-        }
-      );
-      return;
-    } else if (type === 'set-cache') {
-      const {hash, object} = event.data;
-      this.dumberCache.setCache(hash, object).then(() => {}, () => {});
-      return;
     // Following types are from embedded app, not service worker
-    } else if (type === 'history-push-state') {
+    if (type === 'history-push-state') {
       this.historyTracker.pushState(data.title, data.url);
       return;
     } else if (type === 'history-replace-state') {

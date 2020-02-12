@@ -18,6 +18,15 @@ const {NODE_ENV} = process.env;
 const isProd = NODE_ENV === 'production';
 const isTest = NODE_ENV === 'test';
 
+const domainSubfix = isProd ? 'app' : 'local';
+const hostnames = {
+  host: `gist.dumber.${domainSubfix}`,
+  clientUrl: `https://gist.dumber.${domainSubfix}`,
+  cacheUrl: `https://cache.dumber.${domainSubfix}`,
+  oauthUrl: `https://github-oauth.gist.dumber.${domainSubfix}`
+};
+const hostNameModule = `module.exports = ${JSON.stringify(hostnames)};`;
+
 const finalBundleNames = {};
 
 const drApp = dumber({
@@ -34,6 +43,9 @@ const drApp = dumber({
   },
   onManifest: isTest ? undefined : filenameMap => {
     finalBundleNames['entry-bundle.js'] = filenameMap['entry-bundle.js'];
+  },
+  onRequire: moduleId => {
+    if (moduleId === 'host-name') return hostNameModule;
   }
 });
 
@@ -102,6 +114,9 @@ const drWorker = dumber({
   },
   onManifest: function(filenameMap) {
     finalBundleNames['bundler-worker.js'] = filenameMap['bundler-worker.js'];
+  },
+  onRequire: moduleId => {
+    if (moduleId === 'host-name') return hostNameModule;
   }
 });
 
