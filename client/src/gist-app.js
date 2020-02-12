@@ -79,6 +79,13 @@ export class GistApp {
           this.showBrowserWindowInSmallLayout = false;
         }
       }),
+      this.ea.subscribe('generated-from-skeleton', () => {
+        this.showSideBarInSmallLayout = false;
+        this.showBrowserWindowInSmallLayout = true;
+        if (this.windowWidth <= 450) {
+          this.showEditorsInSmallLayout = false;
+        }
+      }),
       this.ea.subscribe('bundle', () => {
         this.bundle();
       })

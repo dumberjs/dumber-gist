@@ -8,6 +8,7 @@
           <div class="mt ml mr mb">
             When others visit your shared URL, Dumber Gist can automatically open some code editor tabs for selected files.<br><br>
             <strong class="text-primary">Drag file(s) to the right side, drag to reorder them.</strong><br>
+            <strong class="text-primary">Click a file to toggle it.</strong><br>
             The first in the selected list will be the default visible tab in code editor.
           </div>
         </div>
@@ -20,7 +21,8 @@
               class="file"
               reorderable-repeat.for="file of originalFiles"
               reorderable-group="files-selection"
-              dblclick.trigger="selectedFiles.push(originalFiles.splice($index, 1)) & leftClick"
+              click.trigger="selectedFiles.push(originalFiles.splice($index, 1)) & leftClick"
+              touchend.trigger="selectedFiles.push(originalFiles.splice($index, 1))"
             >
               <i class.bind="file | fileIcon"></i>
               ${file}
@@ -34,7 +36,8 @@
               class="file selected"
               reorderable-repeat.for="file of selectedFiles"
               reorderable-group="files-selection"
-              dblclick.trigger="originalFiles.push(selectedFiles.splice($index, 1)) & leftClick"
+              click.trigger="originalFiles.push(selectedFiles.splice($index, 1)) & leftClick"
+              touchend.trigger="originalFiles.push(selectedFiles.splice($index, 1))"
             >
               <i class.bind="file | fileIcon"></i>
               ${file}
