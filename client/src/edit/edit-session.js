@@ -216,6 +216,16 @@ export class EditSession {
   }
 
   async render() {
+    try {
+      await this._render();
+    } catch (e) {
+      // Reset rendered hash to force next try
+      this._renderedHash = '';
+      throw e;
+    }
+  }
+
+  async _render() {
     const start = (new Date()).getTime();
 
     // Note all files are copied before rendering.
