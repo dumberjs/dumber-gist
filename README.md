@@ -77,7 +77,6 @@ ssl_certificate_key
 passenger_nodejs
 
 # Change to your local dumber-gist folder
-alias
 root
 ```
 
@@ -99,12 +98,13 @@ If you use sudo to start nginx, don't worry, as a security feature, nginux will 
 
 ### Start local app
 
-Before browse the app, you need to build both `client-app` and `client-worker`. Run
+Before browse the app, you need to build `client` code. Run
 
+    cd client/
     npm i # or yarn or pnpm i
     npm run build
 
-In both `client-app` and `client-worker`, optionally, replace `npm run build` with `npm start` to build them in watch mode.
+Optionally, replace `npm run build` with `npm start` to build them in watch mode.
 
 Use Safari, Chrome or Firefox to navigate to `https://gist.dumber.local`.
 
