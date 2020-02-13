@@ -10,13 +10,13 @@ export class Logs {
 
   constructor(bindingEngine) {
     this.bindingEngine = bindingEngine;
-    this.updateScroll = _.debounce(this.updateScroll.bind(this));
+    this.scrollToBottomIfNeeded = _.debounce(this.scrollToBottomIfNeeded.bind(this));
     this.updateUserScrolled = this.updateUserScrolled.bind(this);
   }
 
   attached() {
     this.subscribers = [
-      this.bindingEngine.propertyObserver(this.logs, 'length').subscribe(this.updateScroll)
+      this.bindingEngine.propertyObserver(this.logs, 'length').subscribe(this.scrollToBottomIfNeeded)
     ];
     this.el.addEventListener('scroll', this.updateUserScrolled);
     this.scrollToBottom();
@@ -31,7 +31,7 @@ export class Logs {
     this.userScrolled = this.el.scrollTop + this.el.clientHeight < this.el.scrollHeight;
   }
 
-  updateScroll() {
+  scrollToBottomIfNeeded() {
     if (this.logs.length === 0) {
       // Reset
       this.userScrolled = false;
