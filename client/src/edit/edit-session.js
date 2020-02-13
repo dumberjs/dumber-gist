@@ -257,7 +257,7 @@ export class EditSession {
     this._renderedHash = getFilesHash(files);
 
     const seconds = ((new Date()).getTime() - start) / 1000;
-    const msg = `[dumber] Built dist/entry-bundle.js in ${seconds} secs.`;
+    const msg = `[dumber] Built dist/entry-bundle.js in ${seconds.toFixed(1)} secs.`;
     console.log(msg);
     this.consoleLog.dumberLogs.push({
       method: 'system',
