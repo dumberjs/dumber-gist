@@ -6,6 +6,8 @@ import _ from 'lodash';
 export class BrowserDevTools {
   @bindable height;
   @bindable toggleDevTools;
+  // Synchronize filters on two logs
+  filter = '';
 
   constructor(consoleLog) {
     this.consoleLog = consoleLog;

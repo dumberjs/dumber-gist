@@ -28,13 +28,15 @@
     <logs
       class="dev-details"
       css="height: ${height}px;"
-      show.bind="activeTool === 'console'"
+      if.bind="activeTool === 'console'"
+      filter.bind="filter"
       reset-logs.call="resetAppLogs()"
       logs.bind="consoleLog.appLogs"></logs>
     <logs
       class="dev-details"
       css="height: ${height}px;"
-      show.bind="activeTool === 'bundler'"
+      if.bind="activeTool === 'bundler'"
+      filter.bind="filter"
       reset-logs.call="resetDumberLogs()"
       logs.bind="consoleLog.dumberLogs"></logs>
   </div>

@@ -1,11 +1,11 @@
-import {inject, bindable, computedFrom, BindingEngine} from 'aurelia-framework';
+import {inject, bindable, computedFrom, BindingEngine, bindingMode} from 'aurelia-framework';
 import _ from 'lodash';
 
 @inject(BindingEngine)
 export class Logs {
   @bindable logs;
   @bindable resetLogs;
-  filter = '';
+  @bindable({defaultBindingMode: bindingMode.twoWay}) filter = '';
   userScrolled = false;
 
   constructor(bindingEngine) {
@@ -19,6 +19,7 @@ export class Logs {
       this.bindingEngine.propertyObserver(this.logs, 'length').subscribe(this.updateScroll)
     ];
     this.el.addEventListener('scroll', this.updateUserScrolled);
+    this.scrollToBottom();
   }
 
   detached() {
@@ -37,8 +38,12 @@ export class Logs {
     }
 
     if (!this.userScrolled) {
-      this.el.scrollTop = this.el.scrollHeight;
+      this.scrollToBottom();
     }
+  }
+
+  scrollToBottom() {
+    this.el.scrollTop = this.el.scrollHeight;
   }
 
   @computedFrom('filter', 'logs.length')
