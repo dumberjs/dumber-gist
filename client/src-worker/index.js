@@ -16,7 +16,7 @@ import localforage from 'localforage';
         postMessage({
           type: 'dumber-console',
           method: method,
-          args: args
+          args: args.map(a => a.toString())
         });
       }
       if (old) old.apply(console, arguments);

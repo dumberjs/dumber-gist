@@ -76,7 +76,7 @@ export const CONSOLE_HACK_JS = `(function() {
       parent.postMessage({
         type: 'app-console',
         method: method,
-        args: args
+        args: args.map(a => a.toString())
       }, '*');
       if (old) old.apply(console, arguments);
     };
@@ -212,7 +212,6 @@ export class DumberSession {
     bundle.files.forEach(f => all.push(f.contents));
     all.push('requirejs.config(' + JSON.stringify(bundle.config, null , 2) + ');');
 
-    console.log('[dumber] Built dist/entry-bundle.js');
     return all.join('\n');
   }
 }

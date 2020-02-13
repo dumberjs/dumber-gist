@@ -2,6 +2,7 @@ import {inject, observable, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import _ from 'lodash';
 import {WorkerService} from '../worker-service';
+import {ConsoleLog} from '../embedded-browser/console-log';
 import crypto from 'crypto';
 
 function getFilesHash(files) {
@@ -12,7 +13,7 @@ function getFilesHash(files) {
   return crypto.createHash('md5').update(str).digest('hex');
 }
 
-@inject(EventAggregator, WorkerService)
+@inject(EventAggregator, WorkerService, ConsoleLog)
 export class EditSession {
   _gist = {description: '', files: []};
   _originalHash = '';
@@ -25,9 +26,10 @@ export class EditSession {
   // for just newly loaded gist.
   @observable mutation = -1;
 
-  constructor(ea, ws) {
+  constructor(ea, ws, consoleLog) {
     this.ea = ea;
     this.ws = ws;
+    this.consoleLog = consoleLog;
   }
 
   get gist() {
@@ -255,6 +257,11 @@ export class EditSession {
     this._renderedHash = getFilesHash(files);
 
     const seconds = ((new Date()).getTime() - start) / 1000;
-    console.log(`Rendering finished in ${seconds} secs.`);
+    const msg = `[dumber] Built dist/entry-bundle.js in ${seconds} secs.`;
+    console.log(msg);
+    this.consoleLog.dumberLogs.push({
+      method: 'system',
+      args: [msg]
+    });
   }
 }
