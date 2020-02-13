@@ -36,6 +36,14 @@ const appHtml = `<!--
 Try to create a paired css/scss/sass/less file like my-app.scss.
 It will be automatically imported based on convention.
  -->
+
+<!--
+There is no bundler config you can change in Dumber Gist to
+turn on shadow DOM.
+But you can turn shadow DOM on by adding a meta tag in every
+html template:
+<use-shadow-dom>
+-->
 <h1>\${message}</h1>
 `;
 
