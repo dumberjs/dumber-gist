@@ -14,7 +14,7 @@ export const JSDELIVR_DATA_PREFIX = '//data.jsdelivr.com/v1/package/npm/';
 export const JSDELIVR_PREFIX = '//cdn.jsdelivr.net/npm/';
 
 export class CachePrimitives {
-  constructor(_localforage, _fetch) {
+  constructor(_localforage, _fetch, _localStorage) {
     this._localforage = _localforage || localforage;
     this._fetch = _fetch || fetch;
   }
@@ -168,7 +168,7 @@ export class CachePrimitives {
 
   async setRemoteCache(hash, object) {
     // Only set remote cache if user signed in.
-    const token = localStorage.getItem('github-oauth-token');
+    const token = await this._localStorage.getItem('github-oauth-token');
     if (!token) return;
     const accessToken = JSON.parse(token).access_token;
     if (!accessToken) return;
