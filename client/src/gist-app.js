@@ -4,7 +4,6 @@ import {EventAggregator} from 'aurelia-event-aggregator';
 import {EditSession} from './edit/edit-session';
 import {OpenedFiles} from './edit/opened-files';
 import {User} from './github/user';
-import {clientUrl} from 'host-name';
 import {combo} from 'aurelia-combo';
 import _ from 'lodash';
 
@@ -26,7 +25,7 @@ const insideIframe = (function() {
 @inject(EventAggregator, BindingEngine, DndService, EditSession, OpenedFiles, User)
 export class GistApp {
   insideIframe = insideIframe;
-  clientUrl = clientUrl;
+  clientUrl = HOST_NAMES.clientUrl;
 
   showSideBarInSmallLayout = false;
   showEditorsInSmallLayout = true;

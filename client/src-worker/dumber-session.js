@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import {Factory, inject} from 'aurelia-dependency-injection';
 import Dumber from 'dumber';
-import packageFileReader from './jsdelivr';
-import findDeps from './au1-deps-finder';
+import {Jsdelivr} from './jsdelivr';
+import {Au1DepsFinder} from './au1-deps-finder';
 import {DepsResolver} from './deps-resolver';
 import {Transpiler} from './transpiler';
 import {DumberCache} from './dumber-cache';
@@ -97,16 +97,17 @@ export class DumberUninitializedError extends Error {
   }
 }
 
-@inject(Factory.of(Dumber), findDeps, DepsResolver, Transpiler, DumberCache)
+@inject(Factory.of(Dumber), Au1DepsFinder, DepsResolver, Transpiler, DumberCache, Jsdelivr)
 export class DumberSession {
-  constructor(Dumber, auFindDeps, depsResolver, transpiler, dumberCache) {
+  constructor(Dumber, au1FindDeps, depsResolver, transpiler, dumberCache, jsdelivr) {
     this.Dumber = Dumber;
-    this.auFindDeps = auFindDeps;
+    this.au1FindDeps = au1FindDeps;
     this.instance = null;
     this.config = null;
     this.depsResolver = depsResolver;
     this.transpiler = transpiler;
     this.dumberCache = dumberCache;
+    this.jsdelivr = jsdelivr;
   }
 
   get isInitialised() {
@@ -137,11 +138,12 @@ export class DumberSession {
 
     const opts = {
       skipModuleLoader: true,
-      depsFinder: isAurelia1 ? this.auFindDeps : undefined,
+      depsFinder: isAurelia1 ? this.au1FindDeps.findDeps : undefined,
       // Cache is implemented in main window.
       // Because we want to share cache on domain gist.dumber.app
       // for all instance of ${app-id}.gist.dumber.app
       cache: this.dumberCache,
+      packageFileReader: this.jsdelivr.create,
       prepend: [
         HISTORY_HACK_JS,
         CONSOLE_HACK_JS,
@@ -149,10 +151,6 @@ export class DumberSession {
       ],
       deps: deps
     };
-
-    if (process.env.NODE_ENV !== 'test') {
-      opts.packageFileReader = packageFileReader;
-    }
 
     this.instance = new this.Dumber(opts);
 

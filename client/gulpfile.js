@@ -21,11 +21,11 @@ const isTest = NODE_ENV === 'test';
 const domainSubfix = isProd ? 'app' : 'local';
 const hostnames = {
   host: `gist.dumber.${domainSubfix}`,
-  clientUrl: `https://gist.dumber.${domainSubfix}`,
-  cacheUrl: `https://cache.dumber.${domainSubfix}`,
-  oauthUrl: `https://github-oauth.gist.dumber.${domainSubfix}`
+  clientUrl: `//gist.dumber.${domainSubfix}`,
+  cacheUrl: `//cache.dumber.${domainSubfix}`,
+  oauthUrl: `//github-oauth.gist.dumber.${domainSubfix}`
 };
-const hostNameModule = `module.exports = ${JSON.stringify(hostnames)};`;
+const HOST_NAMES = `;var HOST_NAMES = ${JSON.stringify(hostnames)};`;
 
 const finalBundleNames = {};
 
@@ -33,6 +33,9 @@ const drApp = dumber({
   src: 'src',
   depsFinder: auDepsFinder,
   hash: isProd && !isTest,
+  prepend: [
+    HOST_NAMES
+  ],
   append: [
     isTest && "requirejs(['../test/setup', /^\\.\\.\\/test\\/.+\\.spec$/]);"
   ],
@@ -43,9 +46,6 @@ const drApp = dumber({
   },
   onManifest: isTest ? undefined : filenameMap => {
     finalBundleNames['entry-bundle.js'] = filenameMap['entry-bundle.js'];
-  },
-  onRequire: moduleId => {
-    if (moduleId === 'host-name') return hostNameModule;
   }
 });
 
@@ -95,6 +95,7 @@ const drWorker = dumber({
   hash: isProd,
   entryBundle: 'bundler-worker',
   prepend: [
+    HOST_NAMES,
     require.resolve('sass.js/dist/sass.sync.js')
   ],
   deps: [
@@ -114,9 +115,6 @@ const drWorker = dumber({
   },
   onManifest: function(filenameMap) {
     finalBundleNames['bundler-worker.js'] = filenameMap['bundler-worker.js'];
-  },
-  onRequire: moduleId => {
-    if (moduleId === 'host-name') return hostNameModule;
   }
 });
 

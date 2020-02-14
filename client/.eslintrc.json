@@ -21,6 +21,7 @@
     "worker": true
   },
   "globals": {
-    "requirejs": true
+    "requirejs": true,
+    "HOST_NAMES": true
   }
 }

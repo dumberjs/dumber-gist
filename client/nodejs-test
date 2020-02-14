@@ -1,0 +1,3 @@
+#!/bin/bash --login
+
+env NODE_ENV=test npx tape -r esm -r @babel/register -r ./nodejs-hostnames.js "$@" | npx tap-nirvana

@@ -1,6 +1,5 @@
 import "core-js/stable";
 import {DumberSession} from './dumber-session';
-import findDeps from './au1-deps-finder';
 import {Container} from 'aurelia-dependency-injection';
 
 (function patchConsole() {
@@ -27,7 +26,6 @@ import {Container} from 'aurelia-dependency-injection';
 })();
 
 const container = new Container();
-container.registerInstance(findDeps, findDeps);
 const session = container.get(DumberSession);
 
 onmessage = async function(event) {

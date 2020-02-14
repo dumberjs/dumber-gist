@@ -3,7 +3,6 @@ import {DialogController} from 'aurelia-dialog';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {inject, BindingEngine} from 'aurelia-framework';
 import {User} from '../../github/user';
-import {clientUrl} from 'host-name';
 import _ from 'lodash';
 
 @inject(EventAggregator, DialogController, BindingEngine, User)
@@ -63,7 +62,7 @@ export class ShareGistDialog {
   }
 
   _update() {
-    let url = `${clientUrl}/?gist=${this.gist.id}`;
+    let url = `${HOST_NAMES.clientUrl}/?gist=${this.gist.id}`;
 
     const {selectedFiles} = this;
     if (selectedFiles.length) {

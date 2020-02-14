@@ -4,7 +4,6 @@ import {SessionId} from './session-id';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {HistoryTracker} from './history-tracker';
 import {ConsoleLog} from './embedded-browser/console-log';
-import {host} from 'host-name';
 
 @inject(EventAggregator, SessionId, HistoryTracker, ConsoleLog)
 export class WorkerService {
@@ -63,7 +62,7 @@ export class WorkerService {
     // in second iframe are provided by caches generated
     // in service worker.
     const iframe = document.createElement('iframe');
-    iframe.setAttribute('src', `https://${this.sessionId.id}.${host}/__boot-up-worker.html`);
+    iframe.setAttribute('src', `https://${this.sessionId.id}.${HOST_NAMES.host}/__boot-up-worker.html`);
     iframe.setAttribute('style', 'display: none');
     document.body.appendChild(iframe);
     this.iframe = iframe;

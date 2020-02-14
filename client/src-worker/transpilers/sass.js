@@ -1,6 +1,10 @@
 /* globals Sass */
 import path from 'path';
 import _ from 'lodash';
+if (process.env.NODE_ENV === 'test') {
+  // Only for running tests in nodejs environment
+  global.Sass = require('sass.js/dist/sass.sync.js');
+}
 
 const EXTS = ['.scss', '.sass'];
 
