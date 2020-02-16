@@ -14,7 +14,7 @@ import {Container} from 'aurelia-dependency-injection';
         postMessage({
           type: 'dumber-console',
           method: method,
-          args: args.map(a => a.toString())
+          args: args.map(a => a && a.String ? a.toString() : a)
         });
       }
       if (old) old.apply(console, arguments);

@@ -77,7 +77,7 @@ export const CONSOLE_HACK_JS = `(function() {
       parent.postMessage({
         type: 'app-console',
         method: method,
-        args: args.map(a => a.toString())
+        args: args.map(a => a && a.String ? a.toString() : a)
       }, '*');
       if (old) old.apply(console, arguments);
     };
