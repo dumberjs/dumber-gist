@@ -193,5 +193,125 @@ test('getJsdelivrFile reads local cached raw package.json', async t => {
   });
 });
 
+test('getNpmPackageFile rejects file path not listed in files', async t => {
+  const db = {};
+  const remote = {
+    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+      files: [
+        {type: 'file', name: 'package.json'},
+        {
+          type: 'directory',
+          name: 'dist',
+          files: [
+            {type: 'file', name: 'index.js'}
+          ]
+        }
+      ]
+    }
+  };
 
+  const p = create(db, remote);
+  await t.rejects(() => p.getNpmPackageFile('foo@1.0.0', 'dist/unknown.js'));
+});
+
+test('getNpmPackageFile gets file from local cache', async t => {
+  const db = {
+    'npm/foo@1.0.0/dist/index.js': 'hash',
+    'hash': {
+      __dumber_hash: 'hash',
+      foo: 'bar'
+    }
+  };
+  const remote = {
+    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+      files: [
+        {type: 'file', name: 'package.json'},
+        {
+          type: 'directory',
+          name: 'dist',
+          files: [
+            {type: 'file', name: 'index.js'}
+          ]
+        }
+      ]
+    }
+  };
+
+  const p = create(db, remote);
+  const result = await p.getNpmPackageFile('foo@1.0.0', 'dist/index.js');
+  t.deepEqual(result, {
+    __dumber_hash: 'hash',
+    foo: 'bar'
+  });
+});
+
+test('getNpmPackageFile gets file from remote cache, add it to local cache', async t => {
+  const db = {
+
+  };
+  const remote = {
+    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+      files: [
+        {type: 'file', name: 'package.json'},
+        {
+          type: 'directory',
+          name: 'dist',
+          files: [
+            {type: 'file', name: 'index.js'}
+          ]
+        }
+      ]
+    },
+    '//cache.dumber.local/npm/foo@1.0.0/dist/index.js': {
+      __dumber_hash: 'hash',
+      foo: 'bar'
+    }
+  };
+
+  const p = create(db, remote);
+  const result = await p.getNpmPackageFile('foo@1.0.0', 'dist/index.js');
+  t.deepEqual(result, {
+    __dumber_hash: 'hash',
+    foo: 'bar'
+  });
+  t.deepEqual(db, {
+    'files!npm/foo@1.0.0': {"package.json":1,"dist/index.js":1},
+    'npm/foo@1.0.0/dist/index.js': 'hash',
+    'hash': {
+      __dumber_hash: 'hash',
+      foo: 'bar'
+    }
+  });
+});
+
+test('getNpmPackageFile gets original file from jsdelivr', async t => {
+  const db = {
+
+  };
+  const remote = {
+    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+      files: [
+        {type: 'file', name: 'package.json'},
+        {
+          type: 'directory',
+          name: 'dist',
+          files: [
+            {type: 'file', name: 'index.js'}
+          ]
+        }
+      ]
+    },
+    '//cdn.jsdelivr.net/npm/foo@1.0.0/dist/index.js': 'lorem'
+  };
+
+  const p = create(db, remote);
+  const result = await p.getNpmPackageFile('foo@1.0.0', 'dist/index.js');
+  t.deepEqual(result, {
+    path: '//cdn.jsdelivr.net/npm/foo@1.0.0/dist/index.js',
+    contents: 'lorem'
+  });
+  t.deepEqual(db, {
+    'files!npm/foo@1.0.0': {"package.json":1,"dist/index.js":1}
+  });
+});
 

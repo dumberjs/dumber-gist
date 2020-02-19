@@ -24,3 +24,24 @@ test('getRemoteCache rejects missing cache, gets valid cache', async t => {
   );
   await t.rejects(() => p.getRemoteCache('hash2'));
 });
+
+test('setRemoteCache does not set cache if user is not signed in', async t => {
+  const remote = {};
+  const p = create({}, remote);
+  await p.setRemoteCache('12345', {a: 1});
+  t.deepEqual(remote, {});
+  await t.rejects(() => p.getRemoteCache('12345'));
+});
+
+test('setRemoteCache sets cache if user is signed in', async t => {
+  const remote = {};
+  const p = create({}, remote, {'github-oauth-token' : '{"access_token":"1"}'});
+  await p.setRemoteCache('12345', {a: 1});
+  t.deepEqual(remote, {
+    '//cache.dumber.local/12/345': {a: 1}
+  });
+  t.deepEqual(
+    await p.getRemoteCache('12345'),
+    {a: 1}
+  );
+});

@@ -17,6 +17,23 @@ function mockLocalforage(db = {}) {
   };
 }
 
+function mockLocalStorage(db = {}) {
+  return {
+    getItem(key) {
+      return db[key];
+    },
+    setItem(key, value) {
+      db[key] = value;
+      return value;
+    },
+    clear() {
+      Object.getOwnPropertyNames(db).forEach(function (prop) {
+        delete db[prop];
+      });
+    }
+  };
+}
+
 function mkResponse (text) {
   return {
     ok: true,
@@ -45,8 +62,11 @@ function mkFailedResponse () {
 }
 
 function mockFetch(remote = {}) {
-  return async url => {
-    if (remote[url]) {
+  return async (url, opts = {}) => {
+    if (opts.method === 'POST') {
+      const {hash, object} = JSON.parse(opts.body);
+      remote[url + '/' + hash.slice(0, 2) + '/' + hash.slice(2)] = object;
+    } else if (remote[url]) {
       const result = remote[url];
       if (typeof result === 'string') {
         return mkResponse(result);
@@ -61,6 +81,6 @@ function mockFetch(remote = {}) {
   }
 }
 
-export default function create(db = {}, remote = {}) {
-  return new CachePrimitives(mockLocalforage(db), mockFetch(remote));
+export default function create(db = {}, remote = {}, localDb = {}) {
+  return new CachePrimitives(mockLocalforage(db), mockFetch(remote), mockLocalStorage(localDb));
 }
