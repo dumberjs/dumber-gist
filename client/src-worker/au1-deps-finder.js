@@ -10,6 +10,7 @@ export class Au1DepsFinder {
   constructor(primitives) {
     this.primitives = primitives;
     this.findDeps = this.findDeps.bind(this);
+    this.readFile = this.readFile.bind(this);
   }
 
   async readFile(filename) {
