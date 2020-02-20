@@ -10,17 +10,17 @@ export class DumberCache {
     this.clearCache = this.clearCache.bind(this);
   }
 
-  async getCache(hash, meta) {
-    try {
-      return await this.primitives.getLocalCache(hash);
-    } catch (e) {
-      if (meta.packageName) {
-        const object = await this.primitives.getRemoteCache(hash);
-        await this.primitives.setLocalCache(hash, object);
-        return object;
-      }
-      throw e;
-    }
+  async getCache(hash) {
+    // try {
+    return await this.primitives.getLocalCache(hash);
+    // } catch (e) {
+    //   if (meta.packageName) {
+    //     const object = await this.primitives.getRemoteCache(hash);
+    //     await this.primitives.setLocalCache(hash, object);
+    //     return object;
+    //   }
+    //   throw e;
+    // }
   }
 
   async setCache(hash, object) {
