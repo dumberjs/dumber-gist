@@ -4,7 +4,7 @@
     <div class="info-item-value">
       <span if.bind="owner">
         <img src.bind="owner.avatar_url" alt.bind="owner.login">
-        ${owner.login}
+        <a href="" class="cursor-pointer" click.trigger="listGists() & leftClick">${owner.login}</a>
         <span if.bind="ownedByMe" class="text-muted">(me)</span>
       </span>
       <span else>&lt;not set&gt;</span>

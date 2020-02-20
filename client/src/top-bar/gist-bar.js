@@ -156,6 +156,12 @@ export class GistBar {
     }
   }
 
+  listGists() {
+    const {owner} = this;
+    if (!owner) return;
+    this.ea.publish('list-gists', owner.login);
+  }
+
   @computedFrom('session.mutation', 'gistId')
   get renewable() {
     return _.get(this.session, 'files.length') || this.gistId;
@@ -192,7 +198,7 @@ export class GistBar {
 
   @computedFrom('session.gist')
   get owner() {
-    return _.get(this.session, 'gist.owner.login', '');
+    return _.get(this.session, 'gist.owner');
   }
 
   @computedFrom('session.gist', 'user')

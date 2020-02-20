@@ -1,11 +1,13 @@
+import {EventAggregator} from 'aurelia-event-aggregator';
 import {inject, computedFrom, BindingEngine} from 'aurelia-framework';
 import {EditSession} from '../edit/edit-session';
 import {User} from '../github/user';
 import _ from 'lodash';
 
-@inject(BindingEngine, EditSession, User)
+@inject(EventAggregator, BindingEngine, EditSession, User)
 export class GistInfo {
-  constructor(bindingEngine, session, user) {
+  constructor(ea, bindingEngine, session, user) {
+    this.ea = ea;
     this.bindingEngine = bindingEngine;
     this.session = session;
     this.user = user;
@@ -21,6 +23,12 @@ export class GistInfo {
 
   detached() {
     _.each(this.subscribers, s => s.dispose());
+  }
+
+  listGists() {
+    const {owner} = this;
+    if (!owner) return;
+    this.ea.publish('list-gists', owner.login);
   }
 
   @computedFrom('session.gist')

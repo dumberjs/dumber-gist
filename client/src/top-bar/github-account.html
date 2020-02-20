@@ -1,4 +1,4 @@
-<template ref="el" class="app-buttons">
+<template ref="el">
   <i if.bind="!user.authenticated" click.trigger="login() & leftClick" class="fab fa-github"></i>
   <img src.bind="user.avatar_url" alt.bind="user.login" else click.trigger="userMenu($event) & leftClick">
   <i click.trigger="helpMenu() & leftClick" class="ml fas fa-question-circle"></i>

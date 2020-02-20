@@ -18,16 +18,22 @@
           style="font-size:1.2rem;margin-left:.4rem;"></i>
       </div>
 
-      <div class="app-buttons mr-auto" if.bind="insideIframe">
+      <div class="app-buttons app-buttons-fill" if.bind="insideIframe">
         <a
           if.bind="session.gist.id"
-          class="btn clean"
+          class="btn clean mr-2"
+          style="flex: 0 0 auto;"
           target="_blank"
-          href="${clientUrl}/?gist=${session.gist.id}">Open in Dumber Gist</a>
+          href="${clientUrl}/?gist=${session.gist.id}"
+        >
+          <i class="fas fa-open d-tiny"></i>
+          <span class="d-tiny-hide">Open in Dumber Gist</span>
+        </a>
+        <span class="text-truncate" style="flex: 1 0 0;">${session.gist.owner.login} / ${session.description}</span>
       </div>
-      <gist-bar else></gist-bar>
+      <gist-bar else class="app-buttons app-buttons-fill"></gist-bar>
 
-      <div class="app-buttons ml-auto">
+      <div class="app-buttons">
         <button
           class="btn btn-not-last even-size d-small ${showEditorsInSmallLayout ? 'primary' : 'clean'}"
           click.trigger="toggleEditors() & leftClick"><i class="fas fa-code"></i></button>
@@ -36,14 +42,14 @@
           click.trigger="toggleBrowserWindow() & leftClick"><i class="fas fa-window-maximize"></i></button>
       </div>
 
-      <github-account class="ml-auto" if.bind="!insideIframe"></github-account>
+      <github-account class="app-buttons" if.bind="!insideIframe"></github-account>
     </div>
     <div class="app-content">
       <div
         class="app-side-bar ${showSideBarInSmallLayout ? 'show-side-bar' : ''}"
         css="width: ${effectiveSideBarWidth}px;"
       >
-        <file-navigator></file-navigator>
+        <file-navigator inside-iframe.bind="insideIframe"></file-navigator>
         <panel-resizer
           class="d-small-hide"
           style="right: -4px;"

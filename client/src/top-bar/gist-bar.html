@@ -1,4 +1,4 @@
-<template class="app-buttons mr-auto">
+<template>
   <button
     class="btn clean even-size"
     click.trigger="open() & leftClick"><i class="fas fa-inbox"></i><span class="d-small-hide">&nbsp;Open</span></button>
@@ -25,6 +25,6 @@
     class="btn clean even-size ${gistId ? '' : 'disabled'}"
     click.trigger="share() & leftClick"><i class="fas fa-share-square"></i><span class="d-small-hide">&nbsp;Share</span></button>
 
-  <span if.bind="gistId" class="ml-2 text-white d-small-hide selectable"><span>${owner}</span><span class="pl pr">/</span><span>${gistId}</span></span>
+  <span if.bind="gistId" class="ml-2 text-white d-small-hide selectable"><a href="" class="cursor-pointer" click.trigger="listGists() & leftClick">${owner.login}</a><span class="pl pr">/</span><span>${gistId}</span></span>
   <span else class="ml-2 text-muted d-small-hide">&lt;draft gist, unsaved&gt;</span>
 </template>

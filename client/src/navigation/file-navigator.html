@@ -19,7 +19,7 @@
     <quick-start if.bind="fileTree.tree.length === 0"></quick-start>
   </div>
 
-  <div class="section-bar">
+  <div class="section-bar" if.bind="!insideIframe">
     <strong class="ml-2 mr-auto">GitHub Gist</strong>
     <span if.bind="isNew" class="text-muted mr-3">&lt;draft&gt;</span>
     <span else class="text-muted mr-3">
@@ -27,5 +27,5 @@
       <span else>Public</span>
     </span>
   </div>
-  <gist-info></gist-info>
+  <gist-info if.bind="!insideIframe"></gist-info>
 </template>

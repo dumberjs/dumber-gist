@@ -195,11 +195,16 @@ html {
   // border-bottom: 2px solid $gray-1000;
 
   .app-buttons {
-    flex: 0 1 auto;
+    flex: 0 0 auto;
     margin: .5rem .25rem;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
+
+    &.app-buttons-fill {
+      flex: 0 1 100%;
+      min-width: 0;
+    }
 
     > .fas, > .fab, > .far {
       font-size: 1.6rem;
@@ -1273,4 +1278,18 @@ textarea {
   font-size: 1.2rem;
   padding: .75rem 0;
   border-top: 2px dashed $gray-700;
+}
+
+a {
+  color: $gray-200;
+
+  &:visited {
+    color: $gray-200;
+  }
+}
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

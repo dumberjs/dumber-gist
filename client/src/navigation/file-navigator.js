@@ -1,4 +1,4 @@
-import {inject, computedFrom} from 'aurelia-framework';
+import {inject, bindable, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {EditSession} from '../edit/edit-session';
 import {FileTree} from '../edit/file-tree';
@@ -7,6 +7,7 @@ import _ from 'lodash';
 
 @inject(EventAggregator, DndService, EditSession, FileTree)
 export class FileNavigator {
+  @bindable insideIframe;
   collapseFlags = {};
 
   constructor(ea, dndService, session, fileTree) {
