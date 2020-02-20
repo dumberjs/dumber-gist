@@ -13,10 +13,14 @@ const DUMBER_CACHE_PREFIX = cacheUrl + '/';
 export const JSDELIVR_DATA_PREFIX = '//data.jsdelivr.com/v1/package/npm/';
 export const JSDELIVR_PREFIX = '//cdn.jsdelivr.net/npm/';
 
+function globalFetch() {
+  return fetch.apply(global, arguments);
+}
+
 export class CachePrimitives {
   constructor(_localforage, _fetch) {
     this._localforage = _localforage || localforage;
-    this._fetch = _fetch || fetch;
+    this._fetch = _fetch || globalFetch;
   }
 
   async getLocalCacheWithPath(filePath) {
