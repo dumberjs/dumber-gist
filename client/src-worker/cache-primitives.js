@@ -34,15 +34,11 @@ export class CachePrimitives {
   }
 
   async setLocalCacheWithPath(filePath, object) {
-    try {
-      // __dumber_hash was added by cache.dumber.app
-      const hash = object.__dumber_hash;
-      if (!hash) return;
-      await this._localforage.setItem(hash, object);
-      await this._localforage.setItem(filePath, hash);
-    } catch (e) {
-      // ignore
-    }
+    // __dumber_hash was added by cache.dumber.app
+    const hash = object.__dumber_hash;
+    if (!hash) return;
+    await this._localforage.setItem(hash, object);
+    await this._localforage.setItem(filePath, hash);
   }
 
   async getLocalCache(hash) {
@@ -90,9 +86,21 @@ export class CachePrimitives {
     return hash;
   }
 
+  // local memory cache when localforage is not available
+  npmPackageFilesCache = {};
+
   async getNpmPackageFiles(packageWithVersion) {
-    let files = await this._localforage.getItem('files!npm/' + packageWithVersion);
-    if (files) return files;
+    let files;
+    try {
+      files = await this._localforage.getItem('files!npm/' + packageWithVersion);
+      if (files) return files;
+    } catch (e) {
+      // localforage doesn't work in iframe (shared iframe snippet for dumber-gist).
+      if (this.npmPackageFilesCache[packageWithVersion]) {
+        this.npmPackageFilesCache[packageWithVersion]
+      }
+    }
+
     const response = await this._fetch(JSDELIVR_DATA_PREFIX + packageWithVersion, {mode: 'cors'});
     if (response.ok) {
       files = this.buildFiles((await response.json()).files);
@@ -100,7 +108,12 @@ export class CachePrimitives {
       files = {};
     }
     if (Object.keys(files).length) {
-      await this._localforage.setItem('files!npm/' + packageWithVersion, files);
+      try {
+        await this._localforage.setItem('files!npm/' + packageWithVersion, files);
+      } catch (e) {
+        // localforage doesn't work in iframe (shared iframe snippet for dumber-gist).
+        this.npmPackageFilesCache[packageWithVersion] = files;
+      }
     }
     return files;
   }
@@ -204,7 +217,13 @@ export class CachePrimitives {
       try {
         // Try remote traced cache.
         const result = await this.getRemoteCacheWithPath(pathWithPackageAndVersion);
-        await this.setLocalCacheWithPath('npm/' + pathWithPackageAndVersion, result);
+
+        try {
+          await this.setLocalCacheWithPath('npm/' + pathWithPackageAndVersion, result);
+        } catch (e) {
+          // ignore
+        }
+
         return result;
       } catch (e) {
         // Finally try to read source (not traced).
