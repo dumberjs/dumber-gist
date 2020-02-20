@@ -5,6 +5,7 @@ test('DumberCache reads local cache', async t => {
   const primitives = {
     async getLocalCache(hash) {
       if (hash === 'hash') return {local: 1};
+      throw new Error('no cache');
     },
     async setLocalCache() {
       t.fail('should not call setLocalCache');
@@ -22,50 +23,32 @@ test('DumberCache reads local cache', async t => {
   t.deepEqual(result, {local: 1});
 });
 
-// test('DumberCache does not read remote cache for local file', async t => {
-//   const local = {};
-//   const primitives = {
-//     async getLocalCache() {
-//       throw new Error('');
-//     },
-//     async setLocalCache(hash, object) {
-//       local[hash] = object;
-//     },
-//     async getRemoteCache(hash) {
-//       if (hash === 'hash') return {local: 1};
-//     },
-//     async setRemoteCache() {
-//       t.fail('should not call setRemoteCache');
-//     }
-//   };
+test('DumberCache reports missing cache', async t => {
+  const primitives = {
+    async getLocalCache(hash) {
+      if (hash === 'hash') return {local: 1};
+      throw new Error('no cache');
+    },
+    async setLocalCache() {
+      t.fail('should not call setLocalCache');
+    },
+    async getRemoteCache() {
+      t.fail('should not call getRemoteCache');
+    },
+    async setRemoteCache() {
+      t.fail('should not call setRemoteCache');
+    }
+  };
 
-//   const c = new DumberCache(primitives);
-//   await t.rejects(() => c.getCache('hash', {}));
-//   t.deepEqual(local, {});
-// });
+  const events = [];
+  function _postMessage(action) {
+    events.push(action);
+  }
 
-// test('DumberCache reads remote cache for npm package, and set local cache', async t => {
-//   const local = {};
-//   const primitives = {
-//     async getLocalCache() {
-//       throw new Error();
-//     },
-//     async setLocalCache(hash, object) {
-//       local[hash] = object;
-//     },
-//     async getRemoteCache(hash) {
-//       if (hash === 'hash') return {local: 1};
-//     },
-//     async setRemoteCache() {
-//       t.fail('should not call setRemoteCache');
-//     }
-//   };
-
-//   const c = new DumberCache(primitives);
-//   const result = await c.getCache('hash', {packageName: 'foo'});
-//   t.deepEqual(result, {local: 1});
-//   t.deepEqual(local, {'hash': {local: 1}});
-// });
+  const c = new DumberCache(primitives, _postMessage);
+  await t.rejects(() => c.getCache('hash2', {a: 1}));
+  t.deepEqual(events, [{type: 'miss-cache', meta: {a: 1}}]);
+});
 
 test('DumberCache sets local cache, does not set remote cache for local file', async t => {
   const local = {};

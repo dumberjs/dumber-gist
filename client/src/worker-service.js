@@ -111,6 +111,9 @@ export class WorkerService {
         args: data.args
       });
       return;
+    } else if (type === 'miss-cache') {
+      this.ea.publish('miss-cache', data.meta);
+      return;
     }
 
     const {_currentJob} = this;
