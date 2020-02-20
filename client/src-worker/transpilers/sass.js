@@ -39,6 +39,11 @@ export class SassTranspiler {
       }
     });
 
+    const newFilename = filename.slice(0, -ext.length) + '.css';
+    if (file.content.match(/^\s*$/)) {
+      return {filename: newFilename, content: ''};
+    }
+
     return new Promise((resolve, reject) => {
       Sass.writeFile(cssFiles, () => {
         Sass.compileFile(
@@ -47,7 +52,6 @@ export class SassTranspiler {
             Sass.removeFile(Object.keys(cssFiles), () => {
               if (result.status === 0) {
                 const {text, map} = result;
-                const newFilename = filename.slice(0, -ext.length) + '.css';
                 map.file = newFilename;
                 map.sources = _.map(map.sources, cleanSource);
                 map.sourceRoot = '';

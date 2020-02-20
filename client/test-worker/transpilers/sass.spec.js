@@ -32,6 +32,20 @@ test('SassTranspiler transpile scss file', async t => {
   t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
 
+test('SassTranspiler transpile empty scss file', async t => {
+  const jt = new SassTranspiler();
+  const code = '\n\t\n';
+  const f = {
+    filename: 'src/foo.scss',
+    content: code
+  };
+  const file = await jt.transpile(f, [f]);
+
+  t.equal(file.filename, 'src/foo.css');
+  t.equal(file.content, '');
+  t.notOk(file.sourceMap);
+});
+
 test('SassTranspiler reject broken scss file', async t => {
   const jt = new SassTranspiler();
   const code = '.a {';

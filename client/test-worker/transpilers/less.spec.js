@@ -31,6 +31,20 @@ test('LessTranspiler transpile less file', async t => {
   // t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
 
+test('LessTranspiler transpile empty less file', async t => {
+  const jt = new LessTranspiler();
+  const code = '\n\t\n';
+  const f = {
+    filename: 'src/foo.less',
+    content: code
+  };
+  const file = await jt.transpile(f, [f]);
+
+  t.equal(file.filename, 'src/foo.css');
+  t.equal(file.content, '');
+  t.notOk(file.sourceMap);
+});
+
 test('LessTranspiler reject broken less file', async t => {
   const jt = new LessTranspiler();
   const code = '.a {';
