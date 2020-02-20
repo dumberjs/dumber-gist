@@ -19,6 +19,7 @@ export class DumberCache {
         await this.primitives.setLocalCache(hash, object);
         return object;
       }
+      throw e;
     }
   }
 

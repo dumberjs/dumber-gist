@@ -55,7 +55,7 @@ export class Jsdelivr {
 
       // Patch package.json with name and forced main
       if (filePath === 'package.json') {
-        const meta = JSON.parse(packageJson);
+        const meta = JSON.parse(JSON.stringify(packageJson));
         if (meta.name !== name) {
           meta.name = name;
         }
