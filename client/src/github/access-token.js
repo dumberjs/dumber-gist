@@ -1,11 +1,16 @@
 import {computedFrom} from 'aurelia-framework';
+import localforage from 'localforage';
 const storageKey = 'github-oauth-token';
 
 export class AccessToken {
   _token = null;
 
   constructor() {
-    let json = localStorage.getItem(storageKey);
+    this.init();
+  }
+
+  async init() {
+    let json = await localforage.getItem(storageKey);
     if (json) {
       this._token = JSON.parse(json);
     }
@@ -21,12 +26,12 @@ export class AccessToken {
     return this._token ? this._token.scope : null;
   }
 
-  setToken(token) {
+  async setToken(token) {
     this._token = token;
     if (token) {
-      localStorage.setItem(storageKey, JSON.stringify(token));
+      await localforage.setItem(storageKey, JSON.stringify(token));
     } else {
-      localStorage.removeItem(storageKey)
+      await localforage.removeItem(storageKey)
     }
   }
 }

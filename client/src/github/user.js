@@ -18,36 +18,36 @@ export class User {
     this.load();
   }
 
-  setAnonymous() {
+  async setAnonymous() {
     this.authenticated = false;
     this.login = null;
     this.avatar_url = null;
-    this.accessToken.setToken(null);
+    await this.accessToken.setToken(null);
   }
 
   async load() {
     if (this.accessToken.value) {
       this.loading = true;
-      return this.api.fetch('user')
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          }
-          return null;
-        })
-        .then(user => {
-          if (user) {
-            this.authenticated = true;
-            this.login = user.login;
-            this.avatar_url = user.avatar_url;
-          } else {
-            this.setAnonymous();
-          }
-        })
-        .catch()
-        .then(() => this.loading = false);
+
+      try {
+        const response = await this.api.fetch('user')
+        const user = response.ok ?
+          await response.json() :
+          null;
+        if (user) {
+          this.authenticated = true;
+          this.login = user.login;
+          this.avatar_url = user.avatar_url;
+        } else {
+          await this.setAnonymous();
+        }
+      } catch(e) {
+        // ignore
+      }
+
+      this.loading = false;
+    } else {
+      await this.setAnonymous();
     }
-    this.setAnonymous();
-    return Promise.resolve(null);
   }
 }

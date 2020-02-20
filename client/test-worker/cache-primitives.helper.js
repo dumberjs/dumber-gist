@@ -17,23 +17,6 @@ function mockLocalforage(db = {}) {
   };
 }
 
-function mockLocalStorage(db = {}) {
-  return {
-    getItem(key) {
-      return db[key];
-    },
-    setItem(key, value) {
-      db[key] = value;
-      return value;
-    },
-    clear() {
-      Object.getOwnPropertyNames(db).forEach(function (prop) {
-        delete db[prop];
-      });
-    }
-  };
-}
-
 function mkResponse (text) {
   return {
     ok: true,
@@ -81,6 +64,6 @@ function mockFetch(remote = {}) {
   }
 }
 
-export default function create(db = {}, remote = {}, localDb = {}) {
-  return new CachePrimitives(mockLocalforage(db), mockFetch(remote), mockLocalStorage(localDb));
+export default function create(db = {}, remote = {}) {
+  return new CachePrimitives(mockLocalforage(db), mockFetch(remote));
 }
