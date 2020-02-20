@@ -61,7 +61,28 @@ test('getNpmPackageFiles gets files from remote, and set local cache', async t =
   });
 });
 
-test('getNpmPackageFiles gets files from set local cache', async t => {
+test('getNpmPackageFiles gets files from remote, ignores unavailable local cache', async t => {
+  const remote = {
+    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+      files: [
+        {type: 'file', name: 'package.json'},
+        {
+          type: 'directory',
+          name: 'dist',
+          files: [
+            {type: 'file', name: 'index.js'}
+          ]
+        }
+      ]
+    }
+  };
+
+  const p = create(undefined, remote);
+  const files = await p.getNpmPackageFiles('foo@1.0.0');
+  t.deepEqual(files, {'package.json': 1, 'dist/index.js': 1});
+});
+
+test('getNpmPackageFiles gets files local cache', async t => {
   const db = {
     'files!npm/foo@1.0.0':  {'package.json': 1, 'dist/index.js': 1}
   };
@@ -102,6 +123,30 @@ test('doesJsdelivrFileExist checks files from remote', async t => {
   t.deepEqual(db, {
     'files!npm/foo@1.0.0':  {'package.json': 1, 'dist/index.js': 1}
   });
+  t.ok(await p.doesJsdelivrFileExist('foo@1.0.0', 'dist/index.js'));
+  t.notOk(await p.doesJsdelivrFileExist('foo@1.0.0', 'dist'));
+  t.notOk(await p.doesJsdelivrFileExist('foo@1.0.0', 'unknown'));
+  t.notOk(await p.doesJsdelivrFileExist('foo@1.0.0', 'dist/unknown'));
+});
+
+test('doesJsdelivrFileExist checks files from remote, ignores unavailable local cache', async t => {
+  const remote = {
+    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+      files: [
+        {type: 'file', name: 'package.json'},
+        {
+          type: 'directory',
+          name: 'dist',
+          files: [
+            {type: 'file', name: 'index.js'}
+          ]
+        }
+      ]
+    }
+  };
+
+  const p = create(undefined, remote);
+  t.ok(await p.doesJsdelivrFileExist('foo@1.0.0', 'package.json'));
   t.ok(await p.doesJsdelivrFileExist('foo@1.0.0', 'dist/index.js'));
   t.notOk(await p.doesJsdelivrFileExist('foo@1.0.0', 'dist'));
   t.notOk(await p.doesJsdelivrFileExist('foo@1.0.0', 'unknown'));
@@ -177,6 +222,18 @@ test('getJsdelivrFile gets remote package.json, and cache raw content', async t 
   });
 });
 
+test('getJsdelivrFile gets remote package.json, ignores unavailable local cache', async t => {
+  const remote = {
+    '//cdn.jsdelivr.net/npm/foo@1.0.0/package.json': '{"name":"foo"}'
+  };
+  const p = create(undefined, remote);
+  const file = await p.getJsdelivrFile('foo@1.0.0', 'package.json');
+  t.deepEqual(file, {
+    path: '//cdn.jsdelivr.net/npm/foo@1.0.0/package.json',
+    contents: '{"name":"foo"}'
+  });
+});
+
 test('getJsdelivrFile reads local cached raw package.json', async t => {
   const db = {
     'raw!npm/foo@1.0.0/package.json': '{"name":"foo"}'
@@ -246,9 +303,7 @@ test('getNpmPackageFile gets file from local cache', async t => {
 });
 
 test('getNpmPackageFile gets file from remote cache, add it to local cache', async t => {
-  const db = {
-
-  };
+  const db = {};
   const remote = {
     '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
       files: [
@@ -281,6 +336,34 @@ test('getNpmPackageFile gets file from remote cache, add it to local cache', asy
       __dumber_hash: 'hash',
       foo: 'bar'
     }
+  });
+});
+
+test('getNpmPackageFile gets file from remote cache, ignores unavailable local cache', async t => {
+  const remote = {
+    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+      files: [
+        {type: 'file', name: 'package.json'},
+        {
+          type: 'directory',
+          name: 'dist',
+          files: [
+            {type: 'file', name: 'index.js'}
+          ]
+        }
+      ]
+    },
+    'https://cache.dumber.local/npm/foo@1.0.0/dist/index.js': {
+      __dumber_hash: 'hash',
+      foo: 'bar'
+    }
+  };
+
+  const p = create(undefined, remote);
+  const result = await p.getNpmPackageFile('foo@1.0.0', 'dist/index.js');
+  t.deepEqual(result, {
+    __dumber_hash: 'hash',
+    foo: 'bar'
   });
 });
 

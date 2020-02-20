@@ -86,7 +86,7 @@ export class CachePrimitives {
     return hash;
   }
 
-  // local memory cache when localforage is not available
+  // local memory cache when indexeddb is not available in safari iframe
   npmPackageFilesCache = {};
 
   async getNpmPackageFiles(packageWithVersion) {
@@ -95,7 +95,7 @@ export class CachePrimitives {
       files = await this._localforage.getItem('files!npm/' + packageWithVersion);
       if (files) return files;
     } catch (e) {
-      // localforage doesn't work in iframe (shared iframe snippet for dumber-gist).
+      // indexeddb doesn't work in safari iframe (shared iframe snippet for dumber-gist).
       if (this.npmPackageFilesCache[packageWithVersion]) {
         this.npmPackageFilesCache[packageWithVersion]
       }
@@ -111,7 +111,7 @@ export class CachePrimitives {
       try {
         await this._localforage.setItem('files!npm/' + packageWithVersion, files);
       } catch (e) {
-        // localforage doesn't work in iframe (shared iframe snippet for dumber-gist).
+        // indexeddb doesn't work in safari iframe (shared iframe snippet for dumber-gist).
         this.npmPackageFilesCache[packageWithVersion] = files;
       }
     }
@@ -138,6 +138,7 @@ export class CachePrimitives {
         return {path: url, contents};
       } catch (e) {
         // ignore
+        // indexeddb doesn't work in safari iframe (shared iframe snippet for dumber-gist).
       }
     }
 
@@ -161,6 +162,7 @@ export class CachePrimitives {
           await this.setLocalRawFileCache('npm/' + pathWithPackageAndVersion, contents);
         } catch (e) {
           // ignore
+          // indexeddb doesn't work in safari iframe (shared iframe snippet for dumber-gist).
         }
       }
 
@@ -222,6 +224,7 @@ export class CachePrimitives {
           await this.setLocalCacheWithPath('npm/' + pathWithPackageAndVersion, result);
         } catch (e) {
           // ignore
+          // indexeddb doesn't work in safari iframe (shared iframe snippet for dumber-gist).
         }
 
         return result;
