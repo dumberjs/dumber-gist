@@ -73,7 +73,7 @@ export class BrowserFrame {
     }
   }
 
-  missCache({meta}) {
+  missCache(meta) {
     const {packageName} = meta;
     if (packageName && this.missedCache.indexOf(packageName) === -1) {
       // Rebuild the array for easier observation in Aurelia 1.
