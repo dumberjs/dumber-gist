@@ -27,7 +27,9 @@ class Dumber {
   }
 }
 
-function auFindDeps() {}
+const auFindDeps = {
+  findDeps() {}
+};
 
 const dumberCache = {
   async getCache() {},
@@ -148,7 +150,7 @@ test('DumberSession replaces existing dumber instance with different config', as
   t.notOk(session.instance === instance1);
   t.deepEqual(session.instance.config, {
     skipModuleLoader: true,
-    depsFinder: auFindDeps,
+    depsFinder: auFindDeps.findDeps,
     cache: dumberCache,
     packageFileReader: jsdelivr.create,
     prepend: [HISTORY_HACK_JS, CONSOLE_HACK_JS, 'https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'],
