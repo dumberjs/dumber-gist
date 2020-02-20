@@ -10,6 +10,7 @@ import _ from 'lodash';
 
 @inject(EventAggregator, DndService, SessionId, HistoryTracker, ConsoleLog, Oauth, User)
 export class BrowserFrame {
+  @bindable insideIframe;
   @bindable isBundling;
   @bindable bundlerError;
   missedCache = [];

@@ -78,6 +78,7 @@
           auto-refresh.bind="autoRefresh"
           bundle.call="bundle()"></browser-bar>
         <browser-frame
+          inside-iframe.bind="insideIframe"
           is-bundling.bind="isBundling"
           bundler-error.bind="bundlerError"></browser-frame>
         <browser-dev-tools

@@ -8,7 +8,7 @@
 
       <span>It will be much faster after the cache was created.</span><br>
 
-      <span if.bind="!user.authenticated"><br>Please <button class="btn success small" click.trigger="login() & leftClick"><i class="fab fa-github"></i> Sign In</button> to help contributing the traced cache for npm packages to cache.dumber.app.<br></span>
+      <span if.bind="!user.authenticated && !insideIframe"><br>Please <button class="btn success small" click.trigger="login() & leftClick"><i class="fab fa-github"></i> Sign In</button> to help contributing the traced cache for npm packages to cache.dumber.app.<br></span>
 
       <span if.bind="missedCache.includes('aurelia')" class="text-error"><br>Note it can take up to a minute or two to trace <strong>a new dev release of Aurelia2</strong>, due to latency of downloading many small files from jsdelivr.</span>
     </p>
