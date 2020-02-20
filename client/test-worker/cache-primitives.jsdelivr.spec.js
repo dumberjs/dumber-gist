@@ -262,7 +262,7 @@ test('getNpmPackageFile gets file from remote cache, add it to local cache', asy
         }
       ]
     },
-    '//cache.dumber.local/npm/foo@1.0.0/dist/index.js': {
+    'https://cache.dumber.local/npm/foo@1.0.0/dist/index.js': {
       __dumber_hash: 'hash',
       foo: 'bar'
     }

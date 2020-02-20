@@ -21,9 +21,9 @@ const isTest = NODE_ENV === 'test';
 const domainSubfix = isProd ? 'app' : 'local';
 const hostnames = {
   host: `gist.dumber.${domainSubfix}`,
-  clientUrl: `//gist.dumber.${domainSubfix}`,
-  cacheUrl: `//cache.dumber.${domainSubfix}`,
-  oauthUrl: `//github-oauth.gist.dumber.${domainSubfix}`
+  clientUrl: `https://gist.dumber.${domainSubfix}`,
+  cacheUrl: `https://cache.dumber.${domainSubfix}`,
+  oauthUrl: `https://github-oauth.gist.dumber.${domainSubfix}`
 };
 const HOST_NAMES = `;var HOST_NAMES = ${JSON.stringify(hostnames)};`;
 

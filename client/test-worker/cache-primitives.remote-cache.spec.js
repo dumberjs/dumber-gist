@@ -3,7 +3,7 @@ import create from './cache-primitives.helper';
 
 test('getRemoteCacheWithPath rejects missing cache, gets valid cache', async t => {
   const remote = {
-    '//cache.dumber.local/npm/foo@1.0.0/index.js': {foo: 1}
+    'https://cache.dumber.local/npm/foo@1.0.0/index.js': {foo: 1}
   };
   const p = create({}, remote);
   t.deepEqual(
@@ -15,7 +15,7 @@ test('getRemoteCacheWithPath rejects missing cache, gets valid cache', async t =
 
 test('getRemoteCache rejects missing cache, gets valid cache', async t => {
   const remote = {
-    '//cache.dumber.local/ha/sh': {foo: 1}
+    'https://cache.dumber.local/ha/sh': {foo: 1}
   };
   const p = create({}, remote);
   t.deepEqual(
@@ -38,7 +38,7 @@ test('setRemoteCache sets cache if user is signed in', async t => {
   const p = create({'github-oauth-token' : '{"access_token":"1"}'}, remote);
   await p.setRemoteCache('12345', {a: 1});
   t.deepEqual(remote, {
-    '//cache.dumber.local/12/345': {a: 1}
+    'https://cache.dumber.local/12/345': {a: 1}
   });
   t.deepEqual(
     await p.getRemoteCache('12345'),
