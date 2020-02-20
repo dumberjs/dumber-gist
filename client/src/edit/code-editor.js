@@ -10,6 +10,10 @@ import "codemirror/addon/scroll/annotatescrollbar";
 import "codemirror/addon/search/matchesonscrollbar";
 import "codemirror/addon/search/match-highlighter";
 import "codemirror/addon/lint/lint";
+// import "codemirror/addon/lint/javascript-lint";
+import "codemirror/addon/lint/html-lint";
+import "codemirror/addon/lint/css-lint";
+import "codemirror/addon/lint/json-lint";
 import "codemirror/mode/markdown/markdown";
 import "codemirror/mode/htmlmixed/htmlmixed";
 import "codemirror/mode/vue/vue";
@@ -145,6 +149,28 @@ export class CodeEditor {
         highlightSelectionMatches: {showToken: /\w|-|_|\./},
         gutters: ["CodeMirror-lint-markers"],
         lint: true,
+        //
+        // Cannot use codemirror built-in js-lint now.
+        // it uses jshint but jshint does not support all
+        // latest ES syntax.
+        // {
+        //   // jshint
+        //   esversion: 10,
+        //   undef: true,
+        //   unused: true
+        // },
+        //
+        // There are few linters missing (but possible):
+        // eslint in browser https://github.com/angelozerr/codemirror-lint-eslint/blob/master/eslint-lint.js
+        // sass-lint in browser https://stackoverflow.com/questions/43127937/scss-linter-for-codemirror
+        // less-lint in browser
+        //
+        // The other option is to rely on bundler worker's transpilers
+        // to emit errors, then translate those errors into
+        // codemirror lint data structure to show in the editor.
+        // But this assumes all transpilers emit error with enough
+        // information on location (col, row).
+        //
         extraKeys: {
           // When codemirror has the focus, it consumes almost
           // all keybord events.

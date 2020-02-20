@@ -39,6 +39,10 @@ const drApp = dumber({
   append: [
     isTest && "requirejs(['../test/setup', /^\\.\\.\\/test\\/.+\\.spec$/]);"
   ],
+  deps: [
+    // htmlhint strangely ships with missing "module": "src/core.js".
+    {name: 'htmlhint', main: 'dist/htmlhint.js'}
+  ],
   codeSplit: isTest ? undefined : (moduleId, packageName) => {
     if (!packageName) return 'app-bundle';
     if (packageName === 'codemirror') return 'codemirror-bundle';
