@@ -25,7 +25,12 @@ export class DumberCache {
   }
 
   async setCache(hash, object) {
-    await this.primitives.setLocalCache(hash, object);
+    try {
+      await this.primitives.setLocalCache(hash, object);
+    } catch (e) {
+      // ignore
+    }
+
     if (object.packageName) {
       // Globally share traced result for npm packages
       try {
