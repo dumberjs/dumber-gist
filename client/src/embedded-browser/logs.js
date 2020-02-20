@@ -28,7 +28,8 @@ export class Logs {
   }
 
   updateUserScrolled() {
-    this.userScrolled = this.el.scrollTop + this.el.clientHeight < this.el.scrollHeight;
+    // Give 20 pixels margin.
+    this.userScrolled = this.el.scrollTop + this.el.clientHeight < this.el.scrollHeight - 20;
   }
 
   scrollToBottomIfNeeded() {
