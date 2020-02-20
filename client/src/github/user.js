@@ -15,7 +15,6 @@ export class User {
 
     this.load = this.load.bind(this);
     this._subscriber = bindingEngine.propertyObserver(accessToken, 'value').subscribe(this.load);
-    this.load();
   }
 
   async setAnonymous() {
