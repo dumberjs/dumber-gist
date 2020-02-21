@@ -44,18 +44,21 @@ export class UrlHandler {
       const g = await this.gists.load(gist);
       this.session.loadGist(g);
 
-      if (open) {
-        if (!Array.isArray(open)) open = [open];
-        if (open.length) {
-          _.each(open, fn => this.ea.publish('open-file', fn));
-          // set focus back to first opened file
-          this.ea.publish('open-file', open[0]);
+      // Delay open files to fix edge case on Safari
+      setTimeout(() => {
+        if (open) {
+          if (!Array.isArray(open)) open = [open];
+          if (open.length) {
+            _.each(open, fn => this.ea.publish('open-file', fn));
+            // set focus back to first opened file
+            this.ea.publish('open-file', open[0]);
+          }
+        } else {
+          // Try open readme file if there is one
+          this.ea.publish('open-file', 'README.md');
+          this.ea.publish('open-file', 'readme.md');
         }
-      } else {
-        // Try open readme file if there is one
-        this.ea.publish('open-file', 'README.md');
-        this.ea.publish('open-file', 'readme.md');
-      }
+      });
     }
   }
 
