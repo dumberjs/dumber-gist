@@ -119,6 +119,16 @@ addEventListener('fetch', function(event) {
         }
       }
 
+      // Bypass Chrome issue
+      // https://github.com/dumberjs/dumber-gist/issues/5
+      // https://github.com/paulirish/caltrainschedule.io/issues/49
+      if (
+        event.request.cache === 'only-if-cached' &&
+        event.request.mode !== 'same-origin'
+      ) {
+        return;
+      }
+
       return fetch(event.request);
     })
   );
