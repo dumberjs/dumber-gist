@@ -37,6 +37,10 @@ export class FileNavigator {
     });
   }
 
+  openAny() {
+    this.ea.publish('open-any');
+  }
+
   createFile() {
     this.ea.publish('create-file');
   }
