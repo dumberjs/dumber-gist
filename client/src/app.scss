@@ -363,7 +363,7 @@ html {
 .btn {
   display: inline-block;
   border: 0;
-  padding: .2rem .8rem;
+  padding: .1rem .6rem 0;
   line-height: 1.6rem;
   border-radius: $border-radius;
   margin: 0;
@@ -383,7 +383,7 @@ html {
 
   &.small {
     font-size: .8rem;
-    padding: .1rem .5rem;
+    padding-bottom: .1rem;
   }
 
   + .btn {
@@ -1116,7 +1116,7 @@ input[type='text'] {
     font-weight: bold;
     font-size: .7rem;
     line-height: 1;
-    color: $cyan-dark;
+    color: $green-dark;
     display: block;
     text-align: center;
     position: absolute;
