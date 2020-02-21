@@ -52,7 +52,7 @@ ux-dialog {
   border: 1px solid $gray-700;
   border-radius: $border-radius;
   padding: 3;
-  width: 300px;
+  width: 420px;
   max-height: 100%;
   margin: auto;
   color: $gray-100;
@@ -67,12 +67,11 @@ ux-dialog {
     @media (min-width: $small) {
       width: 600px;
     }
-
-    @media (max-width: $small - .02) and (min-width: $tiny) {
-      width: 420px;
-    }
   }
 
+  @media (max-width: $tiny - .02) {
+    width: 300px;
+  }
 }
 
 ux-dialog > ux-dialog-header {
