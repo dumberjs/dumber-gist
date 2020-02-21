@@ -196,7 +196,7 @@ html {
 
   .app-buttons {
     flex: 0 0 auto;
-    margin: .5rem .25rem;
+    margin: .25rem;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
@@ -212,10 +212,10 @@ html {
       margin: 0 .25rem;
     }
 
-    img {
+    > img {
       cursor: pointer;
-      width: 1.6rem;
-      height: 1.6rem;
+      width: 1.5rem;
+      height: 1.5rem;
       margin: 0 .25rem;
     }
   }
