@@ -57,10 +57,23 @@ if ('serviceWorker' in navigator) {
     document.body.appendChild(script);
   })();
 } else {
-  var msg = 'Service workers are not supported in this browser. Please get a better browser.';
+
+  var insideIframe = (function() {
+    try {
+      return window.self !== window.top;
+    } catch (e) {
+      return true;
+    }
+  })();
+  var msg = 'Service Worker is not supported in this browser.';
+  if (insideIframe) {
+    msg = 'Either this iframe is showing in an insecure (http://) window, or ' + msg;
+  }
+  msg = 'Error: ' + msg;
   console.log(msg);
-  var error = document.createElement('h1');
+  var error = document.createElement('p');
   error.textContent = msg;
+  error.style = 'color: #DD6163; font-size: 16px; margin: 10px;';
   document.querySelector('.flash-screen > div').appendChild(error);
 }
 </script>
