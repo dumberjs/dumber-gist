@@ -7,12 +7,6 @@ html {
   line-height: 1.5;
 }
 
-@media (max-width: $tiny - .02) {
-  html {
-    font-size: 13px;
-  }
-}
-
 .d-block {
   display: block !important;
 }
@@ -113,6 +107,10 @@ html {
   margin-bottom: .75rem !important;
 }
 
+.pl-0 {
+  padding-left: 0 !important;
+}
+
 .pl {
   padding-left: .25rem !important;
 }
@@ -123,6 +121,10 @@ html {
 
 .pl-3 {
   padding-left: .75rem !important;
+}
+
+.pr-0 {
+  padding-right: 0 !important;
 }
 
 .pr {
@@ -209,14 +211,14 @@ html {
     > .fas, > .fab, > .far {
       font-size: 1.6rem;
       cursor: pointer;
-      margin: 0 .25rem;
+      margin: 0 2px;
     }
 
     > img {
       cursor: pointer;
       width: 1.5rem;
       height: 1.5rem;
-      margin: 0 .25rem;
+      margin: 0 2px;
     }
   }
 }
@@ -387,7 +389,7 @@ html {
   }
 
   + .btn {
-    margin-left: .25rem;
+    margin-left: 2px;
   }
 
   &.btn-not-first {
@@ -1256,10 +1258,7 @@ textarea {
 
 .available-item {
   padding: .5rem 1rem;
-
-  &:not(:last-child) {
-    border-bottom: 1px dashed $gray-700;
-  }
+  border-top: 1px dashed $gray-700;
 
   &.selected {
     background-color: $gray-1000;

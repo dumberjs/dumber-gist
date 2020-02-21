@@ -36,10 +36,10 @@
       <div class="app-buttons">
         <button
           class="btn btn-not-last even-size d-small ${showEditorsInSmallLayout ? 'primary' : 'clean'}"
-          click.trigger="toggleEditors() & leftClick"><i class="fas fa-code"></i></button>
+          click.trigger="toggleEditors() & leftClick"><i class="fas fa-code fa-fw"></i></button>
         <button
           class="btn btn-not-first even-size d-small ${showBrowserWindowInSmallLayout ? 'primary' : 'clean'}"
-          click.trigger="toggleBrowserWindow() & leftClick"><i class="fas fa-window-maximize"></i></button>
+          click.trigger="toggleBrowserWindow() & leftClick"><i class="fas fa-window-maximize fa-fw"></i></button>
       </div>
 
       <github-account class="app-buttons" if.bind="!insideIframe"></github-account>
