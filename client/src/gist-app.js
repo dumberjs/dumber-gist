@@ -7,9 +7,9 @@ import {User} from './github/user';
 import {combo} from 'aurelia-combo';
 import _ from 'lodash';
 
-const MIN_PANEL_WIDTH = 160;
+const MIN_PANEL_WIDTH = 300;
 const MIN_DEV_TOOLS_HEIGHT = 50;
-
+const MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS = 600;
 const insideIframe = (function() {
   try {
     return window.self !== window.top;
@@ -73,14 +73,14 @@ export class GistApp {
       this.ea.subscribe('opened-file', () => {
         this.showSideBarInSmallLayout = false;
         this.showEditorsInSmallLayout = true;
-        if (this.windowWidth <= 450) {
+        if (this.windowWidth <= MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS) {
           this.showBrowserWindowInSmallLayout = false;
         }
       }),
       this.ea.subscribe('generated-from-skeleton', () => {
         this.showSideBarInSmallLayout = false;
         this.showBrowserWindowInSmallLayout = true;
-        if (this.windowWidth <= 450) {
+        if (this.windowWidth <= MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS) {
           this.showEditorsInSmallLayout = false;
         }
       }),
@@ -152,7 +152,7 @@ export class GistApp {
       this.editorsWidth = Math.round(.5 * width);
     }
 
-    if (width <= 450 && this.showEditorsInSmallLayout) {
+    if (width <= MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS && this.showEditorsInSmallLayout) {
       this.showBrowserWindowInSmallLayout = false;
     }
 
@@ -236,7 +236,7 @@ export class GistApp {
     this.showEditorsInSmallLayout = !this.showEditorsInSmallLayout;
     if (!this.showEditorsInSmallLayout) {
       this.showBrowserWindowInSmallLayout = true;
-    } else if (this.windowWidth <= 450) {
+    } else if (this.windowWidth <= MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS) {
       this.showBrowserWindowInSmallLayout = false;
     }
   }
@@ -245,7 +245,7 @@ export class GistApp {
     this.showBrowserWindowInSmallLayout = !this.showBrowserWindowInSmallLayout;
     if (!this.showBrowserWindowInSmallLayout) {
       this.showEditorsInSmallLayout = true;
-    } else if (this.windowWidth <= 450) {
+    } else if (this.windowWidth <= MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS) {
       this.showEditorsInSmallLayout = false;
     }
   }
