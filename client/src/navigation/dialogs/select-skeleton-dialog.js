@@ -1,6 +1,7 @@
 import {DialogController} from 'aurelia-dialog';
 import {inject} from 'aurelia-framework';
 import {combo} from 'aurelia-combo';
+import _ from 'lodash';
 
 @inject(DialogController)
 export class SelectSkeletonDialog {
@@ -78,6 +79,41 @@ export class SelectSkeletonDialog {
     this.controller.ok({
       framework: this.framework,
       transpiler: this.transpiler
+    });
+  }
+
+  @combo('up')
+  selectPreviousFramework() {
+    let idx = _.findIndex(this.frameworks, {value: this.framework});
+    idx -= 1;
+    if (idx < 0) {
+      idx = this.frameworks.length - 1;
+    }
+    this.framework = this.frameworks[idx].value;
+    this.scrollIfNeeded();
+  }
+
+  @combo('down')
+  selectNextFramework() {
+    let idx = _.findIndex(this.frameworks, {value: this.framework});
+    idx += 1;
+    if (idx >= this.frameworks.length) {
+      idx = 0;
+    }
+    this.framework = this.frameworks[idx].value;
+    this.scrollIfNeeded();
+  }
+
+  scrollIfNeeded() {
+    setTimeout(() => {
+      const selected = this.list.querySelector('.selection.selected');
+      if (selected) {
+        if (selected.scrollIntoViewIfNeeded) {
+          selected.scrollIntoViewIfNeeded();
+        } else if (selected.scrollIntoView) {
+          selected.scrollIntoView();
+        }
+      }
     });
   }
 }
