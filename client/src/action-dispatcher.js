@@ -142,7 +142,7 @@ export class ActionDispatcher {
   }
 
   deleteNode({filePath, isFolder}) {
-    this.helper.confirm(`Delete ${isFolder ? 'folder' : 'file'} "${filePath}"?`)
+    this.helper.confirm(`Delete ${isFolder ? 'folder' : 'file'} "${filePath}" ?`)
     .then(
       () => {
         if (isFolder) {
