@@ -25,7 +25,6 @@ const insideIframe = (function() {
 @inject(EventAggregator, BindingEngine, DndService, EditSession, OpenedFiles, User)
 export class GistApp {
   insideIframe = insideIframe;
-  clientUrl = HOST_NAMES.clientUrl;
 
   showSideBarInSmallLayout = false;
   showEditorsInSmallLayout = true;
@@ -290,5 +289,22 @@ export class GistApp {
   get effectiveDevToolsHeight() {
     const hight = this.devToolsHeight + this.intention.devTools;
     return hight;
+  }
+
+  @computedFrom('session.gist', 'openedFiles.filenames.length')
+  get dumberGistUrl() {
+    const {gist} = this.session;
+    if (!gist || !gist.id) return '';
+
+    let url = `${HOST_NAMES.clientUrl}/?gist=${gist.id}`;
+
+    const {filenames} = this.openedFiles;
+    if (filenames.length) {
+      url += _(filenames)
+        .map(f => `&open=${encodeURIComponent(f)}`)
+        .join('');
+    }
+
+    return url;
   }
 }
