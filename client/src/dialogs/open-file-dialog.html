@@ -9,7 +9,7 @@
         keydown.trigger="keyDownInFilter($event)"
         focus.one-time="true">
     </ux-dialog-header>
-    <ux-dialog-body ref="list" style="padding-left: 0; padding-right: 0;">
+    <ux-dialog-body ref="list" class="p-0">
       <div
         repeat.for="fn of filteredFilenames"
         class="available-item ${selectedIdx === $index ? 'selected' : ''}"
