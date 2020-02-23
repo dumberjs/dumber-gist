@@ -12,7 +12,8 @@ function clearUp() {
 const ea = {
   publish(event, data) {
     published.push([event, data]);
-  }
+  },
+  subscribe() {}
 }
 
 class TestWorkerService extends WorkerService {
@@ -64,6 +65,35 @@ test('WorkerService queues and executes action', async t => {
 
   const result = await j;
   t.deepEqual(result, {result: 1});
+  t.notOk(w.isWaiting);
+  t.equal(actions.length, 1);
+  t.equal(published.length, 0);
+});
+
+
+test('WorkerService updates token', async t => {
+  clearUp();
+  const w = new TestWorkerService();
+  t.notOk(w.isWaiting);
+
+  const j = w.perform({type: 'update-token', token: {a:1}});
+
+  setTimeout(() => {
+    t.ok(w.isWaiting);
+    t.deepEqual(actions, [{id: 0, type: 'update-token', token: {a:1}, toBundler: true}]);
+    t.equal(published.length, 0);
+
+    w._workerSaid({
+      data: {
+        type: 'ack',
+        id: 0,
+        data: undefined
+      }
+    });
+  });
+
+  const result = await j;
+  t.equal(result, undefined);
   t.notOk(w.isWaiting);
   t.equal(actions.length, 1);
   t.equal(published.length, 0);
