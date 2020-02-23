@@ -60,8 +60,8 @@ export class Oauth {
     window.location = url;
   }
 
-  async logout() {
-    await this.accessToken.setToken(null);
+  logout() {
+    this.accessToken.setToken(null);
     this.ea.publish('info', 'Signed out from GitHub');
   }
 
@@ -89,7 +89,7 @@ export class Oauth {
       .then(body => queryString.parse(body))
       .then(token => this.accessToken.setToken(token))
       .catch(async err => {
-        await this.accessToken.setToken(null);
+        this.accessToken.setToken(null);
         throw err;
       });
   }

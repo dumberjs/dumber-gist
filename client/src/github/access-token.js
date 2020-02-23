@@ -1,18 +1,26 @@
-import {computedFrom} from 'aurelia-framework';
-import localforage from 'localforage';
+import {inject, computedFrom} from 'aurelia-framework';
+import {EventAggregator} from 'aurelia-event-aggregator';
 const storageKey = 'github-oauth-token';
 
+@inject(EventAggregator)
 export class AccessToken {
   _token = null;
 
-  constructor() {
+  constructor(ea) {
+    this.ea = ea;
     this.init();
   }
 
-  async init() {
-    let json = await localforage.getItem(storageKey);
-    if (json) {
-      this._token = JSON.parse(json);
+  init() {
+    try {
+      const json = localStorage.getItem(storageKey);
+      if (json) {
+        this._token = JSON.parse(json);
+        this.ea.publish('update-token', this._token);
+      }
+    } catch (e) {
+      // ignore
+      // localStorage could be unavailable in iframe.
     }
   }
 
@@ -26,12 +34,18 @@ export class AccessToken {
     return this._token ? this._token.scope : null;
   }
 
-  async setToken(token) {
+  setToken(token) {
     this._token = token;
-    if (token) {
-      await localforage.setItem(storageKey, JSON.stringify(token));
-    } else {
-      await localforage.removeItem(storageKey)
+    this.ea.publish('update-token', this._token);
+    try {
+      if (token) {
+        localStorage.setItem(storageKey, JSON.stringify(token));
+      } else {
+        localStorage.removeItem(storageKey)
+      }
+    } catch (e) {
+      // ignore
+      // localStorage could be unavailable in iframe.
     }
   }
 }

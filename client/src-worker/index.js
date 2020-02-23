@@ -44,6 +44,9 @@ onmessage = async function(event) {
       data = await session.update(action.files);
     } else if (type === 'build') {
       data = await session.build();
+    } else if (type === 'update-token') {
+      // sync github token from main window
+      global.__github_token = action.token;
     } else {
       throw new Error(`Unknown action: ${JSON.stringify(action)}`);
     }

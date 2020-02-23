@@ -34,14 +34,20 @@ test('setRemoteCache does not set cache if user is not signed in', async t => {
 });
 
 test('setRemoteCache sets cache if user is signed in', async t => {
-  const remote = {};
-  const p = create({'github-oauth-token' : '{"access_token":"1"}'}, remote);
-  await p.setRemoteCache('12345', {a: 1});
-  t.deepEqual(remote, {
-    'https://cache.dumber.local/12/345': {a: 1}
-  });
-  t.deepEqual(
-    await p.getRemoteCache('12345'),
-    {a: 1}
-  );
+  global.__github_token = {access_token: '1'};
+  try {
+    const remote = {};
+    const p = create({}, remote);
+    await p.setRemoteCache('12345', {a: 1});
+    t.deepEqual(remote, {
+      'https://cache.dumber.local/12/345': {a: 1}
+    });
+    t.deepEqual(
+      await p.getRemoteCache('12345'),
+      {a: 1}
+    );
+  } catch (e) {
+    delete global.__github_token;
+    throw e;
+  }
 });

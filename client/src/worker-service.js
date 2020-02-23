@@ -21,6 +21,10 @@ export class WorkerService {
     this._workerSaid = this._workerSaid.bind(this);
     this._bootUpBundlerWorker();
     this._bootUpServiceWorker();
+
+    this._tokenUpdator = this.ea.subscribe('update-token', async token => {
+      await this.perform({type: 'update-token', token});
+    });
   }
 
   // waiting for worker to finish some work

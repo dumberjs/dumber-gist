@@ -21,7 +21,7 @@ export class User {
     this.authenticated = false;
     this.login = null;
     this.avatar_url = null;
-    await this.accessToken.setToken(null);
+    this.accessToken.setToken(null);
   }
 
   async load() {
