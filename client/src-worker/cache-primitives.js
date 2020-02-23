@@ -189,7 +189,7 @@ export class CachePrimitives {
     // Only set remote cache if user signed in.
     const token = global.__github_token;
     if (!token) return;
-    const {accessToken} = token;
+    const accessToken = token.access_token;
     if (!accessToken) return;
 
     return await this._fetch(cacheUrl, {
