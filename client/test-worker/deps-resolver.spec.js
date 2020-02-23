@@ -61,21 +61,64 @@ class TurboResolver {
 }
 
 test('DepsResolver lists empty deps', async t => {
-  const r = new DepsResolver(() => new TurboResolver());
+  const primitives = {
+    async getLocalCache() {
+      t.fail('Should not called getLocalCache');
+    },
+    async setLocalCache() {
+      t.fail('Should not called setLocalCache');
+    }
+  }
+  const r = new DepsResolver(() => new TurboResolver(), primitives);
   const deps = await r.resolve({});
   t.equal(deps.length, 0);
 });
 
-test('DepsResolver lists all deps from appDependencies', async t => {
-  const r = new DepsResolver(() => new TurboResolver());
+test('DepsResolver lists all deps from appDependencies, set cache, then reads from cache', async t => {
+  const db = {}
+  const primitives = {
+    async getLocalCache(hash) {
+      if (db[hash]) return db[hash];
+      throw new Error('no cache');
+    },
+    async setLocalCache(hash, object) {
+      db[hash] = object;
+    }
+  }
+
+  const r = new DepsResolver(() => new TurboResolver(), primitives);
   const deps = await r.resolve({'vue': '^2.0.0'});
   t.deepEqual(deps, [
     {name: 'vue', version: '2.1.0', main: 'dist/vue.min.js', lazyMain: true}
   ]);
+
+  const cached = Object.values(db)[0];
+  t.equal(typeof cached.time, 'number');
+  t.deepEqual(cached.result, [
+    {name: 'vue', version: '2.1.0', main: 'dist/vue.min.js', lazyMain: true}
+  ]);
+
+  const r2 = new DepsResolver(() => ({
+    async resolve() {
+      t.fail('should not call turbo-resolver');
+    }
+  }), primitives);
+  const deps2 = await r2.resolve({'vue': '^2.0.0'});
+  t.deepEqual(deps2, [
+    {name: 'vue', version: '2.1.0', main: 'dist/vue.min.js', lazyMain: true}
+  ]);
 });
 
-test('DepsResolver lists all deps from appDependencies, case 2', async t => {
-  const r = new DepsResolver(() => new TurboResolver());
+test('DepsResolver lists all deps from appDependencies, ignore unavailable primitives error', async t => {
+  const primitives = {
+    async getLocalCache() {
+      throw new Error('indexeddb is not available');
+    },
+    async setLocalCache() {
+      throw new Error('indexeddb is not available');
+    }
+  }
+  const r = new DepsResolver(() => new TurboResolver(), primitives);
   const deps = await r.resolve({'inferno': '^7.0.0'});
   t.deepEqual(deps, [
     {name: 'inferno', version: '7.4.0', main: 'dist/index.dev.esm.js', lazyMain: true},
@@ -85,7 +128,15 @@ test('DepsResolver lists all deps from appDependencies, case 2', async t => {
 });
 
 test('DepsResolver lists all deps from appDependencies and resDependencies', async t => {
-  const r = new DepsResolver(() => new TurboResolver());
+  const primitives = {
+    async getLocalCache() {
+      throw new Error('indexeddb is not available');
+    },
+    async setLocalCache() {
+      throw new Error('indexeddb is not available');
+    }
+  }
+  const r = new DepsResolver(() => new TurboResolver(), primitives);
   const deps = await r.resolve({'aurelia-bootstrapper': '^2.0.0'});
   t.deepEqual(deps, [
     {name: 'aurelia-binding', version: '2.0.0', lazyMain: true},
@@ -95,7 +146,15 @@ test('DepsResolver lists all deps from appDependencies and resDependencies', asy
 });
 
 test('DepsResolver kepts only max version for duplicated package versions', async t => {
-  const r = new DepsResolver(() => new TurboResolver());
+  const primitives = {
+    async getLocalCache() {
+      throw new Error('indexeddb is not available');
+    },
+    async setLocalCache() {
+      throw new Error('indexeddb is not available');
+    }
+  }
+  const r = new DepsResolver(() => new TurboResolver(), primitives);
   const deps = await r.resolve({'foo': '^1.0.0', 'bar': '^2.0.0'});
   t.deepEqual(deps, [
     {name: 'bar', version: '2.1.2', lazyMain: true},
