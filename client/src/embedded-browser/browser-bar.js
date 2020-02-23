@@ -8,6 +8,7 @@ import {HistoryTracker} from '../history-tracker';
 @inject(EventAggregator, DialogService, EditSession, HistoryTracker)
 export class BrowserBar {
   @bindable isBundling;
+  @bindable insideIframe;
   @bindable({defaultBindingMode: bindingMode.twoWay}) autoRefresh;
   @bindable bundle;
 
@@ -34,7 +35,10 @@ export class BrowserBar {
     this.dialogService.open({
       viewModel: BrowserConfigDialog,
       model: {
-        autoRefresh: this.autoRefresh
+        config: {
+          autoRefresh: this.autoRefresh,
+        },
+        insideIframe: this.insideIframe
       }
     }).whenClosed(response => {
       if (response.wasCancelled) return;

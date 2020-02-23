@@ -12,6 +12,7 @@ import {OpenedFiles} from './edit/opened-files';
 import {Gists} from './github/gists';
 import {User} from './github/user';
 import {combo} from 'aurelia-combo';
+import localforage from 'localforage';
 import _ from 'lodash';
 
 @noView()
@@ -36,6 +37,7 @@ export class ActionDispatcher {
     this.forkGist = this.forkGist.bind(this);
     this.openAny = this.openAny.bind(this);
     this.listGists = this.listGists.bind(this);
+    this.resetCache = this.resetCache.bind(this);
   }
 
   attached() {
@@ -57,7 +59,8 @@ export class ActionDispatcher {
       }),
       this.ea.subscribe('fork-gist', this.forkGist),
       this.ea.subscribe('open-any', this.openAny),
-      this.ea.subscribe('list-gists', this.listGists)
+      this.ea.subscribe('list-gists', this.listGists),
+      this.ea.subscribe('reset-cache', this.resetCache),
     ];
   }
 
@@ -285,5 +288,14 @@ export class ActionDispatcher {
       });
     })
     .catch(err => this.ea.publish('error', err.message));
+  }
+
+  async resetCache() {
+    try {
+      await localforage.clear();
+      this.ea.publish('success', 'Bundler caches have been cleared!');
+    } catch (e) {
+      // ignore
+    }
   }
 }
