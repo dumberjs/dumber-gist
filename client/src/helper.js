@@ -27,6 +27,8 @@ export class Helper {
       viewModel: WaitingDialog,
       model: {...opts, title}
     }).then(openDialogResult => {
+      // Close the waiting dialog,
+      // and return original promise.
       return promise.finally(() => {
         openDialogResult.controller.cancel();
       });
