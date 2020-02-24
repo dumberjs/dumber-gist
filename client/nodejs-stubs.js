@@ -4,3 +4,5 @@ global.HOST_NAMES = {
   cacheUrl: 'https://cache.dumber.local',
   oauthUrl: 'https://github-oauth.gist.dumber.local'
 };
+
+global.DUMBER_MODULE_LOADER_DIST = 'dumber-module-loader dist content';

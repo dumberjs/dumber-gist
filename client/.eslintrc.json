@@ -22,6 +22,7 @@
   },
   "globals": {
     "requirejs": true,
-    "HOST_NAMES": true
+    "HOST_NAMES": true,
+    "DUMBER_MODULE_LOADER_DIST": true
   }
 }

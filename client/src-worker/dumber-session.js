@@ -147,7 +147,7 @@ export class DumberSession {
       prepend: [
         HISTORY_HACK_JS,
         CONSOLE_HACK_JS,
-        'https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'
+        DUMBER_MODULE_LOADER_DIST // provided by gulpfile
       ],
       deps: deps
     };

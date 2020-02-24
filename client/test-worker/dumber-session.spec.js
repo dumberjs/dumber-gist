@@ -80,7 +80,7 @@ test('DumberSession initialises new dumber instance', async t => {
     depsFinder: undefined,
     cache: dumberCache,
     packageFileReader: jsdelivr.create,
-    prepend: [HISTORY_HACK_JS, CONSOLE_HACK_JS, 'https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'],
+    prepend: [HISTORY_HACK_JS, CONSOLE_HACK_JS, 'dumber-module-loader dist content'],
     deps: [
       {name: 'vue', main: 'dist/vue.js', version: '2.1.0', lazyMain: true}
     ]
@@ -102,7 +102,7 @@ test('DumberSession reuses existing dumber instance', async t => {
     depsFinder: undefined,
     cache: dumberCache,
     packageFileReader: jsdelivr.create,
-    prepend: [HISTORY_HACK_JS, CONSOLE_HACK_JS, 'https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'],
+    prepend: [HISTORY_HACK_JS, CONSOLE_HACK_JS, 'dumber-module-loader dist content'],
     deps: []
   });
   const instance1 = session.instance;
@@ -134,7 +134,7 @@ test('DumberSession replaces existing dumber instance with different config', as
     depsFinder: undefined,
     cache: dumberCache,
     packageFileReader: jsdelivr.create,
-    prepend: [HISTORY_HACK_JS, CONSOLE_HACK_JS, 'https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'],
+    prepend: [HISTORY_HACK_JS, CONSOLE_HACK_JS, 'dumber-module-loader dist content'],
     deps: [
       {name: 'vue', main: 'dist/vue.js', version: '2.1.0', lazyMain: true}
     ]
@@ -153,7 +153,7 @@ test('DumberSession replaces existing dumber instance with different config', as
     depsFinder: auFindDeps.findDeps,
     cache: dumberCache,
     packageFileReader: jsdelivr.create,
-    prepend: [HISTORY_HACK_JS, CONSOLE_HACK_JS, 'https://cdn.jsdelivr.net/npm/dumber-module-loader/dist/index.min.js'],
+    prepend: [HISTORY_HACK_JS, CONSOLE_HACK_JS, 'dumber-module-loader dist content'],
     deps: [
       {name: 'aurelia-binding', version: '2.0.0', lazyMain: true},
       {name: 'aurelia-bootstrapper', version: '2.3.3', lazyMain: true},

@@ -27,6 +27,10 @@ const hostnames = {
 };
 const HOST_NAMES = `;var HOST_NAMES = ${JSON.stringify(hostnames)};`;
 
+const distPath = require.resolve('dumber-module-loader/dist/index.min.js');
+const dist = fs.readFileSync(distPath, 'utf8');
+const DUMBER_MODULE_LOADER_DIST = `;var DUMBER_MODULE_LOADER_DIST = ${JSON.stringify(dist)};`;
+
 const finalBundleNames = {};
 
 const drApp = dumber({
@@ -100,6 +104,7 @@ const drWorker = dumber({
   entryBundle: 'bundler-worker',
   prepend: [
     HOST_NAMES,
+    DUMBER_MODULE_LOADER_DIST,
     require.resolve('sass.js/dist/sass.sync.js')
   ],
   deps: [
