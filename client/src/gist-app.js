@@ -84,8 +84,8 @@ export class GistApp {
           this.showEditorsInSmallLayout = false;
         }
       }),
-      this.ea.subscribe('bundle', () => {
-        this.bundle();
+      this.ea.subscribe('bundle-or-reload', () => {
+        this.bundleOrReload();
       })
     ];
     window.addEventListener('resize', this._onResize);
@@ -94,7 +94,17 @@ export class GistApp {
     }
   }
 
-  @combo('ctrl+s', 'command+s')
+  @combo('alt+r')
+  async bundleOrReload() {
+    if (this.isBundling) return;
+    if (this.session.isRendered) {
+      // browser-frame handles reload
+      this.ea.publish('history-reload');
+      return;
+    }
+    await this.bundle();
+  }
+
   async bundle() {
     if (this.session.isRendered) return;
     if (this.isBundling) {
@@ -260,8 +270,7 @@ export class GistApp {
     }
   }
 
-  // TODO test ctrl-w in Win10 Chrome
-  @combo('ctrl+w')
+  @combo('alt+w')
   closeActiveTab(e) {
     if (e && e.stopPropagation) {
       e.stopPropagation();

@@ -8,9 +8,9 @@
             click.trigger="model.autoRefresh = true & leftClick"
           >
             <i class="icon fas ${model.autoRefresh ? 'text-primary fa-check-square' : 'text-muted fa-square'}"></i>
-            <span>
+            <span style="line-height: 1.3;">
               <strong>Automatically refresh the embedded browser</strong>
-              <small><br>Rendering is de-bounced for <span class="badge bg-dark">500ms</span></small>
+              <span><br>Rendering is de-bounced for <span class="badge bg-dark">500ms</span></span>
             </span>
           </div>
           <div
@@ -18,9 +18,9 @@
             click.trigger="model.autoRefresh = false & leftClick"
           >
             <i class="icon fas ${!model.autoRefresh ? 'text-primary fa-check-square' : 'text-muted fa-square'}"></i>
-            <span>
+            <span style="line-height: 1.3;">
               <strong>Manually refresh the embedded browser</strong>
-              <small><br>Either click the refresh button <i class="badge bg-dark fas fa-sync-alt"></i> or use keybord shortcut <span class="badge bg-dark">Ctrl-S</span> or <span class="badge bg-dark">⌘S</span></small>
+              <span><br>Either click the refresh button <i class="badge bg-dark fas fa-sync-alt"></i> or use keybord shortcut <span class="badge bg-dark">Alt-R</span> (<span class="badge bg-dark">⌥ R</span>)</span>
             </span>
           </div>
         </div>

@@ -38,6 +38,7 @@ export class ActionDispatcher {
     this.openAny = this.openAny.bind(this);
     this.listGists = this.listGists.bind(this);
     this.resetCache = this.resetCache.bind(this);
+    this.closeActiveFile = this.closeActiveFile.bind(this);
   }
 
   attached() {
@@ -51,6 +52,7 @@ export class ActionDispatcher {
       this.ea.subscribe('delete-node', this.deleteNode),
       this.ea.subscribe('open-file', fn => this.openedFiles.openFile(fn)),
       this.ea.subscribe('close-file', fn => this.openedFiles.closeFile(fn)),
+      this.ea.subscribe('close-active-file', this.closeActiveFile),
       this.ea.subscribe('renamed-file', ({oldFilename, newFilename}) => {
         this.openedFiles.afterRenameFile(oldFilename, newFilename);
       }),
@@ -68,6 +70,14 @@ export class ActionDispatcher {
     this._subscribers.forEach(s => s.dispose());
   }
 
+  closeActiveFile() {
+    const {filenames, focusedIndex} = this.openedFiles;
+    if (focusedIndex >= 0) {
+      const fn = filenames[focusedIndex];
+      if (fn) this.openedFiles.closeFile(fn);
+    }
+  }
+
   updateFile(file) {
     this.session.updateFile(file.filename, file.content);
   }
@@ -76,8 +86,7 @@ export class ActionDispatcher {
     this.session.updatePath(oldFilePath, newFilePath);
   }
 
-  // TODO test ctrl-n in Win10 Chrome
-  @combo('ctrl+n')
+  @combo('alt+n')
   createFileWithKeyboard(e) {
     if (e && e.stopPropagation) {
       e.stopPropagation();
@@ -86,7 +95,7 @@ export class ActionDispatcher {
     this.createFile();
   }
 
-  @combo('ctrl+p', 'command+p')
+  @combo('ctrl+p', 'alt+p', 'command+p')
   openAnyWithKeyboard(e) {
     if (e && e.stopPropagation) {
       e.stopPropagation();

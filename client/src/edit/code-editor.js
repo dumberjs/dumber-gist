@@ -57,9 +57,7 @@ export class CodeEditor {
   }
 
   closeEditor() {
-    if (this.file) {
-      this.ea.publish('close-file', this.file.filename);
-    }
+    this.ea.publish('close-active-file');
   }
 
   newFile() {
@@ -75,7 +73,7 @@ export class CodeEditor {
   }
 
   bundle() {
-    this.ea.publish('bundle');
+    this.ea.publish('bundle-or-reload');
   }
 
   fileChanged(file) {
@@ -175,11 +173,11 @@ export class CodeEditor {
           // When codemirror has the focus, it consumes almost
           // all keybord events.
           // So we need to bind those shortcuts in editor too.
-          'Ctrl-W': this.closeEditor,
-          'Ctrl-N': this.newFile,
-          'Ctrl-S': this.bundle,
-          'Cmd-S': this.bundle,
+          'Alt-W': this.closeEditor,
+          'Alt-N': this.newFile,
+          'Alt-R': this.bundle,
           'Ctrl-P': this.openAny,
+          'Alt-P': this.openAny,
           'Cmd-P': this.openAny,
           'Tab': cm => {
             // https://codemirror.net/doc/manual.html

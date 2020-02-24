@@ -91,6 +91,41 @@ export const CONSOLE_HACK_JS = `(function() {
 })();
 `;
 
+export const FORWORD_SHORTCUTS = `(function() {
+document.addEventListener('keydown', function (e) {
+  if (e.altKey) {
+    if (e.code === 'KeyW') { // Alt-W
+      parent.postMessage({
+        type: 'short-cut',
+        shortcut: 'close-active-file'
+      }, '*');
+    } else if (e.code === 'KeyN') {// Alt-N
+      parent.postMessage({
+        type: 'short-cut',
+        shortcut: 'create-file'
+      }, '*');
+    } else if (e.code === 'KeyR') { // Alt-R
+      parent.postMessage({
+        type: 'short-cut',
+        shortcut: 'bundle-or-reload'
+      }, '*');
+    }
+  }
+  if (
+    e.code === 'KeyP' &&
+    (e.altKey || e.ctrlKey || e.metaKey)
+  ) {
+    // Ctrl-P, Alt-P, or Cmd-P
+    parent.postMessage({
+      type: 'short-cut',
+      shortcut: 'open-any'
+    }, '*');
+  }
+})
+})();
+`;
+
+
 export class DumberUninitializedError extends Error {
   constructor() {
     super('dumber instance is not initialized!')
@@ -147,6 +182,7 @@ export class DumberSession {
       prepend: [
         HISTORY_HACK_JS,
         CONSOLE_HACK_JS,
+        FORWORD_SHORTCUTS,
         DUMBER_MODULE_LOADER_DIST // provided by gulpfile
       ],
       deps: deps

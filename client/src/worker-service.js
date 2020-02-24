@@ -120,6 +120,12 @@ export class WorkerService {
       return;
     }
 
+    // Forward shortcut from service worker (from embedded app)
+    if (type === 'short-cut') {
+      this.ea.publish(data.shortcut);
+      return;
+    }
+
     const {_currentJob} = this;
     if (!_currentJob) return;
 
