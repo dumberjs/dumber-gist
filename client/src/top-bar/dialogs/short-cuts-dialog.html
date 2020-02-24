@@ -1,0 +1,27 @@
+<template>
+  <ux-dialog class="wide-dialog">
+    <ux-dialog-header>
+      List of Keyboard Short-cuts
+    </ux-dialog-header>
+    <ux-dialog-body class="p-0">
+      <div
+        class="available-item left-right"
+        repeat.for="s of shortcuts"
+        click.trigger="evoke(s.event) & leftClick">
+        <div class="left">
+          <strong>${s.action}</strong>
+          <small if.bind="s.notes"><br>${s.notes}</small>
+        </div>
+        <div class="right">
+          <span repeat.for="c of s.keys">
+            <span class="badge bg-dark" if.bind="c">${c}</span>
+            <br else>
+          </span>
+        </div>
+      </div>
+    </ux-dialog-body>
+    <ux-dialog-footer>
+      <button class="btn ml-auto" click.trigger="controller.cancel() & leftClick">Close</button>
+    </ux-dialog-footer>
+  </ux-dialog>
+</template>

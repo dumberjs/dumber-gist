@@ -1279,6 +1279,21 @@ textarea {
     border-radius: $border-radius;
     border-bottom-color: transparent;
   }
+
+  &.left-right {
+    display: flex;
+    align-items: center;
+
+    > .left {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    > .right {
+      text-align: right;
+      flex: 0 0 auto;
+    }
+  }
 }
 
 .lead {

@@ -5,6 +5,7 @@ import {Oauth} from '../github/oauth';
 import {User} from '../github/user';
 import {SessionId} from '../session-id';
 import {ContextMenu} from '../dialogs/context-menu';
+import {ShortCutsDialog} from './dialogs/short-cuts-dialog';
 
 @inject(EventAggregator, DialogService, SessionId, Oauth, User)
 export class GithubAccount {
@@ -59,14 +60,20 @@ export class GithubAccount {
           {title: 'Dumber Gist', icon: "fab fa-github", href: 'https://github.com/dumberjs/dumber-gist'},
           {separator: true},
           {title: 'GitHub Wiki', href: 'https://github.com/dumberjs/dumber-gist/wiki'},
-          {title: 'GitHub Issues', href: 'https://github.com/dumberjs/dumber-gist/issues'}
+          {title: 'GitHub Issues', href: 'https://github.com/dumberjs/dumber-gist/issues'},
+          {separator: true},
+          {title: 'List of Short-cuts', code: 'short-cuts'}
         ]
       }
     }).whenClosed(response => {
       if (response.wasCancelled) return;
 
       const code = response.output;
-      if (code === 'logout') return this.oauth.logout();
+      if (code === 'short-cuts') return this.listShortCuts();
     });
+  }
+
+  listShortCuts() {
+    this.dialogService.open({viewModel: ShortCutsDialog});
   }
 }
