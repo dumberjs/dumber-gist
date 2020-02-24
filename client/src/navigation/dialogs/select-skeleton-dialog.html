@@ -12,10 +12,10 @@
             >
               <i if.bind="f.icon" class="icon" class.bind="f.icon"></i>
               <img if.bind="f.image" src.bind="f.image" alt.bind="f.label">
-              <span>
-                <strong>${f.label}</strong>
-                <small if.bind="f.description"><br>${f.description}</small>
-              </span>
+              <div>
+                <div class="title">${f.label}</div>
+                <div class="description" if.bind="f.description">${f.description}</div>
+              </div>
             </div>
 
             <small class="text-muted ml-2"><i class="fas fa-info-circle"></i> Angular and Ember are not supported yet.</small>
@@ -33,10 +33,10 @@
               >
                 <i if.bind="f.icon" class="icon" class.bind="f.icon"></i>
                 <img if.bind="f.image" src.bind="f.image" alt.bind="f.label">
-                <span>
-                  <strong>${f.label}</strong>
-                  <small if.bind="f.description"><br>${f.description}</small>
-                </span>
+                <div>
+                  <div class="title">${f.label}</div>
+                  <div class="description" if.bind="f.description">${f.description}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -45,7 +45,10 @@
             <div class="section-header">CSS Language</div>
             <div class="section-body">
               <div class="selection selected">
-                <small>All css/scss/sass/less formats are supported, you can even mix them in the same project.</small>
+                <div>
+                  <div class="description">All css/scss/sass/less formats are supported, you can even mix them in the same project.</div>
+                </div>
+
               </div>
               <small class="text-muted ml-2"><i class="fas fa-info-circle"></i> Stylus is not supported yet.</small>
             </div>
