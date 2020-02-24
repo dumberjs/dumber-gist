@@ -25,14 +25,10 @@
           </div>
         </div>
       </div>
-
-      <button
-        if.bind="!insideIframe"
-        class="btn big d-block w100 mt mb ml-0 mr-0 warning"
-        click.trigger="resetCache() & leftClick">Reset all bundler caches</button>
     </ux-dialog-body>
     <ux-dialog-footer>
       <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
+      <button class="btn error" click.trigger="resetCache() & leftClick">Reset Cache</button>
       <button class="btn ml-auto primary" click.trigger="ok() & leftClick">Save</button>
     </ux-dialog-footer>
   </ux-dialog>

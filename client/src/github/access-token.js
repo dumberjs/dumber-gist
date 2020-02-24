@@ -11,17 +11,23 @@ export class AccessToken {
     this.init();
   }
 
-  init() {
-    try {
-      const json = localStorage.getItem(storageKey);
-      if (json) {
-        this._token = JSON.parse(json);
-        this.ea.publish('update-token', this._token);
-      }
-    } catch (e) {
-      // ignore
-      // localStorage could be unavailable in iframe.
-    }
+  async init() {
+    return new Promise(resolve => {
+      // delay init so others can listen to update-token event.
+      setTimeout(() => {
+        try {
+          const json = localStorage.getItem(storageKey);
+          if (json) {
+            this._token = JSON.parse(json);
+            this.ea.publish('update-token', this._token);
+          }
+        } catch (e) {
+          // ignore
+          // localStorage could be unavailable in iframe.
+        }
+        resolve();
+      });
+    });
   }
 
   @computedFrom('_token')
