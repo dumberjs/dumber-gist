@@ -62,6 +62,8 @@ function callback(entries) {
   if (!entries.length) return;
   if (entries[0].isIntersecting) {
     observer.unobserve(flash);
+    observer.disconnect();
+    observer = undefined;
     _start();
   }
 }
