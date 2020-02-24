@@ -44,20 +44,41 @@
     </div>
   </div>
 <script>
+var observer;
+function _start() {
+  var script = document.createElement('script');
+  // Load dumber-gist app for https://gist.dumber.app/.
+  script.setAttribute('data-main', 'aurelia-bootstrapper');
+  script.src = '/dist/entry-bundle.js';
+  script.type = 'text/javascript';
+  script.charset = 'utf-8';
+  script.async = true;
+  document.body.appendChild(script);
+}
+
+var flash = document.querySelector('.flash-screen');
+
+function callback(entries) {
+  if (!entries.length) return;
+  if (entries[0].isIntersecting) {
+    observer.unobserve(flash);
+    _start();
+  }
+}
 
 if ('serviceWorker' in navigator) {
-  (function() {
-    var script = document.createElement('script');
-    // Load dumber-gist app for https://gist.dumber.app/.
-    script.setAttribute('data-main', 'aurelia-bootstrapper');
-    script.src = '/dist/entry-bundle.js';
-    script.type = 'text/javascript';
-    script.charset = 'utf-8';
-    script.async = true;
-    document.body.appendChild(script);
-  })();
+  try {
+    // Not all browser support IntersectionObserver
+    observer = new IntersectionObserver(callback, {
+      root: null,
+      rootMargin: '10px',
+      threshold: .2
+    });
+    observer.observe(flash);
+  } catch (e) {
+    _start();
+  }
 } else {
-
   var insideIframe = (function() {
     try {
       return window.self !== window.top;
@@ -65,10 +86,12 @@ if ('serviceWorker' in navigator) {
       return true;
     }
   })();
+
   var msg = 'Service Worker is not supported in this browser.';
   if (insideIframe) {
     msg = 'Either this iframe is showing in an insecure (http://) window, or ' + msg;
   }
+
   msg = 'Error: ' + msg;
   console.log(msg);
   var error = document.createElement('p');
