@@ -1,17 +1,9 @@
-addEventListener('install', event => {
-  // The skipWaiting() method allows this service worker to progress from the registration's
-  // waiting position to active even while service worker clients are using the registration.
-  // https://slightlyoff.github.io/ServiceWorker/spec/service_worker/index.html#service-worker-global-scope-skipwaiting
-  event.waitUntil(skipWaiting());
+addEventListener('install', e => {
+  e.waitUntil(skipWaiting());
 });
 
-addEventListener('activate', event => {
-  // The claim() method of the of the Clients interface allows an active Service Worker to set
-  // itself as the active worker for a client page when the worker and the page are in the same
-  // scope. This triggers an oncontrollerchange event on any client pages within the Service
-  // Worker's scope.
-  // https://slightlyoff.github.io/ServiceWorker/spec/service_worker/index.html#clients-claim-method
-  event.waitUntil(clients.claim());
+addEventListener('activate', e => {
+  e.waitUntil(clients.claim());
 });
 
 const DEFAULT_INDEX_HTML = `<!DOCTYPE html>
@@ -55,8 +47,8 @@ function mimeType(filename) {
   return 'text/plain';
 }
 
-addEventListener('message', async function(event) {
-  const {data, source} = event;
+addEventListener('message', async e => {
+  const {data, source} = e;
 
   const {type, id, files} = data;
   if (type === 'sw:update-files') {
@@ -103,16 +95,18 @@ addEventListener('message', async function(event) {
   source.postMessage({type: 'ack', id});
 });
 
-addEventListener('fetch', function(event) {
-  event.respondWith(
-    caches.match(event.request).then(function(response) {
-      if (response) return response;
+addEventListener('fetch', e => {
+  if (!e.request.url.match(/^https:\/\/\w+\.gist\.dumber\.(local|app)/)) return;
+
+  e.respondWith(
+    caches.match(e.request).then(r => {
+      if (r) return r;
 
       if (
-        event.request.method === 'GET' &&
-        event.request.url.startsWith(location.origin + '/')
+        e.request.method === 'GET' &&
+        e.request.url.startsWith(location.origin + '/')
       ) {
-        const pathname = event.request.url.slice(location.origin.length);
+        const pathname = e.request.url.slice(location.origin.length);
         if (isLikeRoute(pathname)) {
           // Return /index.html for HTML5 routes
           return caches.match(location.origin + '/');
@@ -123,13 +117,13 @@ addEventListener('fetch', function(event) {
       // https://github.com/dumberjs/dumber-gist/issues/5
       // https://github.com/paulirish/caltrainschedule.io/issues/49
       if (
-        event.request.cache === 'only-if-cached' &&
-        event.request.mode !== 'same-origin'
+        e.request.cache === 'only-if-cached' &&
+        e.request.mode !== 'same-origin'
       ) {
         return;
       }
 
-      return fetch(event.request);
+      return fetch(e.request);
     })
   );
 });
