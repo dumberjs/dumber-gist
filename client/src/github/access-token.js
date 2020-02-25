@@ -1,5 +1,6 @@
 import {inject, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
+import _ from 'lodash';
 const storageKey = 'github-oauth-token';
 
 @inject(EventAggregator)
@@ -41,6 +42,7 @@ export class AccessToken {
   }
 
   setToken(token) {
+    if (_.isEqual(token, this._token)) return;
     this._token = token;
     this.ea.publish('update-token', this._token);
     try {
