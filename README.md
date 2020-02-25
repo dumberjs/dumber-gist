@@ -1,119 +1,13 @@
 # Dumber Gist
 
-WIP, not always online. https://gist.dumber.app
+https://gist.dumber.app
+
+Wiki: https://github.com/dumberjs/dumber-gist/wiki
 
 An online IDE to write JS SPA prototypes in your own GitHub gists.
 
 Dumber Gist is inspired by [gist-run](https://github.com/gist-run), it is the gist-run on [dumber bundler](https://github.com/dumberjs).
 
-## Structure of the project
+Dumber Gist runs [dumber](https://dumber.js.org/) bundler purely in browser.
 
-### client/src
-
-The main front-end app, it will boot up a service worker. Borrowed many code from [gist-run](https://github.com/gist-run).
-
-### client/src-worker
-
-The front-end worker, runs dumber bundler inside browser. Cache traced local files locally in indexedDB (localforage), cache traced npm files in globally shared `https://cache.dumber.app` (`https://cache.dumber.local` for local dev environment).
-
-Npm packages are retrieved from [jsdelivr](https://www.jsdelivr.com). Dependencies tree is resolved using code borrowed from [stackblitz turbo-resolver](https://github.com/stackblitz/core/tree/master/turbo-resolver).
-
-### client-service-worker
-
-The front-end service worker, generates responses for embedded app `https://[random-32-chars-hex].gist.dumber.app` (`https://0123456789abcdef0123456789abcdef.gist.dumber.local` for local dev environment).
-
-The static resources are not cached by CloudFlare. Because:
-1. CloudFlare free plan doesn't cache wild card DNS name.
-2. it doesn't make any sense to cache unrepeatable host name.
-
-### server/dumber-cache
-
-The back-end for client to save globally shared tracing cache. Note all tracing work is done at front-end, the back-end is very simple. To avoid abuse, saving-cache only applies for front-end signed in with GitHub account. The back-end double-checks user GitHub token.
-
-Caches are saved in `server/dumber-cache/public`. The static files are served directly from nginx, not from passenger.
-
-### server/github-oauth
-
-The back-end for retrieving GitHub token after user attempted GitHub signing in. The back-end exchanges a code with a token. This back-end is necessary for hiding GitHub client secret from front-end side.
-
-The code is based on [gist-run github-oauth-server](https://github.com/gist-run/github-oauth-server).
-
-### nginx.dev.conf
-
-A local nginx dev config file for local development against `gist.dumber.local`. This file is for macOS. It requires some changes to work in Linux. See below for more details.
-
-### nginx.prod.conf
-
-An example config file for production deployment for `gist.dumber.app`, without real certificate and GitHub client secret.
-
-It is deployed to a small box in Digital Ocean. Technical, this single VM structure doesn't scale, but this single VM structure is simplest for local development, also nginx+passenger+nodejs with two extremely simple back-ends should be able to handle very large traffic, even on a $5/month DO box.
-
-In addition, `gist.dumber.app` and `cache.dumber.app` are behind a CloudFlare free plan. Thanks for CloudFlare, all static resources of dumber gist are properly cached in a CDN to enable fast boot up.
-
-## Local dev (macOS)
-
-### Local DNS for gist.dumber.local
-
-Add following line to `/etc/hosts`, this turns on few DNS entries locally.
-
-```sh
-# Use localhost for dumber-gist
-127.0.0.1       gist.dumber.local 0123456789abcdef0123456789abcdef.gist.dumber.local cache.dumber.local github-oauth.gist.dumber.local
-```
-
-### nginx and passenger
-
-    brew install nginx passenger
-
-Overwrite `/usr/local/etc/nginx/nginx.conf` with the content of `nginx.dev.conf`.
-Then need to adjust values of few paths inside the config.
-
-```sh
-# You need to generate a self-signed certificate for these two
-ssl_certificate
-ssl_certificate_key
-
-# You local nodejs path
-passenger_nodejs
-
-# Change to your local dumber-gist folder
-root
-```
-
-Start nginx with
-
-```sh
-brew services restart nginx
-```
-
-You may encounter permission issue that nginx cannot open port 443, try
-
-```sh
-sudo brew services restart nginx
-```
-
-I don't need sudo for port 443 to work for me. I don't remember what I did long time ago to allow port below 1024.
-
-If you use sudo to start nginx, don't worry, as a security feature, nginux will downgrade itself to a user (default to the user of the app) after it was started.
-
-### Start local app
-
-Before browse the app, you need to build `client` code. Run
-
-    cd client/
-    npm i # or yarn or pnpm i
-    npm run build
-
-Optionally, replace `npm run build` with `npm start` to build them in watch mode.
-
-Use Safari, Chrome or Firefox to navigate to `https://gist.dumber.local`.
-
-Note, in watch mode, there is no special dev server to auto refresh browser window. You need to manually refresh browser window after the code changes were built.
-
-If uses Chrome, start Chrome with:
-
-```sh
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --unsafely-treat-insecure-origin-as-secure=https://gist.dumber.local,https://cache.dumber.local,https://github-oauth.gist.dumber.local,https://0123456789abcdef0123456789abcdef.gist.dumber.local
-```
-
-This will bypass ssl check on local self-signed certificate.
+Information on [development](https://github.com/dumberjs/dumber-gist/blob/master/development.md).
