@@ -27,9 +27,7 @@ addEventListener('message', event => {
 
 navigator.serviceWorker.register('/__dumber-gist-worker.js', {scope: './'});
 navigator.serviceWorker.ready.then(function() {
-  setTimeout(function() {
-    parent.postMessage({type: 'worker-up'}, '*');
-  }, 500);
+  parent.postMessage({type: 'worker-up'}, '*');
 });
 
 navigator.serviceWorker.addEventListener('message', function(event) {
