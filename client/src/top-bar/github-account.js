@@ -3,16 +3,14 @@ import {EventAggregator} from 'aurelia-event-aggregator';
 import {DialogService} from 'aurelia-dialog';
 import {Oauth} from '../github/oauth';
 import {User} from '../github/user';
-import {SessionId} from '../session-id';
 import {ContextMenu} from '../dialogs/context-menu';
 import {ShortCutsDialog} from './dialogs/short-cuts-dialog';
 
-@inject(EventAggregator, DialogService, SessionId, Oauth, User)
+@inject(EventAggregator, DialogService, Oauth, User)
 export class GithubAccount {
-  constructor(ea, dialogService, sessionId, oauth, user) {
+  constructor(ea, dialogService, oauth, user) {
     this.ea = ea;
     this.dialogService = dialogService;
-    this.sessionId = sessionId;
     this.oauth = oauth;
     this.user = user;
   }
