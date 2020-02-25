@@ -4,6 +4,7 @@
 scp client/dist/* huocp@a.gist.dumber.app:dumber-gist/client/dist/
 scp client/favicon.ico huocp@a.gist.dumber.app:dumber-gist/client/
 scp client/index.html huocp@a.gist.dumber.app:dumber-gist/client/
+scp client/prefetch.js huocp@a.gist.dumber.app:dumber-gist/client/
 
 scp client-service-worker/* huocp@a.gist.dumber.app:dumber-gist/client-service-worker/
 

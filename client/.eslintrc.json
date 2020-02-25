@@ -18,7 +18,8 @@
     "es2017": true,
     "browser": true,
     "node": true,
-    "worker": true
+    "worker": true,
+    "serviceworker": true
   },
   "globals": {
     "requirejs": true,

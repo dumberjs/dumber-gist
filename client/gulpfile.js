@@ -12,6 +12,8 @@ const terser = require('gulp-terser');
 const gulpif = require('gulp-if');
 const autoprefixer = require('autoprefixer');
 const postcssUrl = require('postcss-url');
+const _ = require('lodash');
+const {generateHash} = require('dumber/lib/shared');
 
 const {NODE_ENV} = process.env;
 
@@ -39,7 +41,11 @@ const drApp = dumber({
   depsFinder: auDepsFinder,
   hash: isProd && !isTest,
   prepend: [
-    HOST_NAMES
+    HOST_NAMES,
+    // For codemirror linter
+    // ignored jshint for now
+    require.resolve('jsonlint/web/jsonlint.js'),
+    require.resolve('csslint/dist/csslint.js')
   ],
   append: [
     isTest && "requirejs(['../test/setup', /^\\.\\.\\/test\\/.+\\.spec$/]);"
@@ -54,12 +60,12 @@ const drApp = dumber({
     return 'deps-bundle';
   },
   onManifest: isTest ? undefined : filenameMap => {
-    finalBundleNames['entry-bundle.js'] = filenameMap['entry-bundle.js'];
+    Object.assign(finalBundleNames, filenameMap);
   }
 });
 
 function clean() {
-  return del(['dist', 'index.html']);
+  return del(['dist', 'index.html', 'prefetch.*.js']);
 }
 
 exports.clean = clean;
@@ -101,7 +107,7 @@ exports.buildApp = buildApp;
 
 const drWorker = dumber({
   src: 'src-worker',
-  hash: isProd,
+  hash: isProd && !isTest,
   entryBundle: 'bundler-worker',
   prepend: [
     HOST_NAMES,
@@ -124,7 +130,7 @@ const drWorker = dumber({
     if (packageName) return 'bundler-other-deps';
   },
   onManifest: function(filenameMap) {
-    finalBundleNames['bundler-worker.js'] = filenameMap['bundler-worker.js'];
+    Object.assign(finalBundleNames, filenameMap);
   }
 });
 
@@ -162,10 +168,25 @@ const buildWorker = gulp.series(
 exports.buildWorker = buildWorker;
 
 function writeIndex() {
+  // Avoid offline cache in dev mode
+  const jsFiles = isProd ?
+    _(finalBundleNames).values().map(f => '/dist/' + f) :
+    [];
+
+  const version = generateHash(jsFiles.join('|'));
+
+  console.log('Update prefetch.js to cache version: ' + version);
+  const prefetchJs = fs.readFileSync('_prefetch.js', 'utf-8')
+    .replace('__cache_name__', version)
+    .replace('__js_files__', JSON.stringify(jsFiles, null, 2));
+  fs.writeFileSync('prefetch.js', prefetchJs);
+
+  console.log('Update index.html');
   const indexHtml = fs.readFileSync('_index.html', 'utf-8')
     .replace('entry-bundle.js', finalBundleNames['entry-bundle.js'])
-    .replace('bundler-worker.js', finalBundleNames['bundler-worker.js']);
+    .replace('bundler-worker.js', finalBundleNames['bundler-worker.js'])
   fs.writeFileSync('index.html', indexHtml);
+
   return Promise.resolve();
 }
 

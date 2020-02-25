@@ -15,8 +15,8 @@ added to cache and then be served as entry of the embedded
 app in the second visible iframe.
 -->
 <script>
-addEventListener('message', event => {
-  var action = event.data;
+addEventListener('message', e => {
+  var action = e.data;
   if (!action || !action.type) return;
 
   // Forward data from parent window to service worker.
@@ -26,17 +26,15 @@ addEventListener('message', event => {
 });
 
 navigator.serviceWorker.register('/__dumber-gist-worker.js', {scope: './'});
-navigator.serviceWorker.ready.then(function() {
-  setTimeout(function() {
-    parent.postMessage({type: 'worker-up'}, '*');
-  }, 500);
+navigator.serviceWorker.addEventListener('message', e => {
+  // Forward data from service worker to parent window.
+  parent.postMessage(e.data, '*');
 });
 
-navigator.serviceWorker.addEventListener('message', function(event) {
-  // Forward data from service worker to parent window.
-  var data = event.data;
-  parent.postMessage(data, '*');
+navigator.serviceWorker.ready.then(() => {
+  parent.postMessage({type: 'worker-up'}, '*');
 });
+
 </script>
 </body>
 </html>

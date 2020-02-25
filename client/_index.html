@@ -7,10 +7,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/0.5.0/modern-normalize.min.css" integrity="sha256-N6+kUxTWxpqVK+BrPWt3t4jeOWPtp37RZEbm5n9X+8U=" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" integrity="sha256-46qynGAkLSFpVbEBog43gvNhfrOj+BmwXdxFgVK/Kvc=" crossorigin="anonymous" />
 
-  <!-- <script src="https://cdn.jsdelivr.net/npm/jshint@2.11.0/dist/jshint.min.js"></script> -->
-  <script src="https://cdn.jsdelivr.net/npm/jsonlint@1.6.3/web/jsonlint.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/csslint@1.0.5/dist/csslint.min.js"></script>
-
   <base href="/">
   <style>
     .flash-screen {
@@ -45,7 +41,8 @@
   </div>
 <script>
 var observer;
-function _start() {
+
+function _startAu() {
   var script = document.createElement('script');
   // Load dumber-gist app for https://gist.dumber.app/.
   script.setAttribute('data-main', 'aurelia-bootstrapper');
@@ -55,6 +52,13 @@ function _start() {
   script.async = true;
   document.body.appendChild(script);
 }
+
+function _start() {
+  // Always check latest prefetch, it may updated cache version.
+  navigator.serviceWorker.register('/prefetch.js', {scope: './'});
+  navigator.serviceWorker.ready.then(_startAu);
+}
+
 
 var flash = document.querySelector('.flash-screen');
 

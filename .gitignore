@@ -15,6 +15,7 @@ yarn.lock
 # Compiled files
 dist
 /client/index.html
+/client/prefetch*
 .nyc_output
 coverage
 
