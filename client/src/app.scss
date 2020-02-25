@@ -206,10 +206,14 @@ html {
 
   .app-buttons {
     flex: 0 0 auto;
-    margin: .25rem;
+    margin: .5rem;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
+
+    @media (max-width: $tiny - .02) {
+      margin: .25rem;
+    }
 
     &.app-buttons-fill {
       flex: 0 1 100%;
@@ -373,18 +377,23 @@ html {
 .btn {
   display: inline-block;
   border: 0;
-  padding: .1rem .6rem 0;
+  padding: .25rem .8rem;
   line-height: 1.6rem;
   border-radius: $border-radius;
   margin: 0;
   text-decoration: none;
   background-color: $gray-100;
   color: $charcoal;
-  font-size: .9rem;
   cursor: pointer;
   text-align: center;
   transition: background-color 200ms ease-in-out, transform 150ms ease;
   appearance: none;
+
+
+  @media (max-width: $tiny - .02) {
+    padding-left: .6rem;
+    padding-right: .6rem;
+  }
 
   &.big {
     font-size: 1.1rem;
@@ -393,11 +402,14 @@ html {
 
   &.small {
     font-size: .8rem;
-    padding-bottom: .1rem;
+    padding: .1rem .6rem;
   }
 
   + .btn {
-    margin-left: 2px;
+    margin-left: 4px;
+    @media (max-width: $tiny - .02) {
+      margin-left: 1px;
+    }
   }
 
   &.btn-not-first {
