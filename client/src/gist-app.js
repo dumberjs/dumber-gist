@@ -7,7 +7,8 @@ import {User} from './github/user';
 import {combo} from 'aurelia-combo';
 import _ from 'lodash';
 
-const MIN_PANEL_WIDTH = 300;
+const MIN_SIDE_BAR_WIDTH = 120;
+const MIN_PANEL_WIDTH = 250;
 const MIN_DEV_TOOLS_HEIGHT = 50;
 const MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS = 600;
 const insideIframe = (function() {
@@ -188,8 +189,8 @@ export class GistApp {
 
     if (this.dnd.model.panel === 'side-bar') {
       let newWidth = this.sideBarWidth + diff;
-      if (newWidth < MIN_PANEL_WIDTH) {
-        newWidth = MIN_PANEL_WIDTH;
+      if (newWidth < MIN_SIDE_BAR_WIDTH) {
+        newWidth = MIN_SIDE_BAR_WIDTH;
       } else if (newWidth > this.windowWidth - 2 * MIN_PANEL_WIDTH) {
         newWidth = this.windowWidth - 2 * MIN_PANEL_WIDTH;
       }
