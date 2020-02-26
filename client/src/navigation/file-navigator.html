@@ -5,8 +5,8 @@
 
   <div class="section-bar">
     <strong class="ml-2 mr-auto">Files</strong>
-    <i if.bind="fileTree.tree.length" class="fas bar-action enabled fa-search mr" click.trigger="openAny() & leftClick"></i>
-    <i class="fas bar-action enabled fa-plus mr" click.trigger="createFile() & leftClick"></i>
+    <i if.bind="fileTree.tree.length" class="fa-fw fas bar-action enabled fa-search mr" click.trigger="openAny() & leftClick"></i>
+    <i class="fa-fw fas bar-action enabled fa-plus mr" click.trigger="createFile() & leftClick"></i>
   </div>
 
   <div class="all-nodes ${dndClass}" ref="dndElement">

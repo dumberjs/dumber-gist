@@ -2,8 +2,8 @@
   <button
     if.bind="!user.authenticated"
     class="btn success even-size mr"
-    click.trigger="login() & leftClick"><i class="fab fa-github"></i><span class="d-small-hide">&nbsp;Sign in</span></button>
+    click.trigger="login() & leftClick"><i class="fa-lg fab fa-github"></i><span class="d-small-hide">&nbsp;Sign in</span></button>
 
   <img src.bind="user.avatar_url" alt.bind="user.login" else click.trigger="userMenu($event) & leftClick">
-  <i click.trigger="helpMenu() & leftClick" class="ml fas fa-question-circle"></i>
+  <i click.trigger="helpMenu() & leftClick" class="ml fa-fw fas fa-question-circle"></i>
 </template>

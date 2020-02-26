@@ -424,11 +424,6 @@ html {
     border-bottom-right-radius: 0;
   }
 
-  .fab, .fas, .far, .fal {
-    line-height: 1.6rem;
-    vertical-align: baseline;
-  }
-
   &.even-size {
     min-width: 3rem;
 
@@ -993,15 +988,9 @@ input[type='text'] {
       .log-line {
         display: block;
         padding: .25rem .5rem;
-        font-size: .9rem;
 
         &:not(:last-child) {
           border-bottom: 1px dashed $gray-800;
-        }
-
-        > .fas, > .far, > .fal, > .fab {
-          width: 1.4rem;
-          text-align: center;
         }
       }
     }
