@@ -354,6 +354,10 @@ html {
   cursor: ew-resize;
   background-color: $gray-800;
 
+  &.resizer-clear-left {
+    right: -5px;
+  }
+
   &:hover {
     transition: transform 150ms ease;
     transform: scaleX(2);
