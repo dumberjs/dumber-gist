@@ -27,15 +27,15 @@
   <div class="dev-details-panel">
     <logs
       class="dev-details"
-      css="height: ${height}px;"
       if.bind="activeTool === 'console'"
+      height.bind="height"
       filter.bind="filter"
       reset-logs.call="resetAppLogs()"
       logs.bind="consoleLog.appLogs"></logs>
     <logs
       class="dev-details"
-      css="height: ${height}px;"
       if.bind="activeTool === 'bundler'"
+      height.bind="height"
       filter.bind="filter"
       reset-logs.call="resetDumberLogs()"
       logs.bind="consoleLog.dumberLogs"></logs>

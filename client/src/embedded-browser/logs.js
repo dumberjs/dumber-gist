@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 @inject(BindingEngine)
 export class Logs {
+  @bindable height;
   @bindable logs;
   @bindable resetLogs;
   @bindable({defaultBindingMode: bindingMode.twoWay}) filter = '';
@@ -25,6 +26,10 @@ export class Logs {
   detached() {
     _.each(this.subscribers, s => s.dispose());
     this.el.removeEventListener('scroll', this.updateUserScrolled);
+  }
+
+  heightChanged() {
+    this.scrollToBottomIfNeeded();
   }
 
   updateUserScrolled() {
