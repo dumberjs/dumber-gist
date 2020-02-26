@@ -349,7 +349,7 @@ html {
   top: 0;
   bottom: 0;
   right: 0;
-  width: 4px;
+  width: 5px;
   z-index: 2;
   cursor: ew-resize;
   background-color: $gray-800;
@@ -361,7 +361,7 @@ html {
 
   &.panel-resizer-horizontal {
     top: -1px;
-    height: 4px;
+    height: 5px;
     width: unset;
     left: 0;
     right: 0;
