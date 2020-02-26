@@ -3,7 +3,7 @@
 @import "gist-editor";
 
 html {
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.5;
 }
 
@@ -988,6 +988,7 @@ input[type='text'] {
       .log-line {
         display: block;
         padding: .25rem .5rem;
+        font-size: 12px;
 
         &:not(:last-child) {
           border-bottom: 1px dashed $gray-800;
