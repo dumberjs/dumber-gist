@@ -9,6 +9,7 @@
               repeat.for="f of frameworks"
               class="selection ${f.value === framework ? 'selected' : ''}"
               click.trigger="framework = f.value & leftClick"
+              dblclick.trigger="ok() & leftClick"
             >
               <i if.bind="f.icon" class="icon" class.bind="f.icon"></i>
               <img if.bind="f.image" src.bind="f.image" alt.bind="f.label">
@@ -30,6 +31,7 @@
                 repeat.for="f of transpilers"
                 class="selection ${f.value === transpiler ? 'selected' : ''}"
                 click.trigger="transpiler = f.value & leftClick"
+                dblclick.trigger="ok() & leftClick"
               >
                 <i if.bind="f.icon" class="icon" class.bind="f.icon"></i>
                 <img if.bind="f.image" src.bind="f.image" alt.bind="f.label">
