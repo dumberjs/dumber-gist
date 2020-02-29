@@ -1,40 +1,23 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Dumber Gist Service Worker</title>
-</head>
-<body>
-<!--
-For https://some-hash.gist.dumber.app/.
-Load boot-up code to init service worker for embedded app.
-This page will be loaded by an invisible iframe to
-setup the service worker.
-Once service worker is in place, a user index.html will be
-added to cache and then be served as entry of the embedded
-app in the second visible iframe.
--->
 <script>
-addEventListener('message', event => {
-  var action = event.data;
-  if (!action || !action.type) return;
+const s = navigator.serviceWorker;
 
+addEventListener('message', e => {
+  if (!e.data || !e.data.type) return;
   // Forward data from parent window to service worker.
-  if (navigator.serviceWorker.controller) {
-    navigator.serviceWorker.controller.postMessage(action);
+  if (s.controller) {
+    s.controller.postMessage(e.data);
   }
 });
 
-navigator.serviceWorker.register('/__dumber-gist-worker.js', {scope: './'});
-navigator.serviceWorker.ready.then(function() {
-  parent.postMessage({type: 'worker-up'}, '*');
-});
+s.register('/__dumber-gist-worker.js').catch(console.error);
+s.ready.then(
+  () => parent.postMessage({type: 'worker-up'}, '*'),
+  console.error
+);
 
-navigator.serviceWorker.addEventListener('message', function(event) {
+s.addEventListener('message', e => {
   // Forward data from service worker to parent window.
-  var data = event.data;
-  parent.postMessage(data, '*');
+  parent.postMessage(e.data, '*');
 });
 </script>
-</body>
-</html>
