@@ -3,6 +3,7 @@
 export class RemoveExpiredSession {
   constructor() {
     this.removeExpired = this.removeExpired.bind(this);
+    this.running = false;
   }
 
   start() {
@@ -10,6 +11,9 @@ export class RemoveExpiredSession {
   }
 
   async removeExpired() {
+    if (this.running) return;
+    this.running = true;
+
     let i = 0;
     let key;
     while ((key = localStorage.key(i)) !== null) {
@@ -24,6 +28,8 @@ export class RemoveExpiredSession {
       }
       i += 1;
     }
+
+    this.running = false;
   }
 
   async _removeServiceWorker(expiredId) {
