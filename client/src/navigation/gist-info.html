@@ -18,7 +18,9 @@
     <div class="info-item-value">
       <textarea
         ref="textarea"
-        value.bind="session.description"></textarea>
+        value.bind="session.description"
+        keydown.trigger="keyDownInDescription($event)"
+        ></textarea>
     </div>
   </div>
 </template>

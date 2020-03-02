@@ -50,4 +50,14 @@ export class GistInfo {
     this.textarea.style.height = 'auto';
     this.textarea.style.height = this.textarea.scrollHeight + 'px';
   }
+
+  keyDownInDescription(e) {
+    if (e.code === 'Enter') {
+      // Prevent enter key's default behavior:
+      // creating new line
+      return false;
+    }
+
+    return true;
+  }
 }
