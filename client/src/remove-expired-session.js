@@ -14,19 +14,20 @@ export class RemoveExpiredSession {
     if (this.running) return;
     this.running = true;
 
-    let i = 0;
-    let key;
-    while ((key = localStorage.key(i)) !== null) {
-      if (key.startsWith('expired:')) {
-        const expired = key.slice(8);
-        try {
+    try {
+      let i = 0;
+      let key;
+      while ((key = localStorage.key(i)) !== null) {
+        if (key.startsWith('expired:')) {
+          const expired = key.slice(8);
           await this._removeServiceWorker(expired);
           localStorage.removeItem(key);
-        } catch (e) {
-          console.error(e);
         }
+        i += 1;
       }
-      i += 1;
+    } catch (e) {
+      // localStorage or service worker could be unavailable in iframe
+      console.error(e);
     }
 
     this.running = false;

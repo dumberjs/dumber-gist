@@ -9,7 +9,12 @@ export class SessionId {
   expireWhenExit() {
     if (process.NODE_ENV === 'test' || !process.browser) return;
     window.addEventListener('unload', () => {
-      localStorage.setItem('expired:' + this.id, (new Date()).toString());
+      try {
+        localStorage.setItem('expired:' + this.id, (new Date()).toString());
+      } catch (e) {
+        // ignore
+        // localStorage could be unavailable in iframe
+      }
     });
   }
 

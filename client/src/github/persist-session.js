@@ -40,13 +40,18 @@ export class PersistSession {
 
       this.editSession.importData(sessionData);
     } catch (e) {
-      console.warn('tryRestoreSession: ' + e.message);
+      // localStorage could be unavailable in iframe
+      console.warn(e);
     }
   }
 
   saveSession() {
-    localStorage.setItem(KEY, JSON.stringify({
-      [this.id]: this._sessionData()
-    }));
+    try {
+      localStorage.setItem(KEY, JSON.stringify({
+        [this.id]: this._sessionData()
+      }));
+    } catch (e) {
+      // localStorage could be unavailable in iframe
+    }
   }
 }
