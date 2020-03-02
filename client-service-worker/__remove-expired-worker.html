@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <script>
 navigator.serviceWorker.getRegistration()
-  .then(r => r.unregister())
+  .then(r => r ? r.unregister() : false)
   .then(
     result => parent.postMessage({_type: 'worker-removed', result}, '*'),
     err => parent.postMessage({_type: 'worker-error', result: err.message}, '*')
