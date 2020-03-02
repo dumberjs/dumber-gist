@@ -27,7 +27,6 @@ export class RemoveExpiredSession {
       }
     } catch (e) {
       // localStorage or service worker could be unavailable in iframe
-      console.error(e);
     }
 
     this.running = false;

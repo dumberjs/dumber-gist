@@ -10,17 +10,19 @@ addEventListener('message', e => {
   }
 });
 
-s.register('/__dumber-gist-worker.js').catch(console.error);
+function handleError (err) {
+  console.error(err);
+  parent.postMessage({
+    type: 'app-console',
+    method: 'error',
+    args: [err.message]
+  });
+}
+
+s.register('/__dumber-gist-worker.js').catch(handleError);
 s.ready.then(
   () => parent.postMessage({type: 'worker-up'}, '*'),
-  err => {
-    console.error(err);
-    parent.postMessage({
-      type: 'app-console',
-      method: 'error',
-      args: [err.message]
-    });
-  }
+  handleError
 );
 
 s.addEventListener('message', e => {
