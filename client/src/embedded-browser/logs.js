@@ -11,7 +11,7 @@ export class Logs {
 
   constructor(bindingEngine) {
     this.bindingEngine = bindingEngine;
-    this.scrollToBottomIfNeeded = _.debounce(this.scrollToBottomIfNeeded.bind(this));
+    this.scrollToBottomIfNeeded = _.debounce(this.scrollToBottomIfNeeded.bind(this), 100);
     this.updateUserScrolled = this.updateUserScrolled.bind(this);
   }
 
