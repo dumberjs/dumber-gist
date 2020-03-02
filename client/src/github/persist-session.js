@@ -1,16 +1,18 @@
 import {inject} from 'aurelia-framework';
 import {SessionId} from '../session-id';
 import {EditSession} from '../edit/edit-session';
+import {InitParams} from '../init-params';
 import _ from 'lodash';
 
 const KEY = 'dumber-gist-session:';
 
 // Save session data before user attempt login,
 // restore them after logged in (or cancelled login).
-@inject(SessionId, EditSession)
+@inject(SessionId, InitParams, EditSession)
 export class PersistSession {
-  constructor(sessionId, editSession) {
+  constructor(sessionId, params, editSession) {
     this.id = sessionId.id;
+    this.previousId = params.sessionId;
     this.editSession = editSession;
   }
 
@@ -33,7 +35,7 @@ export class PersistSession {
       localStorage.removeItem(KEY);
       data = JSON.parse(data);
 
-      const sessionData = data[this.id];
+      const sessionData = data[this.previousId];
       if (!sessionData) return;
 
       this.editSession.importData(sessionData);
