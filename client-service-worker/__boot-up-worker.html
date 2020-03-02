@@ -13,7 +13,14 @@ addEventListener('message', e => {
 s.register('/__dumber-gist-worker.js').catch(console.error);
 s.ready.then(
   () => parent.postMessage({type: 'worker-up'}, '*'),
-  console.error
+  err => {
+    console.error(err);
+    parent.postMessage({
+      type: 'app-console',
+      method: 'error',
+      args: [err.message]
+    });
+  }
 );
 
 s.addEventListener('message', e => {

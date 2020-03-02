@@ -47,11 +47,16 @@ export class WorkerService {
     let resolveWorker = null;
     this._dumberWorkerUp = new Promise(resolve => resolveWorker = resolve);
 
-    const handleMessage = event => {
-      if (event.data && event.data.type === 'worker-up') {
+    const handleMessage = e => {
+      if (!e.data) return;
+      const {type} = e.data;
+      if (type === 'worker-up') {
         console.info('Bundler Worker is up.');
         this.bundler.onmessage = this._workerSaid;
         resolveWorker();
+      } else {
+        // Forward to _workerSaid
+        this._workerSaid(e);
       }
     };
 
@@ -75,12 +80,17 @@ export class WorkerService {
     let resolveWorker = null;
     this._serviceWorkerUp = new Promise(resolve => resolveWorker = resolve);
 
-    const handleMessage = event => {
-      if (event.data && event.data.type === 'worker-up') {
+    const handleMessage = e => {
+      if (!e.data) return;
+      const {type} = e.data;
+      if (type === 'worker-up') {
         console.info(`Service Worker is up on ${host}`);
         removeEventListener('message', handleMessage);
         addEventListener('message', this._workerSaid);
         resolveWorker();
+      } else {
+        // Forward to _workerSaid
+        this._workerSaid(e);
       }
     };
 
@@ -88,8 +98,8 @@ export class WorkerService {
   }
 
   // Handle both bundler worker and service worker.
-  _workerSaid(event) {
-    const {data} = event;
+  _workerSaid(e) {
+    const {data} = e;
     if (!data) return;
     const {type} = data;
     if (!type) return;
