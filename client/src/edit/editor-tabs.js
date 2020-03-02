@@ -36,6 +36,16 @@ export class EditorTabs {
       }
     }
   }
+
+  afterReordering(filenames, change) {
+    if (this.openedFiles.focusedIndex !== change.toIndex) {
+      this.openedFiles.focusedIndex = change.toIndex;
+    } else {
+      // Force a mutation
+      this.openedFiles.focusedIndex = change.toIndex - 1;
+      this.openedFiles.focusedIndex = change.toIndex;
+    }
+  }
 }
 
 export class LastPartValueConverter {

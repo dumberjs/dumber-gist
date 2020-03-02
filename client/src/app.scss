@@ -727,6 +727,7 @@ $node-start-offset: .6rem;
   color: $gray-600;
   white-space: nowrap;
   vertical-align: middle;
+  background-color: $gray-1000;
 
   span {
     flex: 0 1 auto;
@@ -1325,4 +1326,11 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.reorderable-repeat-reordering,
+.reorderable-repeat-dragging-me {
+  .close-file {
+    visibility: hidden;
+  }
 }

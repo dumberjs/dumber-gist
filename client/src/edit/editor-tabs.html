@@ -1,6 +1,8 @@
 <template class="section-bar" ref="el">
   <div
-    repeat.for="filename of openedFiles.filenames"
+    reorderable-repeat.for="filename of openedFiles.filenames"
+    reorderable-direction="right"
+    reorderable-after-reordering="afterReordering"
     class="tab ${openedFiles.focusedIndex === $index ? 'active' : ''}"
     click.trigger="openedFiles.focusedIndex = $index & leftClick"
   >
