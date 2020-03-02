@@ -7,6 +7,14 @@ export class SessionId {
   constructor(params) {
     this.params = params;
     this.id = this._generateId();
+    this.expireWhenExit();
+  }
+
+  expireWhenExit() {
+    if (process.NODE_ENV === 'test' || !process.browser) return;
+    window.addEventListener('unload', () => {
+      localStorage.setItem('expired:' + this.id, (new Date()).toString());
+    });
   }
 
   // id is the unique identifier for every dumber-gist instance.
@@ -14,17 +22,6 @@ export class SessionId {
   _generateId() {
     if (this.params.sessionId) {
       return this.params.sessionId;
-    }
-
-    if (process.env.NODE_ENV !== 'production') {
-      // Simplify dev app setup with a never-change session id.
-      // For local dev, change local /etc/hosts
-      // add following content:
-      //
-      // # Use localhost for dumber-gist
-      // 127.0.0.1       gist.dumber.local 0123456789abcdef0123456789abcdef.gist.dumber.local cache.dumber.local github-oauth.gist.dumber.local
-      //
-      return '0123456789abcdef0123456789abcdef';
     }
 
     // Random id (32 chars) for every dumber-gist instance to avoid

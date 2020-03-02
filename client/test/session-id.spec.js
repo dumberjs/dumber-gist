@@ -7,8 +7,8 @@ test('SessionId reuses sessionId from search param', t => {
   t.end();
 });
 
-test('SessionId generates sessionId', t => {
+test('SessionId generates random sessionId', t => {
   const s = new SessionId({});
-  t.equal(s.id, '0123456789abcdef0123456789abcdef');
+  t.ok(s.id.match(/^[0-9a-f]{32}$/));
   t.end();
 });

@@ -49,7 +49,7 @@ export class WorkerService {
 
     const handleMessage = event => {
       if (event.data && event.data.type === 'worker-up') {
-        console.info('Bundler Worker is up!');
+        console.info('Bundler Worker is up.');
         this.bundler.onmessage = this._workerSaid;
         resolveWorker();
       }
@@ -66,7 +66,8 @@ export class WorkerService {
     // in second iframe are provided by caches generated
     // in service worker.
     const iframe = document.createElement('iframe');
-    iframe.setAttribute('src', `https://${this.sessionId.id}.${HOST_NAMES.host}/__boot-up-worker.html`);
+    const host = `${this.sessionId.id}.${HOST_NAMES.host}`;
+    iframe.setAttribute('src', `https://${host}/__boot-up-worker.html`);
     iframe.setAttribute('style', 'display: none');
     document.body.appendChild(iframe);
     this.iframe = iframe;
@@ -76,7 +77,7 @@ export class WorkerService {
 
     const handleMessage = event => {
       if (event.data && event.data.type === 'worker-up') {
-        console.info('Service Worker is up!');
+        console.info(`Service Worker is up on ${host}`);
         removeEventListener('message', handleMessage);
         addEventListener('message', this._workerSaid);
         resolveWorker();

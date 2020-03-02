@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<script>
+navigator.serviceWorker.getRegistration()
+  .then(r => r.unregister())
+  .then(
+    result => parent.postMessage({_type: 'worker-removed', result}, '*'),
+    err => parent.postMessage({_type: 'worker-error', result: err.message}, '*')
+  );
+</script>

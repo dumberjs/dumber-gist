@@ -4,6 +4,7 @@ import {EventAggregator} from 'aurelia-event-aggregator';
 import {EditSession} from './edit/edit-session';
 import {OpenedFiles} from './edit/opened-files';
 import {User} from './github/user';
+import {RemoveExpiredSession} from './remove-expired-session';
 import {combo} from 'aurelia-combo';
 import _ from 'lodash';
 
@@ -23,7 +24,7 @@ const insideIframe = (function() {
 })();
 
 // Handle layout calculation and global bundling state
-@inject(EventAggregator, BindingEngine, DndService, EditSession, OpenedFiles, User)
+@inject(EventAggregator, BindingEngine, DndService, EditSession, OpenedFiles, User, RemoveExpiredSession)
 export class GistApp {
   insideIframe = insideIframe;
 
@@ -42,7 +43,7 @@ export class GistApp {
   windowWidth = null;
   windowHeight = null;
 
-  constructor(ea, bindingEngine, dndService, session, openedFiles, user) {
+  constructor(ea, bindingEngine, dndService, session, openedFiles, user, removeExpiredSession) {
     this.ea = ea;
     this.dndService = dndService;
     this.session = session;
@@ -59,6 +60,8 @@ export class GistApp {
         this.debouncedBundle();
       }
     });
+
+    removeExpiredSession.start();
   }
 
   attached() {

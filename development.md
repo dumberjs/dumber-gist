@@ -12,7 +12,7 @@ Npm packages are retrieved from [jsdelivr](https://www.jsdelivr.com). Dependenci
 
 ## client-service-worker
 
-The front-end service worker, generates responses for embedded app `https://[random-32-chars-hex].gist.dumber.app` (`https://0123456789abcdef0123456789abcdef.gist.dumber.local` for local dev environment).
+The front-end service worker, generates responses for embedded app `https://[random-32-chars-hex].gist.dumber.app`.
 
 The static resources are not cached by CloudFlare. Because:
 1. CloudFlare free plan doesn't cache wild card DNS name.
@@ -48,11 +48,14 @@ In addition, `gist.dumber.app` and `cache.dumber.app` are behind a CloudFlare fr
 
 ### Local DNS for gist.dumber.local
 
-Add following line to `/etc/hosts`, this turns on few DNS entries locally.
+Following dnsmasq setup resolves `any.domain.ends.with.local` to `127.0.0.1`.
 
 ```sh
-# Use localhost for dumber-gist
-127.0.0.1       gist.dumber.local 0123456789abcdef0123456789abcdef.gist.dumber.local cache.dumber.local github-oauth.gist.dumber.local
+brew install dnsmasq
+echo 'address=/local/127.0.0.1' >> `brew --prefix`/etc/dnsmasq.conf
+sudo mkdir -p /etc/resolver
+sudo echo 'nameserver 127.0.0.1' > /etc/resolver/local
+sudo brew services start dnsmasq
 ```
 
 ### nginx and passenger
@@ -100,36 +103,20 @@ Before using the app, you need to build `client` code. Run
 
 Optionally, replace `npm run build` with `npm start` to build them in watch mode.
 
-Use Safari, Chrome or Firefox to navigate to `https://gist.dumber.local`. See below on How to bypass security check on self-signed certificate.
+Use Safari, Chrome or Firefox to navigate to `https://gist.dumber.local`.
 
 Note, in watch mode, there is no special dev server to auto refresh browser window. You need to manually refresh browser window after the code changes were built.
 
-#### Chrome
-Start Chrome with:
+### SSL local root
 
-```sh
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --unsafely-treat-insecure-origin-as-secure=https://gist.dumber.local,https://cache.dumber.local,https://github-oauth.gist.dumber.local,https://0123456789abcdef0123456789abcdef.gist.dumber.local
+Because of self-signed certificate, you will see browser complains about the security. You need to create your own certificate authority root certificate, install [mkcert](https://github.com/FiloSottile/mkcert)
+
+```bash
+brew install mkcert nss
+mkcert -install
+mkcert dumber.local '*.dumber.local' '*.gist.dumber.local' localhost 127.0.0.1 ::1
 ```
 
-This will bypass ssl check on local self-signed certificate.
+Note `nginx.dev.conf` uses the generated certificate.
 
-#### Safari and Firefox
-
-Visit all following sites one by one, and accept the risk to render the site.
-```
-https://gist.dumber.local
-https://cache.dumber.local
-https://github-oauth.gist.dumber.local
-https://0123456789abcdef0123456789abcdef.gist.dumber.local
-```
-
-### Local Cross-Talk
-
-To simplify DNS override, the local dev mode uses fixed host name `https://0123456789abcdef0123456789abcdef.gist.dumber.local` for the embedded user app. This is different from production where every Dumber Gist window uses an unique host name `https://[random-32-chars-hex].gist.dumber.app`.
-
-In local dev, two Dumber Gist windows will cross-talk because their service workers for the embedded user app are shared (because they are bound to same origin).
-
-You can only one Dumber Gist window in local dev.
-
-> It's possible to enable random host name in local dev mode, with the help of Dnsmasq which is much more flexible then `/etc/hosts`. But I would not do it, because I feel that's too much setup for rather little benefit.
 
