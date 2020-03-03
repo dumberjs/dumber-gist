@@ -97,6 +97,11 @@ addEventListener('message', async e => {
 
 addEventListener('fetch', e => {
   if (!e.request.url.match(/^https:\/\/\w+\.gist\.dumber\.(local|app)/)) return;
+  if (
+    e.request.url.endsWith('__boot-up-worker.html') ||
+    e.request.url.endsWith('__dumber-gist-worker') ||
+    e.request.url.endsWith('__remove-expired-worker.html')
+  ) return;
 
   e.respondWith(
     caches.match(e.request).then(r => {
