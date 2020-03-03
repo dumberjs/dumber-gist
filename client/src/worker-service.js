@@ -50,7 +50,7 @@ export class WorkerService {
     const handleMessage = e => {
       if (!e.data) return;
       const {type} = e.data;
-      if (type === 'worker-up') {
+      if (type === 'bundler-worker-up') {
         console.info('Bundler Worker is up.');
         this.bundler.onmessage = this._workerSaid;
         resolveWorker();

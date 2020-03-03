@@ -58,4 +58,4 @@ onmessage = async function(event) {
   }
 };
 
-postMessage({type: 'worker-up'});
+postMessage({type: 'bundler-worker-up'});
