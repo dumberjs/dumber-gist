@@ -8,7 +8,7 @@ Following scripts are in `package.json`.
 
     npm run build
 
-Continuously build in watch mode
+Continuously build in watch mode:
 
     npm start
 
