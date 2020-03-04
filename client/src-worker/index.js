@@ -1,4 +1,4 @@
-import "core-js/stable";
+import 'core-js/features/reflect';
 import {DumberSession} from './dumber-session';
 import {Container} from 'aurelia-dependency-injection';
 

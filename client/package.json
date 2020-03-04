@@ -78,7 +78,7 @@
     "html-lint": "htmlhint -c .htmlhintrc src",
     "lint": "npm run js-lint && npm run css-lint && npm run html-lint",
     "coverage": "npm run test && nyc report --reporter=lcov --reporter=text",
-    "start": "gulp",
+    "start": "gulp clean && env NODE_OPTIONS=--max_old_space_size=3584 gulp",
     "build": "gulp clean && env NODE_OPTIONS=--max_old_space_size=3584 gulp build",
     "build:prod": "gulp clean && env NODE_ENV=production NODE_OPTIONS=--max_old_space_size=3584 gulp build",
     "clear-cache": "gulp clear-cache",

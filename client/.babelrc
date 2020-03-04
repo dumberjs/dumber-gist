@@ -1,18 +1,16 @@
 {
-  "presets": [
-    ["@babel/preset-env", {
-      "loose": true,
-      "targets": "edge >= 15, firefox >= 53, chrome >= 55, safari >= 11"
-    }]
-  ],
   "plugins": [
     ["@babel/plugin-proposal-decorators", { legacy: true }],
     ["@babel/plugin-proposal-class-properties", { loose: true }],
-    "@babel/plugin-syntax-dynamic-import"
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-proposal-export-default-from",
+    "@babel/plugin-proposal-export-namespace-from",
+    ["@babel/plugin-proposal-optional-chaining", {loose: true}],
+    ["@babel/plugin-proposal-private-methods", {loose: true}]
   ],
   "env": {
     "test": {
-      "plugins": [ "istanbul" ]
+      "plugins": [ "babel-plugin-istanbul" ]
     }
   }
 }

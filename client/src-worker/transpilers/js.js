@@ -2,7 +2,6 @@ import path from 'path';
 import {transform} from '@babel/core';
 // import transformCjs from '@babel/plugin-transform-modules-commonjs';
 import syntaxDynamicImport from '@babel/plugin-syntax-dynamic-import';
-import objectRestSpread from '@babel/plugin-proposal-object-rest-spread';
 import classProperties from '@babel/plugin-proposal-class-properties';
 import decorators from '@babel/plugin-proposal-decorators';
 import exportDefaultFrom from '@babel/plugin-proposal-export-default-from';
@@ -32,7 +31,6 @@ const PLUGINS = [
   [nullishCoalescingOperator, {loose: true}],
   [optionalChaining, {loose: true}],
   [privateMethods, {loose: true}],
-  [objectRestSpread, {loose: true}]
   // [transformCjs, {loose: true}],
 ];
 
