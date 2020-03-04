@@ -15,7 +15,7 @@ const indexHtml = ext => `<!DOCTYPE html>
 <!--
 Dumber Gist uses dumber bundler, the default bundle file
 is /dist/entry-bundle.js.
-The starting module is "main" (data-main attribute on script)
+The starting module is pointed to "main" (data-main attribute on script)
 which is your src/main${ext}.
 -->
 <body>

@@ -16,10 +16,10 @@ const indexHtml = ext => `<!DOCTYPE html>
 <!--
 Dumber gist uses dumber bundler, the default bundle file
 is /dist/entry-bundle.js.
-The starting module is aurelia-bootstrapper (data-main
-attribute on script) for Aurelia,
-it then loads up user module "main" (aurelia-app
-attribute on <body>) which is your src/main${ext}.
+The starting module is pointed to aurelia-bootstrapper
+(data-main attribute on script) for Aurelia,
+The aurelia bootstrapper then loads up user module "main"
+(aurelia-app attribute on <body>) which is your src/main${ext}.
 -->
 <body aurelia-app="main">
   <script src="/dist/entry-bundle.js" data-main="aurelia-bootstrapper"></script>
