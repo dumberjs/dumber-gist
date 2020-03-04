@@ -51,6 +51,7 @@ const drApp = dumber({
   codeSplit: isTest ? undefined : (moduleId, packageName) => {
     if (!packageName) return 'app-bundle';
     if (packageName === 'codemirror') return 'codemirror-bundle';
+    if (packageName.includes('aurelia')) return 'au-bundle';
     return 'deps-bundle';
   },
   onManifest: isTest ? undefined : filenameMap => {
