@@ -1,11 +1,5 @@
-/* globals Sass */
 import path from 'path';
 import _ from 'lodash';
-if (!process.browser) {
-  // Only for running tests in nodejs environment
-  // use + to avoid static analysis of bundler
-  global.Sass = require('sass.js' + '/dist/sass.sync.js');
-}
 
 const EXTS = ['.scss', '.sass'];
 
@@ -21,6 +15,14 @@ export class SassTranspiler {
     return EXTS.indexOf(ext) !== -1;
   }
 
+  _lazyLoad() {
+    if (!this._promise) {
+      this._promise = import('sass.js/dist/sass.sync');
+    }
+
+    return this._promise;
+  }
+
   async transpile(file, files) {
     const {filename} = file;
     if (!this.match(file)) throw new Error('Cannot use SassTranspiler for file: ' + filename);
@@ -28,6 +30,8 @@ export class SassTranspiler {
       // ignore sass partial
       return;
     }
+
+    const Sass = await this._lazyLoad();
 
     const ext = path.extname(filename);
 

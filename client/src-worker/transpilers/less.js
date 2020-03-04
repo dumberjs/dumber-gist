@@ -1,48 +1,5 @@
 import path from 'path';
-import createLess from 'less/lib/less';
-import AbstractFileManager from 'less/lib/less/environment/abstract-file-manager';
-import PluginLoader from 'less/lib/less-browser/plugin-loader';
 import _ from 'lodash';
-
-class FileManager extends AbstractFileManager {
-  files = {};
-
-  resetFiles() {
-    this.files = {};
-  }
-
-  setFiles(files) {
-    this.files = files;
-  }
-
-  alwaysMakePathsAbsolute() {
-    return false; // test true/false
-  }
-
-  supports() {
-    return true;
-  }
-
-  loadFile(filename, currentDirectory, options) {
-    if (currentDirectory && !this.isPathAbsolute(filename)) {
-        filename = currentDirectory + filename;
-    }
-
-    filename = options.ext ? this.tryAppendExtension(filename, options.ext) : filename;
-
-    return new Promise((resolve, reject) => {
-      if (this.files[filename]) {
-        resolve({filename, contents: this.files[filename]});
-      } else {
-        reject({filename, message: `less.js file manager cannot find file "${filename}"`});
-      }
-    });
-  }
-}
-
-const fileManager = new FileManager();
-const less = createLess(null, [fileManager]);
-less.PluginLoader = PluginLoader;
 
 export class LessTranspiler {
   match(file) {
@@ -50,9 +7,69 @@ export class LessTranspiler {
     return ext === '.less';
   }
 
+  _lazyLoad() {
+    if (!this._promise) {
+      this._promise = Promise.all([
+        import('less/lib/less'),
+        import('less/lib/less/environment/abstract-file-manager'),
+        import('less/lib/less-browser/plugin-loader')
+      ]).then(results => results.map(r => r.default))
+        .then(results => {
+          const [ createLess,
+                  AbstractFileManager,
+                  PluginLoader ] = results;
+
+          class FileManager extends AbstractFileManager {
+            files = {};
+
+            resetFiles() {
+              this.files = {};
+            }
+
+            setFiles(files) {
+              this.files = files;
+            }
+
+            alwaysMakePathsAbsolute() {
+              return false; // test true/false
+            }
+
+            supports() {
+              return true;
+            }
+
+            loadFile(filename, currentDirectory, options) {
+              if (currentDirectory && !this.isPathAbsolute(filename)) {
+                  filename = currentDirectory + filename;
+              }
+
+              filename = options.ext ? this.tryAppendExtension(filename, options.ext) : filename;
+
+              return new Promise((resolve, reject) => {
+                if (this.files[filename]) {
+                  resolve({filename, contents: this.files[filename]});
+                } else {
+                  reject({filename, message: `less.js file manager cannot find file "${filename}"`});
+                }
+              });
+            }
+          }
+
+          const fileManager = new FileManager();
+          const less = createLess(null, [fileManager]);
+          less.PluginLoader = PluginLoader;
+          return {less, fileManager};
+        });
+    }
+
+    return this._promise;
+  }
+
   async transpile(file, files) {
     const {filename, content} = file;
     if (!this.match(file)) throw new Error('Cannot use LessTranspiler for file: ' + filename);
+
+    const {less, fileManager} = await this._lazyLoad();
 
     const ext = path.extname(filename);
 

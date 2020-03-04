@@ -1,12 +1,6 @@
 import path from 'path';
-import {preprocess, preprocessOptions} from '@aurelia/plugin-conventions';
 import {JsTranspiler} from './js';
 import _ from 'lodash';
-
-const au2Options = preprocessOptions({
-  useProcessedFilePairFilename: true,
-  stringModuleWrap: id => `text!${id}`
-});
 
 const EXTS = ['.html', '.js', '.ts'];
 
@@ -32,10 +26,25 @@ export class Au2Transpiler {
     }
   }
 
+  _lazyLoad() {
+    if (!this._promise) {
+      this._promise = import('@aurelia/plugin-conventions');
+    }
+
+    return this._promise;
+  }
+
   async transpile(file, files) {
     if (!this.match(file, files)) throw new Error('Cannot use Au2Transpiler for file: ' + file.filename);
 
-    const result = preprocess(
+    const au2 = await this._lazyLoad();
+
+    const au2Options = au2.preprocessOptions({
+      useProcessedFilePairFilename: true,
+      stringModuleWrap: id => `text!${id}`
+    });
+
+    const result = au2.preprocess(
       {
         path: file.filename,
         contents: file.content

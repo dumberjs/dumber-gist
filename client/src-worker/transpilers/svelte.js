@@ -1,5 +1,4 @@
 import path from 'path';
-import {compile, preprocess} from 'svelte/compiler';
 import {JsTranspiler} from './js';
 import {LessTranspiler} from './less';
 import {SassTranspiler} from './sass';
@@ -17,6 +16,14 @@ export class SvelteTranspiler {
   match(file) {
     const ext = path.extname(file.filename);
     return ext === '.svelte';
+  }
+
+  _lazyLoad() {
+    if (!this._promise) {
+      this._promise = import('svelte/compiler');
+    }
+
+    return this._promise;
   }
 
   async transpileCss({content, attributes, filename}, files) {
@@ -66,6 +73,8 @@ export class SvelteTranspiler {
 
   async transpile(file, files) {
     if (!this.match(file)) throw new Error('Cannot use SvelteTranspiler for file: ' + file.filename);
+
+    const {compile, preprocess} = await this._lazyLoad();
 
     const {filename, content} = file;
 

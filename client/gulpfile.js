@@ -105,8 +105,7 @@ const drWorker = dumber({
   entryBundle: 'bundler-worker',
   prepend: [
     HOST_NAMES,
-    DUMBER_MODULE_LOADER_DIST,
-    require.resolve('sass.js/dist/sass.sync.js')
+    DUMBER_MODULE_LOADER_DIST
   ],
   deps: [
     // semver main index.js uses special lazyRequire which can not
@@ -120,7 +119,12 @@ const drWorker = dumber({
       "requirejs(['index']);"
   ],
   codeSplit: isTest ? undefined : (moduleId, packageName) => {
+    if (!packageName) return 'bundler-code';
     if (packageName === 'typescript') return 'bundler-ts';
+    if (packageName.startsWith('@aurelia/')) return 'bundler-au2';
+    if (packageName === 'less') return 'bundler-less';
+    if (packageName === 'sass.js') return 'bundler-sass';
+    if (packageName === 'svelte') return 'bundler-svelte';
     if (packageName) return 'bundler-other-deps';
   },
   onManifest: function(filenameMap) {
