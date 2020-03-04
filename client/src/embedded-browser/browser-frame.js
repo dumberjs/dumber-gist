@@ -14,6 +14,10 @@ export class BrowserFrame {
   @bindable isBundling;
   @bindable bundlerError;
   missedCache = [];
+  safari = !!global.safari;
+  firefox = !!global.netscape;
+  chrome = !!global.chrome;
+  serviceWorkerFailed = false;
 
   constructor(ea, dndService, sessionId, historyTracker, consoleLog, oauth, user) {
     this.ea = ea;
@@ -28,6 +32,7 @@ export class BrowserFrame {
     this.goBack = this.goBack.bind(this);
     this.goForward = this.goForward.bind(this);
     this.missCache = this.missCache.bind(this);
+    this.panic = this.panic.bind(this);
   }
 
   attached() {
@@ -35,7 +40,8 @@ export class BrowserFrame {
       this.ea.subscribe('history-back', this.goBack),
       this.ea.subscribe('history-forward', this.goForward),
       this.ea.subscribe('history-reload', this.rebuildFrame),
-      this.ea.subscribe('miss-cache', this.missCache)
+      this.ea.subscribe('miss-cache', this.missCache),
+      this.ea.subscribe('service-worker-panic', this.panic)
     ];
   }
 
@@ -80,6 +86,10 @@ export class BrowserFrame {
       // Rebuild the array for easier observation in Aurelia 1.
       this.missedCache = [...this.missedCache, packageName];
     }
+  }
+
+  panic() {
+    this.serviceWorkerFailed = true;
   }
 
   rebuildFrame() {

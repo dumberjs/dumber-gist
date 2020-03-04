@@ -80,10 +80,15 @@ export class WorkerService {
     let resolveWorker = null;
     this._serviceWorkerUp = new Promise(resolve => resolveWorker = resolve);
 
+    const panic = setTimeout(() => {
+      this.ea.publish('service-worker-panic');
+    }, 5000);
+
     const handleMessage = e => {
       if (!e.data) return;
       const {type} = e.data;
       if (type === 'worker-up') {
+        clearTimeout(panic);
         console.info(`Service Worker is up on ${host}`);
         removeEventListener('message', handleMessage);
         addEventListener('message', this._workerSaid);
@@ -95,6 +100,7 @@ export class WorkerService {
     };
 
     addEventListener('message', handleMessage);
+
   }
 
   // Handle both bundler worker and service worker.

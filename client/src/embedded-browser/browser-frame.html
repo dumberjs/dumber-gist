@@ -12,6 +12,28 @@
 
       <span if.bind="missedCache.includes('aurelia')" class="text-error"><br>Note it can take up to a minute or two to trace <strong>a new dev release of Aurelia2</strong>, due to latency of downloading many small files from jsdelivr.</span>
     </p>
+
+    <div if.bind="serviceWorkerFailed">
+      <h3 class="text-error">Could not boot up service worker.</h3>
+      <div class="text-left">
+        <p if.bind="chrome">
+          If you are using Brave browser, first try turning off Shields on current page.<br>
+          If it's other Chromium based browsers (e.g. Chrome, Edge, Brave), try turning on <span class="badge bg-black">Allow sites to save and read cookie data (recommended)</span> if you manually turned it off in <span class="badge bg-black">Cookies and site data</span>.
+        </p>
+        <p if.bind="firefox">
+          If you customized Firefox <span class="badge bg-black">Enhanced Tracking Protection</span>, try <span class="text-warning">NOT to set the cookies restriction to <span class="badge bg-black">All third-party cookies</span> or <span class="badge bg-black">All cookies</span></span>.
+        </p>
+        <p if.bind="safari">
+          We are not sure about the possible Safari setting caused this.
+        </p>
+        <p if.bind="chrome || firefox">
+          Are you wondering why browser settings use term <span class="badge bg-black">Cookies</span> to mean <span class="badge bg-black">Cookies, localStorage, Service Worker and maybe few more</span>? We wonder that too, we guess they tried to make it easier to understand for the general users, but this is very confusing for the developers like us.
+        </p>
+        <p>
+          Please report an <a href="https://github.com/dumberjs/dumber-gist/issues" target="_blank" class="btn clean">GitHub issue</a> if you cannot resolve this.
+        </p>
+      </div>
+    </div>
   </div>
   <div if.bind="bundlerError" class="error">
     <span repeat.for="err of errors">${err}<br if.bind="!$last"></span>
