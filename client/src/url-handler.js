@@ -83,7 +83,6 @@ export class UrlHandler {
         this.ea.publish('info', `Loaded Gist: ${gistTitle}`);
       }
     }
-    document.title = title;
 
     const params = this.currentParams();
 
@@ -96,12 +95,7 @@ export class UrlHandler {
       return;
     }
 
-    if (gist.id === params.gist) {
-      // Unchanged.
-      return;
-    }
-
-    const replace = params.sessionId || params.code;
+    const replace = params.sessionId || params.code || gist.id === params.gist;
 
     // Update gist id in url
     return this._updateParams({gist: gist.id}, title, replace);
@@ -116,5 +110,7 @@ export class UrlHandler {
     } else {
       history.pushState(null, title, newHref);
     }
+
+    document.title = title;
   }
 }
