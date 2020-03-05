@@ -232,6 +232,8 @@ html {
       height: 1.6rem;
       margin: 0 2px;
       vertical-align: middle;
+      box-shadow: 0 0 0 1px $gray-500;
+      border-radius: $border-radius;
     }
   }
 }
@@ -1164,7 +1166,8 @@ input[type='text'] {
     height: 6rem;
     flex: 0 0 auto;
     margin: 1rem 0 1rem 1rem;
-    box-shadow: 0 0 1rem $bright-shadow, 0 0 0 1px $gray-900;
+    border-radius: $border-radius;
+    box-shadow: 0 0 0 1px $gray-500, 0 0 0 2px $gray-200;
   }
 
   > .description {
