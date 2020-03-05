@@ -10,15 +10,16 @@ import _ from 'lodash';
 
 @inject(EventAggregator, InitParams, BindingEngine, Oauth, PersistSession, Gists, EditSession)
 export class UrlHandler {
-  constructor(ea, params, bindingEngine, oauth, persistSession, gists, session, mockSearch) {
+  constructor(ea, initParams, bindingEngine, oauth, persistSession, gists, session, mockSearch) {
     this.ea = ea;
-    this.params = params;
+    this.initParams = initParams;
     this.oauth = oauth;
     this.persistSession = persistSession;
     this.gists = gists;
     this.session = session;
     this.search = mockSearch || location.search;
     this.initialised = false;
+    this._firstLoad = true;
 
     this.syncUrl = this.syncUrl.bind(this);
     this.subscriber = bindingEngine.propertyObserver(session, 'gist').subscribe(this.syncUrl);
@@ -27,20 +28,29 @@ export class UrlHandler {
   async start() {
     this.initialised = false;
     try {
-      await this.init();
+      await this.init(this.initParams);
     } catch (err) {
       this.ea.publish('error', err.message);
     }
+
+    addEventListener('popstate', () => {
+      this.init(this.currentParams());
+    });
+
     this.initialised = true;
   }
 
-  async init() {
-    let {code, sessionId, gist, open} = this.params;
+  currentParams() {
+    return queryString.parse(location.search.slice(1));
+  }
+
+  async init(params) {
+    let {code, sessionId, gist, open} = params;
     await this.oauth.init(code);
 
     if (sessionId) {
       await this.persistSession.tryRestoreSession();
-    } else if (gist) {
+    } else if (gist && gist !== _.get(this.session, 'gist.id')) {
       const g = await this.gists.load(gist);
       this.session.loadGist(g);
 
@@ -63,21 +73,48 @@ export class UrlHandler {
   }
 
   syncUrl(gist) {
-    if (!gist || !gist.id) {
-      // no gist loaded, or with unsaved new gist
-      return this._updateParams();
+    let title = 'Dumber Gist';
+    const gistTitle = (gist && gist.id) ? `${gist.owner.login} / ${gist.description}` : '';
+    if (gistTitle) {
+      title += ` | ${gistTitle}`;
+      if (this._firstLoad) {
+        this._firstLoad = false;
+      } else {
+        this.ea.publish('info', `Loaded Gist: ${gistTitle}`);
+      }
     }
+    document.title = title;
 
-    if (gist.id === this.params.gist) {
+    const params = this.currentParams();
+
+    if (!gist || !gist.id) {
+      if (params.gist) {
+        // No gist loaded, or with unsaved new gist.
+        // Clean up url.
+        this._updateParams();
+      }
       return;
     }
 
-    return this._updateParams({gist: gist.id});
+    if (gist.id === params.gist) {
+      // Unchanged.
+      return;
+    }
+
+    const replace = params.sessionId || params.code;
+
+    // Update gist id in url
+    return this._updateParams({gist: gist.id}, title, replace);
   }
 
-  _updateParams(params) {
+  _updateParams(params, title = 'Dumber Gist', replace = false) {
     const newSearch = queryString.stringify(params);
     const newHref = newSearch ? `/?${newSearch}` : '/';
-    history.replaceState(null, document.title, newHref);
+
+    if (replace) {
+      history.replaceState(null, title, newHref);
+    } else {
+      history.pushState(null, title, newHref);
+    }
   }
 }

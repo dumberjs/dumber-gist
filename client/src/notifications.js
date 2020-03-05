@@ -2,11 +2,11 @@ import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import _ from 'lodash';
 
-const TIME_TO_STAY = 5000;
+const TIME_TO_STAY = 3000;
 
 const eventMap = {
   error: 'danger',
-  'info-clean': 'info',
+  'info-clean': 'clean',
   'info-dark': 'dark'
 };
 
@@ -73,9 +73,8 @@ export class Notifications {
       }
     }
 
-    let icon = '';
+    let icon = 'fas fa-info-circle';
     if (style === 'success') icon = 'far fa-check';
-    else if (style === 'info') icon = 'fas fa-info-circle';
     else if (style === 'warning') icon = 'fas fa-exclamation-circle';
     else if (style === 'danger') icon = 'fas fa-exclamation-triangle';
 

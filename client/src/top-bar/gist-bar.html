@@ -30,7 +30,7 @@
     <a href="" class="cursor-pointer" click.trigger="listGists() & leftClick">${owner.login}</a>
     <span class="pl pr">/</span>
     <i if.bind="isPrivate" class="pr text-warning fas fa-user-lock"></i>
-    <span>${gistId}</span>
+    <span>${session.description || gistId}</span>
   </span>
   <span else class="ml-2 text-muted d-small-hide">&lt;draft gist, unsaved&gt;</span>
 </template>

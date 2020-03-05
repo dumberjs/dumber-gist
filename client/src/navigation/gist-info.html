@@ -1,9 +1,8 @@
 <template class="gist-info">
   <img
-    if.bind="owner"
     class="owner-image"
-    src.bind="owner.avatar_url"
-    alt.bind="owner.login">
+    src.bind="owner.avatar_url || user.avatar_url"
+    alt.bind="owner.login || user.login">
 
   <div class="description selectable">
     <div class="owner">
@@ -13,9 +12,12 @@
       </span>
       <span else>&lt;draft, unsaved&gt;</span>
     </div>
+    <div if.bind="session.gist.id" class="mb">
+      <small class="text-muted">${session.gist.id}</small>
+    </div>
     <textarea
       ref="textarea"
-      if.bind="ownedByMe"
+      if.bind="ownedByMe || !owner"
       class.bind="session.description !== session.gist.description ? 'modified': ''"
       value.bind="session.description"
       keydown.trigger="keyDownInDescription($event)"

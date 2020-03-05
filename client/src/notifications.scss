@@ -130,6 +130,10 @@ notifications {
     line-height: 1.4rem;
   }
 
+  .notification-title + .notification-message {
+    padding-top: 0;
+  }
+
   .notification-count.badge {
     display: inline-block;
     position: absolute;

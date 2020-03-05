@@ -30,7 +30,7 @@
         </a>
         <span class="text-truncate" style="flex: 1 0 0;">
           <img src.bind="session.gist.owner.avatar_url" alt.bind="owner.login">
-          ${session.gist.owner.login} / ${session.description}
+          ${session.gist.owner.login} / ${session.description || session.gist.id}
         </span>
       </div>
       <gist-bar else class="app-buttons app-buttons-fill"></gist-bar>
