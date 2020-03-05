@@ -66,7 +66,7 @@ function clean() {
 exports.clean = clean;
 
 // clear dumber (tracing) cache
-exports['clean-cache'] = function () {
+exports['clear-cache'] = function () {
   return drApp.clearCache();
 };
 
