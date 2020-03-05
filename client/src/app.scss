@@ -228,8 +228,8 @@ html {
 
     img {
       cursor: pointer;
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 1.6rem;
+      height: 1.6rem;
       margin: 0 2px;
       vertical-align: middle;
     }
@@ -1163,6 +1163,8 @@ input[type='text'] {
     width: 6rem;
     height: 6rem;
     flex: 0 0 auto;
+    margin: 1rem 0 1rem 1rem;
+    box-shadow: 0 0 1rem $bright-shadow, 0 0 0 1px $gray-900;
   }
 
   > .description {
