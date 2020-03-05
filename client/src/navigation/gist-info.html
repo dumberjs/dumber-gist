@@ -1,26 +1,25 @@
 <template class="gist-info">
-  <div class="info-item">
-    <div class="info-item-label">Owner</div>
-    <div class="info-item-value">
+  <img
+    if.bind="owner"
+    class="owner-image"
+    src.bind="owner.avatar_url"
+    alt.bind="owner.login">
+
+  <div class="description selectable">
+    <div class="owner">
       <span if.bind="owner">
-        <img src.bind="owner.avatar_url" alt.bind="owner.login">
         <a href="" class="cursor-pointer" click.trigger="listGists() & leftClick">${owner.login}</a>
         <span if.bind="ownedByMe" class="text-muted">(me)</span>
       </span>
-      <span else>&lt;not set&gt;</span>
+      <span else>&lt;draft, unsaved&gt;</span>
     </div>
-  </div>
-  <div class="info-item">
-    <div class="info-item-label">
-      Description
-      <small if.bind="session.description !== session.gist.description" class="fas fa-circle text-primary"></small>
-    </div>
-    <div class="info-item-value">
-      <textarea
-        ref="textarea"
-        value.bind="session.description"
-        keydown.trigger="keyDownInDescription($event)"
-        ></textarea>
-    </div>
+    <textarea
+      ref="textarea"
+      if.bind="ownedByMe"
+      class.bind="session.description !== session.gist.description ? 'modified': ''"
+      value.bind="session.description"
+      keydown.trigger="keyDownInDescription($event)"
+      ></textarea>
+    <div else>${session.description}</div>
   </div>
 </template>

@@ -18,9 +18,8 @@
           style="font-size:1.2rem;margin-left:.4rem;"></i>
       </div>
 
-      <div class="app-buttons app-buttons-fill" if.bind="insideIframe">
+      <div class="app-buttons app-buttons-fill" if.bind="insideIframe && session.gist.id">
         <a
-          if.bind="session.gist.id"
           class="btn clean mr-2"
           style="flex: 0 0 auto;"
           target="_blank"
@@ -29,7 +28,10 @@
           <i class="far fa-window-restore d-tiny"></i>
           <span class="d-tiny-hide">Open in Dumber Gist</span>
         </a>
-        <span class="text-truncate" style="flex: 1 0 0;">${session.gist.owner.login} / ${session.description}</span>
+        <span class="text-truncate" style="flex: 1 0 0;">
+          <img src.bind="session.gist.owner.avatar_url" alt.bind="owner.login">
+          ${session.gist.owner.login} / ${session.description}
+        </span>
       </div>
       <gist-bar else class="app-buttons app-buttons-fill"></gist-bar>
 

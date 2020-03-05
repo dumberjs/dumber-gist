@@ -205,4 +205,9 @@ export class GistBar {
   get ownedByMe() {
     return _.get(this.session, 'gist.owner.login') === _.get(this.user, 'login');
   }
+
+  @computedFrom('session.gist')
+  get isPrivate() {
+    return !_.get(this.session, 'gist.public');
+  }
 }
