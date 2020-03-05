@@ -1333,8 +1333,14 @@ a {
 }
 
 .reorderable-repeat-reordering,
-.reorderable-repeat-dragging-me {
+.reorderable-repeat-dragging-me,
+.bcx-dnd-preview {
   .close-file {
     visibility: hidden;
   }
+}
+
+.reorderable-repeat-reordering.active {
+  color: $gray-600;
+  background-color: $gray-1000;
 }
