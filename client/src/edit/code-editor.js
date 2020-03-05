@@ -12,7 +12,7 @@ import "codemirror/addon/search/match-highlighter";
 import "codemirror/addon/lint/lint";
 // import "codemirror/addon/lint/javascript-lint";
 import "codemirror/addon/lint/html-lint";
-import "codemirror/addon/lint/css-lint";
+// import "codemirror/addon/lint/css-lint";
 import "codemirror/addon/lint/json-lint";
 import "codemirror/mode/markdown/markdown";
 import "codemirror/mode/htmlmixed/htmlmixed";
