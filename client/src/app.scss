@@ -636,6 +636,7 @@ $node-start-offset: .6rem;
   height: 2.8rem;
   background-color: $gray-1000;
   overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
 
   .bar-action {
