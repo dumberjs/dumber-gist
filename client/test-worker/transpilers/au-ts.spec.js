@@ -58,3 +58,23 @@ export class Foo {
   t.deepEqual(file.sourceMap.sources, ['src/foo.ts']);
   t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
+
+test('AuTsTranspiler stubs an empty es module for ts file with only type definition', async t => {
+  const jt = new AuTsTranspiler();
+  const code = `export interface Foo<T> {
+  value: T;
+  children: (Foo<T> | undefined)[];
+}
+
+`;
+  const file = await jt.transpile({
+    filename: 'src/foo.ts',
+    content: code
+  }, [p]);
+
+  t.equal(file.filename, 'src/foo.js');
+  t.equal(file.content, 'exports.__esModule = true;\n');
+  t.equal(file.sourceMap.file, 'src/foo.js');
+  t.deepEqual(file.sourceMap.sources, ['src/foo.ts']);
+  t.deepEqual(file.sourceMap.sourcesContent, [code]);
+});

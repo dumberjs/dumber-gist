@@ -41,6 +41,7 @@ export class AuTsTranspiler {
         allowJs: true,
         checkJs: false,
         experimentalDecorators: true,
+        // Required for au1 to work
         emitDecoratorMetadata: true,
         inlineSources: true,
         jsx: ext.endsWith('x') ? ts.JsxEmit.React : ts.JsxEmit.None,
@@ -58,7 +59,12 @@ export class AuTsTranspiler {
 
     const {outputText, sourceMapText} = result;
     const newFilename = filename.slice(0, -ext.length) + '.js';
-    const newContent = stripSourceMappingUrl(outputText);
+    let newContent = stripSourceMappingUrl(outputText);
+    if (!newContent) {
+      // For ts type definition file, make a empty es module
+      newContent = 'exports.__esModule = true;\n';
+    }
+
     const sourceMap = JSON.parse(sourceMapText);
     sourceMap.file = newFilename;
     sourceMap.sources = [filename];
