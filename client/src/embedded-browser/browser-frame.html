@@ -4,7 +4,7 @@
   <div class="spinner" if.bind="isBundling & debounce:500" >
     <i class="fas fa-circle-notch fa-spin"></i>
     <p if.bind="missedCache.length">
-      <span>Tracing new version of the npm <span if.bind="missedCache.length > 1">packages</span><span else>package</span>: <strong>${missedCache.slice(0, 3).join(', ')}<span if.bind="missedCache.length > 3">plus ${missedCache.length - 3} more ...</span></strong></span><br>
+      <span>Tracing new version of the npm <span if.bind="missedCache.length > 1">packages</span><span else>package</span>: <strong>${missedCache.slice(0, 3).join(', ')}<span if.bind="missedCache.length > 3">&nbsp;plus ${missedCache.length - 3} more ...</span></strong></span><br>
 
       <span>It will be much faster after the cache was created.</span><br>
 
