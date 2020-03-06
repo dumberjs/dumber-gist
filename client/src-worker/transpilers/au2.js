@@ -11,8 +11,7 @@ export class Au2Transpiler {
 
   match(file, files) {
     const ext = path.extname(file.filename);
-
-    if (!EXTS.includes(ext)) return;
+    if (!EXTS.includes(ext)) return false;
 
     const packageJson = _.find(files, {filename: 'package.json'});
     if (packageJson) {

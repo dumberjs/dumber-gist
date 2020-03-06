@@ -1,6 +1,7 @@
 import path from 'path';
 import {SvelteTranspiler} from './transpilers/svelte';
 import {Au2Transpiler} from './transpilers/au2';
+import {AuTsTranspiler} from './transpilers/au-ts';
 import {JsTranspiler} from './transpilers/js';
 import {SassTranspiler} from './transpilers/sass';
 import {LessTranspiler} from './transpilers/less';
@@ -11,6 +12,7 @@ export class Transpiler {
     this.transpilers = [
       new SvelteTranspiler(),
       new Au2Transpiler(),
+      new AuTsTranspiler(),
       new JsTranspiler(),
       new SassTranspiler(),
       new LessTranspiler(),

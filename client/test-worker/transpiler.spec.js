@@ -1,7 +1,12 @@
 import test from 'tape-promise/tape';
 import {Transpiler} from '../src-worker/transpiler';
 
-test('Transpiler transpiles ts file', async t => {
+const p = {
+  filename: 'package.json',
+  content: '{"dependencies":{"aurelia-bootstrapper":"1.0.0"}}'
+};
+
+test('Transpiler transpiles au1 ts file', async t => {
   const jt = new Transpiler();
   const code = `import {autoinject, bindable} from 'aurelia-framework';
 @autoinject
@@ -13,11 +18,12 @@ export class Foo {
   const file = await jt.transpile({
     filename: 'src/foo.ts',
     content: code
-  });
+  }, [p]);
 
   t.equal(file.filename, 'src/foo.js');
   t.equal(file.moduleId, 'foo');
-  t.ok(file.content.includes('_initializerDefineProperty(this, "bar", _descriptor, this)'));
+  t.ok(file.content.includes("this.bar = '';"));
+  t.ok(file.content.includes("__decorate("));
   t.notOk(file.content.includes("sourceMappingURL"));
   t.equal(file.sourceMap.file, 'src/foo.js');
   t.deepEqual(file.sourceMap.sources, ['src/foo.ts']);

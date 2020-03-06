@@ -19,6 +19,7 @@ import syntaxJsx from '@babel/plugin-syntax-jsx';
 import transformJsx from '@babel/plugin-transform-react-jsx';
 import reactDisplayName from '@babel/plugin-transform-react-display-name';
 import inferno from 'babel-plugin-inferno';
+import _ from 'lodash';
 
 const EXTS = ['.js', '.ts', '.jsx', '.tsx'];
 
@@ -35,13 +36,27 @@ const PLUGINS = [
 ];
 
 export class JsTranspiler {
-  match(file) {
+  match(file, files) {
     const ext = path.extname(file.filename);
-    return EXTS.indexOf(ext) !== -1;
+
+    if (!EXTS.includes(ext)) return false;
+    if (ext !== '.ts') return true;
+
+    const packageJson = _.find(files, {filename: 'package.json'});
+    if (packageJson) {
+      try {
+        const meta = JSON.parse(packageJson.content);
+        // aurelia1 ts files will be processed by typescript compiler
+        return !_.has(meta, ['dependencies', 'aurelia-bootstrapper']);
+      } catch (e) {
+        // ignore
+      }
+    }
+    return true;
   }
 
   async transpile(file, files, opts = {}) {
-    if (!this.match(file)) throw new Error('Cannot use JsTranspiler for file: ' + filename);
+    if (!this.match(file, files)) throw new Error('Cannot use JsTranspiler for file: ' + filename);
 
     const {filename, content} = file;
     const ext = path.extname(filename);

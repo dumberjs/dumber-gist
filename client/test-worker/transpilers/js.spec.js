@@ -20,6 +20,15 @@ test('JsTranspiler does not match other files', t => {
   t.end();
 });
 
+test('JsTranspiler does not match au1 ts files', t => {
+  const jt = new JsTranspiler();
+  t.notOk(jt.match(
+    {filename: 'src/foo.ts', content: ''},
+    [{filename: 'package.json', content: '{"dependencies":{"aurelia-bootstrapper":"1.0.0"}}'}]
+  ));
+  t.end();
+});
+
 test('JsTranspiler transpiles ts file', async t => {
   const jt = new JsTranspiler();
   const code = `import {autoinject, bindable} from 'aurelia-framework';
