@@ -12,7 +12,9 @@ export class AuTsTranspiler {
     if (packageJson) {
       try {
         const meta = JSON.parse(packageJson.content);
-        return _.has(meta, ['dependencies', 'aurelia-bootstrapper']);
+        // au1 or au2
+        return _.has(meta, ['dependencies', 'aurelia-bootstrapper']) ||
+          _.has(meta, ['dependencies', 'aurelia']);
       } catch (e) {
         // ignore
       }

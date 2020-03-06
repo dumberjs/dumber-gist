@@ -5,6 +5,11 @@ const p = {
   filename: 'package.json',
   content: '{"dependencies":{"aurelia-bootstrapper":"1.0.0"}}'
 };
+const p2 = {
+  filename: 'package.json',
+  content: '{"dependencies":{"aurelia":"dev"}}'
+};
+
 
 test('AuTsTranspiler matches nothing in non au1 project', t => {
   const jt = new AuTsTranspiler();
@@ -26,11 +31,12 @@ test('AuTsTranspiler matches ts file in au1 project', t => {
   t.notOk(jt.match({filename: 'src/foo.js', content: ''}, [p]));
   t.notOk(jt.match({filename: 'src/foo.jsx', content: ''}, [p]));
   t.ok(jt.match({filename: 'src/foo.ts', content: ''}, [p]));
-  t.notOk(jt.match({filename: 'src/foo.tsx', content: ''}, [p]));
+  t.ok(jt.match({filename: 'src/foo.ts', content: ''}, [p2]));
+  t.notOk(jt.match({filename: 'src/foo.tsx', content: ''}, [p2]));
   t.notOk(jt.match({filename: 'src/foo.html', content: ''}, [p]));
   t.notOk(jt.match({filename: 'src/foo.css', content: ''}, [p]));
-  t.notOk(jt.match({filename: 'src/foo.json', content: ''}, [p]));
-  t.notOk(jt.match({filename: 'src/foo.less', content: ''}, [p]));
+  t.notOk(jt.match({filename: 'src/foo.json', content: ''}, [p2]));
+  t.notOk(jt.match({filename: 'src/foo.less', content: ''}, [p2]));
   t.notOk(jt.match({filename: 'src/foo.scss', content: ''}, [p]));
   t.end();
 });

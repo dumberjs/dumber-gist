@@ -46,8 +46,9 @@ export class JsTranspiler {
     if (packageJson) {
       try {
         const meta = JSON.parse(packageJson.content);
-        // aurelia1 ts files will be processed by typescript compiler
-        return !_.has(meta, ['dependencies', 'aurelia-bootstrapper']);
+        // au1 and au2 ts files will be processed by typescript compiler
+        return !_.has(meta, ['dependencies', 'aurelia-bootstrapper']) &&
+          !_.has(meta, ['dependencies', 'aurelia']);
       } catch (e) {
         // ignore
       }

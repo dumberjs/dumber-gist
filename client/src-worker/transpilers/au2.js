@@ -1,5 +1,6 @@
 import path from 'path';
 import {JsTranspiler} from './js';
+import {AuTsTranspiler} from './au-ts';
 import _ from 'lodash';
 
 const EXTS = ['.html', '.js', '.ts'];
@@ -7,6 +8,7 @@ const EXTS = ['.html', '.js', '.ts'];
 export class Au2Transpiler {
   constructor() {
     this.jsTranspiler = new JsTranspiler();
+    this.auTsTranspiler = new AuTsTranspiler();
   }
 
   match(file, files) {
@@ -56,9 +58,11 @@ export class Au2Transpiler {
       const ext = path.extname(file.filename);
       const newFilename = file.filename + (ext === '.html' ? '.js': '');
 
-      return this.jsTranspiler.transpile(
+      const t = newFilename.endsWith('.ts') ? this.auTsTranspiler : this.jsTranspiler;
+      return t.transpile(
         // ignore result.map for now
-        {filename: newFilename, content: result.code}
+        {filename: newFilename, content: result.code},
+        files
       );
     }
   }
