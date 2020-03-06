@@ -35,6 +35,22 @@ test('Au1DepsFinder find deps for npm js file', async t => {
   t.deepEqual(deps2, []);
 });
 
+test('Au1DepsFinder find deps for scoped npm js file', async t => {
+  const primitives = {
+    async doesJsdelivrFileExist(packageWithVersion, filePath) {
+      if (packageWithVersion === '@scoped/foo@1.0.0' && filePath === 'dist/bar.html') {
+        return true;
+      }
+    }
+  }
+  const f = new Au1DepsFinder(primitives);
+  const deps = await f.findDeps('//cdn.jsdelivr.net/npm/@scoped/foo@1.0.0/dist/bar.js', 'exports.Bar = class Bar {}');
+  t.deepEqual(deps, ['text!./bar.html']);
+
+  const deps2 = await f.findDeps('//cdn.jsdelivr.net/npm/@scoped/foo@1.0.0/dist/bar2.js', 'exports.Bar = class Bar2 {}');
+  t.deepEqual(deps2, []);
+});
+
 test('Au1DepsFinder find deps for npm html file', async t => {
   const primitives = {
     async doesJsdelivrFileExist() { return false; }

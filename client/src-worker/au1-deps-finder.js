@@ -18,10 +18,14 @@ export class Au1DepsFinder {
     let filePath;
     if (filename.startsWith(JSDELIVR_PREFIX)) {
       const part = filename.slice(JSDELIVR_PREFIX.length);
-      const idx = part.indexOf('/');
+      let idx = part.indexOf('/');
       if (idx > 0) {
-        packageWithVersion = part.slice(0, idx);
-        filePath = part.slice(idx + 1);
+        // For @scoped/npm-package/file/path.js
+        if (part.startsWith('@')) idx = part.indexOf('/', idx + 1);
+        if (idx > 0) {
+          packageWithVersion = part.slice(0, idx);
+          filePath = part.slice(idx + 1);
+        }
       }
     }
 

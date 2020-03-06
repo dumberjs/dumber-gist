@@ -14,10 +14,21 @@ const primitives = {
           })
         };
       }
+    } else if  (packageWithVersion === '@scope/foo@1.0.0' || packageWithVersion === '@scope/foo') {
+      if (filePath === 'package.json') {
+        return {
+          path: '//cdn.jsdelivr.net/npm/@scope/foo@1.0.0/package.json',
+          contents: JSON.stringify({
+            name: '@scope/foo',
+            version: '1.0.0',
+            main: 'dist/index.js'
+          })
+        };
+      }
     }
   },
   async doesJsdelivrFileExist(packageWithVersion, filePath) {
-    if (packageWithVersion === 'foo@1.0.0') {
+    if (packageWithVersion === 'foo@1.0.0' || packageWithVersion === '@scope/foo@1.0.0') {
       return filePath === 'package.json' ||
         filePath === 'dist/index.js';
     }
@@ -26,6 +37,11 @@ const primitives = {
     if (packageWithVersion === 'foo@1.0.0' && filePath === 'dist/index.js') {
       return {
         path: '//cdn.jsdelivr.net/npm/foo@1.0.0/dist/index.js',
+        contents: 'lorem'
+      };
+    } else if (packageWithVersion === '@scope/foo@1.0.0' && filePath === 'dist/index.js') {
+      return {
+        path: '//cdn.jsdelivr.net/npm/@scope/foo@1.0.0/dist/index.js',
         contents: 'lorem'
       };
     }
@@ -167,4 +183,32 @@ test('Jsdelivr rejects unknown alias', async t => {
   await t.rejects(() => j.create({name: 'bar', location: 'foo@2.0.0'}));
 });
 
+test('Jsdelivr gets files for scoped npm package', async t => {
+  const j = new Jsdelivr(primitives);
+  const reader = await j.create({name: '@scope/foo'});
 
+  t.deepEqual(
+    await reader('package.json'),
+    {
+      path: '//cdn.jsdelivr.net/npm/@scope/foo@1.0.0/package.json',
+      contents: JSON.stringify({
+        name: '@scope/foo',
+        version: '1.0.0',
+        main: 'dist/index.js'
+      })
+    }
+  );
+
+  t.deepEqual(reader.packageConfig, {name: '@scope/foo'});
+  t.ok(await reader.exists('package.json'));
+  t.ok(await reader.exists('dist/index.js'));
+  t.notOk(await reader.exists('dist/unknown.js'));
+
+  t.deepEqual(
+    await reader('dist/index.js'),
+    {
+      path: '//cdn.jsdelivr.net/npm/@scope/foo@1.0.0/dist/index.js',
+      contents: 'lorem'
+    }
+  );
+});
