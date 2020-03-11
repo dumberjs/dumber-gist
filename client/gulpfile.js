@@ -108,12 +108,6 @@ const drWorker = dumber({
     HOST_NAMES,
     DUMBER_MODULE_LOADER_DIST
   ],
-  deps: [
-    // semver main index.js uses special lazyRequire which can not
-    // be statically analyzed, we need explicit require for bundler
-    // to work.
-    {name: 'semver', main: 'preload.js'}
-  ],
   append: [
     isTest ?
       `requirejs(['../test-worker/setup', /^\\.\\.\\/test-worker\\/.+\\.spec$/]).catch(console.error);` :
