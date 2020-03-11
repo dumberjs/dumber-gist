@@ -29,7 +29,7 @@ The aurelia bootstrapper then loads up user module "main"
 
 const mainJs = `export function configure(aurelia) {
   aurelia.use.standardConfiguration();
-  aurelia.use.developmentLogging('debug');
+  aurelia.use.developmentLogging('info');
   aurelia.start().then(() => aurelia.setRoot());
 }
 `;
@@ -38,7 +38,7 @@ const mainTs = `import {Aurelia} from 'aurelia-framework';
 
 export function configure(aurelia: Aurelia) {
   aurelia.use.standardConfiguration();
-  aurelia.use.developmentLogging('debug');
+  aurelia.use.developmentLogging('info');
   aurelia.start().then(() => aurelia.setRoot());
 }
 `;
