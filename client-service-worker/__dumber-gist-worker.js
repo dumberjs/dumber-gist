@@ -96,7 +96,9 @@ addEventListener('message', async e => {
 });
 
 addEventListener('fetch', e => {
-  if (!e.request.url.match(/^https:\/\/\w+\.gist\.dumber\.(local|app)/)) return;
+  if (!e.request.url.startsWith(location.origin)) return;
+  const pathname = e.request.url.slice(location.origin.length);
+
   if (
     e.request.url.endsWith('__boot-up-worker.html') ||
     e.request.url.endsWith('__dumber-gist-worker') ||
@@ -107,11 +109,7 @@ addEventListener('fetch', e => {
     caches.match(e.request).then(r => {
       if (r) return r;
 
-      if (
-        e.request.method === 'GET' &&
-        e.request.url.startsWith(location.origin + '/')
-      ) {
-        const pathname = e.request.url.slice(location.origin.length);
+      if (e.request.method === 'GET') {
         if (isLikeRoute(pathname)) {
           // Return /index.html for HTML5 routes
           return caches.match(location.origin + '/');
@@ -128,7 +126,12 @@ addEventListener('fetch', e => {
         return;
       }
 
-      return fetch(e.request);
+      return fetch(e.request).then(response => {
+        if (!response.ok && pathname.length > 1) {
+          return fetch(`//cdn.jsdelivr.net/npm${pathname}`, {mode: 'cors'});
+        }
+        return response;
+      });
     })
   );
 });
