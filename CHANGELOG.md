@@ -1,3 +1,12 @@
+## [0.2.1](https://github.com/dumberjs/dumber-gist/compare/v0.2.0...v0.2.1) (2020-03-12)
+
+
+### Bug Fixes
+
+* avoid accessing dom after detach ([48fa85c](https://github.com/dumberjs/dumber-gist/commit/48fa85c58d81e869e0dfe98b35255706a2e2abb4))
+
+
+
 # 0.2.0 (2020-03-12)
 
 
