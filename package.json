@@ -1,0 +1,14 @@
+{
+  "name": "dumber-gist",
+  "private": true,
+  "version": "0.1.0",
+  "description": "The private is set to true to avoid publishing to npm",
+  "license": "MIT",
+  "devDependencies": {
+    "standard-changelog": "^2.0.21"
+  },
+  "scripts": {
+    "version": "standard-changelog && git add CHANGELOG.md",
+    "postversion": "git push && git push --tags"
+  }
+}
