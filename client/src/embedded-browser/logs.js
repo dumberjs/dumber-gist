@@ -49,7 +49,7 @@ export class Logs {
   }
 
   scrollToBottom() {
-    this.el.scrollTop = this.el.scrollHeight;
+    if (this.el) this.el.scrollTop = this.el.scrollHeight;
   }
 
   @computedFrom('filter', 'logs.length')
