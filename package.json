@@ -9,6 +9,6 @@
   },
   "scripts": {
     "version": "standard-changelog && git add CHANGELOG.md",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags && node deploy.sh"
   }
 }
