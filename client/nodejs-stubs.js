@@ -6,3 +6,5 @@ global.HOST_NAMES = {
 };
 
 global.DUMBER_MODULE_LOADER_DIST = 'dumber-module-loader dist content';
+
+global.fetch = require('node-fetch');
