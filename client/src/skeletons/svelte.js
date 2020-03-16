@@ -57,7 +57,7 @@ To use less: <style lang="less"> or <style type="text/less">
 </style>
 `;
 
-export default function(transpiler) {
+export default function({transpiler}) {
   const ext = transpiler === 'typescript' ? '.ts' : '.js';
   const files = [
     {

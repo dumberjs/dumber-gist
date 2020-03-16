@@ -45,7 +45,7 @@ export default class App extends Component {
 }
 `;
 
-export default function(transpiler) {
+export default function({transpiler}) {
   const ext = transpiler === 'typescript' ? '.ts' : '.js';
   const files = [
     {

@@ -1151,12 +1151,14 @@ input[type='text'] {
   }
 
   img {
+    flex: 0 0 auto;
     width: 2rem;
     height: 2rem;
     margin-right: .6rem;
   }
 
   .icon.fab, .icon.fas, .icon.far, .icon.fal {
+    flex: 0 0 auto;
     font-size: 1.8rem;
     color: $blue;
     line-height: 2rem;

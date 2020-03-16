@@ -50,7 +50,7 @@ export default {
 `;
 
 
-export default function(transpiler) {
+export default function({transpiler}) {
   const ext = transpiler === 'typescript' ? '.ts' : '.js';
   const files = [
     {

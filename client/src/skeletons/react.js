@@ -47,7 +47,7 @@ export default function App() {
 }
 `;
 
-export default function(transpiler) {
+export default function({transpiler}) {
   const ext = transpiler === 'typescript' ? '.tsx' : '.jsx';
   const files = [
     {

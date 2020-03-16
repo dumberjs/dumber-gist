@@ -36,7 +36,7 @@ export class SkeletonGenerator {
       return;
     }
 
-    const files = _.map(skeleton(transpiler), f => ({...f, isChanged: true}));
+    const files = _.map(skeleton({transpiler}), f => ({...f, isChanged: true}));
     this.session.importData({files});
     this.ea.publish('generated-from-skeleton');
   }

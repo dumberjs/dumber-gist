@@ -57,7 +57,7 @@ const appTs = `export class MyApp {
 }
 `;
 
-export default function(transpiler) {
+export default function({transpiler}) {
   const ext = transpiler === 'typescript' ? '.ts' : '.js';
   const files = [
     {

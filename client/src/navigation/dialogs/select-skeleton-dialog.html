@@ -42,6 +42,8 @@
               </div>
             </div>
           </div>
+<!--
+  :-) we need adding angular to left side to balance the height of right side
 
           <div class="select-section">
             <div class="section-header">CSS Language</div>
@@ -53,6 +55,34 @@
 
               </div>
               <small class="text-muted ml-2"><i class="fas fa-info-circle"></i> Stylus is not supported yet.</small>
+            </div>
+          </div>
+ -->
+          <div class="select-section">
+            <div class="section-header">Unit Tests</div>
+            <div class="section-body" if.bind="framework !== 'svelte'">
+              <div
+                repeat.for="f of unitTests"
+                class="selection ${f.value === testFramework ? 'selected' : ''}"
+                click.trigger="testFramework = f.value & leftClick"
+                dblclick.trigger="ok() & leftClick"
+              >
+                <i if.bind="f.icon" class="icon" class.bind="f.icon"></i>
+                <img if.bind="f.image" src.bind="f.image" alt.bind="f.label">
+                <div>
+                  <div class="title">${f.label}</div>
+                  <div class="description" if.bind="f.description">${f.description}</div>
+                </div>
+              </div>
+            </div>
+            <div class="section-body" else>
+              <div class="selection selected">
+                <div>
+                  <div class="description text-warn">
+                    Svelte unit testing is not supported yet, as <a href="https://github.com/sveltejs/svelte/wiki/FAQ#how-do-i-do-testing-svelte-apps" target="_blank">it doesn't have an official support yet.</a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
