@@ -72,7 +72,7 @@ test('EditSession updates file after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -129,7 +129,7 @@ test('EditSession updates file after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -186,7 +186,7 @@ test('EditSession skips unchanged update after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -243,7 +243,7 @@ test('EditSession skips unchanged update after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -300,7 +300,7 @@ test('EditSession skips update on file not existing after rendering', async t =>
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -362,7 +362,7 @@ test('EditSession skips update on file not existing after rendering', async t =>
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -422,7 +422,7 @@ test('EditSession updates file again during rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -485,7 +485,7 @@ test('EditSession updates file again during rendering', async t => {
   es.mutationChanged();
 
   t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -519,7 +519,7 @@ test('EditSession updates file again during rendering', async t => {
   es.mutationChanged();
 
   t.deepEqual(actions.slice(8), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',

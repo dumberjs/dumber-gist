@@ -70,7 +70,7 @@ test('EditSession deletes folder after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -131,7 +131,7 @@ test('EditSession deletes folder after rendering', async t => {
   await es.render();
 es.mutationChanged();
     t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src-js.js',
@@ -204,7 +204,7 @@ test('EditSession deletes nested folder after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -282,7 +282,7 @@ test('EditSession deletes nested folder after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -360,7 +360,7 @@ test('EditSession ignores deleting unknown folder after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -458,7 +458,7 @@ test('EditSession ignores deleting unknown folder after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',

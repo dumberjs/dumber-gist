@@ -66,7 +66,7 @@ test('EditSession creates file after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -128,7 +128,7 @@ test('EditSession creates file after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -189,7 +189,7 @@ test('EditSession cannot creates file to overwrite existing file', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -251,7 +251,7 @@ test('EditSession cannot creates file to overwrite existing file', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -308,7 +308,7 @@ test('EditSession cannot creates file with name conflict on existing folder', as
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -370,7 +370,7 @@ test('EditSession cannot creates file with name conflict on existing folder', as
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',

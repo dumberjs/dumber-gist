@@ -66,7 +66,7 @@ test('EditSession updates path after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -123,7 +123,7 @@ test('EditSession updates path after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/app.js',
@@ -180,7 +180,7 @@ test('EditSession skips file path not existing after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -241,7 +241,7 @@ test('EditSession skips file path not existing after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -298,7 +298,7 @@ test('EditSession skips existing target file path after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -360,7 +360,7 @@ test('EditSession skips existing target file path after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -425,7 +425,7 @@ test('EditSession update folder path after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -500,7 +500,7 @@ test('EditSession update folder path after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -580,7 +580,7 @@ test('EditSession update file path without side effect after rendering', async t
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
@@ -664,7 +664,7 @@ test('EditSession update file path without side effect after rendering', async t
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}, dev: true}},
+    {type: 'init', config: {deps: {}}},
     {type: 'update', files: [
       {
         filename: 'src/main.js',
