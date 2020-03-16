@@ -1,6 +1,5 @@
 import test from 'tape-promise/tape';
 import {EditSession} from '../../src/edit/edit-session';
-import _ from 'lodash';
 
 let actions = [];
 let published = [];
@@ -18,16 +17,10 @@ const ea = {
 
 const workerService = {
   async perform(action) {
-    let isNew;
-    if (action.type === 'init') {
-      isNew = !_.find(actions, {type: 'init'});
-    }
     actions.push(action);
-    if (action.type === 'init') {
-      return {isNew};
-    }
-    if (action.type === 'build') {
-      return 'entry-bundle';
+
+    if (action.type === 'bundle') {
+      return ['bundled-files'];
     }
   }
 };
@@ -66,8 +59,7 @@ test('EditSession updates path after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -81,17 +73,7 @@ test('EditSession updates path after rendering', async t => {
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 
   t.ok(es.isRendered);
@@ -122,9 +104,8 @@ test('EditSession updates path after rendering', async t => {
 
   await es.render();
   es.mutationChanged();
-  t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+  t.deepEqual(actions.slice(2), [
+    {type: 'bundle', files: [
       {
         filename: 'src/app.js',
         content: 'main'
@@ -138,17 +119,7 @@ test('EditSession updates path after rendering', async t => {
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 });
 
@@ -180,8 +151,7 @@ test('EditSession skips file path not existing after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -195,17 +165,7 @@ test('EditSession skips file path not existing after rendering', async t => {
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 
   t.ok(es.isRendered);
@@ -240,9 +200,8 @@ test('EditSession skips file path not existing after rendering', async t => {
 
   await es.render();
   es.mutationChanged();
-  t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+  t.deepEqual(actions.slice(2), [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -256,17 +215,7 @@ test('EditSession skips file path not existing after rendering', async t => {
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 });
 
@@ -298,8 +247,7 @@ test('EditSession skips existing target file path after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -313,17 +261,7 @@ test('EditSession skips existing target file path after rendering', async t => {
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 
   t.ok(es.isRendered);
@@ -359,9 +297,8 @@ test('EditSession skips existing target file path after rendering', async t => {
 
   await es.render();
   es.mutationChanged();
-  t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+  t.deepEqual(actions.slice(2), [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -375,17 +312,7 @@ test('EditSession skips existing target file path after rendering', async t => {
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 });
 
@@ -425,8 +352,7 @@ test('EditSession update folder path after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -448,17 +374,7 @@ test('EditSession update folder path after rendering', async t => {
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 
   t.ok(es.isRendered);
@@ -499,9 +415,8 @@ test('EditSession update folder path after rendering', async t => {
 
   await es.render();
   es.mutationChanged();
-  t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+  t.deepEqual(actions.slice(2), [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -523,17 +438,7 @@ test('EditSession update folder path after rendering', async t => {
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 
   t.ok(es.isRendered);
@@ -580,8 +485,7 @@ test('EditSession update file path without side effect after rendering', async t
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -607,17 +511,7 @@ test('EditSession update file path without side effect after rendering', async t
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 
   t.ok(es.isRendered);
@@ -663,9 +557,8 @@ test('EditSession update file path without side effect after rendering', async t
 
   await es.render();
   es.mutationChanged();
-  t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+  t.deepEqual(actions.slice(2), [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -691,17 +584,7 @@ test('EditSession update file path without side effect after rendering', async t
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 
   t.ok(es.isRendered);

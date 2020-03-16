@@ -36,14 +36,8 @@ onmessage = async function(event) {
   try {
     let data;
 
-    if (type === 'init') {
-      // Let main page to deal with cache because main page knows GitHub access token.
-
-      data = await session.init(action.config);
-    } else if (type === 'update') {
-      data = await session.update(action.files);
-    } else if (type === 'build') {
-      data = await session.build();
+    if (type === 'bundle') {
+      data = await session.bundle(action.files);
     } else if (type === 'update-token') {
       // sync github token from main window
       global.__github_token = action.token;

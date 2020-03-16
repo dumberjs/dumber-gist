@@ -128,7 +128,11 @@ addEventListener('fetch', e => {
 
       return fetch(e.request).then(response => {
         if (!response.ok && pathname.length > 1) {
-          return fetch(`//cdn.jsdelivr.net/npm${pathname}`, {mode: 'cors'});
+          // Try font/image from jsdelivr
+          return fetch(`//cdn.jsdelivr.net/npm${pathname}`, {mode: 'cors'}).then(response => {
+              if (response.ok) return response;
+              throw new Error(`No resource for ${pathname}`);
+            });
         }
         return response;
       });

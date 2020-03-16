@@ -1,6 +1,5 @@
 import test from 'tape-promise/tape';
 import {EditSession} from '../../src/edit/edit-session';
-import _ from 'lodash';
 
 let actions = [];
 let published = [];
@@ -18,16 +17,10 @@ const ea = {
 
 const workerService = {
   async perform(action) {
-    let isNew;
-    if (action.type === 'init') {
-      isNew = !_.find(actions, {type: 'init'});
-    }
     actions.push(action);
-    if (action.type === 'init') {
-      return {isNew};
-    }
-    if (action.type === 'build') {
-      return 'entry-bundle';
+
+    if (action.type === 'bundle') {
+      return ['bundled-files'];
     }
   }
 };
@@ -150,8 +143,7 @@ test('EditSession renders pass on deps from package.json', async t => {
   t.ok(es.isRendered);
   t.notOk(es.isChanged);
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {foo: '^1.0.0', bar: '~2.1.0'}}},
-    {type: 'update', files: [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -165,17 +157,6 @@ test('EditSession renders pass on deps from package.json', async t => {
         content: '{"dependencies":{"foo":"^1.0.0","bar":"~2.1.0"}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 });
-

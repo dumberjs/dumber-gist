@@ -237,34 +237,10 @@ export class EditSession {
       content: f.content
     }));
 
-    // Get dependencies from package.json
-    let deps = {};
-    _.each(files, f => {
-      if (f.filename !== 'package.json') return;
-      const json = JSON.parse(f.content);
-      deps = json.dependencies;
-      return false; // exit early
-    });
-
-    await this.ws.perform({type: 'init', config: {deps}});
-    await this.ws.perform({type: 'update', files});
-    const entryBundle = await this.ws.perform({type: 'build'});
-
-    const htmlAndBundles = _.filter(files, f =>
-      !f.filename.includes('/') && f.filename.endsWith('.html')
-    );
-
-    htmlAndBundles.push({
-      filename: 'dist/entry-bundle.js',
-      content: entryBundle
-    });
-
-    await this.ws.perform({
-      type: 'sw:update-files',
-      files: htmlAndBundles
-    });
-
-    this._renderedHash = getFilesHash(files);
+    const _renderingHash = getFilesHash(files);
+    const visibleFiles = await this.ws.perform({type: 'bundle', files});
+    await this.ws.perform({type: 'sw:update-files', files: visibleFiles});
+    this._renderedHash = _renderingHash;
 
     const seconds = ((new Date()).getTime() - start) / 1000;
     const msg = `[dumber] Built dist/entry-bundle.js in ${seconds.toFixed(1)} secs.`;

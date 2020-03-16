@@ -1,6 +1,5 @@
 import test from 'tape-promise/tape';
 import {EditSession} from '../../src/edit/edit-session';
-import _ from 'lodash';
 
 let actions = [];
 let published = [];
@@ -18,23 +17,16 @@ const ea = {
 
 const workerService = {
   async perform(action) {
-    let isNew;
-    if (action.type === 'init') {
-      isNew = !_.find(actions, {type: 'init'});
-    }
     actions.push(action);
-    let data;
-    if (action.type === 'init') {
-      data = {isNew};
-    } else if (action.type === 'build') {
-      data = 'entry-bundle';
-    }
-    // Test async
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(data);
+
+    if (action.type === 'bundle') {
+      // Test async
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(['bundled-files']);
+        });
       });
-    });
+    }
   }
 };
 
@@ -72,8 +64,7 @@ test('EditSession updates file after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -87,17 +78,7 @@ test('EditSession updates file after rendering', async t => {
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 
   t.ok(es.isRendered);
@@ -128,9 +109,8 @@ test('EditSession updates file after rendering', async t => {
 
   await es.render();
   es.mutationChanged();
-  t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+  t.deepEqual(actions.slice(2), [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main2'
@@ -144,17 +124,7 @@ test('EditSession updates file after rendering', async t => {
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 });
 
@@ -186,8 +156,7 @@ test('EditSession skips unchanged update after rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -201,17 +170,7 @@ test('EditSession skips unchanged update after rendering', async t => {
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 
   t.ok(es.isRendered);
@@ -242,9 +201,8 @@ test('EditSession skips unchanged update after rendering', async t => {
 
   await es.render();
   es.mutationChanged();
-  t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+  t.deepEqual(actions.slice(2), [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -258,17 +216,7 @@ test('EditSession skips unchanged update after rendering', async t => {
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 });
 
@@ -300,8 +248,7 @@ test('EditSession skips update on file not existing after rendering', async t =>
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -315,17 +262,7 @@ test('EditSession skips update on file not existing after rendering', async t =>
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 
   t.ok(es.isRendered);
@@ -361,9 +298,8 @@ test('EditSession skips update on file not existing after rendering', async t =>
 
   await es.render();
   es.mutationChanged();
-  t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+  t.deepEqual(actions.slice(2), [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -377,17 +313,7 @@ test('EditSession skips update on file not existing after rendering', async t =>
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 
   t.ok(es.isRendered);
@@ -422,8 +348,7 @@ test('EditSession updates file again during rendering', async t => {
   await es.render();
   es.mutationChanged();
   t.deepEqual(actions, [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main'
@@ -437,17 +362,7 @@ test('EditSession updates file again during rendering', async t => {
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
 
   t.ok(es.isRendered);
@@ -484,9 +399,8 @@ test('EditSession updates file again during rendering', async t => {
   await es.render();
   es.mutationChanged();
 
-  t.deepEqual(actions.slice(4), [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+  t.deepEqual(actions.slice(2), [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main2'
@@ -500,17 +414,7 @@ test('EditSession updates file again during rendering', async t => {
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
   t.notOk(es.isRendered); // has new change to render
   t.ok(es.isChanged);
@@ -518,9 +422,8 @@ test('EditSession updates file again during rendering', async t => {
   await es.render();
   es.mutationChanged();
 
-  t.deepEqual(actions.slice(8), [
-    {type: 'init', config: {deps: {}}},
-    {type: 'update', files: [
+  t.deepEqual(actions.slice(4), [
+    {type: 'bundle', files: [
       {
         filename: 'src/main.js',
         content: 'main3'
@@ -534,17 +437,7 @@ test('EditSession updates file again during rendering', async t => {
         content: '{"dependencies":{}}'
       }
     ]},
-    {type: 'build'},
-    {type: 'sw:update-files', files:[
-      {
-        filename: 'index.html',
-        content: 'index-html'
-      },
-      {
-        filename: 'dist/entry-bundle.js',
-        content: 'entry-bundle'
-      }
-    ]}
+    {type: 'sw:update-files', files:['bundled-files']}
   ]);
   t.ok(es.isRendered);
   t.ok(es.isChanged);

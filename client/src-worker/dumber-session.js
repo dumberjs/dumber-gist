@@ -149,10 +149,31 @@ export class DumberSession {
     return !!this.instance;
   }
 
+  async bundle(files) {
+    // Get dependencies from package.json
+    let deps = {};
+    _.each(files, f => {
+      if (f.filename !== 'package.json') return;
+      const json = JSON.parse(f.content);
+      deps = json.dependencies;
+      return false; // exit early
+    });
+
+    await this.init({deps});
+    const visibleFiles = await this.update(files);
+    const entryBundle = await this.build();
+    visibleFiles.push({
+      filename: 'dist/entry-bundle.js',
+      content: entryBundle
+    });
+
+    return visibleFiles;
+  }
+
   async init(config) {
     if (this.instance && _.isEqual(this.config, config)) {
       // reuse existing dumber
-      return {isNew: false};
+      return;
     }
 
     const cnt = config.deps ? Object.keys(config.deps).length : 0;
@@ -198,7 +219,6 @@ export class DumberSession {
       transpilerOptions.jsxPragma = 'Inferno.createVNode';
     }
     this.transpilerOptions = transpilerOptions;
-    return {isNew: true};
   }
 
   async update(files) {
@@ -207,10 +227,13 @@ export class DumberSession {
     }
 
     console.log(`[dumber] Tracing files...`);
-
+    const visibleFiles = [];
     for (let i = 0, ii = files.length; i < ii; i++) {
       const file = files[i];
-      if (file.filename.startsWith('src/') || !file.filename.match(/[^/]+\.html/)) {
+      // Don't transpile root level html files
+      if (file.filename.match(/^[^/]+\.html$/)) {
+        visibleFiles.push(file);
+      } else {
         const transpiledFile = await this.transpiler.transpile(file, files, this.transpilerOptions);
         if (!transpiledFile) continue;
 
@@ -220,6 +243,14 @@ export class DumberSession {
         // }
         // console.log(log);
 
+        // Allow manual <link ref="stylesheet" href="/styles.css">
+        if (transpiledFile.filename.endsWith('.css')) {
+          visibleFiles.push({
+            filename: transpiledFile.filename,
+            content: transpiledFile.content
+          });
+        }
+
         await this.instance.capture({
           path: transpiledFile.filename,
           moduleId: transpiledFile.moduleId,
@@ -228,6 +259,8 @@ export class DumberSession {
         });
       }
     }
+
+    return visibleFiles;
   }
 
   // TODO add source map support, copy code from gulp-dumber

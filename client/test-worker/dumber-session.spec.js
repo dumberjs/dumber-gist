@@ -71,8 +71,7 @@ test('DumberSession initialises new dumber instance', async t => {
   t.notOk(session.isInitialised);
 
   const config = {deps: {vue: '^2.0.0'}};
-  const data = await session.init(config);
-  t.deepEqual(data, {isNew: true});
+  await session.init(config);
   t.ok(session.isInitialised);
 
   t.deepEqual(session.config, config);
@@ -93,8 +92,7 @@ test('DumberSession reuses existing dumber instance', async t => {
   t.notOk(session.isInitialised);
 
   const config = {};
-  const data = await session.init(config);
-  t.deepEqual(data, {isNew: true});
+  await session.init(config);
   t.ok(session.isInitialised);
 
   t.deepEqual(session.config, config);
@@ -112,8 +110,7 @@ test('DumberSession reuses existing dumber instance', async t => {
     { filename: 'index.html', content: 'index-html' }
   ]);
 
-  const data2 = await session.init(config);
-  t.deepEqual(data2, {isNew: false});
+  await session.init(config);
   t.ok(session.isInitialised);
 
   t.deepEqual(session.config, config);
@@ -125,8 +122,7 @@ test('DumberSession replaces existing dumber instance with different config', as
   t.notOk(session.isInitialised);
 
   const config = {deps: {vue: '^2.0.0'}};
-  const data = await session.init(config);
-  t.deepEqual(data, {isNew: true});
+  await session.init(config);
   t.ok(session.isInitialised);
 
   t.deepEqual(session.config, config);
@@ -143,8 +139,7 @@ test('DumberSession replaces existing dumber instance with different config', as
   const instance1 = session.instance;
 
   const config2 = {deps: {'aurelia-bootstrapper': '^2.0.0'}};
-  const data2 = await session.init(config2);
-  t.deepEqual(data2, {isNew: true});
+  await session.init(config2);
   t.ok(session.isInitialised);
 
   t.deepEqual(session.config, config2);
@@ -203,4 +198,39 @@ test('DumberSession cannot build before init', async t => {
   await t.rejects(async () => {
     await session.build();
   }, {instanceOf: DumberUninitializedError});
+});
+
+test('DumberSession bundles', async t => {
+  const session = new DumberSession(Dumber, auFindDeps, depsResolver, transpiler, dumberCache, jsdelivr);
+
+  const visibleFiles = await session.bundle([
+    { filename: 'index.html', content: 'index-html' },
+    { filename: 'src/main.js', content: 'main' },
+    { filename: 'src/app.js', content: 'app' },
+    { filename: 'src/app.html', content: 'app-html' },
+    { filename: 'src/app.css', content: 'app-css' }
+  ]);
+  t.equal(session.instance.files.length, 4);
+
+  t.deepEqual(visibleFiles, [
+    {
+      filename: 'index.html',
+      content: 'index-html'
+    },
+    // Allow manual <link ref="stylesheet" href="/src/app.css">
+    {
+      filename: 'src/app.css',
+      content: 'app-css'
+    },
+    {
+      filename: 'dist/entry-bundle.js',
+      content: `main
+app
+app-html
+app-css
+requirejs.config({
+  "foo": "bar"
+});`
+    }
+  ]);
 });

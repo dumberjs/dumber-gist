@@ -1,6 +1,5 @@
 import test from 'tape-promise/tape';
 import {EditSession} from '../../src/edit/edit-session';
-import _ from 'lodash';
 
 let actions = [];
 let published = [];
@@ -18,16 +17,10 @@ const ea = {
 
 const workerService = {
   async perform(action) {
-    let isNew;
-    if (action.type === 'init') {
-      isNew = !_.find(actions, {type: 'init'});
-    }
     actions.push(action);
-    if (action.type === 'init') {
-      return {isNew};
-    }
-    if (action.type === 'build') {
-      return 'entry-bundle';
+
+    if (action.type === 'bundle') {
+      return ['bundled-files'];
     }
   }
 };
