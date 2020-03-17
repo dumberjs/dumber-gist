@@ -38,7 +38,45 @@ export default class App extends Component {
 }
 `;
 
-export default function({transpiler}) {
+const jasmineTest = `import { render } from 'inferno';
+import App from '../src/App';
+
+describe('Component App', () => {
+  it('should render message', () => {
+    const div = document.createElement('div');
+    render(<App />, div);
+    expect(div.textContent, 'Hello Inferno!');
+  });
+});
+`;
+
+const mochaTest = `import { render } from 'inferno';
+import {expect} from 'chai';
+import App from '../src/App';
+
+describe('Component App', () => {
+  it('should render message', () => {
+    const div = document.createElement('div');
+    render(<App />, div);
+    expect(div.textContent, 'Hello Inferno!');
+  });
+});
+`;
+
+const tapeTest = `import { render } from 'inferno';
+import App from '../src/App';
+import test from 'tape';
+
+test('renders without crashing', t => {
+  const div = document.createElement('div');
+  render(<App />, div);
+  t.equal(div.textContent, 'Hello Inferno!')
+  t.end();
+});
+`;
+
+
+export default function({transpiler, testFramework}) {
   const ext = transpiler === 'typescript' ? '.ts' : '.js';
   const files = [
     {
@@ -58,5 +96,23 @@ export default function({transpiler}) {
       content: app
     }
   ];
+
+  if (testFramework === 'jasmine') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: jasmineTest
+    });
+  } if (testFramework === 'mocha') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: mochaTest
+    });
+  } if (testFramework === 'tape') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: tapeTest
+    });
+  }
+
   return files;
 }

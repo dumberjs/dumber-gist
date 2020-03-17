@@ -46,7 +46,6 @@ export class BrowserDevTools {
 
   @computedFrom('session.mutation')
   get hasUnitTests() {
-    console.log('hasUnitTests', _.some(this.session.files, {filename: 'run-tests.html'}));
     return _.some(this.session.files, {filename: 'run-tests.html'});
   }
 
