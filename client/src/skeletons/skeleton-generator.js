@@ -4,6 +4,7 @@ import {EditSession} from '../edit/edit-session';
 import none from './none';
 import aurelia from './aurelia';
 import aurelia2 from './aurelia2';
+import backbone from './backbone';
 import inferno from './inferno';
 import preact from './preact';
 import react from './react';
@@ -15,6 +16,7 @@ const skeletons = {
   none,
   aurelia,
   aurelia2,
+  backbone,
   inferno,
   preact,
   react,
