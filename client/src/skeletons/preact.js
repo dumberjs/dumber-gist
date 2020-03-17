@@ -1,11 +1,3 @@
-const packageJson = `{
-  "dependencies": {
-    "preact": "^10.0.0",
-    "preact-router": "^3.0.0"
-  }
-}
-`;
-
 const indexHtml = ext => `<!DOCTYPE html>
 <html>
 <head>
@@ -57,7 +49,7 @@ export default function({transpiler}) {
   const files = [
     {
       filename: 'package.json',
-      content: packageJson
+      dependencies: {'preact': '^10.0.0'}
     },
     {
       filename: 'index.html',

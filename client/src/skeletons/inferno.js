@@ -1,10 +1,3 @@
-const packageJson = `{
-  "dependencies": {
-    "inferno": "^7.4.0"
-  }
-}
-`;
-
 const indexHtml = ext => `<!DOCTYPE html>
 <html>
 <head>
@@ -50,7 +43,7 @@ export default function({transpiler}) {
   const files = [
     {
       filename: 'package.json',
-      content: packageJson
+      dependencies: {'inferno': '^7.0.0'}
     },
     {
       filename: 'index.html',

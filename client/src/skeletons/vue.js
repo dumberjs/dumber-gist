@@ -1,10 +1,3 @@
-const packageJson = `{
-  "dependencies": {
-    "vue": "^2.0.0"
-  }
-}
-`;
-
 const indexHtml = ext => `<!DOCTYPE html>
 <html>
 <head>
@@ -55,7 +48,7 @@ export default function({transpiler}) {
   const files = [
     {
       filename: 'package.json',
-      content: packageJson
+      dependencies: {'vue': '^2.0.0'}
     },
     {
       filename: 'index.html',

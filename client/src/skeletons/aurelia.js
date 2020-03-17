@@ -1,10 +1,3 @@
-const packageJson = `{
-  "dependencies": {
-    "aurelia-bootstrapper": "^2.3.3"
-  }
-}
-`;
-
 const indexHtml = ext => `<!DOCTYPE html>
 <html>
 <head>
@@ -61,12 +54,115 @@ const appTs = `export class App {
 }
 `;
 
-export default function({transpiler}) {
+const testSetup = `import 'aurelia-polyfills';
+import {initialize} from 'aurelia-pal-browser';
+initialize();
+`;
+
+const jasmineTest = `import {StageComponent} from 'aurelia-testing';
+import {bootstrap} from 'aurelia-bootstrapper';
+
+describe('Component app', () => {
+  let component;
+  let model = {};
+
+  beforeEach(() => {
+    component = StageComponent
+      .withResources('app')
+      .inView('<app></app>')
+      .boundTo(model);
+  });
+
+  afterEach(() => {
+    if (component) {
+      component.dispose();
+      component = null;
+    }
+  });
+
+  it('should render message', done => {
+    component.create(bootstrap).then(() => {
+      const view = component.element;
+      expect(view.textContent.trim()).toBe('Hello Aurelia!');
+      done();
+    }).catch(e => {
+      fail(e);
+      done();
+    });
+  });
+});
+`;
+
+const mochaTest = `import {expect} from 'chai';
+import {StageComponent} from 'aurelia-testing';
+import {bootstrap} from 'aurelia-bootstrapper';
+
+describe('Component app', () => {
+  let component;
+  let model = {};
+
+  beforeEach(() => {
+    component = StageComponent
+      .withResources('app')
+      .inView('<app></app>')
+      .boundTo(model);
+  });
+
+  afterEach(() => {
+    if (component) {
+      component.dispose();
+      component = null;
+    }
+  });
+
+  it('should render message', done => {
+    component.create(bootstrap).then(() => {
+      const view = component.element;
+      expect(view.textContent.trim()).to.equal('Hello Aurelia!');
+      done();
+    }).catch(e => {
+      done(e);
+    });
+  });
+});
+`;
+
+const tapeTest = `import {StageComponent} from 'aurelia-testing';
+import {bootstrap} from 'aurelia-bootstrapper';
+import test from 'tape';
+
+test('should render message', t => {
+  let component = StageComponent
+      .withResources('app')
+      .inView('<app></app>')
+      .boundTo({});
+
+  component.create(bootstrap)
+  .then(
+    () => {
+      const view = component.element;
+      t.equal(view.textContent.trim(), 'Hello Aurelia!');
+    },
+    e => {
+      t.fail(e);
+    }
+  )
+  .then(() => {
+    if (component) {
+      component.dispose();
+      component = null;
+    }
+    t.end();
+  });
+});
+`;
+
+export default function({transpiler, testFramework}) {
   const ext = transpiler === 'typescript' ? '.ts' : '.js';
   const files = [
     {
       filename: 'package.json',
-      content: packageJson
+      dependencies: {'aurelia-bootstrapper': '^2.3.3'}
     },
     {
       filename: 'index.html',
@@ -85,5 +181,29 @@ export default function({transpiler}) {
       content: ext === '.js' ? appJs : appTs
     }
   ];
+
+  if (testFramework !== 'none') {
+    files.push({
+      filename: `test/setup${ext}`,
+      content: testSetup
+    });
+
+    if (testFramework === 'jasmine') {
+      files.push({
+        filename: `test/app.spec${ext}`,
+        content: jasmineTest
+      });
+    } if (testFramework === 'mocha') {
+      files.push({
+        filename: `test/app.spec${ext}`,
+        content: mochaTest
+      });
+    } if (testFramework === 'tape') {
+      files.push({
+        filename: `test/app.spec${ext}`,
+        content: tapeTest
+      });
+    }
+  }
   return files;
 }

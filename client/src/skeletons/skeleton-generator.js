@@ -24,6 +24,63 @@ const skeletons = {
   vue
 };
 
+const DEFAULT_JASMINE_INDEX_HTML = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="/reporter.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jasmine-core@3/lib/jasmine-core/jasmine.min.css">
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/jasmine-core@3/lib/jasmine-core/jasmine.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jasmine-core@3/lib/jasmine-core/jasmine-html.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jasmine-core@3/lib/jasmine-core/boot.min.js"></script>
+<script src="/dist/entry-bundle.js"></script>
+<script>
+requirejs([/\\/(?:tests?|__tests?__)\\/setup/, /\\.(?:spec|test)/]);
+</script>
+</body>
+</html>
+`;
+
+const DEFAULT_MOCHA_INDEX_HTML = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mocha@7/mocha.css">
+</head>
+<body>
+<div id="mocha"></div>
+<script src="https://cdn.jsdelivr.net/npm/mocha@7/mocha.js"></script>
+<script class="mocha-init">
+mocha.setup({ui: "bdd", reporter: "html"});
+</script>
+<script src="/dist/entry-bundle.js"></script>
+<script>
+requirejs([/\\/(?:tests?|__tests?__)\\/setup/, /\\.(?:spec|test)/]);
+</script>
+<script class="mocha-exec">
+mocha.run();
+</script>
+</body>
+</html>
+`;
+
+const DEFAULT_TAPE_INDEX_HTML = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<p>See console for TAP output</p>
+<script src="/dist/entry-bundle.js"></script>
+<script>
+requirejs([/\\/(?:tests?|__tests?__)\\/setup/, /\\.(?:spec|test)/]);
+</script>
+</body>
+</html>
+`;
+
 @inject(EventAggregator, EditSession)
 export class SkeletonGenerator {
   constructor(ea, session) {
@@ -38,8 +95,44 @@ export class SkeletonGenerator {
       return;
     }
 
-    const files = _.map(skeleton(others), f => ({...f, isChanged: true}));
-    this.session.importData({files});
+    const files = skeleton(others);
+    let devDependencies;
+
+    if (others.testFramework === 'jasmine') {
+      // devDependencies = {'jasmine-core': '^3.0.0'};
+      files.push({
+        filename: 'run-tests.html',
+        content: DEFAULT_JASMINE_INDEX_HTML
+      });
+    } else if (others.testFramework === 'mocha') {
+      // devDependencies = {'mocha': '^7.0.0'};
+      files.push({
+        filename: 'run-tests.html',
+        content: DEFAULT_MOCHA_INDEX_HTML
+      });
+    } else if (others.testFramework === 'tape') {
+      // devDependencies = {'tape': '^4.0.0'};
+      files.push({
+        filename: 'run-tests.html',
+        content: DEFAULT_TAPE_INDEX_HTML
+      });
+    }
+
+    const filesWithMeta = _.map(files, f => {
+      let content = f.content;
+      if (f.filename === 'package.json') {
+        const meta = {};
+        meta.dependencies = f.dependencies || {};
+        if (devDependencies) meta.devDependencies = devDependencies;
+        content = JSON.stringify(meta, null, 2) + '\n';
+      }
+      return {
+        filename: f.filename,
+        content,
+        isChanged: true
+      };
+    });
+    this.session.importData({files: filesWithMeta});
     this.ea.publish('generated-from-skeleton');
   }
 }

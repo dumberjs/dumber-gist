@@ -34,8 +34,6 @@ export class Transpiler {
 
     if (result) {
       let moduleId = path.relative('src', result.filename);
-      if (moduleId.endsWith('.js')) moduleId = moduleId.slice(0, -3);
-
       return {...result, moduleId};
     }
   }

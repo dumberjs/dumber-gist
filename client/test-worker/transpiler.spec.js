@@ -21,7 +21,7 @@ export class Foo {
   }, [p]);
 
   t.equal(file.filename, 'src/foo.js');
-  t.equal(file.moduleId, 'foo');
+  t.equal(file.moduleId, 'foo.js');
   t.ok(file.content.includes("this.bar = '';"));
   t.ok(file.content.includes("__decorate("));
   t.notOk(file.content.includes("sourceMappingURL"));
@@ -44,6 +44,7 @@ test('Transpiler transpiles jsx file in inferno way with fragment', async t => {
   }, [], {jsxPragma: 'Inferno.createVNode'});
 
   t.equal(file.filename, 'src/foo.js');
+  t.equal(file.moduleId, 'foo.js');
   t.ok(file.content.includes("createVNode"));
   t.ok(file.content.includes("createFragment"));
   t.notOk(file.content.includes("sourceMappingURL"));
@@ -108,6 +109,7 @@ test('Transpiler transpiles au2 file', async t => {
   }, [htmlPair, au2PackageJson]);
 
   t.equal(file.filename, 'src/foo.js');
+  t.equal(file.moduleId, 'foo.js');
   t.ok(file.content.includes('customElement'));
   // t.notOk(file.content.includes("sourceMappingURL"));
   // t.equal(file.sourceMap.file, 'src/foo.js');
@@ -143,6 +145,7 @@ test('eTranspiler transpiles svelte file with scss', async t => {
     }, [variables]);
 
     t.equal(file.filename, 'src/foo.svelte.js');
+    t.equal(file.moduleId, 'foo.svelte.js');
     t.ok(file.content.includes('SvelteComponent'));
     t.ok(file.content.includes('style.textContent = "h1'));
     t.ok(file.content.includes('color:#DD6163'));

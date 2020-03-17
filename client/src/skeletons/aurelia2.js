@@ -1,10 +1,3 @@
-const packageJson = `{
-  "dependencies": {
-    "aurelia": "dev"
-  }
-}
-`;
-
 const indexHtml = ext => `<!DOCTYPE html>
 <html>
 <head>
@@ -62,7 +55,7 @@ export default function({transpiler}) {
   const files = [
     {
       filename: 'package.json',
-      content: packageJson
+      dependencies: {'aurelia': 'dev'}
     },
     {
       filename: 'index.html',

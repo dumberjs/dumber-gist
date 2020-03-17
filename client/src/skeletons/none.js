@@ -1,9 +1,3 @@
-const packageJson = `{
-  "dependencies": {
-  }
-}
-`;
-
 const indexHtml = ext => `<!DOCTYPE html>
 <html>
 <head>
@@ -33,8 +27,7 @@ export default function({transpiler}) {
   const ext = transpiler === 'typescript' ? '.ts' : '.js';
   const files = [
     {
-      filename: 'package.json',
-      content: packageJson
+      filename: 'package.json'
     },
     {
       filename: 'index.html',
