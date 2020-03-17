@@ -235,38 +235,38 @@ html {
   flex-wrap: nowrap;
   background-color: $gray-800;
   // border-bottom: 2px solid $gray-1000;
+}
 
-  .app-buttons {
-    flex: 0 0 auto;
-    margin: .5rem;
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
+.app-buttons {
+  flex: 0 0 auto;
+  margin: .5rem;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
 
-    @media (max-width: $tiny - .02) {
-      margin: .25rem;
-    }
+  @media (max-width: $tiny - .02) {
+    margin: .25rem;
+  }
 
-    &.app-buttons-fill {
-      flex: 0 1 100%;
-      min-width: 0;
-    }
+  &.app-buttons-fill {
+    flex: 0 1 100%;
+    min-width: 0;
+  }
 
-    > .fas, > .fab, > .far {
-      font-size: 1.6rem;
-      cursor: pointer;
-      margin: 0 2px;
-    }
+  > .fas, > .fab, > .far {
+    font-size: 1.6rem;
+    cursor: pointer;
+    margin: 0 2px;
+  }
 
-    img {
-      cursor: pointer;
-      width: 1.6rem;
-      height: 1.6rem;
-      margin: 0 2px;
-      vertical-align: middle;
-      box-shadow: 0 0 0 1px $gray-500;
-      border-radius: $border-radius;
-    }
+  img {
+    cursor: pointer;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin: 0 2px;
+    vertical-align: middle;
+    box-shadow: 0 0 0 1px $gray-500;
+    border-radius: $border-radius;
   }
 }
 
@@ -441,7 +441,7 @@ html {
   }
 
   &.small {
-    font-size: .8rem;
+    font-size: .9rem;
     padding: .1rem .6rem;
   }
 
@@ -464,12 +464,16 @@ html {
     border-bottom-right-radius: 0;
   }
 
-  &.even-size {
+  &.even-width {
     min-width: 3rem;
 
     @media (max-width: $tiny - .02) {
       min-width: 2rem;
     }
+  }
+
+  &.even-text-width {
+    min-width: 5rem;
   }
 
   &:hover, &:focus {
@@ -497,7 +501,7 @@ html {
     }
   }
 
-  &.clean, &.primary, &.success, &.warning, &.error {
+  &.clean, &.muted, &.primary, &.success, &.warning, &.error {
     text-shadow: 0 0 8px $deep-dark-shadow;
   }
 
@@ -514,6 +518,23 @@ html {
 
       &:hover, &:focus {
         background-color: $dark-shadow;
+      }
+    }
+  }
+
+  &.muted {
+    background-color: $gray-800;
+    color: $white;
+
+    &:hover, &:focus {
+      background-color: $bright-shadow;
+    }
+
+    &.disabled {
+      color: $gray-600;
+
+      &:hover, &:focus {
+        background-color: $gray-800;
       }
     }
   }
@@ -675,8 +696,8 @@ $node-start-offset: .6rem;
     display: inline-block;
     flex: 0 0 auto;
     padding: .6rem 0;
+    width: 2.4rem;
     text-align: center;
-    width: 2rem;
     color: $gray-700;
     font-size: 1.1rem;
 

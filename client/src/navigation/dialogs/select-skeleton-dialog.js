@@ -85,7 +85,7 @@ export class SelectSkeletonDialog {
     },
     {
       value: 'jasmine',
-      label: 'jasmine',
+      label: 'Jasmine',
       image: 'https://avatars2.githubusercontent.com/u/4624349?s=200&v=4'
     },
     {

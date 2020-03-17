@@ -93,6 +93,8 @@ export class BrowserFrame {
   }
 
   rebuildFrame() {
+    if (this.isBundling) return;
+
     this.historyTracker.reset();
 
     let path = _.trim(this.historyTracker.currentUrl);

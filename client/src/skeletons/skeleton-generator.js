@@ -42,7 +42,7 @@ requirejs([
   // also matches files in any src/**/__test__
   /\\/(tests?|__tests?__)\\/setup$/,
   // Load test/**/*.spec.js if exists.
-  // or tests/**/*.spec.js, __test__/**/*.spec.js
+  // or tests/**/*.test.js, __test__/**/*.spec.js
   // also matches files in any src/**/__test__
   /\\.(spec|test)$/
 ]);
@@ -71,7 +71,7 @@ requirejs([
   // also matches files in any src/**/__test__
   /\\/(tests?|__tests?__)\\/setup$/,
   // Load test/**/*.spec.js if exists.
-  // or tests/**/*.spec.js, __test__/**/*.spec.js
+  // or tests/**/*.test.js, __test__/**/*.spec.js
   // also matches files in any src/**/__test__
   /\\.(spec|test)$/
 ]);
@@ -98,7 +98,7 @@ requirejs([
   // also matches files in any src/**/__test__
   /\\/(tests?|__tests?__)\\/setup$/,
   // Load test/**/*.spec.js if exists.
-  // or tests/**/*.spec.js, __test__/**/*.spec.js
+  // or tests/**/*.test.js, __test__/**/*.spec.js
   // also matches files in any src/**/__test__
   /\\.(spec|test)$/
 ]);

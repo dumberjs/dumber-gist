@@ -20,6 +20,15 @@
         if.bind="dumberErrorsCount"
         class="badge bg-error text-white ml">${dumberErrorsCount}</span>
     </div>
+    <div if.bind="hasUnitTests" class="ml-auto app-buttons">
+      <button
+        class="btn small btn-not-last even-text-width ${isRunningUnitTests ? 'muted' : 'primary'}"
+        click.trigger="runApp() & leftClick">App</button>
+      <button
+        if.bind="hasUnitTests"
+        class="btn small btn-not-first even-text-width ${isRunningUnitTests ? 'primary' : 'muted'}"
+        click.trigger="runUnitTests() & leftClick">Tests</button>
+    </div>
     <i
       class="ml-auto mr fas enabled bar-action fa-chevron-${height ? 'down' : 'up'}"
       click.trigger="toggleDevTools({open: false}) & leftClick"></i>
