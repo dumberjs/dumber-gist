@@ -26,7 +26,7 @@
     click.trigger="share() & leftClick"><i class="fas fa-share-square"></i><span class="d-small-hide">&nbsp;Share</span></button>
 
   <span if.bind="gistId" class="ml-2 text-white d-small-hide selectable">
-    <img src.bind="session.gist.owner.avatar_url" alt.bind="owner.login">
+    <a href="" class="cursor-pointer" click.trigger="listGists() & leftClick"><img src.bind="owner.avatar_url" alt.bind="owner.login"></a>
     <a href="" class="cursor-pointer" click.trigger="listGists() & leftClick">${owner.login}</a>
     <span class="pl pr">/</span>
     <i if.bind="isPrivate" class="pr text-warning fas fa-user-lock"></i>

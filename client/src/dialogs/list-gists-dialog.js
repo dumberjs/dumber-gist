@@ -6,6 +6,7 @@ import _ from 'lodash';
 
 @inject(DialogController, Gists)
 export class ListGistsDialog {
+  @observable filter = '';
   @observable hideNoneDumberGists = true;
   gists = [];
   selectedIdx = -1;
@@ -13,32 +14,68 @@ export class ListGistsDialog {
 
   constructor(controller, gists) {
     this.controller = controller;
-    this.controller.settings.overlayDismiss = false;
+    this.controller.settings.lock = true;
     this.gists = gists;
+    this._updateFilteredGists = _.debounce(this._updateFilteredGists.bind(this));
   }
 
   activate(model) {
     this.login = model.login;
     this.gists = _.sortBy(model.gists, 'updated_at').reverse();
-    this.hideNoneDumberGistsChanged(this.hideNoneDumberGists);
+    this._updateFilteredGists();
   }
 
-  hideNoneDumberGistsChanged(hideNoneDumberGists) {
+  hideNoneDumberGistsChanged() {
+    this._updateFilteredGists();
+  }
+
+  filterChanged() {
+    this._updateFilteredGists();
+  }
+
+  _updateFilteredGists() {
     const selected = this.selectedIdx >= 0 ?
       this.filteredGists[this.selectedIdx] :
       null;
 
-    if (hideNoneDumberGists) {
-      this.filteredGists = this.gists.filter(g => g.files['index.html'] && g.files['package.json']);
+    let filteredGists;
+    if (this.hideNoneDumberGists) {
+      filteredGists = this.gists.filter(g => g.files['index.html'] && g.files['package.json']);
     } else {
-      this.filteredGists = this.gists;
+      filteredGists = this.gists;
     }
+
+    const filter = _.trim(this.filter).toLowerCase();
+    if (filter) {
+      filteredGists = filteredGists.filter(g =>
+        _.toLower(g.description).includes(filter)
+      );
+    }
+
+    this.filteredGists = filteredGists;
 
     if (selected) {
       this.selectedIdx = _.findIndex(this.filteredGists, {id: selected.id});
     } else {
       this.selectedIdx = -1;
     }
+  }
+
+  keyDownInFilter(e) {
+    if (e.code === 'ArrowUp') { // up
+      e.target.blur();
+      this.selectPrevious();
+      return false;
+    } else if (e.code === 'ArrowDown') { // down
+      e.target.blur();
+      this.selectNext();
+      return false;
+    } else if (e.code === 'Enter') { // return
+      this.open(this.selectedIdx);
+      return false;
+    }
+
+    return true;
   }
 
   @combo('up')

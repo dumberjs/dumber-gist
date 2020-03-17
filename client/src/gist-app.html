@@ -29,7 +29,7 @@
           <span class="d-tiny-hide">Open in Dumber Gist</span>
         </a>
         <span class="text-truncate" style="flex: 1 0 0;">
-          <img src.bind="session.gist.owner.avatar_url" alt.bind="owner.login">
+          <img src.bind="session.gist.owner.avatar_url" alt.bind="session.gist.owner.login">
           ${session.gist.owner.login} / ${session.description || session.gist.id}
         </span>
       </div>
