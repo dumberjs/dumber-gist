@@ -1,3 +1,29 @@
+# [0.3.0](https://github.com/dumberjs/dumber-gist/compare/v0.2.3...v0.3.0) (2020-03-17)
+
+
+### Bug Fixes
+
+* fix ../src resolving ([71e8be1](https://github.com/dumberjs/dumber-gist/commit/71e8be189fe4e906639b56716307f968eca5dd5f))
+* force readable-stream v2 to support stream-browserify ([4025149](https://github.com/dumberjs/dumber-gist/commit/40251491be315efdff3eff21ea617872d62c254c))
+* typo ([b03310c](https://github.com/dumberjs/dumber-gist/commit/b03310caf0754e48072d9a77f0846735415d301e))
+
+
+### Features
+
+* add app/tests switch button ([4701ff2](https://github.com/dumberjs/dumber-gist/commit/4701ff2c54776f138cfb2174b6dbe026e0046e5d))
+* add backbone framework ([d0da7b9](https://github.com/dumberjs/dumber-gist/commit/d0da7b90c58590f734169c3f782ee31e87851703))
+* filter input in gists list ([5733abd](https://github.com/dumberjs/dumber-gist/commit/5733abd74a5fa4c963606bab9085c9cab64c4a43))
+* remove enzyme from preact tests ([6980bfe](https://github.com/dumberjs/dumber-gist/commit/6980bfe32227458417799eaca4fdeeeb8b4ed545))
+* support manual <link> tag loading compiled css ([3319f16](https://github.com/dumberjs/dumber-gist/commit/3319f16d8675479e78a26f2ebaf0216bab601733))
+* unit tests for aurelia 2 ([9ffb27c](https://github.com/dumberjs/dumber-gist/commit/9ffb27c047ee625258fda9115a2526aa97b7bef4))
+* unit tests for backbone ([35030d5](https://github.com/dumberjs/dumber-gist/commit/35030d50f4e3a9e12cc119b3613222ffd5b4e15c))
+* unit tests for inferno ([67eea1f](https://github.com/dumberjs/dumber-gist/commit/67eea1f41e1009ff5f68a9c3c3f33a6229bae368))
+* unit tests for preact ([4c9e7d7](https://github.com/dumberjs/dumber-gist/commit/4c9e7d7de808555870e20ba668340f1c01fa09d9))
+* unit tests for react ([416e140](https://github.com/dumberjs/dumber-gist/commit/416e140a2a47780587dbc921ca1365ce8d7aaf9b))
+* unit tests for vue ([35d15ed](https://github.com/dumberjs/dumber-gist/commit/35d15ed6a916e6b5cb0ba8b3026ae10f62fcd20b))
+
+
+
 ## [0.2.3](https://github.com/dumberjs/dumber-gist/compare/v0.2.2...v0.2.3) (2020-03-12)
 
 
