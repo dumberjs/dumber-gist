@@ -1,3 +1,17 @@
+# [0.4.0](https://github.com/dumberjs/dumber-gist/compare/v0.3.0...v0.4.0) (2020-03-17)
+
+
+### Bug Fixes
+
+* fix inferno jasmine and mocha test code ([b02841d](https://github.com/dumberjs/dumber-gist/commit/b02841d1d4987b5affca979e82fe9e3739b65de5))
+
+
+### Features
+
+* unit tests for svelte ([e8675ef](https://github.com/dumberjs/dumber-gist/commit/e8675efbc07f922183914447086d2537755415c6))
+
+
+
 # [0.3.0](https://github.com/dumberjs/dumber-gist/compare/v0.2.3...v0.3.0) (2020-03-17)
 
 
