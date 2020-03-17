@@ -41,16 +41,62 @@ html template:
 `;
 
 const appJs = `export class MyApp {
-  message = 'Hello Aurelia2!';
+  message = 'Hello Aurelia 2!';
 }
 `;
 
 const appTs = `export class MyApp {
-  public message: string = 'Hello Aurelia2!';
+  public message: string = 'Hello Aurelia 2!';
 }
 `;
 
-export default function({transpiler}) {
+const testHelper = ext => `import Aurelia, { CustomElement } from 'aurelia';
+export async function render(template${ext === '.ts' ? ': string' : ''}, ...deps${ext === '.ts' ? ': readonly unknown[]' : ''}) {
+  const wrapper = CustomElement.define({name: 'wrapper', template});
+  const div = document.createElement('div');
+  const au = Aurelia.register(deps).app({
+    host: div,
+    component: wrapper
+  });
+  await au.start().wait();
+  return div;
+}
+`;
+
+const jasmineTest = `import { render } from './helper';
+import { MyApp } from '../src/my-app';
+
+describe('Component App', () => {
+  it('should render message', async () => {
+    const div = await render('<my-app></my-app>', MyApp);
+    expect(div.textContent.trim()).toEqual('Hello Aurelia 2!');
+  });
+});
+`;
+
+const mochaTest = `import { render } from './helper';
+import {expect} from 'chai';
+import { MyApp } from '../src/my-app';
+
+describe('Component App', () => {
+  it('should render message', async () => {
+    const div = await render('<my-app></my-app>', MyApp);
+    expect(div.textContent.trim()).to.equal('Hello Aurelia 2!');
+  });
+});
+`
+
+const tapeTest = `import { render } from './helper';
+import test from 'tape-promise/tape';
+import { MyApp } from '../src/my-app';
+
+test('should render message', async t => {
+  const div = await render('<my-app></my-app>', MyApp);
+  t.equal(div.textContent.trim(), 'Hello Aurelia 2!');
+});
+`;
+
+export default function({transpiler, testFramework}) {
   const ext = transpiler === 'typescript' ? '.ts' : '.js';
   const files = [
     {
@@ -74,5 +120,30 @@ export default function({transpiler}) {
       content: ext === '.js' ? appJs : appTs
     }
   ];
+
+  if (testFramework !== 'none') {
+    files.push({
+      filename: `test/helper${ext}`,
+      content: testHelper(ext)
+    });
+
+    if (testFramework === 'jasmine') {
+      files.push({
+        filename: `test/app.spec${ext}`,
+        content: jasmineTest
+      });
+    } if (testFramework === 'mocha') {
+      files.push({
+        filename: `test/app.spec${ext}`,
+        content: mochaTest
+      });
+    } if (testFramework === 'tape') {
+      files.push({
+        filename: `test/app.spec${ext}`,
+        content: tapeTest
+      });
+    }
+  }
+
   return files;
 }
