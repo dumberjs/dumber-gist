@@ -60,7 +60,7 @@
             <div class="section-header">Unit Tests</div>
             <div class="section-body" if.bind="framework !== 'svelte'">
               <div
-                repeat.for="f of unitTests"
+                repeat.for="f of testFrameworks"
                 class="selection ${f.value === testFramework ? 'selected' : ''}"
                 click.trigger="testFramework = f.value & leftClick"
                 dblclick.trigger="ok() & leftClick"

@@ -18,8 +18,8 @@ export class QuickStart {
       viewModel: SelectSkeletonDialog
     }).whenClosed(response => {
       if (response.wasCancelled) return;
-      const {framework, transpiler} = response.output;
-      this.skeletonGenerator.generate(framework, transpiler);
+      const selection = response.output;
+      this.skeletonGenerator.generate(selection);
     })
   }
 }

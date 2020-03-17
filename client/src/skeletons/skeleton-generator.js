@@ -31,14 +31,14 @@ export class SkeletonGenerator {
     this.session = session;
   }
 
-  generate(framework, transpiler) {
+  generate({framework, ...others}) {
     const skeleton = skeletons[framework];
     if (!skeleton) {
       this.ea.publish('warning', `Framework ${framework} is not yet implemented.`);
       return;
     }
 
-    const files = _.map(skeleton({transpiler}), f => ({...f, isChanged: true}));
+    const files = _.map(skeleton(others), f => ({...f, isChanged: true}));
     this.session.importData({files});
     this.ea.publish('generated-from-skeleton');
   }

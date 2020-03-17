@@ -76,7 +76,7 @@ export class SelectSkeletonDialog {
     }
   ];
 
-  unitTests = [
+  testFrameworks = [
     {
       value: 'none',
       label: 'None',
@@ -108,7 +108,8 @@ export class SelectSkeletonDialog {
   ok() {
     this.controller.ok({
       framework: this.framework,
-      transpiler: this.transpiler
+      transpiler: this.transpiler,
+      testFramework: this.testFramework
     });
   }
 
