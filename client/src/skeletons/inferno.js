@@ -45,7 +45,7 @@ describe('Component App', () => {
   it('should render message', () => {
     const div = document.createElement('div');
     render(<App />, div);
-    expect(div.textContent, 'Hello Inferno!');
+    expect(div.textContent).toEqual('Hello Inferno!');
   });
 });
 `;
@@ -58,7 +58,7 @@ describe('Component App', () => {
   it('should render message', () => {
     const div = document.createElement('div');
     render(<App />, div);
-    expect(div.textContent, 'Hello Inferno!');
+    expect(div.textContent).to.equal('Hello Inferno!');
   });
 });
 `;
