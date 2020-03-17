@@ -44,44 +44,39 @@ export default class App extends Component {
 }
 `;
 
-const testSetup = `import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-preact-pure';
-configure({ adapter: new Adapter });
-`;
-
-const jasmineTest = `import { h } from 'preact';
-import { mount } from 'enzyme';
+const jasmineTest = `import { h, render } from 'preact';
 import App from '../src/app';
 
 describe('Component App', () => {
   it('should render message', () => {
-    const wrapper = mount(<App/>);
-    expect(wrapper.text()).toEqual('Hello Preact!');
+    const div = document.createElement('div');
+    render(<App />, div);
+    expect(div.textContent).toEqual('Hello Preact!');
   });
 });
 `;
 
-const mochaTest = `import { h } from 'preact';
-import { mount } from 'enzyme';
+const mochaTest = `import { h, render } from 'preact';
 import {expect} from 'chai';
 import App from '../src/app';
 
 describe('Component App', () => {
   it('should render message', () => {
-    const wrapper = mount(<App/>);
-    expect(wrapper.text()).to.equal('Hello Preact!');
+    const div = document.createElement('div');
+    render(<App />, div);
+    expect(div.textContent).to.equal('Hello Preact!');
   });
 });
 `
 
-const tapeTest = `import { h } from 'preact';
-import { mount } from 'enzyme';
+const tapeTest = `import { h, render } from 'preact';
 import test from 'tape';
 import App from '../src/app';
 
 test('should render message', t => {
-  const wrapper = mount(<App/>);
-  t.equal(wrapper.text(), 'Hello Preact!');
+  const div = document.createElement('div');
+  render(<App />, div);
+  t.equal(div.textContent, 'Hello Preact!');
   t.end();
 });
 `;
@@ -107,28 +102,21 @@ export default function({transpiler, testFramework}) {
     }
   ];
 
-  if (testFramework !== 'none') {
+  if (testFramework === 'jasmine') {
     files.push({
-      filename: `test/setup${ext}`,
-      content: testSetup
+      filename: `test/app.spec${ext}`,
+      content: jasmineTest
     });
-
-    if (testFramework === 'jasmine') {
-      files.push({
-        filename: `test/app.spec${ext}`,
-        content: jasmineTest
-      });
-    } if (testFramework === 'mocha') {
-      files.push({
-        filename: `test/app.spec${ext}`,
-        content: mochaTest
-      });
-    } if (testFramework === 'tape') {
-      files.push({
-        filename: `test/app.spec${ext}`,
-        content: tapeTest
-      });
-    }
+  } if (testFramework === 'mocha') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: mochaTest
+    });
+  } if (testFramework === 'tape') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: tapeTest
+    });
   }
 
   return files;
