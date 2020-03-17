@@ -103,6 +103,11 @@ export class DepsResolver {
         }
 
         console.warn(`[dumber] only uses package "${name}" version ${version}`);
+      } else {
+        if (name === 'readable-stream' && semver.major(version) !== 2) {
+          // Use readable-stream v2.3.6 for nodejs stream stub
+          version = '2.3.6';
+        }
       }
       const dep = {name, version, lazyMain: true};
       if (name === 'vue' && semver.major(version) === 2) {
@@ -118,6 +123,12 @@ export class DepsResolver {
       }
       deps.push(dep);
     });
+
+    if (!_.find(deps, {name: 'readable-stream'})) {
+      // Always force readable-stream v2
+      // Wait for https://github.com/browserify/stream-browserify/pull/18
+      deps.push({name: 'readable-stream', version: '2.3.6', lazyMain: true});
+    }
 
     return deps;
   }
