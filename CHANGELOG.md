@@ -1,3 +1,7 @@
+## [0.4.1](https://github.com/dumberjs/dumber-gist/compare/v0.4.0...v0.4.1) (2020-03-17)
+
+
+
 # [0.4.0](https://github.com/dumberjs/dumber-gist/compare/v0.3.0...v0.4.0) (2020-03-17)
 
 
