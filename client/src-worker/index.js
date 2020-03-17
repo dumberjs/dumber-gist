@@ -14,10 +14,10 @@ import {Container} from 'aurelia-dependency-injection';
         postMessage({
           type: 'dumber-console',
           method: method,
-          args: args.map(a => a && a.String ? a.toString() : a)
+          args: args.map(a => a && a.toString ? a.toString() : a)
         });
       }
-      if (old) old.apply(console, arguments);
+      if (old) return old.apply(console, arguments);
     };
   }
 
