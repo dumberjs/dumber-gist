@@ -39,10 +39,9 @@ export default function App() {
 }
 `;
 
-const jasmineTest = `/* eslint react/jsx-key: 0 */
-import React from 'react';
-import App from '../src/App';
+const jasmineTest = `import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
+import App from '../src/App';
 
 describe('Component App', () => {
   it('should render message', () => {
@@ -57,11 +56,10 @@ describe('Component App', () => {
 });
 `;
 
-const mochaTest = `/* eslint react/jsx-key: 0 */
-import React from 'react';
+const mochaTest = `import React from 'react';
+import ShallowRenderer from 'react-test-renderer/shallow';
 import {expect} from 'chai';
 import App from '../src/App';
-import ShallowRenderer from 'react-test-renderer/shallow';
 
 describe('Component App', () => {
   it('should render message', () => {
@@ -76,10 +74,9 @@ describe('Component App', () => {
 });
 `
 
-const tapeTest = `/* eslint react/jsx-key: 0 */
-import React from 'react';
-import App from '../src/App';
+const tapeTest = `import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
+import App from '../src/App';
 import test from 'tape';
 
 test('should render message', t => {
