@@ -50,7 +50,56 @@ To use less: <style lang="less"> or <style type="text/less">
 </style>
 `;
 
-export default function({transpiler}) {
+const jasmineTest = `import App from '../src/App.svelte';
+
+describe('Component App', () => {
+  it('should render message', () => {
+    const div = document.createElement('div');
+    new App({
+      target: div,
+      props: {
+        name: 'Svelte'
+      }
+    });
+    expect(div.textContent).toEqual('Hello Svelte!');
+  });
+});
+`;
+
+const mochaTest = `import {expect} from 'chai';
+import App from '../src/App.svelte';
+
+describe('Component App', () => {
+  it('should render message', () => {
+    const div = document.createElement('div');
+    new App({
+      target: div,
+      props: {
+        name: 'Svelte'
+      }
+    });
+    expect(div.textContent).to.equal('Hello Svelte!');
+  });
+});
+`
+
+const tapeTest = `import test from 'tape';
+import App from '../src/App.svelte';
+
+test('should render message', t => {
+  const div = document.createElement('div');
+  new App({
+    target: div,
+    props: {
+      name: 'Svelte'
+    }
+  });
+  t.equal(div.textContent, 'Hello Svelte!');
+  t.end();
+});
+`;
+
+export default function({transpiler, testFramework}) {
   const ext = transpiler === 'typescript' ? '.ts' : '.js';
   const files = [
     {
@@ -70,5 +119,23 @@ export default function({transpiler}) {
       content: app(ext)
     }
   ];
+
+  if (testFramework === 'jasmine') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: jasmineTest
+    });
+  } if (testFramework === 'mocha') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: mochaTest
+    });
+  } if (testFramework === 'tape') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: tapeTest
+    });
+  }
+
   return files;
 }

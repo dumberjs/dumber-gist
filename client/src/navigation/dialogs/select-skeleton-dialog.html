@@ -58,7 +58,7 @@
 
           <div class="select-section">
             <div class="section-header">Unit Tests</div>
-            <div class="section-body" if.bind="framework !== 'svelte'">
+            <div class="section-body">
               <div
                 repeat.for="f of testFrameworks"
                 class="selection ${f.value === testFramework ? 'selected' : ''}"
@@ -72,16 +72,6 @@
                   <div class="description" if.bind="f.description">${f.description}</div>
                 </div>
               </div>
-            </div>
-            <div class="section-body" else>
-              <div class="selection selected">
-                <div>
-                  <div class="description text-warn">
-                    Svelte unit testing is not supported yet, as <a href="https://github.com/sveltejs/svelte/wiki/FAQ#how-do-i-do-testing-svelte-apps" target="_blank">it doesn't have an official support yet.</a>
-                  </div>
-                </div>
-              </div>
-              <small class="text-muted ml-2"><i class="fas fa-info-circle"></i> All unit tests run in browser environment, obviously.</small>
             </div>
           </div>
         </div>
