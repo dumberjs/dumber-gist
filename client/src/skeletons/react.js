@@ -39,7 +39,62 @@ export default function App() {
 }
 `;
 
-export default function({transpiler}) {
+const jasmineTest = `/* eslint react/jsx-key: 0 */
+import React from 'react';
+import App from '../src/App';
+import ShallowRenderer from 'react-test-renderer/shallow';
+
+describe('Component App', () => {
+  it('should render message', () => {
+    const renderer = new ShallowRenderer();
+    renderer.render(<App />);
+    let result = renderer.getRenderOutput();
+    expect(result.type).toBe('div');
+    expect(result.props.children).toEqual(
+      <h1>Hello React!</h1>
+    );
+  });
+});
+`;
+
+const mochaTest = `/* eslint react/jsx-key: 0 */
+import React from 'react';
+import {expect} from 'chai';
+import App from '../src/App';
+import ShallowRenderer from 'react-test-renderer/shallow';
+
+describe('Component App', () => {
+  it('should render message', () => {
+    const renderer = new ShallowRenderer();
+    renderer.render(<App />);
+    let result = renderer.getRenderOutput();
+    expect(result.type).to.equal('div');
+    expect(result.props.children).to.deep.equal(
+      <h1>Hello React!</h1>
+    );
+  });
+});
+`
+
+const tapeTest = `/* eslint react/jsx-key: 0 */
+import React from 'react';
+import App from '../src/App';
+import ShallowRenderer from 'react-test-renderer/shallow';
+import test from 'tape';
+
+test('should render message', t => {
+  const renderer = new ShallowRenderer();
+  renderer.render(<App />);
+  let result = renderer.getRenderOutput();
+  t.equal(result.type, 'div');
+  t.deepEqual(result.props.children,
+    <h1>Hello React!</h1>
+  );
+  t.end();
+});
+`;
+
+export default function({transpiler, testFramework}) {
   const ext = transpiler === 'typescript' ? '.tsx' : '.jsx';
   const files = [
     {
@@ -59,5 +114,23 @@ export default function({transpiler}) {
       content: app
     }
   ];
+
+  if (testFramework === 'jasmine') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: jasmineTest
+    });
+  } if (testFramework === 'mocha') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: mochaTest
+    });
+  } if (testFramework === 'tape') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: tapeTest
+    });
+  }
+
   return files;
 }
