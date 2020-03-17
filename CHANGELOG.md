@@ -1,3 +1,12 @@
+## [0.4.2](https://github.com/dumberjs/dumber-gist/compare/v0.4.1...v0.4.2) (2020-03-17)
+
+
+### Bug Fixes
+
+* don't reload if didn't switch app/tests ([b490f4e](https://github.com/dumberjs/dumber-gist/commit/b490f4ee0a2aedd7bb8ce3055234fd08f20ea014))
+
+
+
 ## [0.4.1](https://github.com/dumberjs/dumber-gist/compare/v0.4.0...v0.4.1) (2020-03-17)
 
 
