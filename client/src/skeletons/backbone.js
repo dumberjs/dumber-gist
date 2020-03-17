@@ -12,27 +12,67 @@ The starting module is pointed to "main" (data-main attribute on script)
 which is your src/main${ext}.
 -->
 <body>
-  <div id="root"><h2></h2></div>
+  <div id="root"></div>
   <script src="/dist/entry-bundle.js" data-main="main"></script>
 </body>
 </html>
 `;
 
-const main = `import * as Backbone from 'backbone';
-
-const AppView = Backbone.View.extend({
-  el: '#root',
-  render: function() {
-    this.$('h2').text('Hello Backbone');
-  }
-});
-
-const app = new AppView();
+const main = `import App from './app';
+const app = new App({el: '#root'});
 app.render();
 `;
 
+const app = `import * as Backbone from 'backbone';
 
-export default function({transpiler}) {
+export default Backbone.View.extend({
+  messageTemplate: _.template("<h2><%- message %></h2>"),
+  render: function() {
+    this.$el.html(
+      this.messageTemplate({message: 'Hello Backbone!'})
+    );
+  }
+});
+`;
+
+const jasmineTest = `import App from '../src/app';
+
+describe('Component App', () => {
+  it('should render message', () => {
+    const div = document.createElement('div');
+    const app = new App({el: div});
+    app.render();
+    expect(div.textContent).toEqual('Hello Backbone!');
+  });
+});
+`;
+
+const mochaTest = `import {expect} from 'chai';
+import App from '../src/app';
+
+describe('Component App', () => {
+  it('should render message', () => {
+    const div = document.createElement('div');
+    const app = new App({el: div});
+    app.render();
+    expect(div.textContent).to.equal('Hello Backbone!');
+  });
+});
+`
+
+const tapeTest = `import test from 'tape';
+import App from '../src/app';
+
+test('should render message', t => {
+  const div = document.createElement('div');
+  const app = new App({el: div});
+  app.render();
+  t.equal(div.textContent, 'Hello Backbone!');
+  t.end();
+});
+`;
+
+export default function({transpiler, testFramework}) {
   const ext = transpiler === 'typescript' ? '.ts' : '.js';
   const files = [
     {
@@ -46,7 +86,29 @@ export default function({transpiler}) {
     {
       filename: `src/main${ext}`,
       content: main
+    },
+    {
+      filename: `src/app${ext}`,
+      content: app
     }
   ];
+
+  if (testFramework === 'jasmine') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: jasmineTest
+    });
+  } if (testFramework === 'mocha') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: mochaTest
+    });
+  } if (testFramework === 'tape') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: tapeTest
+    });
+  }
+
   return files;
 }
