@@ -205,5 +205,6 @@ export default function({transpiler, testFramework}) {
       });
     }
   }
+
   return files;
 }

@@ -113,5 +113,6 @@ export default function({transpiler, testFramework}) {
       content: tapeTest
     });
   }
+
   return files;
 }
