@@ -81,6 +81,7 @@ test('DumberSession initialises new dumber instance', async t => {
     cache: dumberCache,
     packageFileReader: jsdelivr.create,
     prepend: [HISTORY_HACK_JS, CONSOLE_HACK_JS, FORWORD_SHORTCUTS, 'dumber-module-loader dist content'],
+    paths: {'../src': ''},
     deps: [
       {name: 'vue', main: 'dist/vue.js', version: '2.1.0', lazyMain: true}
     ]
@@ -102,6 +103,7 @@ test('DumberSession reuses existing dumber instance', async t => {
     cache: dumberCache,
     packageFileReader: jsdelivr.create,
     prepend: [HISTORY_HACK_JS, CONSOLE_HACK_JS, FORWORD_SHORTCUTS, 'dumber-module-loader dist content'],
+    paths: {'../src': ''},
     deps: []
   });
   const instance1 = session.instance;
@@ -132,6 +134,7 @@ test('DumberSession replaces existing dumber instance with different config', as
     cache: dumberCache,
     packageFileReader: jsdelivr.create,
     prepend: [HISTORY_HACK_JS, CONSOLE_HACK_JS, FORWORD_SHORTCUTS, 'dumber-module-loader dist content'],
+    paths: {'../src': ''},
     deps: [
       {name: 'vue', main: 'dist/vue.js', version: '2.1.0', lazyMain: true}
     ]
@@ -150,6 +153,7 @@ test('DumberSession replaces existing dumber instance with different config', as
     cache: dumberCache,
     packageFileReader: jsdelivr.create,
     prepend: [HISTORY_HACK_JS, CONSOLE_HACK_JS, FORWORD_SHORTCUTS, 'dumber-module-loader dist content'],
+    paths: {'../src': ''},
     deps: [
       {name: 'aurelia-binding', version: '2.0.0', lazyMain: true},
       {name: 'aurelia-bootstrapper', version: '2.3.3', lazyMain: true},

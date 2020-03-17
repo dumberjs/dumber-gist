@@ -206,6 +206,10 @@ export class DumberSession {
         FORWORD_SHORTCUTS,
         DUMBER_MODULE_LOADER_DIST // provided by gulpfile
       ],
+      // Short-cut to resolve '../src/app' into 'app'
+      paths: {
+        '../src': ''
+      },
       deps: deps
     };
 
