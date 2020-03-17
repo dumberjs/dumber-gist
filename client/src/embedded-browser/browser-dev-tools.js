@@ -35,11 +35,13 @@ export class BrowserDevTools {
   }
 
   runApp() {
+    if (!this.isRunningUnitTests) return;
     this.historyTracker.currentUrl = '/';
     this.ea.publish('history-reload');
   }
 
   runUnitTests() {
+    if (this.isRunningUnitTests) return;
     this.historyTracker.currentUrl = '/run-tests.html';
     this.ea.publish('history-reload');
   }
