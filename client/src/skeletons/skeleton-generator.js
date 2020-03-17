@@ -28,7 +28,6 @@ const DEFAULT_JASMINE_INDEX_HTML = `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
-<script src="/reporter.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jasmine-core@3/lib/jasmine-core/jasmine.min.css">
 </head>
 <body>
@@ -37,7 +36,16 @@ const DEFAULT_JASMINE_INDEX_HTML = `<!DOCTYPE html>
 <script src="https://cdn.jsdelivr.net/npm/jasmine-core@3/lib/jasmine-core/boot.min.js"></script>
 <script src="/dist/entry-bundle.js"></script>
 <script>
-requirejs([/\\/(?:tests?|__tests?__)\\/setup/, /\\.(?:spec|test)/]);
+requirejs([
+  // Load test/setup if exists.
+  // or tests/setup, __test__/setup, __tests__/setup
+  // also matches files in any src/**/__test__
+  /\\/(tests?|__tests?__)\\/setup$/,
+  // Load test/**/*.spec.js if exists.
+  // or tests/**/*.spec.js, __test__/**/*.spec.js
+  // also matches files in any src/**/__test__
+  /\\.(spec|test)$/
+]);
 </script>
 </body>
 </html>
@@ -57,7 +65,16 @@ mocha.setup({ui: "bdd", reporter: "html"});
 </script>
 <script src="/dist/entry-bundle.js"></script>
 <script>
-requirejs([/\\/(?:tests?|__tests?__)\\/setup/, /\\.(?:spec|test)/]);
+requirejs([
+  // Load test/setup if exists.
+  // or tests/setup, __test__/setup, __tests__/setup
+  // also matches files in any src/**/__test__
+  /\\/(tests?|__tests?__)\\/setup$/,
+  // Load test/**/*.spec.js if exists.
+  // or tests/**/*.spec.js, __test__/**/*.spec.js
+  // also matches files in any src/**/__test__
+  /\\.(spec|test)$/
+]);
 </script>
 <script class="mocha-exec">
 mocha.run();
@@ -72,10 +89,19 @@ const DEFAULT_TAPE_INDEX_HTML = `<!DOCTYPE html>
 <meta charset="utf-8">
 </head>
 <body>
-<p>See console for TAP output</p>
+<p>See console for TAP output.</p>
 <script src="/dist/entry-bundle.js"></script>
 <script>
-requirejs([/\\/(?:tests?|__tests?__)\\/setup/, /\\.(?:spec|test)/]);
+requirejs([
+  // Load test/setup if exists.
+  // or tests/setup, __test__/setup, __tests__/setup
+  // also matches files in any src/**/__test__
+  /\\/(tests?|__tests?__)\\/setup$/,
+  // Load test/**/*.spec.js if exists.
+  // or tests/**/*.spec.js, __test__/**/*.spec.js
+  // also matches files in any src/**/__test__
+  /\\.(spec|test)$/
+]);
 </script>
 </body>
 </html>

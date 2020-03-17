@@ -131,7 +131,7 @@ const tapeTest = `import {StageComponent} from 'aurelia-testing';
 import {bootstrap} from 'aurelia-bootstrapper';
 import test from 'tape';
 
-test('should render message', t => {
+test('Component app should render message', t => {
   let component = StageComponent
       .withResources('app')
       .inView('<app></app>')

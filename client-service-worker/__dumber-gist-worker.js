@@ -106,7 +106,7 @@ addEventListener('fetch', e => {
   ) return;
 
   e.respondWith(
-    caches.match(e.request).then(r => {
+    caches.match(e.request, {ignoreSearch: true}).then(r => {
       if (r) return r;
 
       if (e.request.method === 'GET') {
