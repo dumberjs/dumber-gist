@@ -69,7 +69,7 @@ class TurboResolver {
   }
 }
 
-test('DepsResolver lists empty deps', async t => {
+test('DepsResolver lists empty deps, but with readable-stream patch', async t => {
   const primitives = {
     async getLocalCache() {
       t.fail('Should not called getLocalCache');
@@ -80,7 +80,9 @@ test('DepsResolver lists empty deps', async t => {
   }
   const r = new DepsResolver(() => new TurboResolver(), primitives);
   const deps = await r.resolve({});
-  t.equal(deps.length, 0);
+  t.deepEqual(deps, [
+    {name: 'readable-stream', version: '2.3.6', lazyMain: true}
+  ]);
 });
 
 test('DepsResolver lists all deps from appDependencies, set cache, then reads from cache', async t => {

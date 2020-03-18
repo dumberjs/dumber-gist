@@ -40,7 +40,9 @@ export class DepsResolver {
 
   async resolve(dependencies) {
     if (!dependencies || Object.keys(dependencies).length === 0) {
-      return [];
+      // Always force readable-stream v2
+      // Wait for https://github.com/browserify/stream-browserify/pull/18
+      return [{name: 'readable-stream', version: '2.3.6', lazyMain: true}];
     }
 
     const hash = hashOf(dependencies);
