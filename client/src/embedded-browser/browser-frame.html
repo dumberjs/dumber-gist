@@ -35,7 +35,7 @@
       </div>
     </div>
   </div>
-  <div if.bind="bundlerError" class="error">
-    <span repeat.for="err of errors">${err}<br if.bind="!$last"></span>
+  <div if.bind="error" class="error">
+    <pre>${error}</pre>
   </div>
 </template>

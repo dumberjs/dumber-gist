@@ -124,13 +124,13 @@ export class BrowserFrame {
   }
 
   @computedFrom('bundlerError')
-  get errors() {
-    if (this.bundlerError) {
-      const errs = this.bundlerError.split('\n');
-      if (this.bundlerError.includes('jsdelivr has not synced')) {
-        errs.unshift('Please try again after few minutes. Need to wait jsdelivr to sync npm repositories.');
-      }
-      return errs;
+  get error() {
+    const {bundlerError} = this;
+
+    if (bundlerError && bundlerError.includes('jsdelivr has not synced')) {
+      return 'Please try again after few minutes. Need to wait jsdelivr to sync npm repositories.\n' + bundlerError;
     }
+
+    return bundlerError;
   }
 }
