@@ -58,7 +58,7 @@
 
           <div class="select-section">
             <div class="section-header">Unit Tests</div>
-            <div class="section-body" if.bind="framework !== 'none'">
+            <div class="section-body">
               <div
                 repeat.for="f of testFrameworks"
                 class="selection ${f.value === testFramework ? 'selected' : ''}"
@@ -72,9 +72,6 @@
                   <div class="description" if.bind="f.description">${f.description}</div>
                 </div>
               </div>
-            </div>
-            <div class="section-body" else>
-              <small class="text-warning ml-2"><i class="fas fa-info-circle"></i> Pick a framework first.</small>
             </div>
           </div>
         </div>

@@ -17,13 +17,44 @@ which is your src/main${ext}.
 </html>
 `;
 
-const main = `const el = document.createElement('p');
-el.textContent = 'Hello Dumber Gist!';
-document.body.appendChild(el);
+const main = `import app from './app';
+document.body.appendChild(app);
 `;
 
+const app = `const app = document.createElement('p');
+app.textContent = 'Hello Dumber Gist!';
+export default app;
+`;
 
-export default function({transpiler}) {
+const jasmineTest = `import app from '../src/app';
+
+describe('Component app', () => {
+  it('should render message', () => {
+    expect(app.textContent).toBe('Hello Dumber Gist!');
+  });
+});
+`;
+
+const mochaTest = `import {expect} from 'chai';
+import app from '../src/app';
+
+describe('Component app', () => {
+  it('should render message', () => {
+    expect(app.textContent).to.equal('Hello Dumber Gist!');
+  });
+});
+`;
+
+const tapeTest = `import test from 'tape';
+import app from '../src/app';
+
+test('should render message', t => {
+  t.equal(app.textContent, 'Hello Dumber Gist!');
+  t.end();
+});
+`;
+
+export default function({transpiler, testFramework}) {
   const ext = transpiler === 'typescript' ? '.ts' : '.js';
   const files = [
     {
@@ -36,7 +67,29 @@ export default function({transpiler}) {
     {
       filename: `src/main${ext}`,
       content: main
+    },
+    {
+      filename: `src/app${ext}`,
+      content: app
     }
   ];
+
+  if (testFramework === 'jasmine') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: jasmineTest
+    });
+  } if (testFramework === 'mocha') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: mochaTest
+    });
+  } if (testFramework === 'tape') {
+    files.push({
+      filename: `test/app.spec${ext}`,
+      content: tapeTest
+    });
+  }
+
   return files;
 }

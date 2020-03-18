@@ -54,7 +54,7 @@ describe('Component App', () => {
 `;
 
 const mochaTest = `import {expect} from 'chai';
-import {mount} from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import App from '../src/App';
 
 describe('Component App', () => {
