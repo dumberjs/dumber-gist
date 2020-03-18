@@ -1,3 +1,17 @@
+# [0.5.0](https://github.com/dumberjs/dumber-gist/compare/v0.4.2...v0.5.0) (2020-03-18)
+
+
+### Bug Fixes
+
+* force readable-stream v2 on zero deps to support stream-browserify ([498c688](https://github.com/dumberjs/dumber-gist/commit/498c688aa9320f4885e12795394f609e8d0f3893))
+
+
+### Features
+
+* support unit tests when using no spa framework ([75fb9ae](https://github.com/dumberjs/dumber-gist/commit/75fb9ae684559cee02fc6c23ed14a68e4b476bbb))
+
+
+
 ## [0.4.2](https://github.com/dumberjs/dumber-gist/compare/v0.4.1...v0.4.2) (2020-03-17)
 
 
