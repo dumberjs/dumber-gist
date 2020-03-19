@@ -1,6 +1,6 @@
 # Dumber Gist
 
-An online IDE to write JS SPA prototypes in your own GitHub gists.
+A lightweight online IDE to write JS SPA prototypes in your own GitHub gists.
 
 https://gist.dumber.app
 
