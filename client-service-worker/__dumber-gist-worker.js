@@ -95,15 +95,18 @@ addEventListener('message', async e => {
   source.postMessage({type: 'ack', id});
 });
 
+const existingFiles = [
+  '__boot-up-worker.html',
+  '__dumber-gist-worker.js',
+  '__remove-expired-worker.html',
+  'favicon.ico'
+];
+
 addEventListener('fetch', e => {
   if (!e.request.url.startsWith(location.origin)) return;
   const pathname = e.request.url.slice(location.origin.length);
 
-  if (
-    e.request.url.endsWith('__boot-up-worker.html') ||
-    e.request.url.endsWith('__dumber-gist-worker') ||
-    e.request.url.endsWith('__remove-expired-worker.html')
-  ) return;
+  if (existingFiles.some(f => e.request.url.endsWith(f))) return;
 
   e.respondWith(
     caches.match(e.request, {ignoreSearch: true}).then(r => {
