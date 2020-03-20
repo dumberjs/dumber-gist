@@ -34,7 +34,7 @@
     "babel-plugin-inferno": "^6.1.0",
     "babel-plugin-istanbul": "^6.0.0",
     "base64-arraybuffer": "^0.2.0",
-    "bcx-aurelia-dnd": "^1.0.3",
+    "bcx-aurelia-dnd": "^1.1.1",
     "bcx-aurelia-reorderable-repeat": "^1.3.0",
     "bcx-validation": "^1.1.2",
     "browser-do": "^2.0.1",
