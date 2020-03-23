@@ -20,15 +20,15 @@ export class OpenFileDialog {
   }
 
   keyDownInFilter(e) {
-    if (e.code === 'ArrowUp') { // up
+    if (e.key === 'ArrowUp') { // up
       e.target.blur();
       this.selectPrevious();
       return false;
-    } else if (e.code === 'ArrowDown') { // down
+    } else if (e.key === 'ArrowDown') { // down
       e.target.blur();
       this.selectNext();
       return false;
-    } else if (e.code === 'Enter') { // return
+    } else if (e.key === 'Enter') { // return
       this.open(this.selectedIdx);
       return false;
     }

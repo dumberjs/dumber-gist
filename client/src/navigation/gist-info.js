@@ -52,7 +52,7 @@ export class GistInfo {
   }
 
   keyDownInDescription(e) {
-    if (e.code === 'Enter') {
+    if (e.key === 'Enter') {
       // Prevent enter key's default behavior:
       // creating new line
       return false;

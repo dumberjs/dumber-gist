@@ -48,7 +48,7 @@ export class BrowserBar {
   }
 
   keyDownInInput(e) {
-    if (e.code === 'Enter') { // return key
+    if (e.key === 'Enter') { // return key
       this.ea.publish('history-reload');
     }
 
