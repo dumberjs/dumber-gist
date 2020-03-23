@@ -8,11 +8,12 @@ import {Transpiler} from './transpiler';
 import {DumberCache} from './dumber-cache';
 
 export const HISTORY_HACK_JS = `(function() {
-  var oldPushState = history.pushState;
-  var oldReplaceState = history.replaceState;
-  var oldBack = history.back;
-  var oldForward = history.forward;
-  var oldGo = history.go;
+  if (!parent || typeof parent.postMessage !== 'function') return;
+  const oldPushState = history.pushState;
+  const oldReplaceState = history.replaceState;
+  const oldBack = history.back;
+  const oldForward = history.forward;
+  const oldGo = history.go;
 
   history.pushState = function() {
     parent.postMessage({
@@ -57,7 +58,7 @@ export const HISTORY_HACK_JS = `(function() {
   };
 
   addEventListener('message', function (event) {
-    var action = event.data;
+    const action = event.data;
     if (!action || !action.type) return;
 
     if (action.type === 'history-back') {
@@ -70,10 +71,11 @@ export const HISTORY_HACK_JS = `(function() {
 `;
 
 export const CONSOLE_HACK_JS = `(function() {
+  if (!parent || typeof parent.postMessage !== 'function') return;
   function patch(method) {
-    var old = console[method];
+    const old = console[method];
     console[method] = function() {
-      var args = Array.prototype.slice.call(arguments, 0);
+      const args = Array.prototype.slice.call(arguments, 0);
       parent.postMessage({
         type: 'app-console',
         method: method,
@@ -83,7 +85,7 @@ export const CONSOLE_HACK_JS = `(function() {
     };
   }
 
-  var methods = ['log', 'error', 'warn', 'dir', 'debug', 'info', 'trace'];
+  const methods = ['log', 'error', 'warn', 'dir', 'debug', 'info', 'trace'];
   var i;
   for (i = 0; i < methods.length; i++) {
     patch(methods[i]);
@@ -92,36 +94,37 @@ export const CONSOLE_HACK_JS = `(function() {
 `;
 
 export const FORWORD_SHORTCUTS = `(function() {
-document.addEventListener('keydown', function (e) {
-  if (e.altKey) {
-    if (e.code === 'KeyW') { // Alt-W
+  if (!parent || typeof parent.postMessage !== 'function') return;
+  document.addEventListener('keydown', function (e) {
+    if (e.altKey) {
+      if (e.code === 'KeyW') { // Alt-W
+        parent.postMessage({
+          type: 'short-cut',
+          shortcut: 'close-active-file'
+        }, '*');
+      } else if (e.code === 'KeyN') {// Alt-N
+        parent.postMessage({
+          type: 'short-cut',
+          shortcut: 'create-file'
+        }, '*');
+      } else if (e.code === 'KeyR') { // Alt-R
+        parent.postMessage({
+          type: 'short-cut',
+          shortcut: 'bundle-or-reload'
+        }, '*');
+      }
+    }
+    if (
+      e.code === 'KeyP' &&
+      (e.altKey || e.ctrlKey || e.metaKey)
+    ) {
+      // Ctrl-P, Alt-P, or Cmd-P
       parent.postMessage({
         type: 'short-cut',
-        shortcut: 'close-active-file'
-      }, '*');
-    } else if (e.code === 'KeyN') {// Alt-N
-      parent.postMessage({
-        type: 'short-cut',
-        shortcut: 'create-file'
-      }, '*');
-    } else if (e.code === 'KeyR') { // Alt-R
-      parent.postMessage({
-        type: 'short-cut',
-        shortcut: 'bundle-or-reload'
+        shortcut: 'open-any'
       }, '*');
     }
-  }
-  if (
-    e.code === 'KeyP' &&
-    (e.altKey || e.ctrlKey || e.metaKey)
-  ) {
-    // Ctrl-P, Alt-P, or Cmd-P
-    parent.postMessage({
-      type: 'short-cut',
-      shortcut: 'open-any'
-    }, '*');
-  }
-})
+  })
 })();
 `;
 
