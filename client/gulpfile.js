@@ -4,7 +4,7 @@ const del = require('del');
 const fs = require('fs');
 const gulp = require('gulp');
 const babel = require('gulp-babel');
-const sass = require('gulp-sass');
+const sass = require('gulp-dart-sass');
 const plumber = require('gulp-plumber');
 const merge2 = require('merge2');
 const postcss = require('gulp-postcss');
@@ -80,7 +80,7 @@ function buildJs(src) {
 
 function buildCss(src) {
   return gulp.src(src, {sourcemaps: !isProd})
-  .pipe(sass().on('error', sass.logError))
+  .pipe(sass.sync().on('error', sass.logError))
   .pipe(postcss([
     autoprefixer(),
     postcssUrl({url: 'inline', encodeType: 'base64'})

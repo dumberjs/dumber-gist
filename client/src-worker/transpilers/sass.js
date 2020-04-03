@@ -17,6 +17,10 @@ export class SassTranspiler {
 
   _lazyLoad() {
     if (!this._promise) {
+      // The offical dart-sass doesn't have browser support
+      // https://github.com/sass/dart-sass/issues/25
+      // So I have to use sass.js (emscripted libsass) as it
+      // provided a fake fs layer.
       this._promise = import('sass.js/dist/sass.sync');
     }
 

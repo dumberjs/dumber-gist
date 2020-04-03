@@ -52,7 +52,7 @@
     "gulp-if": "^3.0.0",
     "gulp-plumber": "^1.2.1",
     "gulp-postcss": "^8.0.0",
-    "gulp-sass": "^4.0.2",
+    "gulp-dart-sass": "^1.0.0",
     "gulp-terser": "^1.2.0",
     "htmlhint": "0.11.0",
     "is-utf8": "^0.2.1",
