@@ -1,3 +1,12 @@
+## [0.5.4](https://github.com/dumberjs/dumber-gist/compare/v0.5.3...v0.5.4) (2020-04-03)
+
+
+### Bug Fixes
+
+* fix test selection on Firefox ([6fd57d8](https://github.com/dumberjs/dumber-gist/commit/6fd57d849a33b0fe04961c9c087ae231681d6569))
+
+
+
 ## [0.5.3](https://github.com/dumberjs/dumber-gist/compare/v0.5.2...v0.5.3) (2020-04-03)
 
 
