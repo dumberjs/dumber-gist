@@ -14,7 +14,11 @@ import {Container} from 'aurelia-dependency-injection';
         postMessage({
           type: 'dumber-console',
           method: method,
-          args: args.map(a => a && a.toString ? a.toString() : a)
+          args: args.map((a, i) => {
+            // Remove the leading '[dumber] '
+            if (i === 0) return a.substring(9);
+            return a && a.toString ? a.toString() : a;
+          })
         });
       }
       if (old) return old.apply(console, arguments);
