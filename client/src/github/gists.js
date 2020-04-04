@@ -99,7 +99,7 @@ export class Gists {
     const link = response.headers.get('link');
     let totalPages = page;
     if (link) {
-      const m = link.match(/(?:\?|&)page=(\d+).+?rel="last"/);
+      const m = link.match(/(?:\?|&)page=(\d+)[^"]+?rel="last"/);
       if (m) {
         totalPages = parseInt(m[1], 10);
       }
