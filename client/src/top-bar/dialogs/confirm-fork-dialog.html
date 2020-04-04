@@ -1,27 +1,23 @@
 <template>
   <ux-dialog>
     <ux-dialog-header>Fork this Gist?</ux-dialog-header>
-    <ux-dialog-body>
+    <ux-dialog-body class="p-0">
       <div class="gist-info">
-        <div class="info-item">
-          <div class="info-item-label">Owner</div>
-          <div class="info-item-value">
+        <img
+          class="owner-image"
+          src.bind="gist.owner.avatar_url"
+          alt.bind="gist.owner.login">
+
+        <div class="description selectable">
+          <div class="owner">
             <span>
-              <img src.bind="gist.owner.avatar_url" alt.bind="gist.owner.login">
               ${gist.owner.login}
-              <span if.bind="ownedByMe" class="text-muted">(me)</span>
             </span>
           </div>
-        </div>
-        <div class="info-item">
-          <div class="info-item-label">
-            Description
+          <div class="mb">
+            <small class="text-muted">${gist.id}</small>
           </div>
-          <div class="info-item-value">
-            <textarea
-              readonly
-              value.bind="gist.description"></textarea>
-          </div>
+          <div>${gist.description}</div>
         </div>
       </div>
     </ux-dialog-body>
