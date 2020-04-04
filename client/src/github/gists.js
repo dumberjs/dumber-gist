@@ -55,36 +55,61 @@ export class Gists {
     this.api = api;
   }
 
-  load(id, sha) {
+  async load(id, sha) {
     let url;
     if (sha) {
       url = `gists/${id}/${sha}`;
     } else {
       url = `gists/${id}`;
     }
-    return this.api.fetch(url)
-      .then(response => {
-        if (response.ok) {
-          // TODO: handle truncated files
-          return response.json();
-        }
-        throw new Error(`Error: ${response.statusText}\nGist ${id}`);
-      })
-      .then(fromGitHubGist);
+
+    const response = await this.api.fetch(url);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}\nGist ${id}`);
+    }
+
+    // TODO: handle truncated files
+    const gist = await response.json();
+    return fromGitHubGist(gist);
   }
 
-  list(login) {
-    return this.api.fetch(`users/${login}/gists`)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error(`unable to list gists for user ${login}: ${response.statusText}`);
-      })
-      .then(list => list.map(fromGitHubGist));
+
+  async list(login) {
+    const {totalPages, page, gists} = await this._list(login, 1);
+    if (totalPages > page) {
+      const results = await Promise.all(
+        _.range(page + 1, totalPages + 1)
+          .map(page => this._list(login, page))
+      );
+
+      results.forEach(r => {
+        gists.push(...r.gists);
+      });
+    }
+
+    return gists;
   }
 
-  update(id, gist) {
+  async _list(login, page) {
+    const response = await this.api.fetch(`users/${login}/gists?per_page=100&page=${page}`);
+    if (!response.ok) {
+      throw new Error(`unable to list gists for user ${login}: ${response.statusText}`);
+    }
+
+    const link = response.headers.get('link');
+    let totalPages = page;
+    if (link) {
+      const m = link.match(/(?:\?|&)page=(\d+).+?rel="last"/);
+      if (m) {
+        totalPages = parseInt(m[1], 10);
+      }
+    }
+
+    const list = await response.json();
+    return {totalPages, page, gists: list.map(fromGitHubGist)};
+  }
+
+  async update(id, gist) {
     const opts = {
       method: 'PATCH',
       headers: {
@@ -92,17 +117,17 @@ export class Gists {
       },
       body: JSON.stringify(toGitHubGist(gist))
     };
-    return this.api.fetch(`gists/${id}`, opts)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('unable to patch gist');
-      })
-      .then(fromGitHubGist);
+
+    const response = await this.api.fetch(`gists/${id}`, opts);
+    if (!response.ok) {
+      throw new Error('unable to patch gist');
+    }
+
+    const g = await response.json();
+    return fromGitHubGist(g);
   }
 
-  create(gist) {
+  async create(gist) {
     const opts = {
       method: 'POST',
       headers: {
@@ -110,24 +135,23 @@ export class Gists {
       },
       body:JSON.stringify(toGitHubGist(gist))
     };
-    return this.api.fetch(`gists`, opts)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('unable to create gist');
-      })
-      .then(fromGitHubGist);
+
+    const response = await this.api.fetch(`gists`, opts);
+    if (!response.ok) {
+      throw new Error('unable to create gist');
+    }
+
+    const g = await response.json();
+    return fromGitHubGist(g);
   }
 
-  fork(id) {
-    return this.api.fetch(`gists/${id}/forks`, { method: 'POST' })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('unable to fork gist');
-      })
-      .then(fork => this.load(fork.id));
+  async fork(id) {
+    const response = await this.api.fetch(`gists/${id}/forks`, { method: 'POST' });
+    if (!response.ok) {
+      throw new Error('unable to fork gist');
+    }
+
+    const forked = await response.json();
+    return await this.load(forked.id);
   }
 }
