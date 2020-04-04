@@ -1,3 +1,13 @@
+## [0.5.5](https://github.com/dumberjs/dumber-gist/compare/v0.5.4...v0.5.5) (2020-04-04)
+
+
+### Bug Fixes
+
+* fetch all pages of user's gists ([398d6ab](https://github.com/dumberjs/dumber-gist/commit/398d6ab7c0357c7686f6d58fa371d245c3aee957)), closes [#28](https://github.com/dumberjs/dumber-gist/issues/28)
+* fix outdated fork dialog layout ([b67724b](https://github.com/dumberjs/dumber-gist/commit/b67724bd8bdbc293fca3ec6ebb59f4785187593d))
+
+
+
 ## [0.5.4](https://github.com/dumberjs/dumber-gist/compare/v0.5.3...v0.5.4) (2020-04-03)
 
 
