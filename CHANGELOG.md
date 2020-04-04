@@ -1,3 +1,12 @@
+## [0.5.6](https://github.com/dumberjs/dumber-gist/compare/v0.5.5...v0.5.6) (2020-04-04)
+
+
+### Bug Fixes
+
+* fix wrongly captured total page count ([0b09b0c](https://github.com/dumberjs/dumber-gist/commit/0b09b0ce31c3d33edc0376001936d9b60989821c))
+
+
+
 ## [0.5.5](https://github.com/dumberjs/dumber-gist/compare/v0.5.4...v0.5.5) (2020-04-04)
 
 
