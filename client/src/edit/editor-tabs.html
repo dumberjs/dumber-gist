@@ -5,6 +5,7 @@
     reorderable-after-reordering="afterReordering"
     class="tab ${openedFiles.focusedIndex === $index ? 'active' : ''}"
     click.trigger="openedFiles.focusedIndex = $index & leftClick"
+    touchend.trigger="openedFiles.focusedIndex = $index & leftClick"
   >
     <i class.bind="filename | fileIcon" class="mr"></i>
     <span>${filename | lastPart}</span>
