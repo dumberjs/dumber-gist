@@ -1,3 +1,12 @@
+## [0.5.7](https://github.com/dumberjs/dumber-gist/compare/v0.5.6...v0.5.7) (2020-04-05)
+
+
+### Bug Fixes
+
+* fix tab selection on mobile devices ([c5b16c6](https://github.com/dumberjs/dumber-gist/commit/c5b16c691a4785ae7a830fa9907e56d72e16ef89)), closes [#30](https://github.com/dumberjs/dumber-gist/issues/30)
+
+
+
 ## [0.5.6](https://github.com/dumberjs/dumber-gist/compare/v0.5.5...v0.5.6) (2020-04-04)
 
 
