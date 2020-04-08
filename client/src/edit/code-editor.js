@@ -84,6 +84,7 @@ export class CodeEditor {
 
   attached() {
     this._isAttached = true;
+    this._createMonaco();
 
     // // Delay to fix small screen layout issue.
     // this._toCreate = setTimeout(() => {
