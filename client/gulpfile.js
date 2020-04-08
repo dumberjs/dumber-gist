@@ -50,7 +50,7 @@ const drApp = dumber({
   ],
   codeSplit: isTest ? undefined : (moduleId, packageName) => {
     if (!packageName) return 'app-bundle';
-    if (packageName === 'codemirror') return 'codemirror-bundle';
+    if (packageName === 'monaco-editor') return 'monaco-bundle';
     if (packageName.includes('aurelia')) return 'au-bundle';
     return 'deps-bundle';
   },
@@ -162,14 +162,83 @@ exports.buildWorker = buildWorker;
 
 function writeIndex() {
   const indexHtml = fs.readFileSync('_index.html', 'utf-8')
+    .replace('json.worker.js', finalBundleNames['json.worker.js'])
+    .replace('css.worker.js', finalBundleNames['css.worker.js'])
+    .replace('html.worker.js', finalBundleNames['html.worker.js'])
+    .replace('ts.worker.js', finalBundleNames['ts.worker.js'])
+    .replace('editor.worker.js', finalBundleNames['editor.worker.js'])
     .replace('entry-bundle.js', finalBundleNames['entry-bundle.js'])
     .replace('bundler-worker.js', finalBundleNames['bundler-worker.js']);
+
   fs.writeFileSync('index.html', indexHtml);
   return Promise.resolve();
 }
 
+function buildMonacoWorkers() {
+  if (isTest) return Promise.resolve();
+
+  const json = dumber({
+    src: 'monaco-workers',
+    hash: isProd,
+    entryBundle: 'json.worker',
+    append: ["requirejs(['json.js']);"],
+    onManifest: function(filenameMap) {
+      finalBundleNames['json.worker.js'] = filenameMap['json.worker.js'];
+    }
+  });
+
+  const css = dumber({
+    src: 'monaco-workers',
+    hash: isProd,
+    entryBundle: 'css.worker',
+    append: ["requirejs(['css.js']);"],
+    onManifest: function(filenameMap) {
+      finalBundleNames['css.worker.js'] = filenameMap['css.worker.js'];
+    }
+  });
+
+  const editor = dumber({
+    src: 'monaco-workers',
+    hash: isProd,
+    entryBundle: 'editor.worker',
+    append: ["requirejs(['editor.js']);"],
+    onManifest: function(filenameMap) {
+      finalBundleNames['editor.worker.js'] = filenameMap['editor.worker.js'];
+    }
+  });
+
+  const html = dumber({
+    src: 'monaco-workers',
+    hash: isProd,
+    entryBundle: 'html.worker',
+    append: ["requirejs(['html.js']);"],
+    onManifest: function(filenameMap) {
+      finalBundleNames['html.worker.js'] = filenameMap['html.worker.js'];
+    }
+  });
+
+  const ts = dumber({
+    src: 'monaco-workers',
+    hash: isProd,
+    entryBundle: 'ts.worker',
+    append: ["requirejs(['ts.js']);"],
+    onManifest: function(filenameMap) {
+      finalBundleNames['ts.worker.js'] = filenameMap['ts.worker.js'];
+    }
+  });
+
+  return merge2(
+    gulp.src('monaco-workers/json.js').pipe(json()),
+    gulp.src('monaco-workers/css.js').pipe(css()),
+    gulp.src('monaco-workers/editor.js').pipe(editor()),
+    gulp.src('monaco-workers/html.js').pipe(html()),
+    gulp.src('monaco-workers/ts.js').pipe(ts())
+  ).pipe(gulp.dest('dist'));
+}
+
 const build = gulp.series(
   clean,
+  buildMonacoWorkers,
   buildApp,
   buildWorker,
   writeIndex,
