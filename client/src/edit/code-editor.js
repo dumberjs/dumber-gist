@@ -1,51 +1,33 @@
 import {inject, bindable} from 'aurelia-framework';
 import path from 'path';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import CodeMirror from 'codemirror';
-// import "codemirror/addon/selection/active-line";
-import "codemirror/addon/dialog/dialog";
-import "codemirror/addon/search/search";
-import "codemirror/addon/search/searchcursor";
-import "codemirror/addon/scroll/annotatescrollbar";
-import "codemirror/addon/search/matchesonscrollbar";
-import "codemirror/addon/search/match-highlighter";
-import "codemirror/addon/lint/lint";
-// import "codemirror/addon/lint/javascript-lint";
-import "codemirror/addon/lint/html-lint";
-// import "codemirror/addon/lint/css-lint";
-import "codemirror/addon/lint/json-lint";
-import "codemirror/mode/markdown/markdown";
-import "codemirror/mode/htmlmixed/htmlmixed";
-import "codemirror/mode/vue/vue";
-import "codemirror/mode/jsx/jsx";
+import * as monaco from 'monaco-editor';
 
 const MODES = {
-  '.js': 'jsx',
-  '.ts': 'text/typescript-jsx',
-  '.json': 'application/json',
+  '.js': 'javascript',
+  '.ts': 'typescript',
+  '.json': 'json',
 
-  '.jsx': 'jsx',
-  '.tsx': 'text/typescript-jsx',
+  '.jsx': 'javascript',
+  '.tsx': 'typescript',
 
-  '.css': 'text/css',
-  '.scss': 'text/x-scss',
-  '.less': 'text/x-less',
+  '.css': 'css',
+  '.scss': 'css',
+  '.less': 'css',
 
-  '.vue': 'vue',
+  '.vue': 'html',
   '.md': 'markdown',
-  '.html': 'text/html',
+  '.html': 'html',
   '.xml': 'xml',
   '.svg': 'xml',
 
-  '.svelte': 'text/html'
+  '.svelte': 'html'
 };
 
 @inject(EventAggregator)
 export class CodeEditor {
   @bindable file;
-  @bindable readOnly = false;
-  @bindable lineWrapping = false;
-  mode = '';
+  @bindable wordWrap = false;
 
   constructor(ea) {
     this.ea = ea;
@@ -77,137 +59,132 @@ export class CodeEditor {
   }
 
   fileChanged(file) {
-    const {cm} = this;
-    if (!cm) return;
-    if (!file) return;
+    if (!file) {
+      this._removeMonaco();
+      return;
+    }
 
-    this.updateContent();
-    this.updateMode();
-    // cleanup codemirror session to avoid unwanted undo stack.
-    cm.clearHistory();
-    cm.focus();
-  }
-
-  updateContent() {
-    const {cm} = this;
-    if (!cm) return;
-
-    const value = this.file.content || '';
-
-    if (value !== cm.getValue()) {
-      this._internalUpdate = true;
-      cm.setValue(value);
-      this._internalUpdate = false;
+    if (!this.mo) {
+      this._createMonaco();
+    } else {
+      const value = file.content || '';
+      if (value !== this.mo.getValue()) {
+        this._removeMonaco();
+        this._createMonaco();
+      }
     }
   }
 
-  // scrollToBottom() {
-  //   const {cm} = this;
-  //   if (!cm) return;
-  //   cm.scrollIntoView({line: cm.lastLine(), ch: 0});
-  // }
-
   onChange() {
-    if (this._internalUpdate) return;
-    const {cm, file} = this;
-    if (!cm || !file) return;
-
-    const value = cm.getValue();
-
+    const {mo, file} = this;
+    if (!mo || !file) return;
+    const value = mo.getValue();
     this.ea.publish('update-file', {filename: file.filename, content: value})
   }
 
-  updateMode() {
-    const {cm} = this;
-    if (!cm) return;
+  attached() {
+    this._isAttached = true;
 
-    const newMode = MODES[path.extname(this.file.filename)] || '';
+    // // Delay to fix small screen layout issue.
+    // this._toCreate = setTimeout(() => {
+    //   this.mo = CodeMirror(this.editor, {
+    //     value: this.file.content,
+    //     mode: this.mode,
+    //     theme: 'gist-editor',
+    //     autofocus: true,
+    //     dragDrop: false, // avoid competing with app.js file drop
+    //     lineNumbers: true,
+    //     tabSize: 2,
+    //     indentWithTabs: false,
+    //     readOnly: this.readOnly,
+    //     lineWrapping: this.lineWrapping,
+    //     highlightSelectionMatches: {showToken: /\w|-|_|\./},
+    //     gutters: ["CodeMirror-lint-markers"],
+    //     lint: true,
+    //     //
+    //     // Cannot use codemirror built-in js-lint now.
+    //     // it uses jshint but jshint does not support all
+    //     // latest ES syntax.
+    //     // {
+    //     //   // jshint
+    //     //   esversion: 10,
+    //     //   undef: true,
+    //     //   unused: true
+    //     // },
+    //     //
+    //     // There are few linters missing (but possible):
+    //     // eslint in browser https://github.com/angelozerr/codemirror-lint-eslint/blob/master/eslint-lint.js
+    //     // sass-lint in browser https://stackoverflow.com/questions/43127937/scss-linter-for-codemirror
+    //     // less-lint in browser
+    //     //
+    //     // The other option is to rely on bundler worker's transpilers
+    //     // to emit errors, then translate those errors into
+    //     // codemirror lint data structure to show in the editor.
+    //     // But this assumes all transpilers emit error with enough
+    //     // information on location (col, row).
+    //     //
+    //     extraKeys: {
+    //       // When codemirror has the focus, it consumes almost
+    //       // all keybord events.
+    //       // So we need to bind those shortcuts in editor too.
+    //       'Alt-W': this.closeEditor,
+    //       'Alt-N': this.newFile,
+    //       'Alt-R': this.bundle,
+    //       'Ctrl-P': this.openAny,
+    //       'Alt-P': this.openAny,
+    //       'Cmd-P': this.openAny,
+    //       'Tab': cm => {
+    //         // https://codemirror.net/doc/manual.html
+    //         // Map Tab to spaces
+    //         var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+    //         cm.replaceSelection(spaces);
+    //       }
+    //     }
+    //   });
 
-    if (newMode !== this.mode) {
-      this.mode = newMode;
-      cm.setOption('mode', newMode);
-    }
+    //   this.cm.on('change', this.onChange);
+    //   this._toCreate = null;
+    // }, 50);
   }
 
-  attached() {
-    this.mode = MODES[path.extname(this.file.filename)] || '';
-    // Delay to fix small screen layout issue.
-    this._toCreate = setTimeout(() => {
-      this.cm = CodeMirror(this.editor, {
-        value: this.file.content,
-        mode: this.mode,
-        theme: 'gist-editor',
-        autofocus: true,
-        dragDrop: false, // avoid competing with app.js file drop
-        lineNumbers: true,
-        tabSize: 2,
-        indentWithTabs: false,
-        readOnly: this.readOnly,
-        lineWrapping: this.lineWrapping,
-        highlightSelectionMatches: {showToken: /\w|-|_|\./},
-        gutters: ["CodeMirror-lint-markers"],
-        lint: true,
-        //
-        // Cannot use codemirror built-in js-lint now.
-        // it uses jshint but jshint does not support all
-        // latest ES syntax.
-        // {
-        //   // jshint
-        //   esversion: 10,
-        //   undef: true,
-        //   unused: true
-        // },
-        //
-        // There are few linters missing (but possible):
-        // eslint in browser https://github.com/angelozerr/codemirror-lint-eslint/blob/master/eslint-lint.js
-        // sass-lint in browser https://stackoverflow.com/questions/43127937/scss-linter-for-codemirror
-        // less-lint in browser
-        //
-        // The other option is to rely on bundler worker's transpilers
-        // to emit errors, then translate those errors into
-        // codemirror lint data structure to show in the editor.
-        // But this assumes all transpilers emit error with enough
-        // information on location (col, row).
-        //
-        extraKeys: {
-          // When codemirror has the focus, it consumes almost
-          // all keybord events.
-          // So we need to bind those shortcuts in editor too.
-          'Alt-W': this.closeEditor,
-          'Alt-N': this.newFile,
-          'Alt-R': this.bundle,
-          'Ctrl-P': this.openAny,
-          'Alt-P': this.openAny,
-          'Cmd-P': this.openAny,
-          'Tab': cm => {
-            // https://codemirror.net/doc/manual.html
-            // Map Tab to spaces
-            var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
-            cm.replaceSelection(spaces);
-          }
-        }
-      });
+  _createMonaco() {
+    if (!this._isAttached) return;
+    const language = MODES[path.extname(this.file.filename)] || '';
 
-      this.cm.on('change', this.onChange);
-      this._toCreate = null;
-    }, 50);
+    this.mo = monaco.editor.create(this.editor, {
+      value: this.file.content || '',
+      tabSize: 2,
+      theme: 'vs-dark',
+      wordWrap: this.wordWrap,
+      minimap: { enabled: false },
+      language
+    });
+  }
+
+  _removeMonaco() {
+    if (!this.mo) return;
+    this.mo.dispose();
+    delete this.mo;
   }
 
   detached() {
-    if (this._toCreate) {
-      clearTimeout(this._toCreate);
-      this._toCreate = null;
-    }
+    this._isAttached = false;
+    this._removeMonaco();
 
-    if (!this.cm) return;
-    this.cm.off(this.onChange);
-    delete this.cm;
+    // if (this._toCreate) {
+    //   clearTimeout(this._toCreate);
+    //   this._toCreate = null;
+    // }
 
-    // aurelia keeps view in cache (returnToCache).
-    // this makes sure to clean up codemirror instance.
-    const cmDom = this.editor.querySelector('.CodeMirror');
-    if (cmDom) {
-      cmDom.remove();
-    }
+    // if (!this.cm) return;
+    // this.cm.off(this.onChange);
+    // delete this.cm;
+
+    // // aurelia keeps view in cache (returnToCache).
+    // // this makes sure to clean up codemirror instance.
+    // const cmDom = this.editor.querySelector('.CodeMirror');
+    // if (cmDom) {
+    //   cmDom.remove();
+    // }
   }
 }
