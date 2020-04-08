@@ -42,7 +42,10 @@ const drApp = dumber({
     HOST_NAMES
   ],
   append: [
-    isTest && "requirejs(['../test/setup', /^\\.\\.\\/test\\/.+\\.spec$/]);"
+    isTest && "requirejs(['../test/setup', /^\\.\\.\\/test\\/.+\\.spec$/]);",
+    // To bypass monaco's check on AMD loader.
+    // require.getConfig is an API provided by monaco's built-in AMD loader.
+    "\nrequire.getConfig = function() { return null; };\n"
   ],
   deps: [
     // htmlhint strangely ships with missing "module": "src/core.js".
@@ -236,9 +239,14 @@ function buildMonacoWorkers() {
   ).pipe(gulp.dest('dist'));
 }
 
+function copyMonacoFont() {
+  return gulp.src('node_modules/monaco-editor/esm/vs/base/browser/ui/codiconLabel/codicon/*.ttf')
+    .pipe(gulp.dest('monaco-editor/esm/vs/base/browser/ui/codiconLabel/codicon/'));
+}
 const build = gulp.series(
   clean,
   buildMonacoWorkers,
+  copyMonacoFont,
   buildApp,
   buildWorker,
   writeIndex,

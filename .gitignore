@@ -15,6 +15,7 @@ yarn.lock
 # Compiled files
 dist
 /client/index.html
+/client/monaco-editor
 .nyc_output
 coverage
 
