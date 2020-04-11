@@ -1,3 +1,17 @@
+# [0.6.0](https://github.com/dumberjs/dumber-gist/compare/v0.5.7...v0.6.0) (2020-04-11)
+
+
+### Bug Fixes
+
+* prevent dialog over dialog ([4aa9e70](https://github.com/dumberjs/dumber-gist/commit/4aa9e7020c6d8f55abae1355acfb4c0f8462c01c))
+
+
+### Features
+
+* add option to turn on codemirror vim mode ([d2bdcc6](https://github.com/dumberjs/dumber-gist/commit/d2bdcc64e16c92ea70758ddd32685b5c9034fae4)), closes [#22](https://github.com/dumberjs/dumber-gist/issues/22)
+
+
+
 ## [0.5.7](https://github.com/dumberjs/dumber-gist/compare/v0.5.6...v0.5.7) (2020-04-05)
 
 
