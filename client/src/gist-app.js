@@ -1,4 +1,5 @@
 import {inject, computedFrom, BindingEngine} from 'aurelia-framework';
+import {DialogService} from 'aurelia-dialog';
 import {DndService} from 'bcx-aurelia-dnd';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {EditSession} from './edit/edit-session';
@@ -24,7 +25,7 @@ const insideIframe = (function() {
 })();
 
 // Handle layout calculation and global bundling state
-@inject(EventAggregator, BindingEngine, DndService, EditSession, OpenedFiles, User, RemoveExpiredSession)
+@inject(EventAggregator, DialogService, BindingEngine, DndService, EditSession, OpenedFiles, User, RemoveExpiredSession)
 export class GistApp {
   insideIframe = insideIframe;
 
@@ -43,8 +44,9 @@ export class GistApp {
   windowWidth = null;
   windowHeight = null;
 
-  constructor(ea, bindingEngine, dndService, session, openedFiles, user, removeExpiredSession) {
+  constructor(ea, dialogService, bindingEngine, dndService, session, openedFiles, user, removeExpiredSession) {
     this.ea = ea;
+    this.dialogService = dialogService;
     this.dndService = dndService;
     this.session = session;
     this.openedFiles = openedFiles;
@@ -101,6 +103,7 @@ export class GistApp {
   @combo('alt+r', true)
   async bundleOrReload() {
     if (this.isBundling) return;
+    if (this.dialogService.hasActiveDialog) return;
     if (this.session.isRendered) {
       // browser-frame handles reload
       this.ea.publish('history-reload');
@@ -279,6 +282,8 @@ export class GistApp {
     if (e && e.stopPropagation) {
       e.stopPropagation();
     }
+
+    if (this.dialogService.hasActiveDialog) return;
 
     const {editingFile} = this.openedFiles;
     if (editingFile) {

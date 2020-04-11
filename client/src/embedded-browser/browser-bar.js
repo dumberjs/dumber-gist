@@ -10,13 +10,16 @@ export class BrowserBar {
   @bindable isBundling;
   @bindable insideIframe;
   @bindable({defaultBindingMode: bindingMode.twoWay}) autoRefresh;
-  @bindable bundleOrReload;
 
   constructor(ea, dialogService, session, historyTracker) {
     this.ea = ea;
     this.dialogService = dialogService;
     this.session = session;
     this.historyTracker = historyTracker;
+  }
+
+  bundleOrReload() {
+    this.ea.publish('bundle-or-reload');
   }
 
   goBack() {
