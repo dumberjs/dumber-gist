@@ -86,7 +86,7 @@ export class ActionDispatcher {
     this.session.updatePath(oldFilePath, newFilePath);
   }
 
-  @combo('alt+n')
+  @combo('alt+n', true)
   createFileWithKeyboard(e) {
     if (e && e.stopPropagation) {
       e.stopPropagation();
@@ -95,7 +95,7 @@ export class ActionDispatcher {
     this.createFile();
   }
 
-  @combo('ctrl+p', 'alt+p', 'command+p')
+  @combo('ctrl+p', 'alt+p', 'command+p', true)
   openAnyWithKeyboard(e) {
     if (e && e.stopPropagation) {
       e.stopPropagation();

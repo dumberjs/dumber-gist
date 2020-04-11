@@ -98,7 +98,7 @@ export class GistApp {
     }
   }
 
-  @combo('alt+r')
+  @combo('alt+r', true)
   async bundleOrReload() {
     if (this.isBundling) return;
     if (this.session.isRendered) {
@@ -274,7 +274,7 @@ export class GistApp {
     }
   }
 
-  @combo('alt+w')
+  @combo('alt+w', true)
   closeActiveTab(e) {
     if (e && e.stopPropagation) {
       e.stopPropagation();

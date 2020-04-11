@@ -50,30 +50,6 @@ export class CodeEditor {
   constructor(ea) {
     this.ea = ea;
     this.onChange = this.onChange.bind(this);
-    this.closeEditor = this.closeEditor.bind(this);
-    this.newFile = this.newFile.bind(this);
-    this.bundle = this.bundle.bind(this);
-    this.openAny = this.openAny.bind(this);
-  }
-
-  closeEditor() {
-    this.ea.publish('close-active-file');
-  }
-
-  newFile() {
-    if (this.file) {
-      let inDir = path.dirname(this.file.filename);
-      if (inDir === '.') inDir = '';
-      this.ea.publish('create-file', inDir);
-    }
-  }
-
-  openAny() {
-    this.ea.publish('open-any');
-  }
-
-  bundle() {
-    this.ea.publish('bundle-or-reload');
   }
 
   fileChanged(file) {
@@ -170,15 +146,6 @@ export class CodeEditor {
         // information on location (col, row).
         //
         extraKeys: {
-          // When codemirror has the focus, it consumes almost
-          // all keybord events.
-          // So we need to bind those shortcuts in editor too.
-          'Alt-W': this.closeEditor,
-          'Alt-N': this.newFile,
-          'Alt-R': this.bundle,
-          'Ctrl-P': this.openAny,
-          'Alt-P': this.openAny,
-          'Cmd-P': this.openAny,
           'Tab': cm => {
             // https://codemirror.net/doc/manual.html
             // Map Tab to spaces
