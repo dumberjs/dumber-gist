@@ -1,3 +1,12 @@
+## [0.6.1](https://github.com/dumberjs/dumber-gist/compare/v0.6.0...v0.6.1) (2020-04-11)
+
+
+### Bug Fixes
+
+* missing insideIframe check ([d29c0d6](https://github.com/dumberjs/dumber-gist/commit/d29c0d63e6b5060c889477af2e06a639507f6339))
+
+
+
 # [0.6.0](https://github.com/dumberjs/dumber-gist/compare/v0.5.7...v0.6.0) (2020-04-11)
 
 
