@@ -1,14 +1,19 @@
-import {inject, BindingEngine} from 'aurelia-framework';
+import {inject, bindable, bindingMode, BindingEngine} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {OpenedFiles} from './opened-files';
+import {DialogService} from 'aurelia-dialog';
+import {EditorConfigDialog} from './dialogs/editor-config-dialog';
 import _ from 'lodash';
 
-@inject(EventAggregator, BindingEngine, OpenedFiles)
+@inject(EventAggregator, BindingEngine, OpenedFiles, DialogService)
 export class EditorTabs {
-  constructor(ea, bindingEngine, openedFiles) {
+  @bindable({defaultBindingMode: bindingMode.twoWay}) vimMode;
+
+  constructor(ea, bindingEngine, openedFiles, dialogService) {
     this.ea = ea;
     this.bindingEngine = bindingEngine;
     this.openedFiles = openedFiles;
+    this.dialogService = dialogService;
     this.showActiveTab = _.debounce(this.showActiveTab.bind(this));
   }
 
@@ -20,6 +25,22 @@ export class EditorTabs {
 
   detached() {
     this.subscribers.forEach(s => s.dispose());
+  }
+
+  config() {
+    this.dialogService.open({
+      viewModel: EditorConfigDialog,
+      model: {
+        config: {
+          vimMode: this.vimMode,
+        },
+        insideIframe: this.insideIframe
+      }
+    }).whenClosed(response => {
+      if (response.wasCancelled) return;
+      const {output} = response;
+      this.autoRefresh = output.autoRefresh;
+    });
   }
 
   closeFile(filename) {

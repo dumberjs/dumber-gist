@@ -28,7 +28,7 @@
     </ux-dialog-body>
     <ux-dialog-footer>
       <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
-      <button class="btn error" click.trigger="resetCache() & leftClick">Reset Cache</button>
+      <button class="btn error" if.bind="!insideIframe" click.trigger="resetCache() & leftClick">Reset Cache</button>
       <button class="btn ml-auto primary" click.trigger="ok() & leftClick">Save</button>
     </ux-dialog-footer>
   </ux-dialog>

@@ -44,7 +44,7 @@ export class BrowserBar {
       if (response.wasCancelled) return;
       const {output} = response;
       this.autoRefresh = output.autoRefresh;
-    })
+    });
   }
 
   keyDownInInput(e) {
