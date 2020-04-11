@@ -7,6 +7,7 @@ import _ from 'lodash';
 
 @inject(EventAggregator, BindingEngine, OpenedFiles, DialogService)
 export class EditorTabs {
+  @bindable insideIframe;
   @bindable({defaultBindingMode: bindingMode.twoWay}) vimMode = false;
   @bindable({defaultBindingMode: bindingMode.twoWay}) lineWrapping = false;
 
