@@ -1,5 +1,5 @@
 <template>
-  <ux-dialog class="wide-dialog">
+  <ux-dialog>
     <ux-dialog-body>
       <div class="select-section">
         <div class="section-body">
@@ -7,7 +7,7 @@
             class="selection ${model.autoRefresh ? 'selected' : ''}"
             click.trigger="model.autoRefresh = true & leftClick"
           >
-            <i class="icon fas ${model.autoRefresh ? 'text-primary fa-check-square' : 'text-muted fa-square'}"></i>
+            <i class="icon fas ${model.autoRefresh ? 'text-primary fa-check-circle' : 'text-muted fa-circle'}"></i>
             <div>
               <div class="title">Automatically refresh the embedded browser</div>
               <div class="description">Rendering is de-bounced for <span class="badge bg-dark">500ms</span></div>
@@ -17,7 +17,7 @@
             class="selection ${!model.autoRefresh ? 'selected' : ''}"
             click.trigger="model.autoRefresh = false & leftClick"
           >
-            <i class="icon fas ${!model.autoRefresh ? 'text-primary fa-check-square' : 'text-muted fa-square'}"></i>
+            <i class="icon fas ${!model.autoRefresh ? 'text-primary fa-check-circle' : 'text-muted fa-circle'}"></i>
             <div>
               <div class="title">Manually refresh the embedded browser</div>
               <div class="description">Either click the refresh button <i class="badge bg-dark fas fa-sync-alt"></i> or use keybord shortcut <span class="badge bg-dark">Alt-R</span> (<span class="badge bg-dark">⌥ R</span>)</div>

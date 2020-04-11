@@ -18,6 +18,7 @@ import "codemirror/mode/markdown/markdown";
 import "codemirror/mode/htmlmixed/htmlmixed";
 import "codemirror/mode/vue/vue";
 import "codemirror/mode/jsx/jsx";
+import "codemirror/keymap/vim";
 
 const MODES = {
   '.js': 'jsx',
@@ -44,6 +45,7 @@ const MODES = {
 export class CodeEditor {
   @bindable file;
   @bindable readOnly = false;
+  @bindable vimMode = false;
   @bindable lineWrapping = false;
   mode = '';
 
@@ -105,6 +107,27 @@ export class CodeEditor {
     }
   }
 
+  vimModeChanged(vimMode) {
+    const {cm} = this;
+    if (!cm) return;
+
+    const keyMap = cm.getOption('keyMap');
+    const newKeyMap = vimMode ? 'vim' : 'default';
+    if (keyMap !== newKeyMap) {
+      cm.setOption('keyMap', newKeyMap);
+    }
+  }
+
+  lineWrappingChanged(lineWrapping) {
+    const {cm} = this;
+    if (!cm) return;
+
+    const existingLineWrapping = cm.getOption('lineWrapping');
+    if (lineWrapping !== existingLineWrapping) {
+      cm.setOption('lineWrapping', lineWrapping);
+    }
+  }
+
   attached() {
     this.mode = MODES[path.extname(this.file.filename)] || '';
     // Delay to fix small screen layout issue.
@@ -118,8 +141,10 @@ export class CodeEditor {
         lineNumbers: true,
         tabSize: 2,
         indentWithTabs: false,
+        inputStyle: 'contenteditable',
         readOnly: this.readOnly,
         lineWrapping: this.lineWrapping,
+        keyMap: this.vimMode ? 'vim' : 'default',
         highlightSelectionMatches: {showToken: /\w|-|_|\./},
         gutters: ["CodeMirror-lint-markers"],
         lint: true,

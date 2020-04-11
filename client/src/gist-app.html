@@ -61,12 +61,16 @@
         class="app-editors ${showEditorsInSmallLayout ? 'show-editors' : 'hide-editors'} ${showEditorsInSmallLayout && !showBrowserWindowInSmallLayout ? 'sole-panel' : ''}"
         css="width: ${effectiveEditorsWidth}px;"
       >
-        <editor-tabs></editor-tabs>
+        <editor-tabs
+          inside-iframe.bind="insideIframe"
+          vim-mode.bind="vimMode"
+          line-wrapping.bind="lineWrapping"></editor-tabs>
         <code-editor
           if.bind="openedFiles.editingFile"
           file.bind="openedFiles.editingFile"
           read-only.bind="false"
-          line-wrapping.bind="true"
+          vim-mode.bind="vimMode"
+          line-wrapping.bind="lineWrapping"
           ></code-editor>
         <panel-resizer
           class="d-tiny-hide"

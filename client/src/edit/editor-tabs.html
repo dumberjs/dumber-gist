@@ -1,15 +1,17 @@
-<template class="section-bar" ref="el">
-  <div
-    reorderable-repeat.for="filename of openedFiles.filenames"
-    reorderable-direction="right"
-    reorderable-after-reordering="afterReordering"
-    class="tab ${openedFiles.focusedIndex === $index ? 'active' : ''}"
-    click.trigger="openedFiles.focusedIndex = $index & leftClick"
-    touchend.trigger="openedFiles.focusedIndex = $index & leftClick"
-  >
-    <i class.bind="filename | fileIcon" class="mr"></i>
-    <span>${filename | lastPart}</span>
-    <i class="fas fa-times close-file" click.trigger="closeFile(filename) & leftClick"></i>
+<template class="section-bar">
+  <div class="section-bar" ref="el" style="flex: 1 0 0;">
+    <div
+      reorderable-repeat.for="filename of openedFiles.filenames"
+      reorderable-direction="right"
+      reorderable-after-reordering="afterReordering"
+      class="tab ${openedFiles.focusedIndex === $index ? 'active' : ''}"
+      click.trigger="openedFiles.focusedIndex = $index & leftClick"
+      touchend.trigger="openedFiles.focusedIndex = $index & leftClick"
+    >
+      <i class.bind="filename | fileIcon" class="mr"></i>
+      <span>${filename | lastPart}</span>
+      <i class="fas fa-times close-file" click.trigger="closeFile(filename) & leftClick"></i>
+    </div>
   </div>
-  <i class="ml-auto mr bar-action fas fa-cog enabled" click.trigger="config() & leftClick"></i>
+  <i if.bind="!insideIframe" class="ml mr-2 bar-action fas fa-cog enabled ${vimMode ? 'with-label with-label-vim' : ''}" style="flex: 0 0 auto;" click.trigger="config() & leftClick"></i>
 </template>

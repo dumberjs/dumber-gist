@@ -14,8 +14,11 @@
         </div>
         <div class="right">
           <span repeat.for="c of s.keys">
-            <span class="badge bg-dark" if.bind="c">${c}</span>
-            <br else>
+            <span class="badge bg-dark" if.bind="$even">${c}</span>
+            <span else>
+              (<span class="badge bg-dark">${c}</span>)
+              <br if.bind="!$last">
+            </span>
           </span>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import {inject, computedFrom, BindingEngine} from 'aurelia-framework';
+import {inject, computedFrom, observable, BindingEngine} from 'aurelia-framework';
 import {DialogService} from 'aurelia-dialog';
 import {DndService} from 'bcx-aurelia-dnd';
 import {EventAggregator} from 'aurelia-event-aggregator';
@@ -33,7 +33,11 @@ export class GistApp {
   showEditorsInSmallLayout = true;
   showBrowserWindowInSmallLayout = true;
 
+  initialised = false;
+  @observable vimMode = false;
+  @observable lineWrapping = true;
   autoRefresh = true;
+
   isBundling = false;
   bundlerError = null;
   intention = {sideBar: 0, editors: 0, devTools: 0};
@@ -66,7 +70,44 @@ export class GistApp {
     removeExpiredSession.start();
   }
 
+  vimModeChanged() {
+    this.saveUserPreferences();
+  }
+
+  lineWrappingChanged() {
+    this.saveUserPreferences();
+  }
+
+  loadUserPreferences() {
+    if (insideIframe) return;
+    try {
+      const json = localStorage.getItem('user-preferences');
+      if (!json) return;
+      const pref = JSON.parse(json);
+      this.vimMode = pref.vimMode;
+      this.lineWrapping = pref.lineWrapping;
+    } catch (e) {
+      // localStorage could be unavailable in iframe
+    }
+  }
+
+  saveUserPreferences() {
+    if (insideIframe || !this.initialised) return;
+    try {
+      localStorage.setItem(
+        'user-preferences',
+        JSON.stringify({
+          vimMode: this.vimMode,
+          lineWrapping: this.lineWrapping
+        })
+      );
+    } catch (e) {
+      // localStorage could be unavailable in iframe
+    }
+  }
+
   attached() {
+    this.loadUserPreferences();
     this.dndService.addTarget(this);
     this._subscribers = [
       this.ea.subscribe('dnd:willStart', () => this.resetIntention()),
@@ -98,6 +139,7 @@ export class GistApp {
     if (_.get(this.session, 'files.length')) {
       this.bundle();
     }
+    this.initialised = true;
   }
 
   @combo('alt+r', true)

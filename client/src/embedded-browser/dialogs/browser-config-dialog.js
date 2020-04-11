@@ -22,6 +22,8 @@ export class BrowserConfigDialog {
   }
 
   resetCache() {
+    if (this.insideIframe) return;
+
     this.helper.confirm(`Reset all local caches for bundler and npm registry?`)
     .then(
       () => this.ea.publish('reset-cache'),

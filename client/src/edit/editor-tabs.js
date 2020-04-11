@@ -7,7 +7,8 @@ import _ from 'lodash';
 
 @inject(EventAggregator, BindingEngine, OpenedFiles, DialogService)
 export class EditorTabs {
-  @bindable({defaultBindingMode: bindingMode.twoWay}) vimMode;
+  @bindable({defaultBindingMode: bindingMode.twoWay}) vimMode = false;
+  @bindable({defaultBindingMode: bindingMode.twoWay}) lineWrapping = false;
 
   constructor(ea, bindingEngine, openedFiles, dialogService) {
     this.ea = ea;
@@ -28,18 +29,19 @@ export class EditorTabs {
   }
 
   config() {
+    if (this.insideIframe) return;
+
     this.dialogService.open({
       viewModel: EditorConfigDialog,
       model: {
-        config: {
-          vimMode: this.vimMode,
-        },
-        insideIframe: this.insideIframe
+        vimMode: this.vimMode,
+        lineWrapping: this.lineWrapping
       }
     }).whenClosed(response => {
       if (response.wasCancelled) return;
       const {output} = response;
-      this.autoRefresh = output.autoRefresh;
+      this.vimMode = output.vimMode;
+      this.lineWrapping = output.lineWrapping;
     });
   }
 

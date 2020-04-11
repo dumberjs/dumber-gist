@@ -1,0 +1,34 @@
+<template>
+  <ux-dialog>
+    <ux-dialog-body class="pt-0 pb-0 pl pr">
+      <div class="select-section">
+        <div class="section-body">
+          <div
+            class="selection"
+            click.trigger="model.vimMode = !model.vimMode & leftClick"
+          >
+            <i class="icon fas ${model.vimMode ? 'text-primary fa-check-square' : 'text-muted fa-square'}"></i>
+            <div>
+              <div class="title">Turn on <strong>VIM mode</strong></div>
+              <div class="description">CodeMirror has a robust <a href="https://codemirror.net/demo/vim.html" target="_blank">VIM mode</a> that attempts to faithfully emulate VIM's most useful features.</div>
+            </div>
+          </div>
+          <div
+            class="selection"
+            click.trigger="model.lineWrapping = !model.lineWrapping & leftClick"
+          >
+            <i class="icon fas ${model.lineWrapping ? 'text-primary fa-check-square' : 'text-muted fa-square'}"></i>
+            <div>
+              <div class="title">Wrap long lines</div>
+              <div class="description">Whether CodeMirror should scroll or wrap for long lines.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ux-dialog-body>
+    <ux-dialog-footer>
+      <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
+      <button class="btn ml-auto primary" click.trigger="ok() & leftClick">Save</button>
+    </ux-dialog-footer>
+  </ux-dialog>
+</template>

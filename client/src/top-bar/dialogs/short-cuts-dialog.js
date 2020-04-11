@@ -9,7 +9,7 @@ export class ShortCutsDialog {
       action: 'Find and open a file',
       event: 'open-any',
       notes: "Ctrl-P and Cmd-P may not work when the focus is in embedded app, or blocked by your system's default.",
-      keys: ['Alt-P', '⌥ P', '', 'Ctrl-P', '⌃ P', '', 'Cmd-P', '⌘ P']
+      keys: ['Alt-P', '⌥ P', 'Ctrl-P', '⌃ P', 'Cmd-P', '⌘ P']
     },
     {
       action: 'Manually reload the embedded browser',

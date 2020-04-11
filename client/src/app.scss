@@ -1192,22 +1192,29 @@ input[type='text'] {
   }
 }
 
-.with-auto-label {
+.with-label {
   position: relative;
 
   &::after {
     font-family: Arial;
     font-weight: bold;
-    font-size: .7rem;
+    font-size: .6rem;
     line-height: 1;
-    color: $green-dark;
     display: block;
     text-align: center;
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    content: "auto";
+    content: '';
+  }
+
+  &.with-label-auto::after {
+    content: 'auto';
+  }
+
+  &.with-label-vim::after {
+    content: 'vim';
   }
 }
 
