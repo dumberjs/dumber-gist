@@ -1,3 +1,12 @@
+## [0.6.2](https://github.com/dumberjs/dumber-gist/compare/v0.6.1...v0.6.2) (2020-04-12)
+
+
+### Bug Fixes
+
+* prevent double dialog ([58acaf2](https://github.com/dumberjs/dumber-gist/commit/58acaf2cf1dc130efe45d7706362c89436430c21))
+
+
+
 ## [0.6.1](https://github.com/dumberjs/dumber-gist/compare/v0.6.0...v0.6.1) (2020-04-11)
 
 
