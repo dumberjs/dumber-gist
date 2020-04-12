@@ -35,6 +35,8 @@ export class GistBar {
   }
 
   async open() {
+    if (this.dialogService.hasActiveDialog) return;
+
     try {
       if (this.saveable) {
         await this.dialogService.open({viewModel: ConfirmOpenDialog})
@@ -58,6 +60,8 @@ export class GistBar {
   }
 
   async new() {
+    if (this.dialogService.hasActiveDialog) return;
+
     if (!this.renewable) return; // already in a draft
     try {
       if (this.saveable) {
@@ -78,6 +82,7 @@ export class GistBar {
   }
 
   async save() {
+    if (this.dialogService.hasActiveDialog) return;
     if (!this.saveable) return;
     if (!this.user.authenticated) {
       return this.loginPopup();
@@ -97,6 +102,7 @@ export class GistBar {
   }
 
   async fork() {
+    if (this.dialogService.hasActiveDialog) return;
     if (!this.forkable) return;
     if (!this.user.authenticated) {
       return this.loginPopup();
@@ -129,6 +135,7 @@ export class GistBar {
   }
 
   async share() {
+    if (this.dialogService.hasActiveDialog) return;
     if (!this.gistId) return;
     const {gist} = this.session;
     if (!gist.public) {

@@ -13,6 +13,8 @@ export class QuickStart {
   }
 
   start() {
+    if (this.dialogService.hasActiveDialog) return;
+
     if (this.session.files.length > 0) return;
     this.dialogService.open({
       viewModel: SelectSkeletonDialog

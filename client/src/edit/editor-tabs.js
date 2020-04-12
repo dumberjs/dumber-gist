@@ -31,6 +31,7 @@ export class EditorTabs {
 
   config() {
     if (this.insideIframe) return;
+    if (this.dialogService.hasActiveDialog) return;
 
     this.dialogService.open({
       viewModel: EditorConfigDialog,

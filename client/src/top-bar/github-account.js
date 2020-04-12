@@ -21,6 +21,7 @@ export class GithubAccount {
 
   userMenu() {
     if (!this.user.login) return;
+    if (this.dialogService.hasActiveDialog) return;
 
     const rect = this.el.getBoundingClientRect();
     this.dialogService.open({
@@ -48,6 +49,8 @@ export class GithubAccount {
   }
 
   helpMenu() {
+    if (this.dialogService.hasActiveDialog) return;
+
     const rect = this.el.getBoundingClientRect();
     this.dialogService.open({
       viewModel: ContextMenu,
@@ -72,6 +75,7 @@ export class GithubAccount {
   }
 
   listShortCuts() {
+    if (this.dialogService.hasActiveDialog) return;
     this.dialogService.open({viewModel: ShortCutsDialog});
   }
 }

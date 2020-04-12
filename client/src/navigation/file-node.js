@@ -64,6 +64,8 @@ export class FileNode {
   }
 
   onContextmenu(e) {
+    if (this.dialogService.hasActiveDialog) return;
+
     this.dialogService.open({
       viewModel: ContextMenu,
       model: {

@@ -35,6 +35,8 @@ export class BrowserBar {
   }
 
   config() {
+    if (this.dialogService.hasActiveDialog) return;
+
     this.dialogService.open({
       viewModel: BrowserConfigDialog,
       model: {
