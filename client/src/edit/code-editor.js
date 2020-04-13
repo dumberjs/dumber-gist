@@ -52,6 +52,15 @@ export class CodeEditor {
   constructor(ea) {
     this.ea = ea;
     this.onChange = this.onChange.bind(this);
+    this.newFile = this.newFile.bind(this);
+  }
+
+  newFile() {
+    if (this.file) {
+      let inDir = path.dirname(this.file.filename);
+      if (inDir === '.') inDir = '';
+      this.ea.publish('create-file', inDir);
+    }
   }
 
   fileChanged(file) {
@@ -171,6 +180,8 @@ export class CodeEditor {
         // information on location (col, row).
         //
         extraKeys: {
+          'Ctrl-Alt-N': this.newFile,
+          'Alt-N': this.newFile,
           'Tab': cm => {
             // https://codemirror.net/doc/manual.html
             // Map Tab to spaces
