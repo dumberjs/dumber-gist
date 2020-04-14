@@ -19,10 +19,10 @@ const HOST_NAMES = `;var HOST_NAMES = ${JSON.stringify(hostnames)};`;
 
 async function buildApp() {
   return merge2(
-    gulp.src('src/**/*.js', { sourcemaps: !isProd, since: gulp.lastRun(buildApp)})
+    gulp.src('src/**/*.js', { since: gulp.lastRun(buildApp)})
   )
   .pipe(gap.prependText(HOST_NAMES))
-  .pipe(gulp.dest('dist', {sourcemaps: isProd ? false : (isTest ? true : '.')}));
+  .pipe(gulp.dest('dist'));
 }
 
 exports.buildApp = buildApp;
@@ -33,11 +33,6 @@ function clean() {
 }
 
 exports.clean = clean;
-
-// clear dumber (tracing) cache
-exports['clear-cache'] = function () {
-  return drApp.clearCache();
-};
 
 function copy() {
   return gulp.src('./src/*.html')
