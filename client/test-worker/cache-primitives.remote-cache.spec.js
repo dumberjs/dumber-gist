@@ -1,9 +1,11 @@
 import test from 'tape-promise/tape';
 import create from './cache-primitives.helper';
 
+const cacheUrl = HOST_NAMES.cacheUrl;
+
 test('getRemoteCacheWithPath rejects missing cache, gets valid cache', async t => {
   const remote = {
-    'https://cache.dumber.local/npm/foo@1.0.0/index.js': {foo: 1}
+    [`${cacheUrl}/npm/foo@1.0.0/index.js`]: {foo: 1}
   };
   const p = create({}, remote);
   t.deepEqual(
@@ -15,7 +17,7 @@ test('getRemoteCacheWithPath rejects missing cache, gets valid cache', async t =
 
 test('getRemoteCache rejects missing cache, gets valid cache', async t => {
   const remote = {
-    'https://cache.dumber.local/ha/sh': {foo: 1}
+    [`${cacheUrl}/ha/sh`]: {foo: 1}
   };
   const p = create({}, remote);
   t.deepEqual(
@@ -40,7 +42,7 @@ test('setRemoteCache sets cache if user is signed in', async t => {
     const p = create({}, remote);
     await p.setRemoteCache('12345', {a: 1});
     t.deepEqual(remote, {
-      'https://cache.dumber.local/12/345': {a: 1}
+      [`${cacheUrl}/12/345`]: {a: 1}
     });
     t.deepEqual(
       await p.getRemoteCache('12345'),

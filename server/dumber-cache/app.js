@@ -5,7 +5,11 @@ const {receiveData, fetch} = require('../request');
 
 const PORT = 5001;
 const CACHE_DIR = path.join(__dirname, 'public');
-const HOST = process.env.NODE_ENV === 'production' ? 'https://gist.dumber.app' : 'https://gist.dumber.local';
+const domainSubfix = process.env.NODE_ENV === 'production' ? 'app' : 'local';
+const DUMBER_DOMAIN = process.env.DUMBER_DOMAIN ? process.env.DUMBER_DOMAIN : `dumber.${domainSubfix}`;
+const HOST = `https://gist.${DUMBER_DOMAIN}`;
+const JSDELIVR_CDN_DOMAIN = process.env.JSDELIVR_CDN_DOMAIN ? process.env.JSDELIVR_CDN_DOMAIN.trim() : 'cdn.jsdelivr.net';
+
 const knownTokens = {};
 
 async function getUser(token) {
@@ -53,7 +57,7 @@ async function setCache(hash, object) {
     return;
   }
 
-  if (object.path.startsWith('//cdn.jsdelivr.net/npm/')) {
+  if (object.path.startsWith(`//${JSDELIVR_CDN_DOMAIN}/npm/`)) {
     // slice to "npm/..."
     const npmPath = path.resolve(CACHE_DIR, object.path.slice(19));
     await fs.mkdir(path.dirname(npmPath), {recursive: true});

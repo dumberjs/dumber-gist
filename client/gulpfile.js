@@ -19,12 +19,21 @@ const isProd = NODE_ENV === 'production';
 const isTest = NODE_ENV === 'test';
 
 const domainSubfix = isProd ? 'app' : 'local';
+const DUMBER_DOMAIN = process.env.DUMBER_DOMAIN ? process.env.DUMBER_DOMAIN.trim() : `dumber.${domainSubfix}`;
+const JSDELIVR_CDN_DOMAIN = process.env.JSDELIVR_CDN_DOMAIN ? process.env.JSDELIVR_CDN_DOMAIN.trim() : 'cdn.jsdelivr.net';
+
 const hostnames = {
-  host: `gist.dumber.${domainSubfix}`,
-  clientUrl: `https://gist.dumber.${domainSubfix}`,
-  cacheUrl: `https://cache.dumber.${domainSubfix}`,
-  oauthUrl: `https://github-oauth.gist.dumber.${domainSubfix}`
+  domain : DUMBER_DOMAIN,
+  host: `gist.${DUMBER_DOMAIN}`,
+  clientUrl: `https://gist.${DUMBER_DOMAIN}`,
+  cacheUrl: `https://cache.${DUMBER_DOMAIN}`,
+  oauthUrl: `https://github-oauth.gist.${DUMBER_DOMAIN}`,
+  jsdelivrDataUrl: process.env.JSDELIVR_DATA_URL ? process.env.JSDELIVR_DATA_URL.trim() : '//data.jsdelivr.com',
+  jsdelivrCdnUrl: `https://${JSDELIVR_CDN_DOMAIN}`,
+  jsdelivrCdnDomain: JSDELIVR_CDN_DOMAIN,
+  npmUrl : process.env.NPM_URL ? process.env.NPM_URL.trim() : 'https://registry.npmjs.cf'
 };
+
 const HOST_NAMES = `;var HOST_NAMES = ${JSON.stringify(hostnames)};`;
 
 const loaderDist = isTest ?
@@ -163,6 +172,9 @@ exports.buildWorker = buildWorker;
 function writeIndex() {
   const indexHtml = fs.readFileSync('_index.html', 'utf-8')
     .replace('entry-bundle.js', finalBundleNames['entry-bundle.js'])
+    .replace(/\{\{([a-z]{1,})\}\}/gi, (m, v) => {
+      return hostnames[v];
+    })
     .replace('bundler-worker.js', finalBundleNames['bundler-worker.js']);
   fs.writeFileSync('index.html', indexHtml);
   return Promise.resolve();
