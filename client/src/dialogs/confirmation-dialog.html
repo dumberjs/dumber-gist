@@ -8,7 +8,7 @@
     </ux-dialog-body>
     <ux-dialog-footer>
       <button class="btn" click.trigger="controller.cancel() & leftClick">${cancelationLabel}</button>
-      <button class="btn ml-auto primary" click.trigger="ok() & leftClick">${confirmationLabel}</button>
+      <button class="btn ml-auto primary" attach-focus click.trigger="ok() & leftClick">${confirmationLabel}</button>
     </ux-dialog-footer>
   </ux-dialog>
 </template>
