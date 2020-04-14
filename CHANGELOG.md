@@ -1,3 +1,13 @@
+## [0.6.3](https://github.com/dumberjs/dumber-gist/compare/v0.6.2...v0.6.3) (2020-04-14)
+
+
+### Bug Fixes
+
+* move focus to dialog ([85adf04](https://github.com/dumberjs/dumber-gist/commit/85adf04d8f5dff0ecc9be8c7a50702898c586f74)), closes [#31](https://github.com/dumberjs/dumber-gist/issues/31)
+* use ctrl-alt-n in code editor when alt-n does unicode input ([4e7a6de](https://github.com/dumberjs/dumber-gist/commit/4e7a6de3bae5ea6fe98fd203516a7decb77a49f7))
+
+
+
 ## [0.6.2](https://github.com/dumberjs/dumber-gist/compare/v0.6.1...v0.6.2) (2020-04-12)
 
 
