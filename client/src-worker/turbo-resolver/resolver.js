@@ -170,7 +170,8 @@ export class Resolver {
             parentNode: 'root'
           })
         });
-      });
+      })
+      .catch(reject);
     });
   }
 }

@@ -4,7 +4,11 @@ const {receiveData, fetch} = require('../request');
 const PORT = 5000;
 const CLIENT_ID = process.env.DUMBER_GIST_CLIENTID;
 const CLIENT_SECRET = process.env.DUMBER_GIST_SECRET;
-const HOST = process.env.NODE_ENV === 'production' ? 'https://gist.dumber.app' : 'https://gist.dumber.local';
+
+
+const domainSubfix = process.env.NODE_ENV === 'production' ? 'app' : 'local';
+const domain = process.env.DUMBER_DOMAIN ? process.env.DUMBER_DOMAIN : `dumber.${domainSubfix}`;
+const HOST = `https://gist.${domain}`;
 
 if (!CLIENT_ID || !CLIENT_SECRET) {
   throw new Error('no client_id or client_secret');

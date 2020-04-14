@@ -1,3 +1,5 @@
+const JSDELIVR_CDN_URL = `//${HOST_NAMES.jsdelivrCdnDomain || 'cdn.jsdelivr.net'}`;
+
 addEventListener('install', e => {
   e.waitUntil(skipWaiting());
 });
@@ -132,7 +134,7 @@ addEventListener('fetch', e => {
       return fetch(e.request).then(response => {
         if (!response.ok && pathname.length > 1) {
           // Try font/image from jsdelivr
-          return fetch(`//cdn.jsdelivr.net/npm${pathname}`, {mode: 'cors'}).then(response => {
+          return fetch(`${JSDELIVR_CDN_URL}/npm${pathname}`, {mode: 'cors'}).then(response => {
               if (response.ok) return response;
               throw new Error(`No resource for ${pathname}`);
             });

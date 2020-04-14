@@ -2,6 +2,10 @@ import test from 'tape-promise/tape';
 import {decode} from 'base64-arraybuffer';
 import create from './cache-primitives.helper';
 
+const CACHE_URL = HOST_NAMES.cacheUrl;
+const JSDELIVR_CDN_URL = `//${HOST_NAMES.jsdelivrCdnDomain || 'cdn.jsdelivr.net'}`;
+const JSDELIVR_DATA_URL = HOST_NAMES.jsdelivrDataUrl || '//data.jsdelivr.com';
+
 test('buildFiles builds file list', async t => {
   const files = [
     {type: 'file', name: 'package.json'},
@@ -39,7 +43,7 @@ test('buildFiles builds file list', async t => {
 test('getNpmPackageFiles gets files from remote, and set local cache', async t => {
   const db = {};
   const remote = {
-    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+    [`${JSDELIVR_DATA_URL}/v1/package/npm/foo@1.0.0`]: {
       files: [
         {type: 'file', name: 'package.json'},
         {
@@ -63,7 +67,7 @@ test('getNpmPackageFiles gets files from remote, and set local cache', async t =
 
 test('getNpmPackageFiles gets files from remote, ignores unavailable local cache', async t => {
   const remote = {
-    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+    [`${JSDELIVR_DATA_URL}/v1/package/npm/foo@1.0.0`]: {
       files: [
         {type: 'file', name: 'package.json'},
         {
@@ -104,7 +108,7 @@ test('getNpmPackageFiles returns empty for unknown package', async t => {
 test('doesJsdelivrFileExist checks files from remote', async t => {
   const db = {};
   const remote = {
-    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+    [`${JSDELIVR_DATA_URL}/v1/package/npm/foo@1.0.0`]: {
       files: [
         {type: 'file', name: 'package.json'},
         {
@@ -131,7 +135,7 @@ test('doesJsdelivrFileExist checks files from remote', async t => {
 
 test('doesJsdelivrFileExist checks files from remote, ignores unavailable local cache', async t => {
   const remote = {
-    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+    [`${JSDELIVR_DATA_URL}/v1/package/npm/foo@1.0.0`]: {
       files: [
         {type: 'file', name: 'package.json'},
         {
@@ -179,12 +183,12 @@ test('doesJsdelivrFileExist return false for unknown package', async t => {
 test('getJsdelivrFile gets remote file, rejects missing file', async t => {
   const db = {};
   const remote = {
-    '//cdn.jsdelivr.net/npm/foo@1.0.0/index.js': 'lorem'
+    [`${JSDELIVR_CDN_URL}/npm/foo@1.0.0/index.js`]: 'lorem'
   };
   const p = create(db, remote);
   const file = await p.getJsdelivrFile('foo@1.0.0', 'index.js');
   t.deepEqual(file, {
-    path: '//cdn.jsdelivr.net/npm/foo@1.0.0/index.js',
+    path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/index.js`,
     contents: 'lorem'
   });
   await t.rejects(() => p.getJsdelivrFile('foo@1.0.0', 'unknown'));
@@ -195,12 +199,12 @@ test('getJsdelivrFile gets remote file, rejects missing file', async t => {
 test('getJsdelivrFile gets remote wasm file', async t => {
   const db = {};
   const remote = {
-    '//cdn.jsdelivr.net/npm/foo@1.0.0/index.wasm': decode('YQ==') // string "a"
+    [`${JSDELIVR_CDN_URL}/npm/foo@1.0.0/index.wasm`]: decode('YQ==') // string "a"
   };
   const p = create(db, remote);
   const file = await p.getJsdelivrFile('foo@1.0.0', 'index.wasm');
   t.deepEqual(file, {
-    path: '//cdn.jsdelivr.net/npm/foo@1.0.0/index.wasm',
+    path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/index.wasm`,
     contents: 'YQ=='
   });
   t.deepEqual(db, {});
@@ -209,12 +213,12 @@ test('getJsdelivrFile gets remote wasm file', async t => {
 test('getJsdelivrFile gets remote package.json, and cache raw content', async t => {
   const db = {};
   const remote = {
-    '//cdn.jsdelivr.net/npm/foo@1.0.0/package.json': '{"name":"foo"}'
+    [`${JSDELIVR_CDN_URL}/npm/foo@1.0.0/package.json`]: '{"name":"foo"}'
   };
   const p = create(db, remote);
   const file = await p.getJsdelivrFile('foo@1.0.0', 'package.json');
   t.deepEqual(file, {
-    path: '//cdn.jsdelivr.net/npm/foo@1.0.0/package.json',
+    path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/package.json`,
     contents: '{"name":"foo"}'
   });
   t.deepEqual(db, {
@@ -224,12 +228,12 @@ test('getJsdelivrFile gets remote package.json, and cache raw content', async t 
 
 test('getJsdelivrFile gets remote package.json, ignores unavailable local cache', async t => {
   const remote = {
-    '//cdn.jsdelivr.net/npm/foo@1.0.0/package.json': '{"name":"foo"}'
+    [`${JSDELIVR_CDN_URL}/npm/foo@1.0.0/package.json`]: '{"name":"foo"}'
   };
   const p = create(undefined, remote);
   const file = await p.getJsdelivrFile('foo@1.0.0', 'package.json');
   t.deepEqual(file, {
-    path: '//cdn.jsdelivr.net/npm/foo@1.0.0/package.json',
+    path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/package.json`,
     contents: '{"name":"foo"}'
   });
 });
@@ -241,7 +245,7 @@ test('getJsdelivrFile reads local cached raw package.json', async t => {
   const p = create(db);
   const file = await p.getJsdelivrFile('foo@1.0.0', 'package.json');
   t.deepEqual(file, {
-    path: '//cdn.jsdelivr.net/npm/foo@1.0.0/package.json',
+    path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/package.json`,
     contents: '{"name":"foo"}'
   });
   await t.rejects(() => p.getJsdelivrFile('bar@1.0.0', 'package.json'));
@@ -253,7 +257,7 @@ test('getJsdelivrFile reads local cached raw package.json', async t => {
 test('getNpmPackageFile rejects file path not listed in files', async t => {
   const db = {};
   const remote = {
-    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+    [`${JSDELIVR_DATA_URL}/v1/package/npm/foo@1.0.0`]: {
       files: [
         {type: 'file', name: 'package.json'},
         {
@@ -280,7 +284,7 @@ test('getNpmPackageFile gets file from local cache', async t => {
     }
   };
   const remote = {
-    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+    [`${JSDELIVR_DATA_URL}/v1/package/npm/foo@1.0.0`]: {
       files: [
         {type: 'file', name: 'package.json'},
         {
@@ -305,7 +309,7 @@ test('getNpmPackageFile gets file from local cache', async t => {
 test('getNpmPackageFile gets file from remote cache, add it to local cache', async t => {
   const db = {};
   const remote = {
-    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+    [`${JSDELIVR_DATA_URL}/v1/package/npm/foo@1.0.0`]: {
       files: [
         {type: 'file', name: 'package.json'},
         {
@@ -317,7 +321,7 @@ test('getNpmPackageFile gets file from remote cache, add it to local cache', asy
         }
       ]
     },
-    'https://cache.dumber.local/npm/foo@1.0.0/dist/index.js': {
+    [`${CACHE_URL}/npm/foo@1.0.0/dist/index.js`]: {
       __dumber_hash: 'hash',
       foo: 'bar'
     }
@@ -341,7 +345,7 @@ test('getNpmPackageFile gets file from remote cache, add it to local cache', asy
 
 test('getNpmPackageFile gets file from remote cache, ignores unavailable local cache', async t => {
   const remote = {
-    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+    [`${JSDELIVR_DATA_URL}/v1/package/npm/foo@1.0.0`]: {
       files: [
         {type: 'file', name: 'package.json'},
         {
@@ -353,7 +357,7 @@ test('getNpmPackageFile gets file from remote cache, ignores unavailable local c
         }
       ]
     },
-    'https://cache.dumber.local/npm/foo@1.0.0/dist/index.js': {
+    [`${CACHE_URL}/npm/foo@1.0.0/dist/index.js`]: {
       __dumber_hash: 'hash',
       foo: 'bar'
     }
@@ -372,7 +376,7 @@ test('getNpmPackageFile gets original file from jsdelivr', async t => {
 
   };
   const remote = {
-    '//data.jsdelivr.com/v1/package/npm/foo@1.0.0': {
+    [`${JSDELIVR_DATA_URL}/v1/package/npm/foo@1.0.0`]: {
       files: [
         {type: 'file', name: 'package.json'},
         {
@@ -384,13 +388,13 @@ test('getNpmPackageFile gets original file from jsdelivr', async t => {
         }
       ]
     },
-    '//cdn.jsdelivr.net/npm/foo@1.0.0/dist/index.js': 'lorem'
+    [`${JSDELIVR_CDN_URL}/npm/foo@1.0.0/dist/index.js`]: 'lorem'
   };
 
   const p = create(db, remote);
   const result = await p.getNpmPackageFile('foo@1.0.0', 'dist/index.js');
   t.deepEqual(result, {
-    path: '//cdn.jsdelivr.net/npm/foo@1.0.0/dist/index.js',
+    path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/dist/index.js`,
     contents: 'lorem'
   });
   t.deepEqual(db, {

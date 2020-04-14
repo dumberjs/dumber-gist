@@ -95,9 +95,15 @@ If you use sudo to start nginx, don't worry, as a security feature, nginx will d
 
 ### Start local app
 
-Before using the app, you need to build `client` code. Run
+Before using the app, first you need to build `client` code. Run
 
     cd client/
+    npm i # or yarn or pnpm i
+    npm run build
+
+Then you need to build `client-service-worker` code. Run
+
+    cd client-service-worker/
     npm i # or yarn or pnpm i
     npm run build
 
