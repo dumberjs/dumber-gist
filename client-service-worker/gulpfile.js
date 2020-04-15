@@ -49,7 +49,8 @@ exports.build = build;
 
 
 function watch() {
-  gulp.watch('src/**/*', build);
+  gulp.watch('src/*.js', buildApp);
+  gulp.watch('src/*.html', copy);
 }
 
 exports.watch = gulp.series(
