@@ -6,9 +6,9 @@ const {receiveData, fetch} = require('../request');
 const PORT = 5001;
 const CACHE_DIR = path.join(__dirname, 'public');
 const domainSubfix = process.env.NODE_ENV === 'production' ? 'app' : 'local';
-const DUMBER_DOMAIN = process.env.DUMBER_DOMAIN ? process.env.DUMBER_DOMAIN : `dumber.${domainSubfix}`;
+const DUMBER_DOMAIN = process.env.DUMBER_DOMAIN || `dumber.${domainSubfix}`;
 const HOST = `https://gist.${DUMBER_DOMAIN}`;
-const JSDELIVR_CDN_DOMAIN = process.env.JSDELIVR_CDN_DOMAIN ? process.env.JSDELIVR_CDN_DOMAIN.trim() : 'cdn.jsdelivr.net';
+const JSDELIVR_CDN_DOMAIN = process.env.JSDELIVR_CDN_DOMAIN || 'cdn.jsdelivr.net';
 
 const knownTokens = {};
 
