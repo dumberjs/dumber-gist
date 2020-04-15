@@ -24,3 +24,18 @@ test('Resolver resolves vue2 deps', async t => {
   t.deepEqual(Object.keys(result.appDependencies), ['vue']);
   t.equal(Object.keys(result.resDependencies).length, 0);
 });
+
+test('Resolver resolves invalid deps', async t => {
+  t.timeoutAfter(5000);
+
+  const r = new Resolver(new NpmHttpRegistry());
+
+  try {
+    await r.resolve({
+      'aninvalidmodulename': '^2.0.0'
+    });
+    throw new Error('must failed');
+  } catch (error) {
+    t.equal(error.message, 'Could not load npm registry for aninvalidmodulename: Not found');
+  }
+});
