@@ -8,7 +8,7 @@ const {NODE_ENV} = process.env;
 const isProd = NODE_ENV === 'production';
 const isTest = NODE_ENV === 'test';
 
-const JSDELIVR_CDN_DOMAIN = process.env.JSDELIVR_CDN_DOMAIN ? process.env.JSDELIVR_CDN_DOMAIN.trim() : 'cdn.jsdelivr.net';
+const JSDELIVR_CDN_DOMAIN = process.env.JSDELIVR_CDN_DOMAIN || 'cdn.jsdelivr.net';
 
 const hostnames = {
   jsdelivrCdnDomain: JSDELIVR_CDN_DOMAIN
