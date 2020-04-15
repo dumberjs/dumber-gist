@@ -13,10 +13,16 @@ export class NpmHttpRegistry {
     }
 
     if (!this.fetching[name]) {
-      this.fetching[name] = fetch(`${this.registryUrl}/${name}`).then(response => {
+      this.fetching[name] = fetch(`${this.registryUrl}/${name}`).then(async response => {
         if(!response.ok){
-          console.error(`Could not load npm registry for ${name}: ${response.statusText}`);
-          throw new Error(response.statusText);
+          // npm can send a json error
+          const dataError = (await (response.json().catch( () => null)));
+
+          const errorInfo = dataError && dataError.error ? dataError.error : response.statusText || response.status;
+          const error = `Could not load npm registry for ${name}: ${errorInfo}`;          
+
+          console.error(error);
+          throw new Error(error);
         }
 
         return response.json();
