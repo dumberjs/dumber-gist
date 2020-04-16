@@ -1,5 +1,4 @@
-const domainSubfix = process.env.NODE_ENV === 'production' ? 'app' : 'local';
-const DUMBER_DOMAIN = process.env.DUMBER_DOMAIN || `dumber.${domainSubfix}`;
+const DUMBER_DOMAIN = process.env.DUMBER_DOMAIN || `dumber.local`;
 const JSDELIVR_CDN_DOMAIN = process.env.JSDELIVR_CDN_DOMAIN || 'cdn.jsdelivr.net';
 
 global.HOST_NAMES = {
