@@ -99,7 +99,7 @@ export class Resolver {
     }
 
     if(!version){
-      throw new Error(`jsdelivr has not synced "${registryPackage.name}": "${requestedVersion}".`);
+      throw new Error(`npm package "${registryPackage.name}" was not found with requested version: "${requestedVersion}".`);
     }
     return version;
   }
