@@ -11,7 +11,7 @@ const cacheUrl = HOST_NAMES.cacheUrl;
 const DUMBER_CACHE_PATH_PREFIX = cacheUrl + '/npm/';
 const DUMBER_CACHE_PREFIX = cacheUrl + '/';
 
-export const JSDELIVR_DATA_PREFIX = `${HOST_NAMES.jsdelivrDataUrl ? HOST_NAMES.jsdelivrDataUrl : '//data.jsdelivr.com'}/v1/package/npm/`;
+export const JSDELIVR_DATA_PREFIX = `${HOST_NAMES.jsdelivrDataUrl || '//data.jsdelivr.com'}/v1/package/npm/`;
 export const JSDELIVR_PREFIX = `//${HOST_NAMES.jsdelivrCdnDomain || 'cdn.jsdelivr.net'}/npm/`;
 
 function globalFetch() {
