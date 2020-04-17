@@ -16,10 +16,8 @@ export class NpmHttpRegistry {
       this.fetching[name] = fetch(`${this.registryUrl}/${name}`).then(async response => {
         if(!response.ok){
           // npm can send a json error
-          const dataError = (await (response.json().catch( () => null)));
-
-          const errorInfo = dataError && dataError.error ? dataError.error : response.statusText || response.status;
-          const error = `Could not load npm registry for ${name}: ${errorInfo}`;          
+          const dataError = (await (response.json().then(j => j && j.error).catch( () => null)));
+          const error = `Could not load npm registry for ${name}: ${dataError || response.statusText}`;
 
           console.error(error);
           throw new Error(error);
