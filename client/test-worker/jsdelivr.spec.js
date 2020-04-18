@@ -1,7 +1,7 @@
 import test from 'tape-promise/tape';
 import {Jsdelivr} from '../src-worker/jsdelivr';
 
-const JSDELIVR_CDN_URL = `//${HOST_NAMES.jsdelivrCdnDomain || 'cdn.jsdelivr.net'}`;
+const JSDELIVR_CDN_URL = `//${HOST_NAMES.jsdelivrCdnDomain}`;
 
 const primitives = {
   async getJsdelivrFile(packageWithVersion, filePath) {

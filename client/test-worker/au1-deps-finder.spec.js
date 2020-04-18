@@ -1,7 +1,7 @@
 import test from 'tape-promise/tape';
 import {Au1DepsFinder} from '../src-worker/au1-deps-finder';
 
-const JSDELIVR_CDN_URL = `//${HOST_NAMES.jsdelivrCdnDomain || 'cdn.jsdelivr.net'}`;
+const JSDELIVR_CDN_URL = `//${HOST_NAMES.jsdelivrCdnDomain}`;
 
 test('Au1DepsFinder find deps for local js file', async t => {
   const primitives = {

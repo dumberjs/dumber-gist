@@ -3,8 +3,8 @@ import {decode} from 'base64-arraybuffer';
 import create from './cache-primitives.helper';
 
 const CACHE_URL = HOST_NAMES.cacheUrl;
-const JSDELIVR_CDN_URL = `//${HOST_NAMES.jsdelivrCdnDomain || 'cdn.jsdelivr.net'}`;
-const JSDELIVR_DATA_URL = HOST_NAMES.jsdelivrDataUrl || '//data.jsdelivr.com';
+const JSDELIVR_CDN_URL = `//${HOST_NAMES.jsdelivrCdnDomain}`;
+const JSDELIVR_DATA_URL = `//${HOST_NAMES.jsdelivrDataDomain}`;
 
 test('buildFiles builds file list', async t => {
   const files = [

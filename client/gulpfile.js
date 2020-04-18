@@ -12,26 +12,11 @@ const terser = require('gulp-terser');
 const gulpif = require('gulp-if');
 const autoprefixer = require('autoprefixer');
 const postcssUrl = require('postcss-url');
+const hostnames = require('./host-names');
 
 const {NODE_ENV} = process.env;
-
 const isProd = NODE_ENV === 'production';
 const isTest = NODE_ENV === 'test';
-
-const domainSubfix = isProd ? 'app' : 'local';
-const DUMBER_DOMAIN = process.env.DUMBER_DOMAIN || `dumber.${domainSubfix}`;
-const JSDELIVR_CDN_DOMAIN = process.env.JSDELIVR_CDN_DOMAIN || 'cdn.jsdelivr.net';
-
-const hostnames = {
-  domain : DUMBER_DOMAIN,
-  host: `gist.${DUMBER_DOMAIN}`,
-  clientUrl: `https://gist.${DUMBER_DOMAIN}`,
-  cacheUrl: `https://cache.${DUMBER_DOMAIN}`,
-  oauthUrl: `https://github-oauth.gist.${DUMBER_DOMAIN}`,
-  jsdelivrDataUrl: process.env.JSDELIVR_DATA_URL || '//data.jsdelivr.com',
-  jsdelivrCdnDomain: JSDELIVR_CDN_DOMAIN,
-  npmUrl : process.env.NPM_URL || 'https://registry.npmjs.cf'
-};
 
 const HOST_NAMES = `;var HOST_NAMES = ${JSON.stringify(hostnames)};`;
 

@@ -1,7 +1,7 @@
 import test from 'tape-promise/tape';
 import create from './cache-primitives.helper';
 
-const JSDELIVR_CDN_URL = `//${HOST_NAMES.jsdelivrCdnDomain || 'cdn.jsdelivr.net'}`;
+const JSDELIVR_CDN_URL = `//${HOST_NAMES.jsdelivrCdnDomain}`;
 
 test('getLocalCacheWithPath rejects missing cache, gets valid cache', async t => {
   const p = create({
