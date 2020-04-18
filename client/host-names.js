@@ -10,6 +10,5 @@ module.exports = {
   cacheUrl: `https://cache.${DUMBER_DOMAIN}`,
   oauthUrl: `https://github-oauth.gist.${DUMBER_DOMAIN}`,
   jsdelivrDataDomain: JSDELIVR_DATA_DOMAIN,
-  jsdelivrCdnDomain: JSDELIVR_CDN_DOMAIN,
-  npmUrl : process.env.NPM_URL || 'https://registry.npmjs.cf'
+  jsdelivrCdnDomain: JSDELIVR_CDN_DOMAIN
 };
