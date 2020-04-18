@@ -28,11 +28,11 @@ test('Resolver resolves vue2 deps', async t => {
 test('Resolver resolves invalid deps', async t => {
   const r = new Resolver(new NpmHttpRegistry());
 
-  await t.rejects(r.resolve({'aninvalidmodulename': '^2.0.0'}), /Could not load npm registry for aninvalidmodulename: Not found/);
+  await t.rejects(r.resolve({'an-invalid-module-name': 'latest'}), /Could not load npm registry for an-invalid-module-name: Not found/);
 });
 
 test('Resolver resolves invalid version', async t => {
   const r = new Resolver(new NpmHttpRegistry());
 
-  await t.rejects(r.resolve({'vue': '^2000.0.0'}), /npm package "vue" was not found with requested version: "\^2000.0.0"./);
+  await t.rejects(r.resolve({'vue': '^2000.0.0'}), /npm package "vue" was not found with requested version: "\^2000.0.0"\./);
 });
