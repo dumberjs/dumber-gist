@@ -127,8 +127,13 @@ export class BrowserFrame {
   get error() {
     const {bundlerError} = this;
 
-    if (bundlerError && bundlerError.includes('jsdelivr has not synced')) {
-      return 'Please try again after few minutes. Need to wait jsdelivr to sync npm repositories.\n' + bundlerError;
+    if (
+      bundlerError &&
+      bundlerError.includes('was not found with requested version') &&
+      // Aurelia 2 daily build might be out of sync
+      bundlerError.includes('@aurelia/')
+    ) {
+      return 'Please try again after few minutes. Need to wait registry.npmjs.cf (a npm mirror site) to sync npm repositories.\n' + bundlerError;
     }
 
     return bundlerError;
