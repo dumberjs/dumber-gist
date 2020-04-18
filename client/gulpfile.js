@@ -71,7 +71,7 @@ function buildJs(src) {
   const transpile = babel();
 
   return gulp.src(src, {sourcemaps: !isProd, since: gulp.lastRun(buildApp)})
-  .pipe(gulpif(!isProd, plumber()))
+  .pipe(gulpif(!isProd && !isTest, plumber()))
   .pipe(transpile);
 }
 
@@ -127,13 +127,13 @@ const drWorker = dumber({
 function _buildWorker() {
   return gulp.src(
     isTest ? '{src-worker,test-worker}/**/*.js' : 'src-worker/**/*.js',
-    {sourcemaps: !isProd, since: gulp.lastRun(buildWorker)}
+    {sourcemaps: !isProd && !isTest, since: gulp.lastRun(buildWorker)}
   )
-    .pipe(gulpif(!isProd, plumber()))
+    .pipe(gulpif(!isProd && !isTest, plumber()))
     .pipe(babel())
     .pipe(drWorker())
     .pipe(gulpif(isProd, terser({compress: false, mangle: false})))
-    .pipe(gulp.dest('dist', {sourcemaps: isProd ? false : (isTest ? true : '.')}));
+    .pipe(gulp.dest('dist', {sourcemaps: isProd || isTest ? false : (isTest ? true : '.')}));
 }
 
 function _cleanupEnv() {
