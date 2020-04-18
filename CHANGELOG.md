@@ -1,3 +1,12 @@
+## [0.7.2](https://github.com/dumberjs/dumber-gist/compare/v0.7.1...v0.7.2) (2020-04-18)
+
+
+### Bug Fixes
+
+* out of sync is from registry.npmjs.cf, not jsdelivr ([f288547](https://github.com/dumberjs/dumber-gist/commit/f288547465ee39b5bbae433727128eafec5d056d))
+
+
+
 ## [0.7.1](https://github.com/dumberjs/dumber-gist/compare/v0.7.0...v0.7.1) (2020-04-18)
 
 
