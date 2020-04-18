@@ -15,6 +15,7 @@ yarn.lock
 # Compiled files
 dist
 /client/index.html
+/client-service-worker/__dumber-gist-worker.js
 .nyc_output
 coverage
 

@@ -8,7 +8,6 @@ global.HOST_NAMES = {
   cacheUrl: `https://cache.${DUMBER_DOMAIN}`,
   oauthUrl: `https://github-oauth.gist.${DUMBER_DOMAIN}`,
   jsdelivrDataUrl: process.env.JSDELIVR_DATA_URL || '//data.jsdelivr.com',
-  jsdelivrCdnUrl: `https://${JSDELIVR_CDN_DOMAIN}`,
   jsdelivrCdnDomain: JSDELIVR_CDN_DOMAIN,
   npmUrl : process.env.NPM_URL || 'https://registry.npmjs.cf'
 };

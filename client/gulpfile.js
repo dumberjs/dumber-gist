@@ -29,7 +29,6 @@ const hostnames = {
   cacheUrl: `https://cache.${DUMBER_DOMAIN}`,
   oauthUrl: `https://github-oauth.gist.${DUMBER_DOMAIN}`,
   jsdelivrDataUrl: process.env.JSDELIVR_DATA_URL || '//data.jsdelivr.com',
-  jsdelivrCdnUrl: `https://${JSDELIVR_CDN_DOMAIN}`,
   jsdelivrCdnDomain: JSDELIVR_CDN_DOMAIN,
   npmUrl : process.env.NPM_URL || 'https://registry.npmjs.cf'
 };
@@ -69,7 +68,11 @@ const drApp = dumber({
 });
 
 function clean() {
-  return del(['dist', 'index.html']);
+  return del([
+    'dist',
+    'index.html',
+    '../client-service-worker/__dumber-gist-worker.js'
+  ], {force: true});
 }
 
 exports.clean = clean;
@@ -172,11 +175,20 @@ exports.buildWorker = buildWorker;
 function writeIndex() {
   const indexHtml = fs.readFileSync('_index.html', 'utf-8')
     .replace('entry-bundle.js', finalBundleNames['entry-bundle.js'])
-    .replace(/\{\{([a-z]{1,})\}\}/gi, (m, v) => {
+    .replace(/\{\{\s*([a-z]{1,})\s*\}\}/gi, (m, v) => {
       return hostnames[v];
     })
     .replace('bundler-worker.js', finalBundleNames['bundler-worker.js']);
   fs.writeFileSync('index.html', indexHtml);
+  return Promise.resolve();
+}
+
+function writeServiceWorker() {
+  const serviceWorker = fs.readFileSync('../client-service-worker/___dumber-gist-worker.js', 'utf-8')
+    .replace(/\{\{\s*([a-z]{1,})\s*\}\}/gi, (m, v) => {
+      return hostnames[v];
+    });
+  fs.writeFileSync('../client-service-worker/__dumber-gist-worker.js', serviceWorker);
   return Promise.resolve();
 }
 
@@ -185,6 +197,7 @@ const build = gulp.series(
   buildApp,
   buildWorker,
   writeIndex,
+  writeServiceWorker
 );
 
 exports.build = build;

@@ -24,18 +24,18 @@ const skeletons = {
   vue
 };
 
-const JSDELIVR_CDN_URL = HOST_NAMES.jsdelivrCdnUrl;
+const JSDELIVR_CDN_DOMAIN = HOST_NAMES.jsdelivrCdnDomain;
 
 const DEFAULT_JASMINE_INDEX_HTML = `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
-<link rel="stylesheet" href="${JSDELIVR_CDN_URL}/npm/jasmine-core@3/lib/jasmine-core/jasmine.min.css">
+<link rel="stylesheet" href="//${JSDELIVR_CDN_DOMAIN}/npm/jasmine-core@3/lib/jasmine-core/jasmine.min.css">
 </head>
 <body>
-<script src="${JSDELIVR_CDN_URL}/npm/jasmine-core@3/lib/jasmine-core/jasmine.min.js"></script>
-<script src="${JSDELIVR_CDN_URL}/npm/jasmine-core@3/lib/jasmine-core/jasmine-html.min.js"></script>
-<script src="${JSDELIVR_CDN_URL}/npm/jasmine-core@3/lib/jasmine-core/boot.min.js"></script>
+<script src="//${JSDELIVR_CDN_DOMAIN}/npm/jasmine-core@3/lib/jasmine-core/jasmine.min.js"></script>
+<script src="//${JSDELIVR_CDN_DOMAIN}/npm/jasmine-core@3/lib/jasmine-core/jasmine-html.min.js"></script>
+<script src="//${JSDELIVR_CDN_DOMAIN}/npm/jasmine-core@3/lib/jasmine-core/boot.min.js"></script>
 <script src="/dist/entry-bundle.js"></script>
 <script>
 requirejs([
@@ -57,11 +57,11 @@ const DEFAULT_MOCHA_INDEX_HTML = `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
-<link rel="stylesheet" href="${JSDELIVR_CDN_URL}/npm/mocha@7/mocha.css">
+<link rel="stylesheet" href="//${JSDELIVR_CDN_DOMAIN}/npm/mocha@7/mocha.css">
 </head>
 <body>
 <div id="mocha"></div>
-<script src="${JSDELIVR_CDN_URL}/npm/mocha@7/mocha.js"></script>
+<script src="//${JSDELIVR_CDN_DOMAIN}/npm/mocha@7/mocha.js"></script>
 <script class="mocha-init">
 mocha.setup({ui: "bdd", reporter: "html"});
 </script>
