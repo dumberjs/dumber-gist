@@ -1,3 +1,22 @@
+# [0.7.0](https://github.com/dumberjs/dumber-gist/compare/v0.6.3...v0.7.0) (2020-04-18)
+
+
+### Bug Fixes
+
+* domainSubfix is useless in test mode ([264bd2e](https://github.com/dumberjs/dumber-gist/commit/264bd2ea055fc5a05bbdd7cff76b991196b302cc))
+* invalid message when a requested version is not found (npm vs jsdelivr) ([2736f7f](https://github.com/dumberjs/dumber-gist/commit/2736f7f6af86e88fdb819fa12a2a35ec6f5123ea))
+* remove readable-stream v2 patch after upgrading dumber ([78593e2](https://github.com/dumberjs/dumber-gist/commit/78593e22e2cb762b23ffb96e383a97c4bff50a9a))
+* simplified error handling ([21a29b5](https://github.com/dumberjs/dumber-gist/commit/21a29b5c6c3d252ce37c0d2421d89221e4f03b1e))
+* simplify expression ([a0932cd](https://github.com/dumberjs/dumber-gist/commit/a0932cdde7ff9cfa6d9511930632103bd0c1d3a0))
+* use of t.rejects for more readable tests ([6e806d1](https://github.com/dumberjs/dumber-gist/commit/6e806d132296473816a91d4949ba5bbf5fe38c0e))
+
+
+### Features
+
+* unit test for resolver with invalid package and better error handling in npm-http. ([0cc2b8e](https://github.com/dumberjs/dumber-gist/commit/0cc2b8ee5fb19c7ed3700cafad52d2ac2a96814f))
+
+
+
 ## [0.6.3](https://github.com/dumberjs/dumber-gist/compare/v0.6.2...v0.6.3) (2020-04-14)
 
 
