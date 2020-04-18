@@ -40,9 +40,7 @@ export class DepsResolver {
 
   async resolve(dependencies) {
     if (!dependencies || Object.keys(dependencies).length === 0) {
-      // Always force readable-stream v2
-      // Wait for https://github.com/browserify/stream-browserify/pull/18
-      return [{name: 'readable-stream', version: '2.3.6', lazyMain: true}];
+      return [];
     }
 
     const hash = hashOf(dependencies);
@@ -95,21 +93,8 @@ export class DepsResolver {
       if (Array.isArray(version)) {
         version.sort(semver.compare);
         console.warn(`[dumber] duplicated package "${name}" versions detected: ${JSON.stringify(version)}`);
-        // This is an overly simplified decision on duplicated versions.
-        // Only take the last one which is most likely the biggest version (because of the sorting of resDeps keys).
-        if (name === 'readable-stream') {
-          // Use readable-stream v2 for nodejs stream stub
-          version = _.last(version.filter(v => semver.major(v) === 2))
-        } else {
-          version = _.last(version);
-        }
-
+        version = _.last(version);
         console.warn(`[dumber] only uses package "${name}" version ${version}`);
-      } else {
-        if (name === 'readable-stream' && semver.major(version) !== 2) {
-          // Use readable-stream v2.3.6 for nodejs stream stub
-          version = '2.3.6';
-        }
       }
       const dep = {name, version, lazyMain: true};
       if (name === 'vue' && semver.major(version) === 2) {
@@ -125,12 +110,6 @@ export class DepsResolver {
       }
       deps.push(dep);
     });
-
-    if (!_.find(deps, {name: 'readable-stream'})) {
-      // Always force readable-stream v2
-      // Wait for https://github.com/browserify/stream-browserify/pull/18
-      deps.push({name: 'readable-stream', version: '2.3.6', lazyMain: true});
-    }
 
     return deps;
   }

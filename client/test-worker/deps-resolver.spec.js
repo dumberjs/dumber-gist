@@ -69,7 +69,7 @@ class TurboResolver {
   }
 }
 
-test('DepsResolver lists empty deps, but with readable-stream patch', async t => {
+test('DepsResolver lists empty deps', async t => {
   const primitives = {
     async getLocalCache() {
       t.fail('Should not called getLocalCache');
@@ -80,9 +80,7 @@ test('DepsResolver lists empty deps, but with readable-stream patch', async t =>
   }
   const r = new DepsResolver(() => new TurboResolver(), primitives);
   const deps = await r.resolve({});
-  t.deepEqual(deps, [
-    {name: 'readable-stream', version: '2.3.6', lazyMain: true}
-  ]);
+  t.equal(deps.length, 0);
 });
 
 test('DepsResolver lists all deps from appDependencies, set cache, then reads from cache', async t => {
@@ -100,15 +98,13 @@ test('DepsResolver lists all deps from appDependencies, set cache, then reads fr
   const r = new DepsResolver(() => new TurboResolver(), primitives);
   const deps = await r.resolve({'vue': '^2.0.0'});
   t.deepEqual(deps, [
-    {name: 'vue', version: '2.1.0', main: 'dist/vue.min.js', lazyMain: true},
-    {name: 'readable-stream', version: '2.3.6', lazyMain: true}
+    {name: 'vue', version: '2.1.0', main: 'dist/vue.min.js', lazyMain: true}
   ]);
 
   const cached = Object.values(db)[0];
   t.equal(typeof cached.time, 'number');
   t.deepEqual(cached.result, [
-    {name: 'vue', version: '2.1.0', main: 'dist/vue.min.js', lazyMain: true},
-    {name: 'readable-stream', version: '2.3.6', lazyMain: true}
+    {name: 'vue', version: '2.1.0', main: 'dist/vue.min.js', lazyMain: true}
   ]);
 
   const r2 = new DepsResolver(() => ({
@@ -118,8 +114,7 @@ test('DepsResolver lists all deps from appDependencies, set cache, then reads fr
   }), primitives);
   const deps2 = await r2.resolve({'vue': '^2.0.0'});
   t.deepEqual(deps2, [
-    {name: 'vue', version: '2.1.0', main: 'dist/vue.min.js', lazyMain: true},
-    {name: 'readable-stream', version: '2.3.6', lazyMain: true}
+    {name: 'vue', version: '2.1.0', main: 'dist/vue.min.js', lazyMain: true}
   ]);
 });
 
@@ -137,8 +132,7 @@ test('DepsResolver lists all deps from appDependencies, ignore unavailable primi
   t.deepEqual(deps, [
     {name: 'inferno', version: '7.4.0', main: 'dist/index.dev.esm.js', lazyMain: true},
     {name: 'inferno-shared', version: '7.4.0', main: 'dist/index.dev.esm.js', lazyMain: true},
-    {name: 'inferno-vnode-flags', version: '7.4.0', main: 'dist/index.dev.esm.js', lazyMain: true},
-    {name: 'readable-stream', version: '2.3.6', lazyMain: true}
+    {name: 'inferno-vnode-flags', version: '7.4.0', main: 'dist/index.dev.esm.js', lazyMain: true}
   ]);
 });
 
@@ -156,8 +150,7 @@ test('DepsResolver lists all deps from appDependencies and resDependencies', asy
   t.deepEqual(deps, [
     {name: 'aurelia-binding', version: '2.0.0', lazyMain: true},
     {name: 'aurelia-bootstrapper', version: '2.3.3', lazyMain: true},
-    {name: 'aurelia-framework', version: '1.0.0', lazyMain: true},
-    {name: 'readable-stream', version: '2.3.6', lazyMain: true}
+    {name: 'aurelia-framework', version: '1.0.0', lazyMain: true}
   ]);
 });
 
@@ -176,24 +169,6 @@ test('DepsResolver kepts only max version for duplicated package versions', asyn
     {name: 'bar', version: '2.1.2', lazyMain: true},
     {name: 'foo', version: '1.5.1', lazyMain: true},
     {name: 'lodash', version: '3.5.0', lazyMain: true},
-    // readable-stream is special, we need old v2 for nodejs stream stub
-    {name: 'readable-stream', version: '2.3.6', lazyMain: true},
-  ]);
-});
-
-test('DepsResolver forces readable-stream v2', async t => {
-  const primitives = {
-    async getLocalCache() {
-      throw new Error('indexeddb is not available');
-    },
-    async setLocalCache() {
-      throw new Error('indexeddb is not available');
-    }
-  }
-  const r = new DepsResolver(() => new TurboResolver(), primitives);
-  const deps = await r.resolve({'readable-stream': '^3.0.0'});
-  t.deepEqual(deps, [
-    // readable-stream is special, we need old v2 for nodejs stream stub
-    {name: 'readable-stream', version: '2.3.6', lazyMain: true}
+    {name: 'readable-stream', version: '3.0.0', lazyMain: true},
   ]);
 });
