@@ -1,14 +1,14 @@
 import test from 'tape-promise/tape';
 import {Jsdelivr} from '../src-worker/jsdelivr';
+import {JSDELIVR_PREFIX} from '../src-worker/cache-primitives';
 
-const JSDELIVR_CDN_URL = `//${HOST_NAMES.jsdelivrCdnDomain}`;
 
 const primitives = {
   async getJsdelivrFile(packageWithVersion, filePath) {
     if (packageWithVersion === 'foo@1.0.0' || packageWithVersion === 'foo') {
       if (filePath === 'package.json') {
         return {
-          path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/package.json`,
+          path: `${JSDELIVR_PREFIX}foo@1.0.0/package.json`,
           contents: JSON.stringify({
             name: 'foo',
             version: '1.0.0',
@@ -19,7 +19,7 @@ const primitives = {
     } else if  (packageWithVersion === '@scope/foo@1.0.0' || packageWithVersion === '@scope/foo') {
       if (filePath === 'package.json') {
         return {
-          path: `${JSDELIVR_CDN_URL}/npm/@scope/foo@1.0.0/package.json`,
+          path: `${JSDELIVR_PREFIX}@scope/foo@1.0.0/package.json`,
           contents: JSON.stringify({
             name: '@scope/foo',
             version: '1.0.0',
@@ -38,12 +38,12 @@ const primitives = {
   async getNpmPackageFile(packageWithVersion, filePath) {
     if (packageWithVersion === 'foo@1.0.0' && filePath === 'dist/index.js') {
       return {
-        path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/dist/index.js`,
+        path: `${JSDELIVR_PREFIX}foo@1.0.0/dist/index.js`,
         contents: 'lorem'
       };
     } else if (packageWithVersion === '@scope/foo@1.0.0' && filePath === 'dist/index.js') {
       return {
-        path: `${JSDELIVR_CDN_URL}/npm/@scope/foo@1.0.0/dist/index.js`,
+        path: `${JSDELIVR_PREFIX}@scope/foo@1.0.0/dist/index.js`,
         contents: 'lorem'
       };
     }
@@ -67,7 +67,7 @@ test('Jsdelivr gets files on default version', async t => {
   t.deepEqual(
     await reader('package.json'),
     {
-      path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/package.json`,
+      path: `${JSDELIVR_PREFIX}foo@1.0.0/package.json`,
       contents: JSON.stringify({
         name: 'foo',
         version: '1.0.0',
@@ -84,7 +84,7 @@ test('Jsdelivr gets files on default version', async t => {
   t.deepEqual(
     await reader('dist/index.js'),
     {
-      path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/dist/index.js`,
+      path: `${JSDELIVR_PREFIX}foo@1.0.0/dist/index.js`,
       contents: 'lorem'
     }
   );
@@ -97,7 +97,7 @@ test('Jsdelivr gets files on explicit version', async t => {
   t.deepEqual(
     await reader('package.json'),
     {
-      path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/package.json`,
+      path: `${JSDELIVR_PREFIX}foo@1.0.0/package.json`,
       contents: JSON.stringify({
         name: 'foo',
         version: '1.0.0',
@@ -114,7 +114,7 @@ test('Jsdelivr gets files on explicit version', async t => {
   t.deepEqual(
     await reader('dist/index.js'),
     {
-      path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/dist/index.js`,
+      path: `${JSDELIVR_PREFIX}foo@1.0.0/dist/index.js`,
       contents: 'lorem'
     }
   );
@@ -127,7 +127,7 @@ test('Jsdelivr gets files with aliased package', async t => {
   t.deepEqual(
     await reader('package.json'),
     {
-      path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/package.json`,
+      path: `${JSDELIVR_PREFIX}foo@1.0.0/package.json`,
       contents: JSON.stringify({
         name: 'bar',
         version: '1.0.0',
@@ -144,7 +144,7 @@ test('Jsdelivr gets files with aliased package', async t => {
   t.deepEqual(
     await reader('dist/index.js'),
     {
-      path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/dist/index.js`,
+      path: `${JSDELIVR_PREFIX}foo@1.0.0/dist/index.js`,
       contents: 'lorem'
     }
   );
@@ -157,7 +157,7 @@ test('Jsdelivr gets files with aliased package case 2', async t => {
   t.deepEqual(
     await reader('package.json'),
     {
-      path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/package.json`,
+      path: `${JSDELIVR_PREFIX}foo@1.0.0/package.json`,
       contents: JSON.stringify({
         name: 'bar',
         version: '1.0.0',
@@ -174,7 +174,7 @@ test('Jsdelivr gets files with aliased package case 2', async t => {
   t.deepEqual(
     await reader('dist/index.js'),
     {
-      path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/dist/index.js`,
+      path: `${JSDELIVR_PREFIX}foo@1.0.0/dist/index.js`,
       contents: 'lorem'
     }
   );
@@ -192,7 +192,7 @@ test('Jsdelivr gets files for scoped npm package', async t => {
   t.deepEqual(
     await reader('package.json'),
     {
-      path: `${JSDELIVR_CDN_URL}/npm/@scope/foo@1.0.0/package.json`,
+      path: `${JSDELIVR_PREFIX}@scope/foo@1.0.0/package.json`,
       contents: JSON.stringify({
         name: '@scope/foo',
         version: '1.0.0',
@@ -209,7 +209,7 @@ test('Jsdelivr gets files for scoped npm package', async t => {
   t.deepEqual(
     await reader('dist/index.js'),
     {
-      path: `${JSDELIVR_CDN_URL}/npm/@scope/foo@1.0.0/dist/index.js`,
+      path: `${JSDELIVR_PREFIX}@scope/foo@1.0.0/dist/index.js`,
       contents: 'lorem'
     }
   );

@@ -1,7 +1,6 @@
 import test from 'tape-promise/tape';
 import create from './cache-primitives.helper';
-
-const JSDELIVR_CDN_URL = `//${HOST_NAMES.jsdelivrCdnDomain}`;
+import {JSDELIVR_PREFIX} from '../src-worker/cache-primitives';
 
 test('getLocalCacheWithPath rejects missing cache, gets valid cache', async t => {
   const p = create({
@@ -75,20 +74,20 @@ test('setLocalCache sets cache with npm filePath', async t => {
   const db = {};
   const p = create(db);
   const object = {
-    path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/index.js`,
+    path: `${JSDELIVR_PREFIX}foo@1.0.0/index.js`,
     foo: 'bar'
   };
   await p.setLocalCache('hash', object);
   t.deepEqual(db, {
     'hash': {
-      path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/index.js`,
+      path: `${JSDELIVR_PREFIX}foo@1.0.0/index.js`,
       foo: 'bar'
     },
     'npm/foo@1.0.0/index.js': 'hash'
   });
   t.deepEqual(
     await p.getLocalCache('hash'),
-    {path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/index.js`, foo: 'bar'}
+    {path: `${JSDELIVR_PREFIX}foo@1.0.0/index.js`, foo: 'bar'}
   );
   t.deepEqual(
     await p.getLocalCache('npm/foo@1.0.0/index.js'),
@@ -96,7 +95,7 @@ test('setLocalCache sets cache with npm filePath', async t => {
   );
   t.deepEqual(
     await p.getLocalCacheWithPath('npm/foo@1.0.0/index.js'),
-    {path: `${JSDELIVR_CDN_URL}/npm/foo@1.0.0/index.js`, foo: 'bar'}
+    {path: `${JSDELIVR_PREFIX}foo@1.0.0/index.js`, foo: 'bar'}
   );
 });
 
