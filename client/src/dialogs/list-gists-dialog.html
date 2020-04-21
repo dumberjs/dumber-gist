@@ -1,6 +1,6 @@
 <template>
-  <ux-dialog class="wide-dialog">
-    <ux-dialog-header>
+  <div class="dialog wide-dialog">
+    <div class="dialog-header">
       <input
         type="text"
         class="w100"
@@ -8,8 +8,8 @@
         value.bind="filter"
         keydown.trigger="keyDownInFilter($event)"
         focus.one-time="true">
-    </ux-dialog-header>
-    <ux-dialog-body ref="list" class="p-0">
+    </div>
+    <div class="dialog-body p-0" ref="list">
       <div class="text-center mt-3 mb-3" if.bind="!filteredGists.length">
         No ${hideNoneDumberGists ? 'possible dumber' : ''} gists found
       </div>
@@ -27,8 +27,8 @@
           <small class="text-muted" style="min-width: 10rem;">${gist.updated_at | showLocalDate}</small>
         </div>
       </div>
-    </ux-dialog-body>
-    <ux-dialog-footer class="pt-0 pb-0">
+    </div>
+    <div class="dialog-footer pt-0 pb-0">
       <div
         class="selection pl-0 pr-0 text-left"
         style="flex-grow: 1;"
@@ -37,6 +37,6 @@
         <i class="icon fas ${hideNoneDumberGists ? 'text-primary fa-check-square' : 'text-muted fa-square'}"></i>
           <span>Only show gists contain index.html and package.json.</span>
       </div>
-    </ux-dialog-footer>
-  </ux-dialog>
+    </div>
+  </div>
 </template>

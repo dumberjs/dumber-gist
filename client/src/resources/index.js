@@ -3,6 +3,7 @@ export function configure(config) {
     './left-click',
     './file-icon',
     './hidden-submit.html',
-    './show-local-date'
+    './show-local-date',
+    './dialog-close'
   ]);
 }

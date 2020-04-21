@@ -1,7 +1,7 @@
 <template>
-  <ux-dialog class="wide-dialog">
-    <ux-dialog-header>Share Gist</ux-dialog-header>
-    <ux-dialog-body>
+  <div class="dialog wide-dialog">
+    <div class="dialog-header">Share Gist</div>
+    <div class="dialog-body">
       <div class="select-section">
         <div class="section-header">Optionally set opening tabs</div>
         <div class="section-body">
@@ -68,9 +68,9 @@
           </div>
         </div>
       </div>
-    </ux-dialog-body>
-    <ux-dialog-footer>
+    </div>
+    <div class="dialog-footer">
       <button class="btn ml-auto" attach-focus click.trigger="controller.cancel() & leftClick">Close</button>
-    </ux-dialog-footer>
-  </ux-dialog>
+    </div>
+  </div>
 </template>

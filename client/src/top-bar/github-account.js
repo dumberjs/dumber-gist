@@ -1,6 +1,6 @@
 import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {DialogService} from 'aurelia-dialog';
+import {DialogService} from 'aurelia-dialog-lite';
 import {Oauth} from '../github/oauth';
 import {User} from '../github/user';
 import {ContextMenu} from '../dialogs/context-menu';

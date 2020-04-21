@@ -1,5 +1,5 @@
 import {inject, computedFrom, observable, BindingEngine} from 'aurelia-framework';
-import {DialogService} from 'aurelia-dialog';
+import {DialogService} from 'aurelia-dialog-lite';
 import {DndService} from 'bcx-aurelia-dnd';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {EditSession} from './edit/edit-session';

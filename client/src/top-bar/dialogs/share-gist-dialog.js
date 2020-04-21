@@ -1,5 +1,5 @@
 import ClipboardJS from 'clipboard';
-import {DialogController} from 'aurelia-dialog';
+import {DialogController} from 'aurelia-dialog-lite';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {inject, BindingEngine} from 'aurelia-framework';
 import {User} from '../../github/user';

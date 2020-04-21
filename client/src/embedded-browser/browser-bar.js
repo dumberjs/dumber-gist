@@ -1,6 +1,6 @@
 import {inject, bindable, bindingMode} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {DialogService} from 'aurelia-dialog';
+import {DialogService} from 'aurelia-dialog-lite';
 import {BrowserConfigDialog} from './dialogs/browser-config-dialog';
 import {EditSession} from '../edit/edit-session';
 import {HistoryTracker} from '../history-tracker';

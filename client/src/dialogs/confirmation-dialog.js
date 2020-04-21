@@ -1,4 +1,4 @@
-import {DialogController} from 'aurelia-dialog';
+import {DialogController} from 'aurelia-dialog-lite';
 import {inject} from 'aurelia-framework';
 import {combo} from 'aurelia-combo';
 

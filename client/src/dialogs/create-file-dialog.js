@@ -1,4 +1,4 @@
-import {DialogController} from 'aurelia-dialog';
+import {DialogController} from 'aurelia-dialog-lite';
 import Validation from 'bcx-validation';
 import {EditSession} from '../edit/edit-session';
 import {inject, computedFrom} from 'aurelia-framework';

@@ -1,6 +1,6 @@
 <template>
-  <ux-dialog>
-    <ux-dialog-body class="pt-0 pb-0 pl pr">
+  <div class="dialog">
+    <div class="dialog-body pt-0 pb-0 pl pr">
       <div class="select-section">
         <div class="section-body">
           <div
@@ -25,10 +25,10 @@
           </div>
         </div>
       </div>
-    </ux-dialog-body>
-    <ux-dialog-footer>
+    </div>
+    <div class="dialog-footer">
       <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
       <button class="btn ml-auto primary" click.trigger="ok() & leftClick">Save</button>
-    </ux-dialog-footer>
-  </ux-dialog>
+    </div>
+  </div>
 </template>

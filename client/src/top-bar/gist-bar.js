@@ -1,6 +1,6 @@
 import {inject, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {DialogService} from 'aurelia-dialog';
+import {DialogService} from 'aurelia-dialog-lite';
 import {ConfirmOpenDialog} from './dialogs/confirm-open-dialog';
 import {OpenGistDialog} from './dialogs/open-gist-dialog';
 import {ConfirmDraftDialog} from './dialogs/confirm-draft-dialog';

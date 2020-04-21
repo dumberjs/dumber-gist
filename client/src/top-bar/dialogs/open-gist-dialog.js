@@ -1,6 +1,6 @@
 import {inject, computedFrom} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {DialogController} from 'aurelia-dialog';
+import {DialogController} from 'aurelia-dialog-lite';
 import Validation from 'bcx-validation';
 import {Gists} from '../../github/gists';
 import {Helper} from '../../helper';

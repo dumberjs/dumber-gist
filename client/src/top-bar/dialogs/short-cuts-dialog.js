@@ -1,5 +1,5 @@
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {DialogController} from 'aurelia-dialog';
+import {DialogController} from 'aurelia-dialog-lite';
 import {inject} from 'aurelia-framework';
 
 @inject(DialogController, EventAggregator)

@@ -1,4 +1,4 @@
-import {DialogController} from 'aurelia-dialog';
+import {DialogController} from 'aurelia-dialog-lite';
 import {inject} from 'aurelia-framework';
 import _ from 'lodash';
 
@@ -10,7 +10,6 @@ export class WaitingDialog {
 
   constructor(controller) {
     this.controller = controller;
-    // controller.settings.centerHorizontalOnly = false;
     controller.settings.lock = true;
     controller.settings.overlayDismiss = false;
   }

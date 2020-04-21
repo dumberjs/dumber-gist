@@ -1,5 +1,5 @@
 import {combo} from 'aurelia-combo';
-import {DialogController} from 'aurelia-dialog';
+import {DialogController} from 'aurelia-dialog-lite';
 import {inject, observable} from 'aurelia-framework';
 import {fuzzyFilter} from './fuzzy-filter';
 

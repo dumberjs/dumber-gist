@@ -1,51 +1,10 @@
-@import "variables";
-
-ux-dialog-container, ux-dialog-overlay {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-ux-dialog-overlay {
-  opacity: 0;
-  // background-color: rgba(0, 0, 0, .1);
-}
-
-ux-dialog-overlay.active {
-  opacity: 1;
-}
-
-ux-dialog-container {
-  display: block;
-  transition: opacity .2s linear;
-  opacity: 0;
-  overflow-x: hidden;
-  overflow-y: hidden;
-}
-
-ux-dialog-container.active {
-  opacity: 1;
-}
-
-ux-dialog-container>div {
+.dialog-lite-overlay {
+  justify-content: flex-start;
   padding: 1rem 0;
-  height: 100%;
+  z-index: 1051;
 }
 
-ux-dialog-container>div>div {
-  display: block;
-  width: fit-content;
-  height: 100%;
-  margin: auto;
-}
-
-ux-dialog-container,ux-dialog-container > div,ux-dialog-container > div > div {
-  outline: 0;
-}
-
-ux-dialog {
+.dialog {
   display: flex;
   flex-direction: column;
   box-shadow: 0 5px 15px $dark-shadow;
@@ -54,7 +13,6 @@ ux-dialog {
   padding: 3;
   width: 420px;
   max-height: 100%;
-  margin: auto;
   color: $gray-100;
   border-image-source: initial;
   border-image-slice: initial;
@@ -72,89 +30,69 @@ ux-dialog {
   @media (max-width: $tiny - .02) {
     width: 310px;
   }
-}
 
-ux-dialog > ux-dialog-header {
-  display: block;
-  flex: 0 0;
-  padding: .75rem 1rem;
-  font-size: 1.2rem;
-  border-top-left-radius: $border-radius;
-  border-top-right-radius: $border-radius;
+  > .dialog-header {
+    display: flex;
+    flex-wrap: nowrap;
+    flex: 0 0 auto;
+    padding: .75rem 1rem;
+    font-size: 1.2rem;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
 
-  .dialog-header-content {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+    > .dialog-close {
+      cursor: pointer;
+      display: inline-block;
+      margin: -.75rem -1rem -.75rem auto;
+      margin-left: auto;
+      color: $gray-400;
+      font-size: 2.6rem;
+      font-weight: 300;
+      line-height: 1;
+      width: 2.8rem;
+      vertical-align: middle;
+      text-align: center;
+      border-radius: $border-radius;
 
-  .dialog-close {
-    float: right;
-    appearance: none;
-    background: transparent;
-    border: 0;
-    color: $gray-500;
-    padding: 0 .5rem .4rem;
-    margin: -.5rem -.75rem -.75rem 0;
-    font-size: 2.2rem;
-    line-height: 1;
-    border-radius: $border-radius;
-
-    &:focus {
-      outline: 0;
-    }
-
-    &:hover {
-      color: $gray-100;
-      background-color: $gray-700;
+      &:hover {
+        color: $white;
+      }
     }
   }
-}
 
-ux-dialog > ux-dialog-body {
-  display: block;
-  flex: 0 1;
-  padding: .75rem 1rem;
-  overflow-x: hidden;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
+  > .dialog-body {
+    display: block;
+    flex: 0 1 auto;
+    padding: .75rem 1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 
-ux-dialog-header + ux-dialog-body {
-  padding-top: .25rem;
-}
+  .dialog-header + .dialog-body {
+    padding-top: .25rem;
+  }
 
-ux-dialog > ux-dialog-footer {
-  display: flex;
-  flex: 0 0;
-  padding: 1rem;
-  background-color: $gray-900;
-  text-align: right;
-  border-bottom-left-radius: $border-radius;
-  border-bottom-right-radius: $border-radius;
-}
+  > .dialog-footer {
+    display: flex;
+    flex: 0 0 auto;
+    padding: 1rem;
+    background-color: $gray-900;
+    text-align: right;
+    border-bottom-left-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
 
-ux-dialog > ux-dialog-footer .btn {
-  min-width: 6rem;
-}
+    .btn {
+      min-width: 6rem;
+    }
 
-ux-dialog > ux-dialog-footer .btn+.btn {
-  margin-left: 10px;
-}
+    .btn + .btn {
+      margin-left: 10px;
+    }
 
-ux-dialog > ux-dialog-footer button:disabled {
-  cursor: default;
-  opacity: .45;
-}
-
-.ux-dialog-open {
-  overflow: hidden;
-}
-
-ux-dialog.merge-header-with-body > ux-dialog-header {
-  border-bottom: 0;
-}
-
-ux-dialog.merge-header-with-body > ux-dialog-body {
-  padding-top: 0;
+    button:disabled {
+      cursor: default;
+      opacity: .45;
+    }
+  }
 }

@@ -1,7 +1,7 @@
 <template>
-  <ux-dialog class="wide-dialog">
-    <ux-dialog-header>Open a GitHub Gist</ux-dialog-header>
-    <ux-dialog-body>
+  <div class="dialog wide-dialog">
+    <div class="dialog-header">Open a GitHub Gist</div>
+    <div class="dialog-body">
       <form submit.trigger="open()">
         <input type="text" value.bind="gistUrl" class="w100" placeholder="Gist id or URL" focus.one-time="true">
         <hidden-submit></hidden-submit>
@@ -25,10 +25,10 @@
         <input type="text" value.bind="githubUser" class="w100" placeholder="GitHub user name">
         <hidden-submit></hidden-submit>
       </form>
-    </ux-dialog-body>
-    <ux-dialog-footer>
+    </div>
+    <div class="dialog-footer">
       <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
       <button class="btn ml-auto primary" attach-focus click.trigger="open() & leftClick" disabled.bind="(errors || !gistUrl) && !githubUser">Open</button>
-    </ux-dialog-footer>
-  </ux-dialog>
+    </div>
+  </div>
 </template>

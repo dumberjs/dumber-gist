@@ -1,9 +1,9 @@
 <template>
-  <ux-dialog class="wide-dialog">
-    <ux-dialog-header>
+  <div class="dialog wide-dialog">
+    <div class="dialog-header">
       List of Keyboard Short-cuts
-    </ux-dialog-header>
-    <ux-dialog-body class="p-0">
+    </div>
+    <div class="dialog-body p-0">
       <div
         class="available-item left-right"
         repeat.for="s of shortcuts"
@@ -22,9 +22,9 @@
           </span>
         </div>
       </div>
-    </ux-dialog-body>
-    <ux-dialog-footer>
+    </div>
+    <div class="dialog-footer">
       <button class="btn ml-auto" attach-focus click.trigger="controller.cancel() & leftClick">Close</button>
-    </ux-dialog-footer>
-  </ux-dialog>
+    </div>
+  </div>
 </template>

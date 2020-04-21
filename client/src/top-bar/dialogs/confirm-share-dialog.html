@@ -1,6 +1,6 @@
 <template>
-  <ux-dialog>
-    <ux-dialog-body>
+  <div class="dialog">
+    <div class="dialog-body">
       <div style="display:flex; align-items: center;">
         <i class="fas fa-exclamation-triangle text-warning" style="font-size: 2rem; margin-right: 1rem;"></i>
         <div>
@@ -12,9 +12,9 @@
       <button class="btn big d-block w100 mt mb ml-0 mr-0 success" click.trigger="controller.ok(true) & leftClick">Save changes of current gist<br>Then share it</button>
 
       <button class="btn big d-block w100 mt-2 mb ml-0 mr-0 primary" click.trigger="controller.ok(false) & leftClick">Share the latest gist without local changes</button>
-    </ux-dialog-body>
-    <ux-dialog-footer>
+    </div>
+    <div class="dialog-footer">
       <button class="btn ml-auto" attach-focus click.trigger="controller.cancel() & leftClick">Cancel</button>
-    </ux-dialog-footer>
-  </ux-dialog>
+    </div>
+  </div>
 </template>

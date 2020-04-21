@@ -1,7 +1,7 @@
 import {inject, bindable, bindingMode, BindingEngine} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {OpenedFiles} from './opened-files';
-import {DialogService} from 'aurelia-dialog';
+import {DialogService} from 'aurelia-dialog-lite';
 import {EditorConfigDialog} from './dialogs/editor-config-dialog';
 import _ from 'lodash';
 

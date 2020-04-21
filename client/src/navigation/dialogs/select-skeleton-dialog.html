@@ -1,6 +1,6 @@
 <template>
-  <ux-dialog class="wide-dialog">
-    <ux-dialog-body>
+  <div class="dialog wide-dialog">
+    <div class="dialog-body">
       <div class="cols">
         <div class="select-section">
           <div class="section-header">SPA Framework</div>
@@ -76,10 +76,10 @@
           </div>
         </div>
       </div>
-    </ux-dialog-body>
-    <ux-dialog-footer>
+    </div>
+    <div class="dialog-footer">
       <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
       <button class="btn ml-auto primary" click.trigger="ok() & leftClick">Create</button>
-    </ux-dialog-footer>
-  </ux-dialog>
+    </div>
+  </div>
 </template>

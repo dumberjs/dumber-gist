@@ -1,5 +1,5 @@
 import {inject} from 'aurelia-framework';
-import {DialogService} from 'aurelia-dialog';
+import {DialogService} from 'aurelia-dialog-lite';
 import {EditSession} from '../edit/edit-session';
 import {SelectSkeletonDialog} from './dialogs/select-skeleton-dialog';
 import {SkeletonGenerator} from '../skeletons/skeleton-generator';

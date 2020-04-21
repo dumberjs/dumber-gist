@@ -1,6 +1,6 @@
 import {inject, noView} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {DialogService} from 'aurelia-dialog';
+import {DialogService} from 'aurelia-dialog-lite';
 import {CreateFileDialog} from './dialogs/create-file-dialog';
 import {OpenFileDialog} from './dialogs/open-file-dialog';
 import {EditNameDialog} from './dialogs/edit-name-dialog';

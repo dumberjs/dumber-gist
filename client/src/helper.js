@@ -1,5 +1,5 @@
 import {inject} from 'aurelia-framework';
-import {DialogService} from 'aurelia-dialog';
+import {DialogService} from 'aurelia-dialog-lite';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {ConfirmationDialog} from './dialogs/confirmation-dialog';
 import {WaitingDialog} from './dialogs/waiting-dialog';

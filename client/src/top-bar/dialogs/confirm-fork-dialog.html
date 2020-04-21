@@ -1,7 +1,7 @@
 <template>
-  <ux-dialog>
-    <ux-dialog-header>Fork this Gist?</ux-dialog-header>
-    <ux-dialog-body class="p-0">
+  <div class="dialog">
+    <div class="dialog-header">Fork this Gist?</div>
+    <div class="dialog-body p-0">
       <div class="gist-info">
         <img
           class="owner-image"
@@ -20,10 +20,10 @@
           <div>${gist.description}</div>
         </div>
       </div>
-    </ux-dialog-body>
-    <ux-dialog-footer>
+    </div>
+    <div class="dialog-footer">
       <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
       <button class="btn ml-auto primary" attach-focus click.trigger="controller.ok() & leftClick">Fork</button>
-    </ux-dialog-footer>
-  </ux-dialog>
+    </div>
+  </div>
 </template>
