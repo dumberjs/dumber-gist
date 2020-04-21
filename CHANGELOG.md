@@ -1,3 +1,12 @@
+# [0.8.0](https://github.com/dumberjs/dumber-gist/compare/v0.7.2...v0.8.0) (2020-04-21)
+
+
+### Features
+
+* migrate to aurelia-dialog-lite for proper focus trap ([7f6e85e](https://github.com/dumberjs/dumber-gist/commit/7f6e85e17d3adfb63a87503e696dfd32cd6d008f)), closes [#31](https://github.com/dumberjs/dumber-gist/issues/31)
+
+
+
 ## [0.7.2](https://github.com/dumberjs/dumber-gist/compare/v0.7.1...v0.7.2) (2020-04-18)
 
 
