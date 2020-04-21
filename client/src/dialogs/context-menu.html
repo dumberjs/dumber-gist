@@ -1,8 +1,4 @@
 <template>
-  <div
-    class="context-overlay"
-    click.trigger="controller.cancel()"
-    contextmenu.trigger="controller.cancel()"></div>
   <div class="context-menu" style.bind="style">
     <div
       class="context-menu-item ${item.danger ? 'danger' : ''} ${item.code || item.href ? 'context-menu-item-action' : ''} ${item.separator ? 'context-menu-item-separator' : ''}"
