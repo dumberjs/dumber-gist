@@ -24,6 +24,7 @@ app.render();
 `;
 
 const app = `import * as Backbone from 'backbone';
+import _ from 'underscore';
 
 export default Backbone.View.extend({
   messageTemplate: _.template("<h2><%- message %></h2>"),
