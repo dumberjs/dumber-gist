@@ -15,9 +15,7 @@
   <style>
     .flash-screen {
       background-color: #212529;
-      color: #dee2e6;
-      font-size: 24px;
-      line-height: 1.5;
+      color: #f8f9fa;
       position: fixed;
       top: 0;
       bottom: 0;
@@ -30,6 +28,18 @@
       align-items: center;
       text-align: center;
     }
+
+    .flash-screen-title {
+      font-size: 26px;
+      line-height: 2;
+      font-style: italic;
+    }
+
+    .flash-screen-subtitle {
+      font-size: 16px;
+      line-height: 1.5;
+      color: #adb5bd;
+    }
   </style>
   <script>const BUNDLER_WORKER = '/dist/bundler-worker.js';</script>
 </head>
@@ -38,7 +48,8 @@
   <div aurelia-app="main">
     <div class="flash-screen">
       <div>
-        <i>Dumber Gist</i><br>
+        <div class="flash-screen-title">Dumber Gist</div>
+        <div class="flash-screen-subtitle">A lightweight online IDE to write JS SPA prototypes in your own GitHub gists</div>
       </div>
       <span>&nbsp;</span>
     </div>
