@@ -17,6 +17,18 @@ export class Resolver {
     this.jobs = [];
   }
 
+  _checkFinish() {
+    if (this.jobs.filter(j => !j.done).length === 0) {
+      const errors = this.jobs.filter(j => j.error).map(j => j.error);
+
+      if (errors.length) {
+        this._reject(new Error(_.uniq(errors).join('\n')));
+      } else {
+        this._resolve(this.renderJpack());
+      }
+    }
+  }
+
   loadRegistryPackage(task){
     const job = this.registry.fetch(task.name).then(registryPackage =>
       this.resolveDependencies(task, registryPackage)
@@ -27,23 +39,14 @@ export class Resolver {
     job.then(
       () => {
         this.jobs[index] = {done: true};
+        this._checkFinish();
       },
       err => {
         console.error(err);
         this.jobs[index] = {done: true, error: err.message};
+        this._checkFinish();
       }
-    ).then(() => {
-      // check finishes
-      if (this.jobs.filter(j => !j.done).length === 0) {
-        const errors = this.jobs.filter(j => j.error).map(j => j.error);
-
-        if (errors.length) {
-          this._reject(new Error(_.uniq(errors).join('\n')));
-        } else {
-          this._resolve(this.renderJpack());
-        }
-      }
-    });
+    );
   }
 
   // Resolution & Iteration
@@ -151,13 +154,24 @@ export class Resolver {
   }
 
   resolve(dependencies){
+    console.info('resolve', dependencies);
     return new Promise((resolve, reject) => {
-      this._resolve = resolve;
-      this._reject = reject;
+      this._resolve = r => {
+        console.info('resolved', dependencies);
+        this.registry.resetCache();
+        return resolve(r);
+      };
+
+      this._reject = e => {
+        console.info('resolved failed', dependencies);
+        this.registry.resetCache();
+        return reject(e);
+      };
+
       const depNames = Object.keys(dependencies);
 
       if(depNames.length === 0){
-        return resolve(this.jpack);
+        return this._resolve(this.jpack);
       }
 
       this.startTime = Date.now();
@@ -171,7 +185,7 @@ export class Resolver {
           })
         });
       })
-      .catch(reject);
+      .catch(this._reject);
     });
   }
 }

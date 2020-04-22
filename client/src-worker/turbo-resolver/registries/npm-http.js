@@ -7,6 +7,10 @@ export class NpmHttpRegistry {
     this.fetching = {};
   }
 
+  resetCache() {
+    this.cache = {};
+  }
+
   async fetch(name){
     if(this.cache[name]) {
       return this.cache[name];

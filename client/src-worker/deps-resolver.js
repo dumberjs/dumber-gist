@@ -64,7 +64,6 @@ export class DepsResolver {
   }
 
   async _resolve(dependencies) {
-
     const result = await this.getResolver().resolve(dependencies);
 
     const packages = {};
