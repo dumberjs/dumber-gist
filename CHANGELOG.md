@@ -1,3 +1,12 @@
+## [0.8.5](https://github.com/dumberjs/dumber-gist/compare/v0.8.4...v0.8.5) (2020-04-22)
+
+
+### Bug Fixes
+
+* fix flex width on address input ([aa8cee4](https://github.com/dumberjs/dumber-gist/commit/aa8cee4a33fdec94f73e0d3dc6c270a22deb5649))
+
+
+
 ## [0.8.4](https://github.com/dumberjs/dumber-gist/compare/v0.8.3...v0.8.4) (2020-04-22)
 
 
