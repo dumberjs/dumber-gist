@@ -154,16 +154,13 @@ export class Resolver {
   }
 
   resolve(dependencies){
-    console.info('resolve', dependencies);
     return new Promise((resolve, reject) => {
       this._resolve = r => {
-        console.info('resolved', dependencies);
         this.registry.resetCache();
         return resolve(r);
       };
 
       this._reject = e => {
-        console.info('resolved failed', dependencies);
         this.registry.resetCache();
         return reject(e);
       };
