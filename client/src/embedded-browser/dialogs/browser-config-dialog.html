@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-    <div class="dialog-footer" keydown.trigger="$event.key === 'Enter' && ($event.stopPropagation() || true)">
+    <div class="dialog-footer" keydown.trigger="($event.key === 'Enter' && $event.stopPropagation()) || true">
       <button class="btn" click.trigger="controller.cancel() & leftClick">Cancel</button>
       <button class="btn error" if.bind="!insideIframe" click.trigger="resetCache() & leftClick">Reset Cache</button>
       <button class="btn ml-auto primary" click.trigger="ok() & leftClick">Save</button>
