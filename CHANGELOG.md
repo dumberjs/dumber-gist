@@ -1,3 +1,13 @@
+## [0.8.2](https://github.com/dumberjs/dumber-gist/compare/v0.8.1...v0.8.2) (2020-04-22)
+
+
+### Bug Fixes
+
+* space key should work on focused button ([9de5c4d](https://github.com/dumberjs/dumber-gist/commit/9de5c4dd1bd7d9975204500e615e1b519ef109a0))
+* unset focus when using up/down keys ([89810dd](https://github.com/dumberjs/dumber-gist/commit/89810dd6df30e5d23f2b098c386e360b7cf3b1c1))
+
+
+
 ## [0.8.1](https://github.com/dumberjs/dumber-gist/compare/v0.8.0...v0.8.1) (2020-04-22)
 
 
