@@ -1,3 +1,12 @@
+## [0.8.3](https://github.com/dumberjs/dumber-gist/compare/v0.8.2...v0.8.3) (2020-04-22)
+
+
+### Bug Fixes
+
+* fix broken backbone skeleton ([a154ce9](https://github.com/dumberjs/dumber-gist/commit/a154ce938677a8cf6875760e50d7df398b215306))
+
+
+
 ## [0.8.2](https://github.com/dumberjs/dumber-gist/compare/v0.8.1...v0.8.2) (2020-04-22)
 
 
