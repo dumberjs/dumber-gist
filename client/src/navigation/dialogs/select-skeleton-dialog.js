@@ -115,6 +115,11 @@ export class SelectSkeletonDialog {
 
   @combo('up')
   selectPreviousFramework() {
+    const focused = document.activeElement;
+    if (this.footer && this.footer.contains(focused)) {
+      focused.blur();
+    }
+
     let idx = _.findIndex(this.frameworks, {value: this.framework});
     idx -= 1;
     if (idx < 0) {
@@ -126,6 +131,11 @@ export class SelectSkeletonDialog {
 
   @combo('down')
   selectNextFramework() {
+    const focused = document.activeElement;
+    if (this.footer && this.footer.contains(focused)) {
+      focused.blur();
+    }
+
     let idx = _.findIndex(this.frameworks, {value: this.framework});
     idx += 1;
     if (idx >= this.frameworks.length) {
