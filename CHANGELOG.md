@@ -1,3 +1,12 @@
+## [0.8.6](https://github.com/dumberjs/dumber-gist/compare/v0.8.5...v0.8.6) (2020-04-23)
+
+
+### Features
+
+* latest aurelia-combo fixed issue on focused button ([9ee430e](https://github.com/dumberjs/dumber-gist/commit/9ee430ed01b2e5ba9b8d97e03dd165f28fb2afaa))
+
+
+
 ## [0.8.5](https://github.com/dumberjs/dumber-gist/compare/v0.8.4...v0.8.5) (2020-04-22)
 
 
