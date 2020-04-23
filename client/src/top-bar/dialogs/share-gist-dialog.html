@@ -21,8 +21,8 @@
               class="file"
               reorderable-repeat.for="file of originalFiles"
               reorderable-group="files-selection"
-              click.trigger="selectedFiles.push(originalFiles.splice($index, 1)) & leftClick"
-              touchend.trigger="selectedFiles.push(originalFiles.splice($index, 1))"
+              click.trigger="selectedFiles.push(originalFiles.splice($index, 1)[0]) & leftClick"
+              touchend.trigger="selectedFiles.push(originalFiles.splice($index, 1)[0])"
             >
               <i class.bind="file | fileIcon"></i>
               ${file}
@@ -36,8 +36,8 @@
               class="file selected"
               reorderable-repeat.for="file of selectedFiles"
               reorderable-group="files-selection"
-              click.trigger="originalFiles.push(selectedFiles.splice($index, 1)) & leftClick"
-              touchend.trigger="originalFiles.push(selectedFiles.splice($index, 1))"
+              click.trigger="originalFiles.push(selectedFiles.splice($index, 1)[0]) & leftClick"
+              touchend.trigger="originalFiles.push(selectedFiles.splice($index, 1)[0])"
             >
               <i class.bind="file | fileIcon"></i>
               ${file}
