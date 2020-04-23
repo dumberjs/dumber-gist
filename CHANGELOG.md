@@ -1,3 +1,12 @@
+## [0.8.7](https://github.com/dumberjs/dumber-gist/compare/v0.8.6...v0.8.7) (2020-04-23)
+
+
+### Bug Fixes
+
+* fix share dialog click ([8d3ee56](https://github.com/dumberjs/dumber-gist/commit/8d3ee5695ffbb0d00825dfca29b724bf03fcde4d))
+
+
+
 ## [0.8.6](https://github.com/dumberjs/dumber-gist/compare/v0.8.5...v0.8.6) (2020-04-23)
 
 
