@@ -14,7 +14,6 @@ export class ListGistsDialog {
 
   constructor(controller, gists) {
     this.controller = controller;
-    this.controller.settings.lock = true;
     this.gists = gists;
     this._updateFilteredGists = _.debounce(this._updateFilteredGists.bind(this));
   }

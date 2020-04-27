@@ -10,7 +10,8 @@ export class WaitingDialog {
 
   constructor(controller) {
     this.controller = controller;
-    controller.settings.lock = true;
+    // No auto dismiss
+    controller.settings.escDismiss = false;
     controller.settings.overlayDismiss = false;
   }
 

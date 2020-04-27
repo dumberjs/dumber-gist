@@ -39,23 +39,14 @@ export class GistBar {
 
     try {
       if (this.saveable) {
-        await this.dialogService.open({viewModel: ConfirmOpenDialog})
-          .whenClosed(response => {
-            if (response.wasCancelled) throw new Error('cancelled');
-            if (response.output) {
-              return this.save();
-            }
-          });
+        const saveFirst = await this.dialogService.open({viewModel: ConfirmOpenDialog})
+        if (saveFirst) await this.save();
       }
 
-      await this.dialogService.open({viewModel: OpenGistDialog})
-        .whenClosed(response => {
-          if (response.wasCancelled) return;
-          const gist = response.output;
-          this.session.loadGist(gist);
-        });
+      const gist = await this.dialogService.open({viewModel: OpenGistDialog});
+      this.session.loadGist(gist);
     } catch (e) {
-      // ignore
+      // ignore cancelled dialog
     }
   }
 
@@ -65,19 +56,14 @@ export class GistBar {
     if (!this.renewable) return; // already in a draft
     try {
       if (this.saveable) {
-        await this.dialogService.open({viewModel: ConfirmDraftDialog})
-          .whenClosed(response => {
-            if (response.wasCancelled) throw new Error('cancelled');
-            if (response.output) {
-              return this.save();
-            }
-          });
+        const saveFirst = await this.dialogService.open({viewModel: ConfirmDraftDialog});
+        if (saveFirst) await this.save();
       } else {
         await this.helper.confirm('Close current gist, then create a new draft?');
       }
       this.ea.publish('new-draft');
     } catch (e) {
-      // ignore
+      // ignore cancelled dialog
     }
   }
 
@@ -116,7 +102,7 @@ export class GistBar {
         );
         this.ea.publish('save-gist', {forceNew: true});
       } catch (e) {
-        // ignore
+        // ignore cancelled dialog
       }
       return;
     }
@@ -125,12 +111,10 @@ export class GistBar {
       await this.dialogService.open({
         viewModel: ConfirmForkDialog,
         model: {gist: this.session.gist}
-      }).whenClosed(response => {
-        if (response.wasCancelled) throw new Error('cancelled');
       });
       this.ea.publish('fork-gist');
     } catch (e) {
-      // ignore
+      // ignore cancelled dialog
     }
   }
 
@@ -145,21 +129,16 @@ export class GistBar {
 
     try {
       if (this.saveable) {
-        await this.dialogService.open({viewModel: ConfirmShareDialog})
-          .whenClosed(response => {
-            if (response.wasCancelled) throw new Error('cancelled');
-            if (response.output) {
-              return this.save();
-            }
-          });
+        const saveFirst = await this.dialogService.open({viewModel: ConfirmShareDialog});
+        if (saveFirst) await this.save();
       }
 
       this.dialogService.open({
         viewModel: ShareGistDialog,
         model: {gist: this.session.gist}
-      });
+      }).then(() => {}, () => {});
     } catch (e) {
-      // ignore
+      // ignore cancelled dialog
     }
   }
 

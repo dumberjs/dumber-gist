@@ -76,13 +76,13 @@ export class FileNode {
           {title: 'Delete', code: 'delete', danger: true, icon: 'fas fa-trash-alt'}
         ]
       }
-    }).whenClosed(response => {
-      if (response.wasCancelled) return;
-
-      const code = response.output;
-      if (code === 'rename') return this.editName();
-      else if (code === 'delete') return this.delete();
-    });
+    }).then(
+      code => {
+        if (code === 'rename') return this.editName();
+        else if (code === 'delete') return this.delete();
+      },
+      () => {}
+    );
   }
 
   edit() {

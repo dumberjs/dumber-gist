@@ -18,10 +18,9 @@ export class QuickStart {
     if (this.session.files.length > 0) return;
     this.dialogService.open({
       viewModel: SelectSkeletonDialog
-    }).whenClosed(response => {
-      if (response.wasCancelled) return;
-      const selection = response.output;
-      this.skeletonGenerator.generate(selection);
-    })
+    }).then(
+      selection => this.skeletonGenerator.generate(selection),
+      () => {}
+    );
   }
 }

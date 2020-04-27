@@ -8,7 +8,10 @@ export function configure(aurelia) {
     aurelia.use.developmentLogging('info');
   }
 
-  aurelia.use.plugin('aurelia-dialog-lite', {lock: false, overlayDismiss: true});
+  aurelia.use.plugin('aurelia-dialog-lite', {
+    escDismiss: true,
+    overlayDismiss: true
+  });
   aurelia.use.plugin('aurelia-combo');
   aurelia.use.plugin('bcx-aurelia-reorderable-repeat');
 

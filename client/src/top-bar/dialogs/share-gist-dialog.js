@@ -12,7 +12,6 @@ export class ShareGistDialog {
   constructor(ea, controller, bindingEngine, user) {
     this.ea = ea;
     this.controller = controller;
-    this.controller.settings.overlayDismiss = false;
     this.bindingEngine = bindingEngine;
     this.user = user;
     this._update = this._update.bind(this);

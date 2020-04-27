@@ -15,23 +15,18 @@ export class Helper {
     return this.dialogService.open({
       viewModel: ConfirmationDialog,
       model: {question, ...opts}
-    }).whenClosed(response => {
-      if (response.wasCancelled) {
-        throw new Error('confirmation cancelled');
-      }
     });
   }
 
   waitFor(title, promise, opts = {}) {
-    return this.dialogService.open({
+    return this.dialogService.create({
       viewModel: WaitingDialog,
       model: {...opts, title}
-    }).then(openDialogResult => {
+    }).then(controller => {
       // Close the waiting dialog,
       // and return original promise.
-      return promise.finally(() => {
-        openDialogResult.controller.cancel();
-      });
+      promise.then(() => controller.ok(), () => controller.ok());
+      return promise;
     });
   }
 }

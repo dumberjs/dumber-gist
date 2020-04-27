@@ -36,16 +36,16 @@ export class GithubAccount {
           {title: 'Sign out', code: 'logout'}
         ]
       }
-    }).whenClosed(response => {
-      if (response.wasCancelled) return;
-
-      const code = response.output;
-      if (code === 'logout') {
-        return this.oauth.logout();
-      } else if (code === 'gists') {
-        this.ea.publish('list-gists', this.user.login);
-      }
-    });
+    }).then(
+      code => {
+        if (code === 'logout') {
+          return this.oauth.logout();
+        } else if (code === 'gists') {
+          this.ea.publish('list-gists', this.user.login);
+        }
+      },
+      () => {}
+    );
   }
 
   helpMenu() {
@@ -66,16 +66,17 @@ export class GithubAccount {
           {title: 'List of Short-cuts', code: 'short-cuts'}
         ]
       }
-    }).whenClosed(response => {
-      if (response.wasCancelled) return;
-
-      const code = response.output;
-      if (code === 'short-cuts') return this.listShortCuts();
-    });
+    }).then(
+      code => {
+        if (code === 'short-cuts') return this.listShortCuts();
+      },
+      () => {}
+    );
   }
 
   listShortCuts() {
     if (this.dialogService.hasActiveDialog) return;
-    this.dialogService.open({viewModel: ShortCutsDialog});
+    this.dialogService.open({viewModel: ShortCutsDialog})
+      .then(() => {}, () => {});
   }
 }

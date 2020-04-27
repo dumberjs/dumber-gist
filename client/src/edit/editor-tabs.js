@@ -39,12 +39,13 @@ export class EditorTabs {
         vimMode: this.vimMode,
         lineWrapping: this.lineWrapping
       }
-    }).whenClosed(response => {
-      if (response.wasCancelled) return;
-      const {output} = response;
-      this.vimMode = output.vimMode;
-      this.lineWrapping = output.lineWrapping;
-    });
+    }).then(
+      output => {
+        this.vimMode = output.vimMode;
+        this.lineWrapping = output.lineWrapping;
+      },
+      () => {}
+    );
   }
 
   closeFile(filename) {

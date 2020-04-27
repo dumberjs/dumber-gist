@@ -11,7 +11,6 @@ export class OpenFileDialog {
 
   constructor(controller) {
     this.controller = controller;
-    this.controller.settings.lock = true;
   }
 
   activate(model) {

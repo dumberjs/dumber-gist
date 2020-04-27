@@ -45,11 +45,10 @@ export class BrowserBar {
         },
         insideIframe: this.insideIframe
       }
-    }).whenClosed(response => {
-      if (response.wasCancelled) return;
-      const {output} = response;
-      this.autoRefresh = output.autoRefresh;
-    });
+    }).then(
+      output => this.autoRefresh = output.autoRefresh,
+      () => {}
+    );
   }
 
   keyDownInInput(e) {

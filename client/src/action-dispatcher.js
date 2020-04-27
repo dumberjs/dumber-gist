@@ -111,11 +111,10 @@ export class ActionDispatcher {
     this.dialogService.open({
       viewModel: OpenFileDialog,
       model: {filenames: _.map(files, 'filename')}
-    }).whenClosed(response => {
-      if (response.wasCancelled) return;
-      const filename = response.output;
-      this.openedFiles.openFile(filename);
-    });
+    }).then(
+      filename => this.openedFiles.openFile(filename),
+      () => {}
+    );
   }
 
   newDraft() {
@@ -129,11 +128,10 @@ export class ActionDispatcher {
     this.dialogService.open({
       viewModel: CreateFileDialog,
       model: {filePath: inDir}
-    }).whenClosed(response => {
-      if (response.wasCancelled) return;
-      const filename = response.output;
-      this.session.createFile(filename);
-    });
+    }).then(
+      filename => this.session.createFile(filename),
+      () => {}
+    );
   }
 
   editName({filePath, isFolder}) {
@@ -142,11 +140,10 @@ export class ActionDispatcher {
     this.dialogService.open({
       viewModel: EditNameDialog,
       model: {filePath, isFolder}
-    }).whenClosed(response => {
-      if (response.wasCancelled) return;
-      const newFilePath = response.output;
-      this.session.updatePath(filePath, newFilePath);
-    });
+    }).then(
+      newFilePath => this.session.updatePath(filePath, newFilePath),
+      () => {}
+    );
   }
 
   importFile(file) {
@@ -180,17 +177,12 @@ export class ActionDispatcher {
 
     if (createNew) {
       try {
-        await this.dialogService.open({
+        const output = await this.dialogService.open({
           viewModel: NewGistDialog,
           model: {description, isPublic}
-        }).whenClosed(response => {
-          if (response.wasCancelled) {
-            throw new Error('cancelled');
-          }
-          const {output} = response;
-          description = output.description;
-          isPublic = output.isPublic;
-        })
+        });
+        description = output.description;
+        isPublic = output.isPublic;
       } catch (e) {
         // cancelled
         return;
@@ -287,14 +279,15 @@ export class ActionDispatcher {
       return this.dialogService.open({
         viewModel: ListGistsDialog,
         model: {login, gists}
-      }).whenClosed(response => {
-        if (response.wasCancelled) return;
-        const id = response.output;
-        return this.helper.waitFor(
-          `Loading Gist ${id.slice(0, 7)} ...`,
-          this.gists.load(id)
-        ).then(gist => this.session.loadGist(gist));
-      });
+      }).then(
+        id => {
+          return this.helper.waitFor(
+            `Loading Gist ${id.slice(0, 7)} ...`,
+            this.gists.load(id)
+          ).then(gist => this.session.loadGist(gist));
+        },
+        () => {}
+      );
     })
     .catch(err => this.ea.publish('error', err.message));
   }
