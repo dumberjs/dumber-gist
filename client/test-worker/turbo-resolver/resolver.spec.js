@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import _ from 'lodash';
 import {NpmHttpRegistry} from '../../src-worker/turbo-resolver/registries/npm-http';
 import {Resolver} from '../../src-worker/turbo-resolver/resolver';
@@ -27,12 +27,20 @@ test('Resolver resolves vue2 deps', async t => {
 
 test('Resolver resolves invalid deps', async t => {
   const r = new Resolver(new NpmHttpRegistry());
-
-  await t.rejects(r.resolve({'an-invalid-module-name': 'latest'}), /Could not load npm registry for an-invalid-module-name: Not found/);
+  try {
+    await r.resolve({'an-invalid-module-name': 'latest'});
+    t.fail('should not pass');
+  } catch (e) {
+    t.equal(e.message, 'Could not load npm registry for an-invalid-module-name: Not found');
+  }
 });
 
 test('Resolver resolves invalid version', async t => {
   const r = new Resolver(new NpmHttpRegistry());
-
-  await t.rejects(r.resolve({'vue': '^2000.0.0'}), /npm package "vue" was not found with requested version: "\^2000.0.0"\./);
+  try {
+    await r.resolve({'vue': '^2000.0.0'});
+    t.fail('should not pass');
+  } catch (e) {
+    t.equal(e.message, 'npm package "vue" was not found with requested version: "^2000.0.0".');
+  }
 });

@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {NpmHttpRegistry} from '../../../src-worker/turbo-resolver/registries/npm-http';
 
 const r = new NpmHttpRegistry();
@@ -9,7 +9,12 @@ test('NpmHttpRegistry fetches one package', async t => {
 });
 
 test('NpmHttpRegistry complains about unknown package', async t => {
-  await t.rejects(async () => r.fetch('@'));
+  try {
+    await r.fetch('@no/such/thing');
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
 });
 
 test('NpmHttpRegistry fetches multiple packages', async t => {

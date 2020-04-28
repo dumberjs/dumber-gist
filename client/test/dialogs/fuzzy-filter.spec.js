@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {fuzzyFilter} from '../../src/dialogs/fuzzy-filter';
 
 test('fuzzyFilter returns original list', t => {

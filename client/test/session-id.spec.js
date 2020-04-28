@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {SessionId} from '../src/session-id';
 
 test('SessionId generates random sessionId', t => {

@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {WorkerService} from '../src/worker-service';
 
 let actions = [];
@@ -120,7 +120,12 @@ test('WorkerService queues and executes action with failure', async t => {
     });
   });
 
-  await t.rejects(async () => await j, {message: 'lorem'});
+  try {
+    await j;
+    t.fail('should not pass');
+  } catch (err) {
+    t.equal(err.message, 'lorem');
+  }
   t.equal(published.length, 0);
 });
 
@@ -150,7 +155,12 @@ test('WorkerService queues and executes action with unknown failure, ignores unk
     });
   });
 
-  await t.rejects(async () => await j, {message: 'unknown error'});
+  try {
+    await j;
+    t.fail('should not pass');
+  } catch (err) {
+    t.equal(err.message, 'unknown error');
+  }
   t.deepEqual(published, [
     ['warning', 'While waiting for acknowledgement id:0 from service worker, received unexpected result {"type":"a"}.']
   ]);
@@ -286,7 +296,12 @@ test('WorkerService queues and executes actions, with failed results and unknown
   ]);
   t.equal(published.length, 0);
 
-  await t.rejects(async() => await j2, {message: 'lorem'});
+  try {
+    await j2;
+    t.fail('should not pass');
+  } catch (err) {
+    t.equal(err.message, 'lorem');
+  }
   t.ok(w.isWaiting);
   t.deepEqual(actions, [
     {id: 0, type: 'work1', data: {a:1}, toBundler: true},

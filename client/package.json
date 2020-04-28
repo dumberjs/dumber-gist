@@ -69,8 +69,7 @@
     "supports-color": "^7.1.0",
     "svelte": "^3.21.0",
     "tap-nirvana": "^1.1.0",
-    "tape": "^5.0.0",
-    "tape-promise": "^4.0.0"
+    "tape": "^5.0.0"
   },
   "scripts": {
     "css-lint": "sass-lint -c .sass-lint.yml 'src/**/*.scss'",

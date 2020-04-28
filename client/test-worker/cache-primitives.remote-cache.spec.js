@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import create from './cache-primitives.helper';
 
 const cacheUrl = HOST_NAMES.cacheUrl;
@@ -12,7 +12,12 @@ test('getRemoteCacheWithPath rejects missing cache, gets valid cache', async t =
     await p.getRemoteCacheWithPath('foo@1.0.0/index.js'),
     {foo: 1}
   );
-  await t.rejects(() => p.getRemoteCacheWithPath('bar@1.0.0/index.js'));
+  try {
+    await p.getRemoteCacheWithPath('bar@1.0.0/index.js');
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
 });
 
 test('getRemoteCache rejects missing cache, gets valid cache', async t => {
@@ -24,7 +29,12 @@ test('getRemoteCache rejects missing cache, gets valid cache', async t => {
     await p.getRemoteCache('hash'),
     {foo: 1}
   );
-  await t.rejects(() => p.getRemoteCache('hash2'));
+  try {
+    await p.getRemoteCache('hash2');
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
 });
 
 test('setRemoteCache does not set cache if user is not signed in', async t => {
@@ -32,7 +42,12 @@ test('setRemoteCache does not set cache if user is not signed in', async t => {
   const p = create({}, remote);
   await p.setRemoteCache('12345', {a: 1});
   t.deepEqual(remote, {});
-  await t.rejects(() => p.getRemoteCache('12345'));
+  try {
+    await p.getRemoteCache('12345');
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
 });
 
 test('setRemoteCache sets cache if user is signed in', async t => {

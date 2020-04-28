@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {Au2Transpiler} from '../../src-worker/transpilers/au2';
 
 const au2PackageJson = {

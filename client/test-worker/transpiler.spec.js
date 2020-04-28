@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {Transpiler} from '../src-worker/transpiler';
 
 const p = {

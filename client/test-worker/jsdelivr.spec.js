@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {Jsdelivr} from '../src-worker/jsdelivr';
 import {JSDELIVR_PREFIX} from '../src-worker/cache-primitives';
 
@@ -52,12 +52,22 @@ const primitives = {
 
 test('Jsdelivr rejects unknown package', async t => {
   const j = new Jsdelivr(primitives);
-  await t.rejects(() => j.create({name: 'unknown'}));
+  try {
+    await j.create({name: 'unknown'});
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
 });
 
 test('Jsdelivr rejects unknown version', async t => {
   const j = new Jsdelivr(primitives);
-  await t.rejects(() => j.create({name: 'foo', version: '2.0.0'}));
+  try {
+    await j.create({name: 'foo', version: '2.0.0'});
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
 });
 
 test('Jsdelivr gets files on default version', async t => {
@@ -182,7 +192,12 @@ test('Jsdelivr gets files with aliased package case 2', async t => {
 
 test('Jsdelivr rejects unknown alias', async t => {
   const j = new Jsdelivr(primitives);
-  await t.rejects(() => j.create({name: 'bar', location: 'foo@2.0.0'}));
+  try {
+    await j.create({name: 'bar', location: 'foo@2.0.0'});
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
 });
 
 test('Jsdelivr gets files for scoped npm package', async t => {

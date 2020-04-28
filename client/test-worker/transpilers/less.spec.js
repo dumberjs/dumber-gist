@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {LessTranspiler} from '../../src-worker/transpilers/less';
 
 test('LessTranspiler matches less files', t => {
@@ -52,15 +52,25 @@ test('LessTranspiler reject broken less file', async t => {
     filename: 'src/foo.less',
     content: code
   };
-  await t.rejects(async () => jt.transpile(f, [f]))
+  try {
+    await jt.transpile(f, [f]);
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
 });
 
 test('LessTranspiler cannot tranpile other file', async t => {
   const jt = new LessTranspiler();
-  await t.rejects(async () => jt.transpile({
-    filename: 'src/foo.js',
-    content: ''
-  }));
+  try {
+    await jt.transpile({
+      filename: 'src/foo.js',
+      content: ''
+    });
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
 });
 
 test('LessTranspiler transpile less file with less import', async t => {

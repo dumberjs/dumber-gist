@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {AuTsTranspiler} from '../../src-worker/transpilers/au-ts';
 
 const p = {

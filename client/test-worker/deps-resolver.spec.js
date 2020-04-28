@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import _ from 'lodash';
 import {DepsResolver} from '../src-worker/deps-resolver';
 

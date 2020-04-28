@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {JsTranspiler} from '../../src-worker/transpilers/js';
 
 test('JsTranspiler matches js/ts/jsx/tsx files', t => {
@@ -100,12 +100,17 @@ test('JsTranspiler transpiles tsx file', async t => {
   t.deepEqual(file.sourceMap.sourcesContent, [code]);
 });
 
-test('JsTranspiler cannot tranpile other file', async t => {
+test('JsTranspiler cannot transpile other file', async t => {
   const jt = new JsTranspiler();
-  await t.rejects(async () => jt.transpile({
-    filename: 'src/foo.html',
-    content: ''
-  }));
+  try {
+    await jt.transpile({
+      filename: 'src/foo.html',
+      content: ''
+    });
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
 });
 
 test('JsTranspiler transpiles jsx file', async t => {

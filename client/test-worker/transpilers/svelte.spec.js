@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {SvelteTranspiler} from '../../src-worker/transpilers/svelte';
 
 test('SvelteTranspiler matches svelte file', t => {

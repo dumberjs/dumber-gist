@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {DumberCache} from '../src-worker/dumber-cache';
 
 test('DumberCache reads local cache', async t => {
@@ -46,7 +46,12 @@ test('DumberCache reports missing cache', async t => {
   }
 
   const c = new DumberCache(primitives, _postMessage);
-  await t.rejects(() => c.getCache('hash2', {a: 1}));
+  try {
+    await c.getCache('hash2', {a: 1});
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
   t.deepEqual(events, [{type: 'miss-cache', meta: {a: 1}}]);
 });
 

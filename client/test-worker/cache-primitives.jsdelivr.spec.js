@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {decode} from 'base64-arraybuffer';
 import create from './cache-primitives.helper';
 import {JSDELIVR_DATA_PREFIX, JSDELIVR_PREFIX} from '../src-worker/cache-primitives';
@@ -190,8 +190,21 @@ test('getJsdelivrFile gets remote file, rejects missing file', async t => {
     path: `${JSDELIVR_PREFIX}foo@1.0.0/index.js`,
     contents: 'lorem'
   });
-  await t.rejects(() => p.getJsdelivrFile('foo@1.0.0', 'unknown'));
-  await t.rejects(() => p.getJsdelivrFile('bar@1.0.0', 'package.json'));
+
+  try {
+    await p.getJsdelivrFile('foo@1.0.0', 'unknown');
+    t.fail('shoud not pass');
+  } catch (err) {
+    t.pass(err.message);
+  }
+
+  try {
+    await p.getJsdelivrFile('bar@1.0.0', 'package.json');
+    t.fail('shoud not pass');
+  } catch (err) {
+    t.pass(err.message);
+  }
+
   t.deepEqual(db, {});
 });
 
@@ -247,7 +260,14 @@ test('getJsdelivrFile reads local cached raw package.json', async t => {
     path: `${JSDELIVR_PREFIX}foo@1.0.0/package.json`,
     contents: '{"name":"foo"}'
   });
-  await t.rejects(() => p.getJsdelivrFile('bar@1.0.0', 'package.json'));
+
+  try {
+    await p.getJsdelivrFile('bar@1.0.0', 'package.json');
+    t.fail('should not pass');
+  } catch (err) {
+    t.pass(err.message);
+  }
+
   t.deepEqual(db, {
     'raw!npm/foo@1.0.0/package.json': '{"name":"foo"}'
   });
@@ -271,7 +291,12 @@ test('getNpmPackageFile rejects file path not listed in files', async t => {
   };
 
   const p = create(db, remote);
-  await t.rejects(() => p.getNpmPackageFile('foo@1.0.0', 'dist/unknown.js'));
+  try {
+    await p.getNpmPackageFile('foo@1.0.0', 'dist/unknown.js');
+    t.fail('should not pass');
+  } catch (err) {
+    t.pass(err.message);
+  }
 });
 
 test('getNpmPackageFile gets file from local cache', async t => {

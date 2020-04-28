@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {TextTranspiler} from '../../src-worker/transpilers/text';
 
 test('TextTranspiler matches html/css/svg/xml/json files', t => {
@@ -36,8 +36,13 @@ test('TextTranspiler passes through supported file', async t => {
 
 test('TextTranspiler cannot tranpile other file', async t => {
   const jt = new TextTranspiler();
-  await t.rejects(async () => jt.transpile({
-    filename: 'src/foo.js',
-    content: ''
-  }));
+  try {
+    await jt.transpile({
+      filename: 'src/foo.js',
+      content: ''
+    });
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
 });

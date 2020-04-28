@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import _ from 'lodash';
 import {
   HISTORY_HACK_JS,
@@ -186,22 +186,31 @@ requirejs.config({
 test('DumberSession cannot update before init', async t => {
   const session = new DumberSession(Dumber, auFindDeps, depsResolver, transpiler, dumberCache, jsdelivr);
 
-  await t.rejects(async () => {
-    await session.update([
-      { filename: 'index.html', content: 'index-html' },
-      { filename: 'src/main.js', content: 'main' },
-      { filename: 'src/app.js', content: 'app' },
-      { filename: 'src/app.html', content: 'app-html' }
-    ]);
-  }, {instanceOf: DumberUninitializedError});
+  return session.update([
+    { filename: 'index.html', content: 'index-html' },
+    { filename: 'src/main.js', content: 'main' },
+    { filename: 'src/app.js', content: 'app' },
+    { filename: 'src/app.html', content: 'app-html' }
+  ]).then(
+    () => t.fail('should not pass'),
+    err => t.ok(err instanceof DumberUninitializedError)
+  );
 });
 
 test('DumberSession cannot build before init', async t => {
   const session = new DumberSession(Dumber, auFindDeps, depsResolver, transpiler, dumberCache, jsdelivr);
 
-  await t.rejects(async () => {
+  try {
     await session.build();
-  }, {instanceOf: DumberUninitializedError});
+    t.fail('should not pass');
+  } catch (err) {
+    t.ok(err instanceof DumberUninitializedError);
+  }
+
+  return session.build().then(
+    () => t.fail('should not pass'),
+    err => t.ok(err instanceof DumberUninitializedError)
+  );
 });
 
 test('DumberSession bundles', async t => {

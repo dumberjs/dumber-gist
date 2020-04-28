@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {Au1DepsFinder} from '../src-worker/au1-deps-finder';
 import {JSDELIVR_PREFIX} from '../src-worker/cache-primitives';
 

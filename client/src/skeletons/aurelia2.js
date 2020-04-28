@@ -87,7 +87,7 @@ describe('Component App', () => {
 `
 
 const tapeTest = `import { render } from './helper';
-import test from 'tape-promise/tape';
+import test from 'tape';
 import { MyApp } from '../src/my-app';
 
 test('should render message', async t => {

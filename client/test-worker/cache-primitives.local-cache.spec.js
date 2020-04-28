@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import create from './cache-primitives.helper';
 import {JSDELIVR_PREFIX} from '../src-worker/cache-primitives';
 
@@ -7,8 +7,21 @@ test('getLocalCacheWithPath rejects missing cache, gets valid cache', async t =>
     'hash': {foo: 1},
     'a-path': 'hash'
   });
-  await t.rejects(() => p.getLocalCacheWithPath('unknown'));
-  await t.rejects(() => p.getLocalCacheWithPath('hash'));
+
+  try {
+    await p.getLocalCacheWithPath('unknown');
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
+
+  try {
+    await p.getLocalCacheWithPath('hash');
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
+
   t.deepEqual(
     await p.getLocalCacheWithPath('a-path'),
     {foo: 1}
@@ -41,7 +54,12 @@ test('getLocalCache rejects missing cache, gets valid cache', async t => {
     'hash': {foo: 1},
     'a-path': 'hash'
   });
-  await t.rejects(() => p.getLocalCache('unknown'));
+  try {
+    await p.getLocalCache('unknown');
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
   t.deepEqual(
     await p.getLocalCache('hash'),
     {foo: 1}
@@ -103,7 +121,12 @@ test('getLocalRawFileCache rejects missing cache, gets valid cache', async t => 
   const p = create({
     'raw!a-path': 'lorem'
   });
-  await t.rejects(() => p.getLocalRawFileCache('unknown'));
+  try {
+    await p.getLocalRawFileCache('unknown');
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
   t.deepEqual(
     await p.getLocalRawFileCache('a-path'),
     'lorem'

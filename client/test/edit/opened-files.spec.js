@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {OpenedFiles} from '../../src/edit/opened-files';
 
 const bindingEngine = {

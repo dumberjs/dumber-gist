@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {HistoryTracker} from '../src/history-tracker';
 import {EventAggregator} from 'aurelia-event-aggregator';
 

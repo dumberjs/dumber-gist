@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'tape';
 import {SassTranspiler} from '../../src-worker/transpilers/sass';
 
 test('SassTranspiler matches sass/scss files', t => {
@@ -53,15 +53,25 @@ test('SassTranspiler reject broken scss file', async t => {
     filename: 'src/foo.scss',
     content: code
   };
-  await t.rejects(async () => jt.transpile(f, [f]))
+  try {
+    await jt.transpile(f, [f]);
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
 });
 
 test('SassTranspiler cannot tranpile other file', async t => {
   const jt = new SassTranspiler();
-  await t.rejects(async () => jt.transpile({
-    filename: 'src/foo.js',
-    content: ''
-  }));
+  try {
+    await jt.transpile({
+      filename: 'src/foo.js',
+      content: ''
+    });
+    t.fail('should not pass');
+  } catch (e) {
+    t.pass(e.message);
+  }
 });
 
 test('SassTranspiler ignore scss partial', async t => {
