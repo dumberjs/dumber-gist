@@ -11,8 +11,8 @@ export class WaitingDialog {
   constructor(controller) {
     this.controller = controller;
     // No auto dismiss
-    controller.settings.escDismiss = false;
-    controller.settings.overlayDismiss = false;
+    controller.escDismiss = false;
+    controller.overlayDismiss = false;
   }
 
   activate(model) {
