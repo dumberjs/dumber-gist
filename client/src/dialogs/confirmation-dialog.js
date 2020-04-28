@@ -6,6 +6,7 @@ import {combo} from 'aurelia-combo';
 export class ConfirmationDialog {
   constructor(controller) {
     this.controller = controller;
+    this.controller.overlayDismiss = false;
   }
 
   activate(model) {
