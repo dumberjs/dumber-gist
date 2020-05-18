@@ -1,3 +1,12 @@
+## [0.9.2](https://github.com/dumberjs/dumber-gist/compare/v0.9.1...v0.9.2) (2020-05-18)
+
+
+### Bug Fixes
+
+* forward code error to app console ([11e0208](https://github.com/dumberjs/dumber-gist/commit/11e0208db4150ca6b42e4d2dc0df532c2ebb248f))
+
+
+
 ## [0.9.1](https://github.com/dumberjs/dumber-gist/compare/v0.9.0...v0.9.1) (2020-04-28)
 
 
