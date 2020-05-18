@@ -90,6 +90,17 @@ export const CONSOLE_HACK_JS = `(function() {
   for (i = 0; i < methods.length; i++) {
     patch(methods[i]);
   }
+
+  window.addEventListener('error', function(event) {
+    parent.postMessage({
+      type: 'app-console',
+      method: 'error',
+      args: [
+        event.message + '\\nat line: ' + event.lineno +
+        ' column: ' + event.colno + ' of file: ' + event.filename
+      ]
+    }, '*');
+  });
 })();
 `;
 
