@@ -1,3 +1,12 @@
+# [0.10.0](https://github.com/dumberjs/dumber-gist/compare/v0.9.2...v0.10.0) (2020-05-19)
+
+
+### Features
+
+* turn on source map support ([369d686](https://github.com/dumberjs/dumber-gist/commit/369d6865c233e79cbd5b8932d41782865c0baeb2))
+
+
+
 ## [0.9.2](https://github.com/dumberjs/dumber-gist/compare/v0.9.1...v0.9.2) (2020-05-18)
 
 
