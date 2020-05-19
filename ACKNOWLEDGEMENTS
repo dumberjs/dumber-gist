@@ -1,8 +1,8 @@
-This project reused some code from [gist-run](https://github.com/gist-run) and [StackBlitz](https://github.com/stackblitz/core).
+This project reused some code from [gist-run](https://github.com/gist-run) and [StackBlitz](https://github.com/stackblitz/core), and unpublished [concat-with-sourcemaps v2](https://github.com/floridoo/concat-with-sourcemaps/blob/releases/v2/index.js).
 
 Below are the required notices from them.
 
-=====
+# gist-run
 
 The MIT License (MIT)
 
@@ -26,7 +26,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-=====
+# StackBlitz
 
 Note: stackblitz has no license file in GitHub repo, but [the author said GPL v3](https://github.com/stackblitz/core/issues/418#issuecomment-414437441)
 
@@ -704,3 +704,22 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
+
+
+# concat-with-sourcemaps
+
+## ISC License
+
+Copyright (c) 2014, Florian Reiterer <me@florianreiterer.com>
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.

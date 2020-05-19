@@ -190,6 +190,7 @@ exports.build = build;
 function watch() {
   gulp.watch('src/**/*', buildApp);
   gulp.watch('src-worker/**/*', buildWorker);
+  gulp.watch('../client-service-worker/___dumber-gist-worker.js', writeServiceWorker);
 }
 
 exports.watch = gulp.series(

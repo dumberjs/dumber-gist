@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import {Factory, inject} from 'aurelia-dependency-injection';
 import Dumber from 'dumber';
+import Concat from './concat-with-sourcemaps';
 import {Jsdelivr} from './jsdelivr';
 import {Au1DepsFinder} from './au1-deps-finder';
 import {DepsResolver} from './deps-resolver';
@@ -291,11 +292,28 @@ export class DumberSession {
     const bundles = await this.instance.bundle();
     // only use single bundle
     const bundle = bundles['entry-bundle'];
-    const all = [];
 
-    bundle.files.forEach(f => all.push(f.contents));
-    all.push('requirejs.config(' + JSON.stringify(bundle.config, null , 2) + ');');
+    const concat = new Concat(true, '/dist/entry-bundle.js', '\n');
+    for (let i = 0; i < bundle.files.length; i++) {
+      await concatFile(concat, bundle.files[i]);
+    }
+    await concat.add(null, 'requirejs.config(' + JSON.stringify(bundle.config, null , 2) + ');');
 
-    return all.join('\n');
+    let content = concat.content.toString();
+    if (concat.sourceMap) {
+      // Have to use inline source map, because browser bypasses
+      // service worker cache when requesting source map file.
+      content += `\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,${Buffer.from(concat.sourceMap).toString('base64')}\n`;
+    }
+    return content;
+  }
+}
+
+async function concatFile(concat, file) {
+  if (file && file.path) {
+    const sourceMap = file.sourceMap && file.sourceMap.sources.length ? file.sourceMap : undefined;
+    await concat.add(file.path, file.contents, sourceMap);
+  } else {
+    await concat.add(null, file.contents);
   }
 }
