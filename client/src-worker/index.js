@@ -1,4 +1,7 @@
-import 'core-js/features/reflect';
+// Use reflect.metadata polyfill from Aurelia 2
+// To make both Aurelia 1 and 2 happy.
+import '@aurelia/kernel';
+
 import {DumberSession} from './dumber-session';
 import {Container} from 'aurelia-dependency-injection';
 
