@@ -1,3 +1,12 @@
+## [0.10.1](https://github.com/dumberjs/dumber-gist/compare/v0.10.0...v0.10.1) (2020-05-24)
+
+
+### Bug Fixes
+
+* fix reflect.metadata polyfill problem on latest Aurelia 2 ([83319ec](https://github.com/dumberjs/dumber-gist/commit/83319ec8e512d1c7b938592829233c40cca75c30))
+
+
+
 # [0.10.0](https://github.com/dumberjs/dumber-gist/compare/v0.9.2...v0.10.0) (2020-05-19)
 
 
