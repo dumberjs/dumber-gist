@@ -113,7 +113,15 @@ const drWorker = dumber({
   codeSplit: isTest ? undefined : (moduleId, packageName) => {
     if (!packageName) return 'bundler-code';
     if (packageName === 'typescript') return 'bundler-ts';
-    if (packageName.startsWith('@aurelia/')) return 'bundler-au2';
+    if (
+      packageName.startsWith('@aurelia/') &&
+      packageName !== '@aurelia/kernel' &&
+      packageName !== '@aurelia/metadata'
+    ) {
+      // @aurelia/kernel and @aurelia/metadata are pushed to bundler-other-deps
+      // because of the reflect.metadata polyfill loaded in src-worker/index.js.
+      return 'bundler-au2';
+    }
     if (packageName === 'less') return 'bundler-less';
     if (packageName === 'sass.js') return 'bundler-sass';
     if (packageName === 'svelte') return 'bundler-svelte';
