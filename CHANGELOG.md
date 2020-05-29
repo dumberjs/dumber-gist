@@ -1,3 +1,12 @@
+## [0.10.3](https://github.com/dumberjs/dumber-gist/compare/v0.10.2...v0.10.3) (2020-05-29)
+
+
+### Bug Fixes
+
+* fix gist info width ([97cc2d2](https://github.com/dumberjs/dumber-gist/commit/97cc2d283dd651cdc5cd32ff20b93adbb6642eb8))
+
+
+
 ## [0.10.2](https://github.com/dumberjs/dumber-gist/compare/v0.10.1...v0.10.2) (2020-05-27)
 
 
