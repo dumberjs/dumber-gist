@@ -1,3 +1,12 @@
+## [0.10.4](https://github.com/dumberjs/dumber-gist/compare/v0.10.3...v0.10.4) (2020-05-29)
+
+
+### Bug Fixes
+
+* migrate to dialog-lite api ([6b5f4d6](https://github.com/dumberjs/dumber-gist/commit/6b5f4d64cad380b720bb96fd69e4024bd0bf838e))
+
+
+
 ## [0.10.3](https://github.com/dumberjs/dumber-gist/compare/v0.10.2...v0.10.3) (2020-05-29)
 
 
