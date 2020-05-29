@@ -56,9 +56,8 @@ export class OpenGistDialog {
     // Try list gists of githubUser
     const githubUser = this.githubUser.trim();
     if (githubUser) {
-      return this.controller.cancel().then(() => {
-        this.ea.publish('list-gists', githubUser);
-      });
+      this.controller.cancel();
+      this.ea.publish('list-gists', githubUser);
     }
   }
 

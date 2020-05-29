@@ -34,8 +34,8 @@ export class ShortCutsDialog {
     this.ea = ea;
   }
 
-  async evoke(action) {
-    await this.controller.cancel();
+  evoke(action) {
+    this.controller.cancel();
     this.ea.publish(action);
   }
 }
