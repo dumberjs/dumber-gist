@@ -1,5 +1,7 @@
 # Dumber Gist
 
+![CI](https://github.com/dumberjs/dumber-gist/workflows/CI/badge.svg)
+
 A lightweight online IDE to write JS SPA prototypes in your own GitHub gists.
 
 https://gist.dumber.app
