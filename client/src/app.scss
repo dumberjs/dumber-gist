@@ -1226,6 +1226,7 @@ input[type='text'] {
   > .description {
     flex: 1 0 0;
     padding: .5rem 1rem;
+    overflow: hidden;
 
     .owner {
       font-size: 1.2rem;
