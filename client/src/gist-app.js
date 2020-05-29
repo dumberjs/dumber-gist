@@ -10,10 +10,10 @@ import {combo} from 'aurelia-combo';
 import _ from 'lodash';
 
 const MIN_SIDE_BAR_WIDTH = 120;
-const MIN_PANEL_WIDTH = 230;
+const MIN_PANEL_WIDTH = 225;
 const MIN_DEV_TOOLS_HEIGHT = 50;
-const MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS = 460;
-const insideIframe = (function() {
+const MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS = 450;
+const insideIframe = true;/* (function() {
   try {
     return window.self !== window.top;
   } catch (e) {
@@ -22,7 +22,7 @@ const insideIframe = (function() {
     // we don't run on IE at all.
     return true;
   }
-})();
+})();*/
 
 // Handle layout calculation and global bundling state
 @inject(EventAggregator, DialogService, BindingEngine, DndService, EditSession, OpenedFiles, User, RemoveExpiredSession)
@@ -56,8 +56,8 @@ export class GistApp {
     this.openedFiles = openedFiles;
     this.user = user;
 
-    this.onResize = _.debounce(this.onResize.bind(this), 100);
     this.onResize();
+    this.onResize = _.debounce(this.onResize.bind(this), 100);
     this._onResize = this._onResize.bind(this);
 
     this.debouncedBundle = _.debounce(this.bundle, 500);
@@ -120,14 +120,14 @@ export class GistApp {
       this.ea.subscribe('opened-file', () => {
         this.showSideBarInSmallLayout = false;
         this.showEditorsInSmallLayout = true;
-        if (this.windowWidth <= MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS) {
+        if (this.windowWidth < MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS) {
           this.showBrowserWindowInSmallLayout = false;
         }
       }),
       this.ea.subscribe('generated-from-skeleton', () => {
         this.showSideBarInSmallLayout = false;
         this.showBrowserWindowInSmallLayout = true;
-        if (this.windowWidth <= MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS) {
+        if (this.windowWidth < MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS) {
           this.showEditorsInSmallLayout = false;
         }
       }),
@@ -211,7 +211,7 @@ export class GistApp {
       this.editorsWidth = Math.round(.5 * width);
     }
 
-    if (width <= MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS && this.showEditorsInSmallLayout) {
+    if (width < MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS && this.showEditorsInSmallLayout) {
       this.showBrowserWindowInSmallLayout = false;
     }
 
@@ -295,7 +295,7 @@ export class GistApp {
     this.showEditorsInSmallLayout = !this.showEditorsInSmallLayout;
     if (!this.showEditorsInSmallLayout) {
       this.showBrowserWindowInSmallLayout = true;
-    } else if (this.windowWidth <= MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS) {
+    } else if (this.windowWidth < MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS) {
       this.showBrowserWindowInSmallLayout = false;
     }
   }
@@ -304,7 +304,7 @@ export class GistApp {
     this.showBrowserWindowInSmallLayout = !this.showBrowserWindowInSmallLayout;
     if (!this.showBrowserWindowInSmallLayout) {
       this.showEditorsInSmallLayout = true;
-    } else if (this.windowWidth <= MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS) {
+    } else if (this.windowWidth < MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS) {
       this.showEditorsInSmallLayout = false;
     }
   }
