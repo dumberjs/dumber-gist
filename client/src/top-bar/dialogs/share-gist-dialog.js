@@ -71,6 +71,6 @@ export class ShareGistDialog {
     }
 
     this.url = url;
-    this.iframed = `<iframe style="width: 100%; height: 400px; border: 0;" loading="lazy" src="${this.url}"></iframe>`;
+    this.iframed = `<iframe style="width: 100%; height: 400px; border: 2px solid #343a40; border-radius: 3px;" loading="lazy" src="${this.url}"></iframe>`;
   }
 }

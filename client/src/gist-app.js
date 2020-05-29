@@ -10,9 +10,9 @@ import {combo} from 'aurelia-combo';
 import _ from 'lodash';
 
 const MIN_SIDE_BAR_WIDTH = 120;
-const MIN_PANEL_WIDTH = 250;
+const MIN_PANEL_WIDTH = 230;
 const MIN_DEV_TOOLS_HEIGHT = 50;
-const MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS = 600;
+const MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS = 460;
 const insideIframe = (function() {
   try {
     return window.self !== window.top;
