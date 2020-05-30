@@ -13,7 +13,7 @@ const MIN_SIDE_BAR_WIDTH = 120;
 const MIN_PANEL_WIDTH = 225;
 const MIN_DEV_TOOLS_HEIGHT = 50;
 const MIN_WINDOW_WIDTH_TO_SHOW_2_PANELS = 450;
-const insideIframe = true;/* (function() {
+const insideIframe = (function() {
   try {
     return window.self !== window.top;
   } catch (e) {
@@ -22,7 +22,7 @@ const insideIframe = true;/* (function() {
     // we don't run on IE at all.
     return true;
   }
-})();*/
+})();
 
 // Handle layout calculation and global bundling state
 @inject(EventAggregator, DialogService, BindingEngine, DndService, EditSession, OpenedFiles, User, RemoveExpiredSession)
