@@ -1,3 +1,12 @@
+## [0.10.6](https://github.com/dumberjs/dumber-gist/compare/v0.10.5...v0.10.6) (2020-05-30)
+
+
+### Bug Fixes
+
+* remove debug code ([ae4d017](https://github.com/dumberjs/dumber-gist/commit/ae4d017248dacef74a4ab0ce7fb466bf47427251))
+
+
+
 ## [0.10.5](https://github.com/dumberjs/dumber-gist/compare/v0.10.4...v0.10.5) (2020-05-29)
 
 
