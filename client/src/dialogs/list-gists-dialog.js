@@ -20,6 +20,8 @@ export class ListGistsDialog {
 
   activate(model) {
     this.login = model.login;
+    this.isOwner = model.isOwner;
+    this.deleteGist = model.deleteGist;
     this.gists = _.sortBy(model.gists, 'updated_at').reverse();
     this._updateFilteredGists();
   }
@@ -124,6 +126,16 @@ export class ListGistsDialog {
       if (selected) {
         this.controller.ok(selected.id);
       }
+    }
+  }
+
+  async delete(gist, e) {
+    e.stopPropagation();
+    if (!this.isOwner) return;
+    if (await this.deleteGist(gist)) {
+      const idx = this.gists.indexOf(gist);
+      if (idx !== -1) this.gists.splice(idx, 1);
+      this._updateFilteredGists()
     }
   }
 }

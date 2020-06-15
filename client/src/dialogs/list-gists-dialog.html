@@ -15,17 +15,20 @@
       </div>
       <div
         repeat.for="gist of filteredGists"
-        class="available-item ${selectedIdx === $index ? 'selected' : ''}"
+        class="available-item left-right ${selectedIdx === $index ? 'selected' : ''}"
         click.trigger="open($index) & leftClick"
       >
-        <div>
-          <strong class="text-cyan">${gist.description || '(no description)'}</strong><small if.bind="!gist.public" class="text-warning">&nbsp;<i class="fas fa-user-lock"></i> Private</small>
+        <div class="left">
+          <div>
+            <strong class="text-cyan">${gist.description || '(no description)'}</strong><small if.bind="!gist.public" class="text-warning">&nbsp;<i class="fas fa-user-lock"></i> Private</small>
+          </div>
+          <div style="display: flex; flex-wrap: wrap;">
+            <small class="text-muted mr-2">${gist.id}</small>
+            <small class="${isOwner ? 'mr-2' : 'mr-auto'}">${gist.filesCount} file<span if.bind="gist.filesCount > 1">s</span></small>
+            <small class="text-muted" style="min-width: 10rem;">${gist.updated_at | showLocalDate}</small>
+          </div>
         </div>
-        <div style="display: flex; flex-wrap: wrap;">
-          <small class="text-muted mr-2">${gist.id}</small>
-          <small class="mr-auto">${gist.filesCount} file<span if.bind="gist.filesCount > 1">s</span></small>
-          <small class="text-muted" style="min-width: 10rem;">${gist.updated_at | showLocalDate}</small>
-        </div>
+        <button class="right btn error" if.bind="isOwner" click.trigger="delete(gist, $event) & leftClick">Delete</button>
       </div>
     </div>
     <div class="dialog-footer pt-0 pb-0">

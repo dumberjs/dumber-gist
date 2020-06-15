@@ -39,6 +39,7 @@ export class ActionDispatcher {
     this.listGists = this.listGists.bind(this);
     this.resetCache = this.resetCache.bind(this);
     this.closeActiveFile = this.closeActiveFile.bind(this);
+    this.deleteGist = this.deleteGist.bind(this);
   }
 
   attached() {
@@ -266,6 +267,25 @@ export class ActionDispatcher {
     }
   }
 
+  async deleteGist(gist) {
+    if (!this.user || this.user.login !== gist.owner.login) return;
+
+    try {
+      await this.helper.confirm(`Delete gist "${gist.description}" ?`)
+    } catch (e) {
+      return;
+    }
+
+    try {
+      await this.gists.delete(gist.id)
+    } catch (e) {
+      this.ea.publish('error', 'Failed to delete gist: ' + e.message);
+      return;
+    }
+
+    return true;
+  }
+
   listGists(login) {
     if (!login) return;
 
@@ -278,7 +298,12 @@ export class ActionDispatcher {
     .then(gists => {
       return this.dialogService.open({
         viewModel: ListGistsDialog,
-        model: {login, gists}
+        model: {
+          login,
+          gists,
+          isOwner: this.user && this.user.login === login,
+          deleteGist: this.deleteGist
+        }
       }).then(
         id => {
           return this.helper.waitFor(

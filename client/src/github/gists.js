@@ -154,4 +154,11 @@ export class Gists {
     const forked = await response.json();
     return await this.load(forked.id);
   }
+
+  async delete(id) {
+    const response = await this.api.fetch(`gists/${id}`, { method: 'DELETE' });
+    if (!response.ok) {
+      throw new Error('unable to delete gist');
+    }
+  }
 }
