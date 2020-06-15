@@ -1,3 +1,12 @@
+# [0.11.0](https://github.com/dumberjs/dumber-gist/compare/v0.10.7...v0.11.0) (2020-06-15)
+
+
+### Features
+
+* delete gist ([2ac3255](https://github.com/dumberjs/dumber-gist/commit/2ac32556bab6fd30e7457c76755c1e981154a8d2))
+
+
+
 ## [0.10.7](https://github.com/dumberjs/dumber-gist/compare/v0.10.6...v0.10.7) (2020-05-31)
 
 
