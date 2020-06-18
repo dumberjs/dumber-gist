@@ -11,7 +11,7 @@ import "codemirror/addon/search/matchesonscrollbar";
 import "codemirror/addon/search/match-highlighter";
 import "codemirror/addon/lint/lint";
 // import "codemirror/addon/lint/javascript-lint";
-import "codemirror/addon/lint/html-lint";
+// import "codemirror/addon/lint/html-lint";
 // import "codemirror/addon/lint/css-lint";
 import "codemirror/addon/lint/json-lint";
 import "codemirror/mode/markdown/markdown";
@@ -19,6 +19,37 @@ import "codemirror/mode/htmlmixed/htmlmixed";
 import "codemirror/mode/vue/vue";
 import "codemirror/mode/jsx/jsx";
 import "codemirror/keymap/vim";
+import {HTMLHint} from 'htmlhint';
+
+// Patched codemirror htmlhint integration to support latest htmlhint version.
+CodeMirror.registerHelper("lint", "html", function(text) {
+  var found = [];
+
+  var messages = HTMLHint.verify(text, {
+    "tagname-lowercase": true,
+    "attr-lowercase": true,
+    "attr-value-double-quotes": true,
+    "attr-no-duplication": true,
+    "doctype-first": false,
+    "tag-pair": true,
+    "spec-char-escape": true,
+    "id-unique": true,
+    "src-not-empty": true,
+    "attr-no-duplication": true,
+    "title-require": true
+  });
+  for (var i = 0; i < messages.length; i++) {
+    var message = messages[i];
+    var startLine = message.line - 1, endLine = message.line - 1, startCol = message.col - 1, endCol = message.col;
+    found.push({
+      from: CodeMirror.Pos(startLine, startCol),
+      to: CodeMirror.Pos(endLine, endCol),
+      message: message.message,
+      severity : message.type
+    });
+  }
+  return found;
+});
 
 const MODES = {
   '.js': 'jsx',
