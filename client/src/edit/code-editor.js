@@ -35,7 +35,6 @@ CodeMirror.registerHelper("lint", "html", function(text) {
     "spec-char-escape": true,
     "id-unique": true,
     "src-not-empty": true,
-    "attr-no-duplication": true,
     "title-require": true
   });
   for (var i = 0; i < messages.length; i++) {
