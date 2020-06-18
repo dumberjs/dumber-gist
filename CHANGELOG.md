@@ -1,3 +1,12 @@
+## [0.11.1](https://github.com/dumberjs/dumber-gist/compare/v0.11.0...v0.11.1) (2020-06-18)
+
+
+### Bug Fixes
+
+* patch codemirror htmlhint integration ([d184fe7](https://github.com/dumberjs/dumber-gist/commit/d184fe7b72b474e0f83c0275f75771b09114287d))
+
+
+
 # [0.11.0](https://github.com/dumberjs/dumber-gist/compare/v0.10.7...v0.11.0) (2020-06-15)
 
 
