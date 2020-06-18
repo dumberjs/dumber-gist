@@ -60,7 +60,7 @@
     "localforage": "^1.7.4",
     "lodash": "^4.17.15",
     "merge2": "^1.4.1",
-    "moment": "^2.26.0",
+    "moment": "^2.27.0",
     "nyc": "^15.1.0",
     "postcss-url": "^8.0.0",
     "sass-lint": "^1.13.1",
