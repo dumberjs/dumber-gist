@@ -1,5 +1,18 @@
 import test from 'tape';
+import {Container} from 'aurelia-dependency-injection';
 import {Transpiler} from '../src-worker/transpiler';
+import {CachePrimitives} from '../src-worker/cache-primitives';
+
+const container = new Container();
+container.registerInstance(CachePrimitives, {
+  async getJsdelivrFile() {
+    throw new Error('should not get here');
+  },
+  async doesJsdelivrFileExist() {
+    return false;
+  }
+});
+const jt = container.get(Transpiler);
 
 const p = {
   filename: 'package.json',
@@ -7,7 +20,6 @@ const p = {
 };
 
 test('Transpiler transpiles au1 ts file', async t => {
-  const jt = new Transpiler();
   const code = `import {autoinject, bindable} from 'aurelia-framework';
 @autoinject
 export class Foo {
@@ -31,7 +43,6 @@ export class Foo {
 });
 
 test('Transpiler transpiles jsx file in inferno way with fragment', async t => {
-  const jt = new Transpiler();
   const code = `const descriptions = items.map(item => (
   <>
     <dt>{item.name}</dt>
@@ -54,7 +65,6 @@ test('Transpiler transpiles jsx file in inferno way with fragment', async t => {
 });
 
 test('Transpiler transpile scss file', async t => {
-  const jt = new Transpiler();
   const code = '.a { .b { color: red; } }';
   const f = {
     filename: 'src/foo.scss',
@@ -71,7 +81,6 @@ test('Transpiler transpile scss file', async t => {
 });
 
 test('Transpiler transpiles supported text file', async t => {
-  const jt = new Transpiler();
   const code = 'lorem';
   const file = await jt.transpile({
     filename: 'src/foo/bar.html',
@@ -85,7 +94,6 @@ test('Transpiler transpiles supported text file', async t => {
 });
 
 test('Transpiler cannot transpile binary file', async t => {
-  const jt = new Transpiler();
   t.equal(await jt.transpile({
     filename: 'src/foo.jpg',
     content: ''
@@ -93,7 +101,6 @@ test('Transpiler cannot transpile binary file', async t => {
 });
 
 test('Transpiler transpiles au2 file', async t => {
-  const jt = new Transpiler();
   const code = `export class Foo {
   public name: string;
 }
@@ -118,7 +125,6 @@ test('Transpiler transpiles au2 file', async t => {
 });
 
 test('eTranspiler transpiles svelte file with scss', async t => {
-  const jt = new Transpiler();
   const code = `<script>
   export let name;
 </script>
