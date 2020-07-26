@@ -30,6 +30,7 @@ const DEFAULT_JASMINE_INDEX_HTML = `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
+<title>Unit Tests</title>
 <link rel="stylesheet" href="//${JSDELIVR_CDN_DOMAIN}/npm/jasmine-core@3/lib/jasmine-core/jasmine.min.css">
 </head>
 <body>
@@ -57,6 +58,7 @@ const DEFAULT_MOCHA_INDEX_HTML = `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
+<title>Unit Tests</title>
 <link rel="stylesheet" href="//${JSDELIVR_CDN_DOMAIN}/npm/mocha@7/mocha.css">
 </head>
 <body>
@@ -89,6 +91,7 @@ const DEFAULT_TAPE_INDEX_HTML = `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
+<title>Unit Tests</title>
 </head>
 <body>
 <p>See console for TAP output.</p>
