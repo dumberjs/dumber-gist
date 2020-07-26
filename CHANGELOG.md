@@ -1,3 +1,12 @@
+# [0.12.0](https://github.com/dumberjs/dumber-gist/compare/v0.11.1...v0.12.0) (2020-07-26)
+
+
+### Features
+
+* **sass:** support remote scss file ([4f45742](https://github.com/dumberjs/dumber-gist/commit/4f45742ad1f3bc6fdf8b9bc779063875849f4f56)), closes [#39](https://github.com/dumberjs/dumber-gist/issues/39)
+
+
+
 ## [0.11.1](https://github.com/dumberjs/dumber-gist/compare/v0.11.0...v0.11.1) (2020-06-18)
 
 
