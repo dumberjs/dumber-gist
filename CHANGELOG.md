@@ -1,3 +1,12 @@
+## [0.12.1](https://github.com/dumberjs/dumber-gist/compare/v0.12.0...v0.12.1) (2020-10-14)
+
+
+### Bug Fixes
+
+* **aurelia2:** Aurelia 2 changed the api ([6b1a199](https://github.com/dumberjs/dumber-gist/commit/6b1a19987482e24ac24fa961357349f100b374d1))
+
+
+
 # [0.12.0](https://github.com/dumberjs/dumber-gist/compare/v0.11.1...v0.12.0) (2020-07-26)
 
 
