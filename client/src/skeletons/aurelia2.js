@@ -58,7 +58,7 @@ export async function render(template${ext === '.ts' ? ': string' : ''}, ...deps
     host: div,
     component: wrapper
   });
-  await au.start().wait();
+  await au.start();
   return div;
 }
 `;
