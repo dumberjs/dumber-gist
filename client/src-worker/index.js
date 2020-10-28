@@ -19,7 +19,7 @@ import {Container} from 'aurelia-dependency-injection';
           method: method,
           args: args.map((a, i) => {
             // Remove the leading '[dumber] '
-            if (i === 0) return a.substring(9);
+            if (i === 0) return a.slice(9);
             return a && a.toString ? a.toString() : a;
           })
         });

@@ -74,8 +74,8 @@ export class DepsResolver {
     Object.keys(result.resDependencies).sort().forEach(fullName => {
       const idx = fullName.lastIndexOf('@');
       if (idx === -1) return;
-      const name = fullName.substr(0, idx);
-      const version = fullName.substr(idx + 1);
+      const name = fullName.slice(0, idx);
+      const version = fullName.slice(idx + 1);
       if (packages[name]) {
         if (typeof packages[name] === 'string') {
           packages[name] = [packages[name]];
