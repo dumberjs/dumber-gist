@@ -101,7 +101,7 @@ export default function({transpiler, testFramework}) {
   const files = [
     {
       filename: 'package.json',
-      dependencies: {'aurelia': 'dev'}
+      dependencies: {'aurelia': 'latest'}
     },
     {
       filename: 'index.html',
