@@ -233,7 +233,7 @@ export class CodeEditor {
     }
 
     if (!this.cm) return;
-    this.cm.off(this.onChange);
+    this.cm.off('change', this.onChange);
     delete this.cm;
 
     // aurelia keeps view in cache (returnToCache).
