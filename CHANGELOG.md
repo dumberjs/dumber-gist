@@ -1,3 +1,12 @@
+# [0.16.0](https://github.com/dumberjs/dumber-gist/compare/v0.14.0...v0.16.0) (2021-07-18)
+
+
+### Bug Fixes
+
+* fix wrong call of codemirror editor.off ([9962851](https://github.com/dumberjs/dumber-gist/commit/9962851c0d4f95cabb52aa9c6bd8f0950251c0b7))
+
+
+
 # [0.15.0](https://github.com/dumberjs/dumber-gist/compare/v0.14.0...v0.15.0) (2021-07-18)
 
 
