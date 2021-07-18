@@ -81,7 +81,7 @@ export default function({transpiler, testFramework}) {
   const files = [
     {
       filename: 'package.json',
-      dependencies: {'inferno': '^7.0.0'}
+      dependencies: {'inferno': 'latest'}
     },
     {
       filename: 'index.html',

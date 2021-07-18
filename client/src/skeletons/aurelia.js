@@ -162,7 +162,7 @@ export default function({transpiler, testFramework}) {
   const files = [
     {
       filename: 'package.json',
-      dependencies: {'aurelia-bootstrapper': '^2.3.3'}
+      dependencies: {'aurelia-bootstrapper': 'latest'}
     },
     {
       filename: 'index.html',
