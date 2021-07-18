@@ -129,9 +129,7 @@ export class BrowserFrame {
 
     if (
       bundlerError &&
-      bundlerError.includes('was not found with requested version') &&
-      // Aurelia 2 daily build might be out of sync
-      bundlerError.includes('@aurelia/')
+      bundlerError.includes('was not found with requested version')
     ) {
       return 'Please try again after few minutes. Need to wait registry.npmjs.cf (a npm mirror site) to sync npm repositories.\n' + bundlerError;
     }
