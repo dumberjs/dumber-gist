@@ -101,12 +101,6 @@ Before using the app, first you need to build `client` code. Run
     npm i # or yarn or pnpm i
     npm run build
 
-Then you need to build `client-service-worker` code. Run
-
-    cd client-service-worker/
-    npm i # or yarn or pnpm i
-    npm run build
-
 Optionally, replace `npm run build` with `npm start` to build them in watch mode.
 
 Use Safari, Chrome or Firefox to navigate to `https://gist.dumber.local`.
