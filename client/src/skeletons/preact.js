@@ -86,7 +86,7 @@ export default function({transpiler, testFramework}) {
   const files = [
     {
       filename: 'package.json',
-      dependencies: {'preact': '^10.0.0'}
+      dependencies: {'preact': 'latest'}
     },
     {
       filename: 'index.html',

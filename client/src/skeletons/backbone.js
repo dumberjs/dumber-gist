@@ -78,7 +78,7 @@ export default function({transpiler, testFramework}) {
   const files = [
     {
       filename: 'package.json',
-      dependencies: {'backbone': '^1.0.0'}
+      dependencies: {'backbone': 'latest'}
     },
     {
       filename: 'index.html',

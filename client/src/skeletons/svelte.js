@@ -104,7 +104,7 @@ export default function({transpiler, testFramework}) {
   const files = [
     {
       filename: 'package.json',
-      dependencies: {'svelte': '^3.0.0'}
+      dependencies: {'svelte': 'latest'}
     },
     {
       filename: 'index.html',
