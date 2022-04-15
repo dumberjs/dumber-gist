@@ -2,8 +2,8 @@ const http = require('http');
 const {receiveData, fetch} = require('../request');
 
 const PORT = 5000;
-const CLIENT_ID = process.env.DUMBER_GIST_CLIENTID;
-const CLIENT_SECRET = process.env.DUMBER_GIST_SECRET;
+const CLIENT_ID = process.env.DR_CLIENT_ID;
+const CLIENT_SECRET = process.env.DR_CLIENT_SECRET;
 
 const domainSubfix = process.env.NODE_ENV === 'production' ? 'app' : 'local';
 const domain = process.env.DUMBER_DOMAIN || `dumber.${domainSubfix}`;

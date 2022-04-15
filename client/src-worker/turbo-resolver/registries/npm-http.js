@@ -2,7 +2,10 @@ export class NpmHttpRegistry {
   constructor() {
     // Cannot use https://registry.npmjs.org which
     // doesn't have CORS enabled
-    this.registryUrl = 'https://registry.npmjs.cf';
+    // this.registryUrl = 'https://registry.npmjs.cf';
+    // 2022-04-15 npmjs.cf has duplicated cors header issue.
+    // npmjs.org seems works with CORS now.
+    this.registryUrl = 'https://registry.npmjs.org';
     this.cache = {};
     this.fetching = {};
   }
