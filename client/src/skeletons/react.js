@@ -18,13 +18,14 @@ which is your src/index${ext}.
 </html>
 `;
 
-const index = `import React from "react";
-import ReactDOM from "react-dom";
+const index = ext => `import React from "react";
+import { createRoot } from 'react-dom/client';
 
 import App from "./App";
 
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+const container = document.getElementById("root");
+const root = createRoot(container${ext === '.tsx' ? '!' : ''});
+root.render(<App />);
 `;
 
 const app = `import React from "react";
@@ -104,7 +105,7 @@ export default function({transpiler, testFramework}) {
     },
     {
       filename: `src/index${ext}`,
-      content: index
+      content: index(ext)
     },
     {
       filename: `src/App${ext}`,
