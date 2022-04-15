@@ -36,7 +36,8 @@ const DEFAULT_JASMINE_INDEX_HTML = `<!DOCTYPE html>
 <body>
 <script src="//${JSDELIVR_CDN_DOMAIN}/npm/jasmine-core@3/lib/jasmine-core/jasmine.min.js"></script>
 <script src="//${JSDELIVR_CDN_DOMAIN}/npm/jasmine-core@3/lib/jasmine-core/jasmine-html.min.js"></script>
-<script src="//${JSDELIVR_CDN_DOMAIN}/npm/jasmine-core@3/lib/jasmine-core/boot.min.js"></script>
+<script src="//${JSDELIVR_CDN_DOMAIN}/npm/jasmine-core@3/lib/jasmine-core/boot0.min.js"></script>
+<script src="//${JSDELIVR_CDN_DOMAIN}/npm/jasmine-core@3/lib/jasmine-core/boot1.min.js"></script>
 <script src="/dist/entry-bundle.js"></script>
 <script>
 requirejs([
