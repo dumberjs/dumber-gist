@@ -1,3 +1,12 @@
+# [0.17.0](https://github.com/dumberjs/dumber-gist/compare/v0.16.0...v0.17.0) (2022-04-15)
+
+
+### Bug Fixes
+
+* use npmjs.org now ([04414b8](https://github.com/dumberjs/dumber-gist/commit/04414b8088e969e97054287f9ad8685f76f33df9))
+
+
+
 # [0.16.0](https://github.com/dumberjs/dumber-gist/compare/v0.14.0...v0.16.0) (2021-07-18)
 
 
