@@ -107,8 +107,8 @@ const drWorker = dumber({
   ],
   append: [
     isTest ?
-      `requirejs(['../test-worker/setup', /^\\.\\.\\/test-worker\\/.+\\.spec$/]).catch(console.error);` :
-      "requirejs(['index']);"
+      `requirejs(['process-fill', '../test-worker/setup', /^\\.\\.\\/test-worker\\/.+\\.spec$/]).catch(console.error);` :
+      "requirejs(['process-fill', 'index']);"
   ],
   codeSplit: isTest ? undefined : (moduleId, packageName) => {
     if (!packageName) return 'bundler-code';

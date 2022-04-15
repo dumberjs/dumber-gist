@@ -89,6 +89,7 @@ export class DepsResolver {
     const deps = [];
     Object.keys(packages).sort().forEach(name => {
       let version = packages[name];
+      console.log('version', version);
       if (Array.isArray(version)) {
         version.sort(semver.compare);
         console.warn(`[dumber] duplicated package "${name}" versions detected: ${JSON.stringify(version)}`);

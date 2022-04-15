@@ -95,6 +95,7 @@ export class Resolver {
       requestedVersion = '*';
     }
 
+    console.log('availableVersions', availableVersions);
     let version = semver.maxSatisfying(availableVersions, requestedVersion, true);
 
     if(!version && requestedVersion === '*' && availableVersions.every(availableVersion => !!semver(availableVersion, true).prerelease.length)){
