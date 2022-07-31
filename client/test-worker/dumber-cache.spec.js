@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import {DumberCache} from '../src-worker/dumber-cache';
 
 test('DumberCache reads local cache', async t => {
@@ -50,7 +50,7 @@ test('DumberCache reports missing cache', async t => {
     await c.getCache('hash2', {a: 1});
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
   t.deepEqual(events, [{type: 'miss-cache', meta: {a: 1}}]);
 });

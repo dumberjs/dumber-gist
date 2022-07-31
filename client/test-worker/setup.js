@@ -1,1 +1,1 @@
-import "core-js/stable";
+// import "core-js/stable";

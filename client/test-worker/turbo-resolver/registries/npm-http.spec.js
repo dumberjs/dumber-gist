@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import {NpmHttpRegistry} from '../../../src-worker/turbo-resolver/registries/npm-http';
 
 const r = new NpmHttpRegistry();
@@ -13,7 +13,7 @@ test('NpmHttpRegistry complains about unknown package', async t => {
     await r.fetch('@no/such/thing');
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 });
 

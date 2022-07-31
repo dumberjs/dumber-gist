@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import {Jsdelivr} from '../src-worker/jsdelivr';
 import {JSDELIVR_PREFIX} from '../src-worker/cache-primitives';
 
@@ -56,7 +56,7 @@ test('Jsdelivr rejects unknown package', async t => {
     await j.create({name: 'unknown'});
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 });
 
@@ -66,7 +66,7 @@ test('Jsdelivr rejects unknown version', async t => {
     await j.create({name: 'foo', version: '2.0.0'});
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 });
 
@@ -196,7 +196,7 @@ test('Jsdelivr rejects unknown alias', async t => {
     await j.create({name: 'bar', location: 'foo@2.0.0'});
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 });
 

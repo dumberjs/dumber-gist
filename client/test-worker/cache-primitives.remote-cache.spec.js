@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import create from './cache-primitives.helper';
 
 const cacheUrl = HOST_NAMES.cacheUrl;
@@ -16,7 +16,7 @@ test('getRemoteCacheWithPath rejects missing cache, gets valid cache', async t =
     await p.getRemoteCacheWithPath('bar@1.0.0/index.js');
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 });
 
@@ -33,7 +33,7 @@ test('getRemoteCache rejects missing cache, gets valid cache', async t => {
     await p.getRemoteCache('hash2');
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 });
 
@@ -46,7 +46,7 @@ test('setRemoteCache does not set cache if user is not signed in', async t => {
     await p.getRemoteCache('12345');
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 });
 

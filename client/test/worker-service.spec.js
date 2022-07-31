@@ -1,30 +1,25 @@
-import test from 'tape';
+import {test} from 'zora';
 import {WorkerService} from '../src/worker-service';
 
-let actions = [];
-let published = [];
-
-function clearUp() {
-  actions = [];
-  published = [];
-}
-
-const ea = {
-  publish(event, data) {
-    published.push([event, data]);
-  },
-  subscribe() {}
+function makeEa(published) {
+  return {
+    publish(event, data) {
+      published.push([event, data]);
+    },
+    subscribe() {}
+  };
 }
 
 class TestWorkerService extends WorkerService {
-  constructor() {
+  constructor(ea, actions) {
     super(ea);
+    this.actions = actions;
   }
 
   _bootUpBundlerWorker() {
     this.bundler = {
       postMessage: action => {
-        actions.push({...action, toBundler: true});
+        this.actions.push({...action, toBundler: true});
       }
     };
     this._dumberWorkerUp = Promise.resolve();
@@ -34,7 +29,7 @@ class TestWorkerService extends WorkerService {
     this.iframe = {
       contentWindow: {
         postMessage: action => {
-          actions.push(action);
+          this.actions.push(action);
         }
       }
     };
@@ -43,8 +38,10 @@ class TestWorkerService extends WorkerService {
 }
 
 test('WorkerService queues and executes action', async t => {
-  clearUp();
-  const w = new TestWorkerService();
+  const actions = [];
+  const published = [];
+  const ea = makeEa(published);
+  const w = new TestWorkerService(ea, actions);
   t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'work1', data: {a:1}});
@@ -72,8 +69,10 @@ test('WorkerService queues and executes action', async t => {
 
 
 test('WorkerService updates token', async t => {
-  clearUp();
-  const w = new TestWorkerService();
+  const actions = [];
+  const published = [];
+  const ea = makeEa(published);
+  const w = new TestWorkerService(ea, actions);
   t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'update-token', token: {a:1}});
@@ -100,8 +99,10 @@ test('WorkerService updates token', async t => {
 });
 
 test('WorkerService queues and executes action with failure', async t => {
-  clearUp();
-  const w = new TestWorkerService();
+  const actions = [];
+  const published = [];
+  const ea = makeEa(published);
+  const w = new TestWorkerService(ea, actions);
   t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'work1', data: {a:1}});
@@ -130,8 +131,10 @@ test('WorkerService queues and executes action with failure', async t => {
 });
 
 test('WorkerService queues and executes action with unknown failure, ignores unknown message', async t => {
-  clearUp();
-  const w = new TestWorkerService();
+  const actions = [];
+  const published = [];
+  const ea = makeEa(published);
+  const w = new TestWorkerService(ea, actions);
   t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'work1', data: {a:1}});
@@ -167,8 +170,10 @@ test('WorkerService queues and executes action with unknown failure, ignores unk
 });
 
 test('WorkerService queues and executes actions', async t => {
-  clearUp();
-  const w = new TestWorkerService();
+  const actions = [];
+  const published = [];
+  const ea = makeEa(published);
+  const w = new TestWorkerService(ea, actions);
   t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'work1', data: {a:1}});
@@ -240,8 +245,10 @@ test('WorkerService queues and executes actions', async t => {
 });
 
 test('WorkerService queues and executes actions, with failed results and unknown messages', async t => {
-  clearUp();
-  const w = new TestWorkerService();
+  const actions = [];
+  const published = [];
+  const ea = makeEa(published);
+  const w = new TestWorkerService(ea, actions);
   t.notOk(w.isWaiting);
 
   const j = w.perform({type: 'work1', data: {a:1}});

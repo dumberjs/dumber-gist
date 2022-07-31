@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import {SassTranspiler, possiblePaths} from '../../src-worker/transpilers/sass';
 import {JSDELIVR_PREFIX} from '../../src-worker/cache-primitives';
 
@@ -38,7 +38,6 @@ test('possiblePaths returns nothing for non-remote path', t => {
     possiblePaths('foo'),
     []
   );
-  t.end();
 });
 
 test('possiblePaths returns index paths', t => {
@@ -50,7 +49,6 @@ test('possiblePaths returns index paths', t => {
       {packagePath: 'foo', filePath: 'bar.scss/_index.sass'}
     ]
   );
-  t.end();
 });
 
 test('possiblePaths returns index paths and partial paths', t => {
@@ -66,14 +64,12 @@ test('possiblePaths returns index paths and partial paths', t => {
       {packagePath: '@scope/foo', filePath: 'dist/bar/_index.sass'}
     ]
   );
-  t.end();
 });
 
 test('SassTranspiler matches sass/scss files', t => {
   const jt = new SassTranspiler(primitives);
   t.ok(jt.match({filename: 'src/foo.sass', content: ''}));
   t.ok(jt.match({filename: 'src/foo.scss', content: ''}));
-  t.end();
 });
 
 test('SassTranspiler does not match other files', t => {
@@ -81,7 +77,6 @@ test('SassTranspiler does not match other files', t => {
   t.notOk(jt.match({filename: 'src/foo.js', content: ''}));
   t.notOk(jt.match({filename: 'src/foo.css', content: ''}));
   t.notOk(jt.match({filename: 'src/foo.html', content: ''}));
-  t.end();
 });
 
 test('SassTranspiler transpile scss file', async t => {
@@ -125,7 +120,7 @@ test('SassTranspiler reject broken scss file', async t => {
     await jt.transpile(f, [f]);
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 });
 
@@ -138,7 +133,7 @@ test('SassTranspiler cannot tranpile other file', async t => {
     });
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 });
 
@@ -219,7 +214,7 @@ test('SassTranspiler rejects missing import', async t => {
     await jt.transpile(f, [f]);
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 });
 

@@ -1,10 +1,9 @@
-import test from 'tape';
+import {test} from 'zora';
 import {LessTranspiler} from '../../src-worker/transpilers/less';
 
 test('LessTranspiler matches less files', t => {
   const jt = new LessTranspiler();
   t.ok(jt.match({filename: 'src/foo.less', content: ''}));
-  t.end();
 });
 
 test('LessTranspiler does not match other files', t => {
@@ -12,7 +11,6 @@ test('LessTranspiler does not match other files', t => {
   t.notOk(jt.match({filename: 'src/foo.scss', content: ''}));
   t.notOk(jt.match({filename: 'src/foo.css', content: ''}));
   t.notOk(jt.match({filename: 'src/foo.html', content: ''}));
-  t.end();
 });
 
 test('LessTranspiler transpile less file', async t => {
@@ -56,7 +54,7 @@ test('LessTranspiler reject broken less file', async t => {
     await jt.transpile(f, [f]);
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 });
 
@@ -69,7 +67,7 @@ test('LessTranspiler cannot tranpile other file', async t => {
     });
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 });
 

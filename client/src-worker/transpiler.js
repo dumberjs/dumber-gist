@@ -2,7 +2,6 @@ import path from 'path';
 import {inject} from 'aurelia-dependency-injection';
 import {SvelteTranspiler} from './transpilers/svelte';
 import {Au2Transpiler} from './transpilers/au2';
-import {AuTsTranspiler} from './transpilers/au-ts';
 import {JsTranspiler} from './transpilers/js';
 import {SassTranspiler} from './transpilers/sass';
 import {LessTranspiler} from './transpilers/less';
@@ -11,7 +10,6 @@ import {TextTranspiler} from './transpilers/text';
 @inject(
   SvelteTranspiler,
   Au2Transpiler,
-  AuTsTranspiler,
   JsTranspiler,
   SassTranspiler,
   LessTranspiler,

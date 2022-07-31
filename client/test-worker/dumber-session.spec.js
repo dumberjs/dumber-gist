@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import _ from 'lodash';
 import {
   HISTORY_HACK_JS,
@@ -181,7 +181,7 @@ app-html
 requirejs.config({
   "foo": "bar"
 });
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9tYWluLmpzIiwic3JjL2FwcC5qcyIsInNyYy9hcHAuaHRtbCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtBQ0FBO0FDQUEiLCJmaWxlIjoiL2Rpc3QvZW50cnktYnVuZGxlLmpzIn0=
+//#${'' /* skip convert-source-map's bug on removeMapFileComments */} sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9tYWluLmpzIiwic3JjL2FwcC5qcyIsInNyYy9hcHAuaHRtbCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtBQ0FBO0FDQUEiLCJmaWxlIjoiL2Rpc3QvZW50cnktYnVuZGxlLmpzIn0=
 `);
 });
 
@@ -246,7 +246,7 @@ app-css
 requirejs.config({
   "foo": "bar"
 });
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9tYWluLmpzIiwic3JjL2FwcC5qcyIsInNyYy9hcHAuaHRtbCIsInNyYy9hcHAuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0FDQUE7QUNBQTtBQ0FBIiwiZmlsZSI6Ii9kaXN0L2VudHJ5LWJ1bmRsZS5qcyJ9
+//#${'' /* skip convert-source-map's bug on removeMapFileComments */} sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9tYWluLmpzIiwic3JjL2FwcC5qcyIsInNyYy9hcHAuaHRtbCIsInNyYy9hcHAuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0FDQUE7QUNBQTtBQ0FBIiwiZmlsZSI6Ii9kaXN0L2VudHJ5LWJ1bmRsZS5qcyJ9
 `
     }
   ]);

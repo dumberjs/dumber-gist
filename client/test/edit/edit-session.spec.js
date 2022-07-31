@@ -1,29 +1,25 @@
-import test from 'tape';
+import {test} from 'zora';
 import {EditSession} from '../../src/edit/edit-session';
 
-let actions = [];
-let published = [];
-
-function clearUp() {
-  actions = [];
-  published = [];
+function makeEa(published) {
+  return {
+    publish(event, data) {
+      published.push([event, data]);
+    }
+  };
 }
 
-const ea = {
-  publish(event, data) {
-    published.push([event, data]);
-  }
-};
+function makeWorkerService(actions) {
+  return {
+    async perform(action) {
+      actions.push(action);
 
-const workerService = {
-  async perform(action) {
-    actions.push(action);
-
-    if (action.type === 'bundle') {
-      return ['bundled-files'];
+      if (action.type === 'bundle') {
+        return ['bundled-files'];
+      }
     }
-  }
-};
+  };
+}
 
 const consoleLog = {
   dumberLogs: {
@@ -32,7 +28,11 @@ const consoleLog = {
 }
 
 test('EditSession loads gist', t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
@@ -60,11 +60,14 @@ test('EditSession loads gist', t => {
   t.equal(es.description, 'desc');
   t.notOk(es.isRendered);
   t.notOk(es.isChanged);
-  t.end();
 });
 
 test('EditSession detects changed description', t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
@@ -103,11 +106,14 @@ test('EditSession detects changed description', t => {
   t.equal(es.description, 'desc2');
   t.notOk(es.isRendered);
   t.ok(es.isChanged);
-  t.end();
 });
 
 test('EditSession renders pass on deps from package.json', async t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {

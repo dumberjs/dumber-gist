@@ -86,8 +86,8 @@ describe('Component App', () => {
 });
 `
 
-const tapeTest = `import { render } from './helper';
-import test from 'tape';
+const zoraTest = `import { render } from './helper';
+import {test} from 'zora';
 import { MyApp } from '../src/my-app';
 
 test('should render message', async t => {
@@ -137,10 +137,10 @@ export default function({transpiler, testFramework}) {
         filename: `test/app.spec${ext}`,
         content: mochaTest
       });
-    } if (testFramework === 'tape') {
+    } if (testFramework === 'zora') {
       files.push({
         filename: `test/app.spec${ext}`,
-        content: tapeTest
+        content: zoraTest
       });
     }
   }

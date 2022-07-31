@@ -1,29 +1,25 @@
-import test from 'tape';
+import {test} from 'zora';
 import {EditSession} from '../../src/edit/edit-session';
 
-let actions = [];
-let published = [];
-
-function clearUp() {
-  actions = [];
-  published = [];
+function makeEa(published) {
+  return {
+    publish(event, data) {
+      published.push([event, data]);
+    }
+  };
 }
 
-const ea = {
-  publish(event, data) {
-    published.push([event, data]);
-  }
-};
+function makeWorkerService(actions) {
+  return {
+    async perform(action) {
+      actions.push(action);
 
-const workerService = {
-  async perform(action) {
-    actions.push(action);
-
-    if (action.type === 'bundle') {
-      return ['bundled-files'];
+      if (action.type === 'bundle') {
+        return ['bundled-files'];
+      }
     }
-  }
-};
+  };
+}
 
 const consoleLog = {
   dumberLogs: {
@@ -32,7 +28,11 @@ const consoleLog = {
 }
 
 test('EditSession updates path after rendering', async t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
@@ -124,7 +124,11 @@ test('EditSession updates path after rendering', async t => {
 });
 
 test('EditSession skips file path not existing after rendering', async t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
@@ -220,7 +224,11 @@ test('EditSession skips file path not existing after rendering', async t => {
 });
 
 test('EditSession skips existing target file path after rendering', async t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
@@ -317,7 +325,11 @@ test('EditSession skips existing target file path after rendering', async t => {
 });
 
 test('EditSession update folder path after rendering', async t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
@@ -446,7 +458,11 @@ test('EditSession update folder path after rendering', async t => {
 });
 
 test('EditSession update file path without side effect after rendering', async t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {

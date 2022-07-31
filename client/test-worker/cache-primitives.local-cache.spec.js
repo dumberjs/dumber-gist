@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import create from './cache-primitives.helper';
 import {JSDELIVR_PREFIX} from '../src-worker/cache-primitives';
 
@@ -12,14 +12,14 @@ test('getLocalCacheWithPath rejects missing cache, gets valid cache', async t =>
     await p.getLocalCacheWithPath('unknown');
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 
   try {
     await p.getLocalCacheWithPath('hash');
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 
   t.deepEqual(
@@ -58,7 +58,7 @@ test('getLocalCache rejects missing cache, gets valid cache', async t => {
     await p.getLocalCache('unknown');
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
   t.deepEqual(
     await p.getLocalCache('hash'),
@@ -125,7 +125,7 @@ test('getLocalRawFileCache rejects missing cache, gets valid cache', async t => 
     await p.getLocalRawFileCache('unknown');
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
   t.deepEqual(
     await p.getLocalRawFileCache('a-path'),

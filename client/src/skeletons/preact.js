@@ -69,15 +69,14 @@ describe('Component App', () => {
 });
 `
 
-const tapeTest = `import { h, render } from 'preact';
-import test from 'tape';
+const zoraTest = `import { h, render } from 'preact';
+import {test} from 'zora';
 import App from '../src/app';
 
 test('should render message', t => {
   const div = document.createElement('div');
   render(<App />, div);
   t.equal(div.textContent, 'Hello Preact!');
-  t.end();
 });
 `;
 
@@ -112,10 +111,10 @@ export default function({transpiler, testFramework}) {
       filename: `test/app.spec${ext}`,
       content: mochaTest
     });
-  } if (testFramework === 'tape') {
+  } if (testFramework === 'zora') {
     files.push({
       filename: `test/app.spec${ext}`,
-      content: tapeTest
+      content: zoraTest
     });
   }
 

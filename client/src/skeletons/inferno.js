@@ -63,15 +63,14 @@ describe('Component App', () => {
 });
 `;
 
-const tapeTest = `import { render } from 'inferno';
+const zoraTest = `import { render } from 'inferno';
 import App from '../src/App';
-import test from 'tape';
+import {test} from 'zora';
 
 test('renders without crashing', t => {
   const div = document.createElement('div');
   render(<App />, div);
   t.equal(div.textContent, 'Hello Inferno!')
-  t.end();
 });
 `;
 
@@ -107,10 +106,10 @@ export default function({transpiler, testFramework}) {
       filename: `test/app.spec${ext}`,
       content: mochaTest
     });
-  } if (testFramework === 'tape') {
+  } if (testFramework === 'zora') {
     files.push({
       filename: `test/app.spec${ext}`,
-      content: tapeTest
+      content: zoraTest
     });
   }
 

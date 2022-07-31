@@ -88,7 +88,7 @@ mocha.run();
 </html>
 `;
 
-const DEFAULT_TAPE_INDEX_HTML = `<!DOCTYPE html>
+const DEFAULT_zora_INDEX_HTML = `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -142,11 +142,11 @@ export class SkeletonGenerator {
         filename: 'run-tests.html',
         content: DEFAULT_MOCHA_INDEX_HTML
       });
-    } else if (others.testFramework === 'tape') {
-      // devDependencies = {'tape': '^4.0.0'};
+    } else if (others.testFramework === 'zora') {
+      // devDependencies = {'zora': '^4.0.0'};
       files.push({
         filename: 'run-tests.html',
-        content: DEFAULT_TAPE_INDEX_HTML
+        content: DEFAULT_zora_INDEX_HTML
       });
     }
 

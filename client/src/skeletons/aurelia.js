@@ -127,17 +127,17 @@ describe('Component app', () => {
 });
 `;
 
-const tapeTest = `import {StageComponent} from 'aurelia-testing';
+const zoraTest = `import {StageComponent} from 'aurelia-testing';
 import {bootstrap} from 'aurelia-bootstrapper';
-import test from 'tape';
+import {test} from 'zora';
 
-test('Component app should render message', t => {
+test('Component app should render message', async t => {
   let component = StageComponent
       .withResources('app')
       .inView('<app></app>')
       .boundTo({});
 
-  component.create(bootstrap)
+  return component.create(bootstrap)
   .then(
     () => {
       const view = component.element;
@@ -152,7 +152,6 @@ test('Component app should render message', t => {
       component.dispose();
       component = null;
     }
-    t.end();
   });
 });
 `;
@@ -198,10 +197,10 @@ export default function({transpiler, testFramework}) {
         filename: `test/app.spec${ext}`,
         content: mochaTest
       });
-    } if (testFramework === 'tape') {
+    } if (testFramework === 'zora') {
       files.push({
         filename: `test/app.spec${ext}`,
-        content: tapeTest
+        content:zoraTest
       });
     }
   }

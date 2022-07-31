@@ -1,29 +1,25 @@
-import test from 'tape';
+import {test} from 'zora';
 import {EditSession} from '../../src/edit/edit-session';
 
-let actions = [];
-let published = [];
-
-function clearUp() {
-  actions = [];
-  published = [];
+function makeEa(published) {
+  return {
+    publish(event, data) {
+      published.push([event, data]);
+    }
+  };
 }
 
-const ea = {
-  publish(event, data) {
-    published.push([event, data]);
-  }
-};
+function makeWorkerService(actions) {
+  return {
+    async perform(action) {
+      actions.push(action);
 
-const workerService = {
-  async perform(action) {
-    actions.push(action);
-
-    if (action.type === 'bundle') {
-      return ['bundled-files'];
+      if (action.type === 'bundle') {
+        return ['bundled-files'];
+      }
     }
-  }
-};
+  };
+}
 
 const consoleLog = {
   dumberLogs: {
@@ -32,7 +28,11 @@ const consoleLog = {
 }
 
 test('EditSession imports data', t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
@@ -79,11 +79,14 @@ test('EditSession imports data', t => {
   t.equal(es.gist, newGist);
   t.notOk(es.isRendered);
   t.ok(es.isChanged);
-  t.end();
 });
 
 test('EditSession imports data with only files', t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
@@ -140,5 +143,4 @@ test('EditSession imports data with only files', t => {
   t.equal(es.gist, gist);
   t.notOk(es.isRendered);
   t.ok(es.isChanged);
-  t.end();
 });

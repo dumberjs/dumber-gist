@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import {OpenedFiles} from '../../src/edit/opened-files';
 
 const bindingEngine = {
@@ -46,7 +46,6 @@ test('OpenedFiles opens nothing by default', t => {
 
   t.equal(fs.filenames.length, 0);
   t.equal(fs.focusedIndex, -1);
-  t.end();
 });
 
 test('OpenedFiles opens/closes file', t => {
@@ -152,7 +151,6 @@ test('OpenedFiles opens/closes file', t => {
     ['closed-file', 'index.html']
   ]);
   t.notOk(fs.editingFile);
-  t.end();
 });
 
 test('OpenedFiles closes file case 1', t => {
@@ -203,7 +201,6 @@ test('OpenedFiles closes file case 1', t => {
     ['closed-file', 'index.html']
   ]);
   t.equal(fs.editingFile.filename, 'package.json');
-  t.end();
 });
 
 test('OpenedFiles closes file case 2', t => {
@@ -242,7 +239,6 @@ test('OpenedFiles closes file case 2', t => {
     ['closed-file', 'index.html']
   ]);
   t.equal(fs.editingFile.filename, 'src/main.js');
-  t.end();
 });
 
 test('OpenedFiles opens opened file', t => {
@@ -281,7 +277,6 @@ test('OpenedFiles opens opened file', t => {
     ['opened-file', 'index.html']
   ]);
   t.equal(fs.editingFile.filename, 'index.html');
-  t.end();
 });
 
 test('OpenedFiles renames opened file case 1', t => {
@@ -320,7 +315,6 @@ test('OpenedFiles renames opened file case 1', t => {
     ['opened-file', 'package.json']
   ]);
   t.equal(fs.editingFile.filename, 'package.json');
-  t.end();
 });
 
 test('OpenedFiles renames opened file case 2', t => {
@@ -360,7 +354,6 @@ test('OpenedFiles renames opened file case 2', t => {
     ['opened-file', 'package.json']
   ]);
   t.equal(fs.editingFile.filename, 'src/index.js');
-  t.end();
 });
 
 test('OpenedFiles syncs with session', t => {
@@ -407,5 +400,4 @@ test('OpenedFiles syncs with session', t => {
     ['opened-file', 'package.json']
   ]);
   t.equal(fs.editingFile.filename, 'index.html');
-  t.end();
 });

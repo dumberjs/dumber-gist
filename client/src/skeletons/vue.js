@@ -65,14 +65,13 @@ describe('Component App', () => {
 });
 `;
 
-const tapeTest = `import test from 'tape';
+const zoraTest = `import {test} from 'zora';
 import { mount } from '@vue/test-utils';
 import App from '../src/App';
 
 test('should render message', t => {
   const wrapper = mount(App);
   t.equal(wrapper.text(), 'Hello Vue!');
-  t.end();
 });
 `;
 
@@ -107,10 +106,10 @@ export default function({transpiler, testFramework}) {
       filename: `test/app.spec${ext}`,
       content: mochaTest
     });
-  } if (testFramework === 'tape') {
+  } if (testFramework === 'zora') {
     files.push({
       filename: `test/app.spec${ext}`,
-      content: tapeTest
+      content: zoraTest
     });
   }
 

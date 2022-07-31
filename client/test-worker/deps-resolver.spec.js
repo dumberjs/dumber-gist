@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import _ from 'lodash';
 import {DepsResolver} from '../src-worker/deps-resolver';
 

@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import {fuzzyFilter} from '../../src/dialogs/fuzzy-filter';
 
 test('fuzzyFilter returns original list', t => {
@@ -6,7 +6,6 @@ test('fuzzyFilter returns original list', t => {
     fuzzyFilter('', ['foo', 'bar', 'lo']),
     [['foo'], ['bar'], ['lo']]
   );
-  t.end();
 });
 
 test('fuzzyFilter returns sorted filtered list', t => {
@@ -14,7 +13,6 @@ test('fuzzyFilter returns sorted filtered list', t => {
     fuzzyFilter('o', ['foo', 'bar', 'lo']),
     [['l', 'o'], ['f', 'o', 'o']]
   );
-  t.end();
 });
 
 test('fuzzyFilter returns sorted filtered list, case2', t => {
@@ -27,7 +25,6 @@ test('fuzzyFilter returns sorted filtered list, case2', t => {
       ['src/', 'a', 'pp.', 'j', 's']
     ]
   );
-  t.end();
 });
 
 test('fuzzyFilter returns sorted filtered list, case3', t => {
@@ -38,7 +35,6 @@ test('fuzzyFilter returns sorted filtered list, case3', t => {
       ['', 's', 'rc/', 'main', '.js'],
     ]
   );
-  t.end();
 });
 
 test('fuzzyFilter returns sorted filtered list, case4', t => {
@@ -51,5 +47,4 @@ test('fuzzyFilter returns sorted filtered list, case4', t => {
       ['package.', 'js', 'on']
     ]
   );
-  t.end();
 });

@@ -1,8 +1,23 @@
 {
   "compilerOptions": {
+    "emitDecoratorMetadata": false,
     "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "target": "ES2020",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "importHelpers": true,
+    "sourceMap": true
     "baseUrl": "src"
   },
+  "include": [
+    "test",
+    "src",
+    "test-worker",
+    "src-worker"
+  ],
   "exclude": [
     "node_modules",
     "dist",

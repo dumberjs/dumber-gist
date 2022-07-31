@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import {HistoryTracker} from '../src/history-tracker';
 import {EventAggregator} from 'aurelia-event-aggregator';
 
@@ -13,7 +13,6 @@ test('HistoryTracker initialises', t => {
   ]);
   t.notOk(h.canGoBack);
   t.notOk(h.canGoForward);
-  t.end();
 });
 
 test('HistoryTracker pushes state', t => {
@@ -28,7 +27,6 @@ test('HistoryTracker pushes state', t => {
   ]);
   t.ok(h.canGoBack);
   t.notOk(h.canGoForward);
-  t.end();
 });
 
 test('HistoryTracker replaces state', t => {
@@ -42,7 +40,6 @@ test('HistoryTracker replaces state', t => {
   ]);
   t.notOk(h.canGoBack);
   t.notOk(h.canGoForward);
-  t.end();
 });
 
 test('HistoryTracker pushes / replaces state', t => {
@@ -64,7 +61,6 @@ test('HistoryTracker pushes / replaces state', t => {
 
   t.ok(h.canGoBack);
   t.notOk(h.canGoForward);
-  t.end();
 });
 
 test('HistoryTracker goes back and forward', t => {
@@ -127,6 +123,5 @@ test('HistoryTracker goes back and forward', t => {
   t.ok(h.canGoBack);
   t.notOk(h.canGoForward);
 
-  t.end();
 });
 

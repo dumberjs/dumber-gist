@@ -1,5 +1,5 @@
-import test from 'tape';
-import {JsTranspiler} from '../../src-worker/transpilers/js';
+import {test} from 'zora';
+import {JsTranspiler} from '../../src-worker/transpilers/js.js';
 
 test('JsTranspiler matches js/ts/jsx/tsx files', t => {
   const jt = new JsTranspiler();
@@ -7,7 +7,6 @@ test('JsTranspiler matches js/ts/jsx/tsx files', t => {
   t.ok(jt.match({filename: 'src/foo.jsx', content: ''}));
   t.ok(jt.match({filename: 'src/foo.ts', content: ''}));
   t.ok(jt.match({filename: 'src/foo.tsx', content: ''}));
-  t.end();
 });
 
 test('JsTranspiler does not match other files', t => {
@@ -17,25 +16,6 @@ test('JsTranspiler does not match other files', t => {
   t.notOk(jt.match({filename: 'src/foo.json', content: ''}));
   t.notOk(jt.match({filename: 'src/foo.less', content: ''}));
   t.notOk(jt.match({filename: 'src/foo.scss', content: ''}));
-  t.end();
-});
-
-test('JsTranspiler does not match au1 ts files', t => {
-  const jt = new JsTranspiler();
-  t.notOk(jt.match(
-    {filename: 'src/foo.ts', content: ''},
-    [{filename: 'package.json', content: '{"dependencies":{"aurelia-bootstrapper":"1.0.0"}}'}]
-  ));
-  t.end();
-});
-
-test('JsTranspiler does not match au2 ts files', t => {
-  const jt = new JsTranspiler();
-  t.notOk(jt.match(
-    {filename: 'src/foo.ts', content: ''},
-    [{filename: 'package.json', content: '{"dependencies":{"aurelia":"dev"}}'}]
-  ));
-  t.end();
 });
 
 test('JsTranspiler transpiles ts file', async t => {
@@ -53,7 +33,7 @@ export class Foo {
   });
 
   t.equal(file.filename, 'src/foo.js');
-  t.ok(file.content.includes('_initializerDefineProperty(this, "bar", _descriptor, this)'));
+  t.ok(file.content.includes("this.bar = ''"));
   t.notOk(file.content.includes("sourceMappingURL"));
   t.equal(file.sourceMap.file, 'src/foo.js');
   t.deepEqual(file.sourceMap.sources, ['src/foo.ts']);
@@ -77,7 +57,7 @@ export class Foo {
   });
 
   t.equal(file.filename, 'src/foo.js');
-  t.ok(file.content.includes('_initializerDefineProperty(this, "bar", _descriptor, this)'));
+  t.ok(file.content.includes("this.bar = ''"));
   t.notOk(file.content.includes("sourceMappingURL"));
   t.equal(file.sourceMap.file, 'src/foo.js');
   t.deepEqual(file.sourceMap.sources, ['src/foo.js']);
@@ -109,7 +89,7 @@ test('JsTranspiler cannot transpile other file', async t => {
     });
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 });
 

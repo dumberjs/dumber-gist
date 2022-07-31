@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import _ from 'lodash';
 import {NpmHttpRegistry} from '../../src-worker/turbo-resolver/registries/npm-http';
 import {Resolver} from '../../src-worker/turbo-resolver/resolver';

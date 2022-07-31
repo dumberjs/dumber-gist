@@ -75,10 +75,10 @@ describe('Component App', () => {
 });
 `
 
-const tapeTest = `import React from 'react';
+const zoraTest = `import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 import App from '../src/App';
-import test from 'tape';
+import {test} from 'zora';
 
 test('should render message', t => {
   const renderer = new ShallowRenderer();
@@ -88,7 +88,6 @@ test('should render message', t => {
   t.deepEqual(result.props.children,
     <h1>Hello React!</h1>
   );
-  t.end();
 });
 `;
 
@@ -123,10 +122,10 @@ export default function({transpiler, testFramework}) {
       filename: `test/app.spec${ext}`,
       content: mochaTest
     });
-  } if (testFramework === 'tape') {
+  } if (testFramework === 'zora') {
     files.push({
       filename: `test/app.spec${ext}`,
-      content: tapeTest
+      content: zoraTest
     });
   }
 

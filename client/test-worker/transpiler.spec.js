@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import {Container} from 'aurelia-dependency-injection';
 import {Transpiler} from '../src-worker/transpiler';
 import {CachePrimitives} from '../src-worker/cache-primitives';

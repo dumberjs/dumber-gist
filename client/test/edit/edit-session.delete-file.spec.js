@@ -1,29 +1,25 @@
-import test from 'tape';
+import {test} from 'zora';
 import {EditSession} from '../../src/edit/edit-session';
 
-let actions = [];
-let published = [];
-
-function clearUp() {
-  actions = [];
-  published = [];
+function makeEa(published) {
+  return {
+    publish(event, data) {
+      published.push([event, data]);
+    }
+  };
 }
 
-const ea = {
-  publish(event, data) {
-    published.push([event, data]);
-  }
-};
+function makeWorkerService(actions) {
+  return {
+    async perform(action) {
+      actions.push(action);
 
-const workerService = {
-  async perform(action) {
-    actions.push(action);
-
-    if (action.type === 'bundle') {
-      return ['bundled-files'];
+      if (action.type === 'bundle') {
+        return ['bundled-files'];
+      }
     }
-  }
-};
+  };
+}
 
 const consoleLog = {
   dumberLogs: {
@@ -32,7 +28,11 @@ const consoleLog = {
 }
 
 test('EditSession deletes file after rendering', async t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
@@ -115,7 +115,11 @@ test('EditSession deletes file after rendering', async t => {
 });
 
 test('EditSession ignores deleting file not existing after rendering', async t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {

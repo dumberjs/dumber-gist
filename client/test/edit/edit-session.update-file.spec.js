@@ -1,34 +1,30 @@
-import test from 'tape';
+import {test} from 'zora';
 import {EditSession} from '../../src/edit/edit-session';
 
-let actions = [];
-let published = [];
-
-function clearUp() {
-  actions = [];
-  published = [];
+function delay(ms = 100) {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms);
+  })
+}
+function makeEa(published) {
+  return {
+    publish(event, data) {
+      published.push([event, data]);
+    }
+  };
 }
 
-const ea = {
-  publish(event, data) {
-    published.push([event, data]);
-  }
-};
+function makeWorkerService(actions) {
+  return {
+    async perform(action) {
+      actions.push(action);
 
-const workerService = {
-  async perform(action) {
-    actions.push(action);
-
-    if (action.type === 'bundle') {
-      // Test async
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve(['bundled-files']);
-        });
-      });
+      if (action.type === 'bundle') {
+        return ['bundled-files'];
+      }
     }
-  }
-};
+  };
+}
 
 const consoleLog = {
   dumberLogs: {
@@ -37,7 +33,11 @@ const consoleLog = {
 }
 
 test('EditSession updates file after rendering', async t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
@@ -129,7 +129,11 @@ test('EditSession updates file after rendering', async t => {
 });
 
 test('EditSession skips unchanged update after rendering', async t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
@@ -221,7 +225,11 @@ test('EditSession skips unchanged update after rendering', async t => {
 });
 
 test('EditSession skips update on file not existing after rendering', async t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
@@ -321,7 +329,11 @@ test('EditSession skips update on file not existing after rendering', async t =>
 });
 
 test('EditSession updates file again during rendering', async t => {
-  clearUp();
+  const actions = [];
+  const published = [];
+
+  const ea = makeEa(published);
+  const workerService = makeWorkerService(actions);
   const es = new EditSession(ea, workerService, consoleLog);
 
   const gist = {
@@ -416,6 +428,8 @@ test('EditSession updates file again during rendering', async t => {
     ]},
     {type: 'sw:update-files', files:['bundled-files']}
   ]);
+
+  await delay(100);
   t.notOk(es.isRendered); // has new change to render
   t.ok(es.isChanged);
 

@@ -61,7 +61,7 @@ describe('Component App', () => {
 });
 `
 
-const tapeTest = `import test from 'tape';
+const zoraTest = `import {test} from 'zora';
 import App from '../src/app';
 
 test('should render message', t => {
@@ -69,7 +69,6 @@ test('should render message', t => {
   const app = new App({el: div});
   app.render();
   t.equal(div.textContent, 'Hello Backbone!');
-  t.end();
 });
 `;
 
@@ -104,10 +103,10 @@ export default function({transpiler, testFramework}) {
       filename: `test/app.spec${ext}`,
       content: mochaTest
     });
-  } if (testFramework === 'tape') {
+  } if (testFramework === 'zora') {
     files.push({
       filename: `test/app.spec${ext}`,
-      content: tapeTest
+      content: zoraTest
     });
   }
 

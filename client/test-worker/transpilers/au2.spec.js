@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import {Au2Transpiler} from '../../src-worker/transpilers/au2';
 
 const au2PackageJson = {
@@ -11,7 +11,6 @@ test('Au2Transpiler matches js/ts/html if using aurelia2', t => {
   t.ok(jt.match({filename: 'src/foo.ts', content: ''}, [au2PackageJson]));
   t.ok(jt.match({filename: 'src/foo.html', content: ''}, [au2PackageJson]));
   t.notOk(jt.match({filename: 'src/foo.css', content: ''}, [au2PackageJson]));
-  t.end();
 });
 
 test('Au2Transpiler does not any files if not using aurelia2', t => {
@@ -23,7 +22,6 @@ test('Au2Transpiler does not any files if not using aurelia2', t => {
   t.notOk(jt.match({filename: 'src/foo.scss', content: ''}));
   t.notOk(jt.match({filename: 'src/foo.js', content: ''}));
   t.notOk(jt.match({filename: 'src/foo.ts', content: ''}));
-  t.end();
 });
 
 test('Au2Transpiler transpiles js file', async t => {
@@ -79,7 +77,7 @@ test('Au2Transpiler transpiles html file', async t => {
 
   t.equal(file.filename, 'src/foo.html.js');
   t.ok(file.content.includes('name = "foo"'));
-  t.ok(file.content.includes('import d0 from "./foo.css"'));
+  t.ok(file.content.includes('import "./foo.css"'));
   // t.notOk(file.content.includes("sourceMappingURL"));
   // t.equal(file.sourceMap.file, 'src/foo.html.js');
   // t.deepEqual(file.sourceMap.sources, ['src/foo.html']);

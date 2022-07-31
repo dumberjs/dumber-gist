@@ -1,14 +1,19 @@
 // Copy of not published concat-with-sourcemaps v2
 // https://github.com/floridoo/concat-with-sourcemaps/blob/releases/v2/index.js
 
-const SourceMapGenerator = require('source-map').SourceMapGenerator;
-const SourceMapConsumer = require('source-map').SourceMapConsumer;
+import { SourceMapGenerator, SourceMapConsumer } from 'source-map';
+
+if (typeof process === 'undefined' || process.browser) {
+  SourceMapConsumer.initialize({
+    "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.4/lib/mappings.wasm"
+  });
+}
 
 function unixStylePath(filePath) {
   return filePath.replace(/\\/g, '/');
 }
 
-class Concat {
+export default class Concat {
   constructor(generateSourceMap, fileName, separator) {
     this.lineOffset = 0;
     this.columnOffset = 0;
@@ -51,13 +56,12 @@ class Concat {
         sourceMap = JSON.parse(sourceMap);
       if (sourceMap && sourceMap.mappings && sourceMap.mappings.length > 0) {
         const upstreamSM = await (new SourceMapConsumer(sourceMap));
-        const _this = this;
-        upstreamSM.eachMapping(function (mapping) {
+        upstreamSM.eachMapping((mapping) => {
           if (mapping.source) {
-            _this._sourceMap.addMapping({
+            this._sourceMap.addMapping({
               generated: {
-                line: _this.lineOffset + mapping.generatedLine,
-                column: (mapping.generatedLine === 1 ? _this.columnOffset : 0) + mapping.generatedColumn
+                line: this.lineOffset + mapping.generatedLine,
+                column: (mapping.generatedLine === 1 ? this.columnOffset : 0) + mapping.generatedColumn
               },
               original: mapping.originalLine == null ? null : {
                 line: mapping.originalLine,
@@ -69,8 +73,8 @@ class Concat {
           }
         });
         if (upstreamSM.sourcesContent) {
-          upstreamSM.sourcesContent.forEach(function (sourceContent, i) {
-            _this._sourceMap.setSourceContent(upstreamSM.sources[i], sourceContent);
+          upstreamSM.sourcesContent.forEach((sourceContent, i) => {
+            this._sourceMap.setSourceContent(upstreamSM.sources[i], sourceContent);
           });
         }
         upstreamSM.destroy();
@@ -112,6 +116,3 @@ class Concat {
     return this._sourceMap ? this._sourceMap.toString() : undefined;
   }
 }
-Concat.default = Concat;
-
-module.exports = Concat;

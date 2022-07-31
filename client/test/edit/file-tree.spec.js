@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import {FileTree} from '../../src/edit/file-tree';
 
 const bindingEngine = {
@@ -76,7 +76,6 @@ test('FileTree generates tree', t => {
       }
     }
   ]);
-  t.end();
 });
 
 test('FileTree generates deep tree with isChanged flags', t => {
@@ -234,7 +233,6 @@ test('FileTree generates deep tree with isChanged flags', t => {
       }
     }
   ]);
-  t.end();
 });
 
 test('FileTree generates deep tree with isChanged flags case 2', t => {
@@ -392,5 +390,4 @@ test('FileTree generates deep tree with isChanged flags case 2', t => {
       }
     }
   ]);
-  t.end();
 });

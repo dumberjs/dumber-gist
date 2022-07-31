@@ -1,10 +1,9 @@
-import test from 'tape';
+import {test} from 'zora';
 import {SvelteTranspiler} from '../../src-worker/transpilers/svelte';
 
 test('SvelteTranspiler matches svelte file', t => {
   const jt = new SvelteTranspiler();
   t.ok(jt.match({filename: 'src/foo.svelte', content: ''}));
-  t.end();
 });
 
 test('SvelteTranspiler does not any other files', t => {
@@ -16,7 +15,6 @@ test('SvelteTranspiler does not any other files', t => {
   t.notOk(jt.match({filename: 'src/foo.scss', content: ''}));
   t.notOk(jt.match({filename: 'src/foo.js', content: ''}));
   t.notOk(jt.match({filename: 'src/foo.ts', content: ''}));
-  t.end();
 });
 
 test('SvelteTranspiler transpiles svelte file', async t => {

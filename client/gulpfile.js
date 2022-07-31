@@ -1,9 +1,8 @@
 const dumber = require('gulp-dumber');
 const auDepsFinder = require('aurelia-deps-finder');
-const del = require('del');
 const fs = require('fs');
 const gulp = require('gulp');
-const babel = require('gulp-babel');
+const swc = require('gulp-swc');
 const sass = require('gulp-dart-sass');
 const plumber = require('gulp-plumber');
 const merge2 = require('merge2');
@@ -36,10 +35,12 @@ const drApp = dumber({
   ],
   append: [
     isTest && "requirejs(['../test/setup', /^\\.\\.\\/test\\/.+\\.spec$/]);"
+    // isTest && "requirejs(['../test/setup', '../test/worker-service.spec.js']);"
   ],
   deps: [
     // htmlhint strangely ships with missing "module": "src/core.js".
-    {name: 'htmlhint', main: 'dist/htmlhint.js'}
+    {name: 'htmlhint', main: 'dist/htmlhint.js'},
+    {name: 'punycode', main: 'punycode.js', lazyMain: true}
   ],
   codeSplit: isTest ? undefined : (moduleId, packageName) => {
     if (!packageName) return 'app-bundle';
@@ -47,17 +48,24 @@ const drApp = dumber({
     if (packageName.includes('aurelia')) return 'au-bundle';
     return 'deps-bundle';
   },
+  onRequire(moduleId) {
+    if (moduleId === '@parcel/source-map/parcel_sourcemap_wasm/dist-web/parcel_sourcemap_wasm.js') {
+      const content = fs.readFileSync(require.resolve(moduleId), 'utf8');
+      const patched = content.replace(/new URL\((?:'|")parcel_sourcemap_wasm_bg.wasm(?:'|"),\s*import.meta.url\)/, 'new URL("https://cdn.jsdelivr.net/npm/@parcel/source-map@2.0.5/parcel_sourcemap_wasm/dist-web/parcel_sourcemap_wasm_bg.wasm");');
+      return patched;
+    }
+  },
   onManifest: isTest ? undefined : filenameMap => {
     finalBundleNames['entry-bundle.js'] = filenameMap['entry-bundle.js'];
   }
 });
 
 function clean() {
-  return del([
+  return Promise.all([
     'dist',
     'index.html',
     '../client-service-worker/__dumber-gist-worker.js'
-  ], {force: true});
+  ].map(p => fs.promises.rm(p, { force: true, recursive: true })));
 }
 
 exports.clean = clean;
@@ -67,12 +75,30 @@ exports['clear-cache'] = function () {
   return drApp.clearCache();
 };
 
-function buildJs(src) {
-  const transpile = babel();
+const swcOptions = {
+  jsc: {
+    parser: {
+      syntax: 'ecmascript',
+      dynamicImport: true,
+      exportDefaultFrom: true,
+      exportNamespaceFrom: true,
+      decorators: true,
+      decoratorsBeforeExport: true
+    },
+    "transform": {
+      "legacyDecorator": true
+    },
+    target: 'es2020',
+    loose: true,
+    keepClassNames: true
+  },
+  isModule: true
+};
 
+function buildJs(src) {
   return gulp.src(src, {sourcemaps: !isProd, since: gulp.lastRun(buildApp)})
   .pipe(gulpif(!isProd && !isTest, plumber()))
-  .pipe(transpile);
+  .pipe(swc(swcOptions));
 }
 
 function buildCss(src) {
@@ -105,10 +131,14 @@ const drWorker = dumber({
     HOST_NAMES,
     DUMBER_MODULE_LOADER_DIST
   ],
+  deps: [
+    {name: 'punycode', main: 'punycode.js', lazyMain: true}
+  ],
   append: [
     isTest ?
-      `requirejs(['process-fill', '../test-worker/setup', /^\\.\\.\\/test-worker\\/.+\\.spec$/]).catch(console.error);` :
-      "requirejs(['process-fill', 'index']);"
+      `requirejs(['../test-worker/setup', /^\\.\\.\\/test-worker\\/.+\\.spec$/]).catch(console.error);` :
+      // `requirejs(['../test-worker/setup', '../test-worker/transpilers/au2.spec.js']).catch(console.error);` :
+      "requirejs(['index']);"
   ],
   codeSplit: isTest ? undefined : (moduleId, packageName) => {
     if (!packageName) return 'bundler-code';
@@ -127,6 +157,13 @@ const drWorker = dumber({
     if (packageName === 'svelte') return 'bundler-svelte';
     if (packageName) return 'bundler-other-deps';
   },
+  onRequire(moduleId) {
+    if (moduleId === '@parcel/source-map/parcel_sourcemap_wasm/dist-web/parcel_sourcemap_wasm.js') {
+      const content = fs.readFileSync(require.resolve(moduleId), 'utf8');
+      const patched = content.replace(/new URL\((?:'|")parcel_sourcemap_wasm_bg.wasm(?:'|"),\s*import.meta.url\)/, 'new URL("https://cdn.jsdelivr.net/npm/@parcel/source-map@2.0.5/parcel_sourcemap_wasm/dist-web/parcel_sourcemap_wasm_bg.wasm");');
+      return patched;
+    }
+  },
   onManifest: function(filenameMap) {
     finalBundleNames['bundler-worker.js'] = filenameMap['bundler-worker.js'];
   }
@@ -138,7 +175,7 @@ function _buildWorker() {
     {sourcemaps: !isProd && !isTest, since: gulp.lastRun(buildWorker)}
   )
     .pipe(gulpif(!isProd && !isTest, plumber()))
-    .pipe(babel())
+    .pipe(swc(swcOptions))
     .pipe(drWorker())
     .pipe(gulpif(isProd, terser({compress: false, mangle: false})))
     .pipe(gulp.dest('dist', {sourcemaps: isProd || isTest ? false : (isTest ? true : '.')}));

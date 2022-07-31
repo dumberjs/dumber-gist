@@ -1,4 +1,4 @@
-import test from 'tape';
+import {test} from 'zora';
 import {TextTranspiler} from '../../src-worker/transpilers/text';
 
 test('TextTranspiler matches html/css/svg/xml/json files', t => {
@@ -8,7 +8,6 @@ test('TextTranspiler matches html/css/svg/xml/json files', t => {
   t.ok(jt.match({filename: 'src/foo.svg', content: ''}));
   t.ok(jt.match({filename: 'src/foo.xml', content: ''}));
   t.ok(jt.match({filename: 'src/foo.json', content: ''}));
-  t.end();
 });
 
 test('TextTranspiler does not match other files', t => {
@@ -18,7 +17,6 @@ test('TextTranspiler does not match other files', t => {
   t.notOk(jt.match({filename: 'src/foo.ts', content: ''}));
   t.notOk(jt.match({filename: 'src/foo.tsx', content: ''}));
   t.notOk(jt.match({filename: 'src/foo.scss', content: ''}));
-  t.end();
 });
 
 test('TextTranspiler passes through supported file', async t => {
@@ -43,6 +41,6 @@ test('TextTranspiler cannot tranpile other file', async t => {
     });
     t.fail('should not pass');
   } catch (e) {
-    t.pass(e.message);
+    t.ok(true, e.message);
   }
 });
