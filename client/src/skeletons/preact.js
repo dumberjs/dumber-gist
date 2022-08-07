@@ -81,7 +81,7 @@ test('should render message', t => {
 `;
 
 export default function({transpiler, testFramework}) {
-  const ext = transpiler === 'typescript' ? '.ts' : '.js';
+  const ext = transpiler === 'typescript' ? '.tsx' : '.jsx';
   const files = [
     {
       filename: 'package.json',

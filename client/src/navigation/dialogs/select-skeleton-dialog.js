@@ -53,12 +53,12 @@ export class SelectSkeletonDialog {
       label: 'Svelte',
       image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 139 139' class='svelte-c8tyih'%3E%3Cpath fill='red' d='M110 28a34 34 0 0 0-46-9L38 35a30 30 0 0 0-13 20 32 32 0 0 0 3 20 30 30 0 0 0-5 12 32 32 0 0 0 6 24c10 15 31 19 46 10l26-17a30 30 0 0 0 13-20 32 32 0 0 0-3-20 30 30 0 0 0 5-11 32 32 0 0 0-6-25'%3E%3C/path%3E%3Cpath fill='%23fff' d='M62 112a21 21 0 0 1-22-8 19 19 0 0 1-4-15 17 17 0 0 1 1-2v-1l2 1a34 34 0 0 0 10 5h1v1a6 6 0 0 0 1 4 6 6 0 0 0 7 2 6 6 0 0 0 1-1l26-16a5 5 0 0 0 3-4 6 6 0 0 0-1-4 6 6 0 0 0-7-3 6 6 0 0 0-2 1l-10 6a19 19 0 0 1-5 3 21 21 0 0 1-22-8 19 19 0 0 1-3-15 18 18 0 0 1 8-12l26-17a19 19 0 0 1 5-2 21 21 0 0 1 22 8 19 19 0 0 1 4 15 20 20 0 0 1-1 2v2l-2-1a34 34 0 0 0-10-5l-1-1v-1a6 6 0 0 0-1-4 6 6 0 0 0-7-2 6 6 0 0 0-1 1L54 57a5 5 0 0 0-3 4 6 6 0 0 0 1 4 6 6 0 0 0 7 3 6 6 0 0 0 2-1l10-6a19 19 0 0 1 5-3 21 21 0 0 1 22 9 19 19 0 0 1 3 14 18 18 0 0 1-8 12l-26 17a19 19 0 0 1-5 2'%3E%3C/path%3E%3C/svg%3E"
     },
-    {
-      value: 'vue',
-      label: 'Vue 2',
-      description: 'SFC (.vue file) is not supported.',
-      image: 'https://vuejs.org/images/logo.png'
-    }
+    // {
+    //   value: 'vue',
+    //   label: 'Vue 2',
+    //   description: 'SFC (.vue file) is not supported.',
+    //   image: 'https://vuejs.org/images/logo.png'
+    // }
   ];
 
   transpilers = [

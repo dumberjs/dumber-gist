@@ -1,5 +1,5 @@
 import path from 'path';
-import transformInferno from 'ts-transform-inferno';
+import transformInferno from 'ts-plugin-inferno';
 import * as ts from 'typescript';
 import {stripSourceMappingUrl} from 'dumber/lib/shared.js';
 const EXTS = ['.js', '.ts', '.jsx', '.tsx'];

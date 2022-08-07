@@ -48,7 +48,7 @@
     "semver": "^7.3.7",
     "source-map": "^0.8.0-beta.0",
     "svelte": "^3.49.0",
-    "ts-transform-inferno": "^4.0.3",
+    "ts-plugin-inferno": "^1.0.0",
     "tslib": "^2.4.0",
     "typescript": "^4.7.4",
     "zora": "^5.0.4"
