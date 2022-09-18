@@ -120,3 +120,19 @@ mkcert dumber.local '*.dumber.local' '*.gist.dumber.local' localhost 127.0.0.1 :
 Note `nginx.dev.conf` uses the generated certificate.
 
 
+
+
+## Production deployment
+
+Setup acme.sh for certificate renewal. https://github.com/acmesh-official/acme.sh
+
+Install it under root user, then run following two commands.
+
+    acme.sh --issue --dns dns_cf -d '*.gist.dumber.app' --server letsencrypt
+    acme.sh --install-cert -d '*.gist.dumber.app' --key-file /root/gist.dumber.app.key.pem --fullchain-file /root/gist.dumber.app.cert.pem --reloadcmd "service nginx force-reload"
+
+acme added crontab job to renew the cert every 3 months.
+
+Also need to make sure nginx user "www-data" has access to the app files.
+
+    chown -R o+rx /home/huocp
