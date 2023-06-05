@@ -1,3 +1,12 @@
+## [0.18.1](https://github.com/dumberjs/dumber-gist/compare/v0.18.0...v0.18.1) (2023-06-05)
+
+
+### Features
+
+* upgrade to dumber v2, replace babel with TypeScript ([d4ccee3](https://github.com/dumberjs/dumber-gist/commit/d4ccee3aa2c8d1a4b3d2fffece613fd48c012e87))
+
+
+
 # [0.18.0](https://github.com/dumberjs/dumber-gist/compare/v0.17.0...v0.18.0) (2022-04-15)
 
 
