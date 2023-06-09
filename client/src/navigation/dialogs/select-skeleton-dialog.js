@@ -23,9 +23,8 @@ export class SelectSkeletonDialog {
     },
     {
       value: 'aurelia2',
-      label: 'Aurelia 2 (pre-alpha)',
+      label: 'Aurelia 2',
       image: 'https://aurelia.io/styles/images/aurelia-icon.svg',
-      description: 'Not for production yet.'
     },
     {
       value: 'backbone',
