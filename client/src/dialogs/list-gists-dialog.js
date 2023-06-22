@@ -1,10 +1,9 @@
 import {DialogController} from 'aurelia-dialog-lite';
 import {inject, observable} from 'aurelia-framework';
 import {combo} from 'aurelia-combo';
-import {Gists} from '../github/gists';
 import _ from 'lodash';
 
-@inject(DialogController, Gists)
+@inject(DialogController)
 export class ListGistsDialog {
   @observable filter = '';
   @observable hideNoneDumberGists = true;
@@ -12,9 +11,8 @@ export class ListGistsDialog {
   selectedIdx = -1;
   filteredGists = [];
 
-  constructor(controller, gists) {
+  constructor(controller) {
     this.controller = controller;
-    this.gists = gists;
     this._updateFilteredGists = _.debounce(this._updateFilteredGists.bind(this));
   }
 
@@ -41,9 +39,9 @@ export class ListGistsDialog {
 
     let filteredGists;
     if (this.hideNoneDumberGists) {
-      filteredGists = this.gists.filter(g => g.files['index.html'] && g.files['package.json']);
+      filteredGists = this.gists ? this.gists.filter(g => g.files['index.html'] && g.files['package.json']) : [];
     } else {
-      filteredGists = this.gists;
+      filteredGists = this.gists || [];
     }
 
     const filter = _.trim(this.filter).toLowerCase();
