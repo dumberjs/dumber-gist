@@ -1,3 +1,12 @@
+## [0.18.3](https://github.com/dumberjs/dumber-gist/compare/v0.18.2...v0.18.3) (2023-06-22)
+
+
+### Bug Fixes
+
+* fix some strange new error in dialog ([4ad4c4c](https://github.com/dumberjs/dumber-gist/commit/4ad4c4c535c362a379ec6d61ad53d77727c69455))
+
+
+
 ## [0.18.2](https://github.com/dumberjs/dumber-gist/compare/v0.18.1...v0.18.2) (2023-06-09)
 
 
