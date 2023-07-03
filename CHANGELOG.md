@@ -1,3 +1,12 @@
+## [0.18.4](https://github.com/dumberjs/dumber-gist/compare/v0.18.3...v0.18.4) (2023-07-03)
+
+
+### Bug Fixes
+
+* fix aurelia 2 conventions ([b9d7f80](https://github.com/dumberjs/dumber-gist/commit/b9d7f80fb1c89d529bee56edfccad4323ca5578b))
+
+
+
 ## [0.18.3](https://github.com/dumberjs/dumber-gist/compare/v0.18.2...v0.18.3) (2023-06-22)
 
 
