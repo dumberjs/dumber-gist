@@ -188,16 +188,16 @@ export class CachePrimitives {
 
   async setRemoteCache(hash, object) {
     // Only set remote cache if user signed in.
-    const token = global.__github_token;
-    if (!token) return;
-    const accessToken = token.access_token;
-    if (!accessToken) return;
+    // const token = global.__github_token;
+    // if (!token) return;
+    // const accessToken = token.access_token;
+    // if (!accessToken) return;
 
     return await this._fetch(cacheUrl, {
       mode: 'cors',
       method: 'POST',
       body: JSON.stringify({
-        token: accessToken,
+        // token: accessToken,
         hash,
         object
       }),

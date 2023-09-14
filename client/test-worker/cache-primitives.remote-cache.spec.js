@@ -37,21 +37,21 @@ test('getRemoteCache rejects missing cache, gets valid cache', async t => {
   }
 });
 
-test('setRemoteCache does not set cache if user is not signed in', async t => {
-  const remote = {};
-  const p = create({}, remote);
-  await p.setRemoteCache('12345', {a: 1});
-  t.deepEqual(remote, {});
-  try {
-    await p.getRemoteCache('12345');
-    t.fail('should not pass');
-  } catch (e) {
-    t.ok(true, e.message);
-  }
-});
+// test('setRemoteCache does not set cache if user is not signed in', async t => {
+//   const remote = {};
+//   const p = create({}, remote);
+//   await p.setRemoteCache('12345', {a: 1});
+//   t.deepEqual(remote, {});
+//   try {
+//     await p.getRemoteCache('12345');
+//     t.fail('should not pass');
+//   } catch (e) {
+//     t.ok(true, e.message);
+//   }
+// });
 
-test('setRemoteCache sets cache if user is signed in', async t => {
-  global.__github_token = {access_token: '1'};
+test('setRemoteCache sets cache', async t => {
+  // global.__github_token = {access_token: '1'};
   try {
     const remote = {};
     const p = create({}, remote);

@@ -7,8 +7,6 @@
       <span>Tracing new version of the npm <span if.bind="missedCache.length > 1">packages</span><span else>package</span>: <strong>${missedCache.slice(0, 3).join(', ')}<span if.bind="missedCache.length > 3">&nbsp;plus ${missedCache.length - 3} more ...</span></strong></span><br>
 
       <span>It will be much faster after the cache was created.</span><br>
-
-      <span if.bind="!user.authenticated && !insideIframe"><br>Please <button class="btn success small" click.trigger="login() & leftClick"><i class="fab fa-github"></i> Sign In</button> to help contributing the traced cache for npm packages to cache.dumber.app.<br></span>
     </p>
 
     <div if.bind="serviceWorkerFailed">

@@ -83,12 +83,14 @@ async function handleRequest(req, res) {
     if (req.method === 'POST') {
       try {
         const d = await receiveData(req)
-        const {token, hash, object} = d;
-        if (!token || !hash || !object) {
+        // const {token, hash, object} = d;
+        const {hash, object} = d;
+        if (!hash || !object) {
           throw new Error('In complete request');
         }
 
-        await getUser(token);
+        // Skip user check, allow anonymous contribution to cache
+        // await getUser(token);
         setCache(hash, object);
 
         res.writeHead(200);
