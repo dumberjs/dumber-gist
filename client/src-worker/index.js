@@ -1,5 +1,6 @@
-// Use reflect.metadata polyfill from Aurelia 2
-// To make both Aurelia 1 and 2 happy.
+// metadata Polyfill from Aurelia 1
+import 'aurelia-polyfills';
+// initializeTC39Metadata from Aurelia 2
 import '@aurelia/kernel';
 
 import {DumberSession} from './dumber-session';

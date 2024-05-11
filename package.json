@@ -5,7 +5,7 @@
   "description": "The private is set to true to avoid publishing to npm",
   "license": "MIT",
   "devDependencies": {
-    "standard-changelog": "^2.0.27"
+    "standard-changelog": "^6.0.0"
   },
   "scripts": {
     "version": "standard-changelog && git add CHANGELOG.md",

@@ -64,14 +64,13 @@ export class SelectSkeletonDialog {
     {
       value: 'esnext',
       label: 'ESNext (.js/.jsx)',
-      icon: 'fab fa-js-square',
-      description: 'Uses legacy decorator syntax.'
+      icon: 'fab fa-js-square'
     },
     {
       value: 'typescript',
       label: 'TypeScript (.ts/.tsx)',
       icon: 'fab fa-js-square',
-      description: 'Uses legacy decorator syntax, esModuleInterop is turned on.'
+      description: 'esModuleInterop is turned on.'
     }
   ];
 
