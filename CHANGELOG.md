@@ -1,3 +1,12 @@
+# [0.19.0](https://github.com/dumberjs/dumber-gist/compare/v0.18.5...v0.19.0) (2024-05-11)
+
+
+### Bug Fixes
+
+* update to latest au2 ([51f0e64](https://github.com/dumberjs/dumber-gist/commit/51f0e64387b636f0796d52ed20246a2cbdb93d17))
+
+
+
 ## [0.18.5](https://github.com/dumberjs/dumber-gist/compare/v0.18.4...v0.18.5) (2023-09-14)
 
 
