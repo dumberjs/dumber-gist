@@ -63,18 +63,6 @@ describe('Component App', () => {
 });
 `;
 
-const zoraTest = `import { render } from 'inferno';
-import App from '../src/App';
-import {test} from 'zora';
-
-test('renders without crashing', t => {
-  const div = document.createElement('div');
-  render(<App />, div);
-  t.equal(div.textContent, 'Hello Inferno!')
-});
-`;
-
-
 export default function({transpiler, testFramework}) {
   const ext = transpiler === 'typescript' ? '.tsx' : '.jsx';
   const files = [
@@ -101,15 +89,10 @@ export default function({transpiler, testFramework}) {
       filename: `test/app.spec${ext}`,
       content: jasmineTest
     });
-  } if (testFramework === 'mocha') {
+  } else if (testFramework === 'mocha') {
     files.push({
       filename: `test/app.spec${ext}`,
       content: mochaTest
-    });
-  } if (testFramework === 'zora') {
-    files.push({
-      filename: `test/app.spec${ext}`,
-      content: zoraTest
     });
   }
 

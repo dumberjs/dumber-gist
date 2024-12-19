@@ -67,18 +67,8 @@ describe('Component App', () => {
     expect(div.textContent).to.equal('Hello Preact!');
   });
 });
-`
-
-const zoraTest = `import { h, render } from 'preact';
-import {test} from 'zora';
-import App from '../src/app';
-
-test('should render message', t => {
-  const div = document.createElement('div');
-  render(<App />, div);
-  t.equal(div.textContent, 'Hello Preact!');
-});
 `;
+
 
 export default function({transpiler, testFramework}) {
   const ext = transpiler === 'typescript' ? '.tsx' : '.jsx';
@@ -106,15 +96,10 @@ export default function({transpiler, testFramework}) {
       filename: `test/app.spec${ext}`,
       content: jasmineTest
     });
-  } if (testFramework === 'mocha') {
+  } else if (testFramework === 'mocha') {
     files.push({
       filename: `test/app.spec${ext}`,
       content: mochaTest
-    });
-  } if (testFramework === 'zora') {
-    files.push({
-      filename: `test/app.spec${ext}`,
-      content: zoraTest
     });
   }
 

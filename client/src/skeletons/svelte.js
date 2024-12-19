@@ -19,8 +19,9 @@ which is your src/index${ext}.
 `;
 
 const index = `import App from './App.svelte';
+import { mount } from 'svelte';
 
-const app = new App({
+const app = mount(App, {
   target: document.getElementById('root'),
   props: {
     name: 'Svelte'
@@ -51,11 +52,12 @@ To use less: <style lang="less"> or <style type="text/less">
 `;
 
 const jasmineTest = `import App from '../src/App.svelte';
+import { mount } from 'svelte';
 
 describe('Component App', () => {
   it('should render message', () => {
     const div = document.createElement('div');
-    new App({
+    mount(App, {
       target: div,
       props: {
         name: 'Svelte'
@@ -68,11 +70,12 @@ describe('Component App', () => {
 
 const mochaTest = `import {expect} from 'chai';
 import App from '../src/App.svelte';
+import { mount } from 'svelte';
 
 describe('Component App', () => {
   it('should render message', () => {
     const div = document.createElement('div');
-    new App({
+    mount(App, {
       target: div,
       props: {
         name: 'Svelte'
@@ -82,21 +85,6 @@ describe('Component App', () => {
   });
 });
 `
-
-const zoraTest = `import {test} from 'zora';
-import App from '../src/App.svelte';
-
-test('should render message', t => {
-  const div = document.createElement('div');
-  new App({
-    target: div,
-    props: {
-      name: 'Svelte'
-    }
-  });
-  t.equal(div.textContent, 'Hello Svelte!');
-});
-`;
 
 export default function({transpiler, testFramework}) {
   const ext = transpiler === 'typescript' ? '.ts' : '.js';
@@ -124,15 +112,10 @@ export default function({transpiler, testFramework}) {
       filename: `test/app.spec${ext}`,
       content: jasmineTest
     });
-  } if (testFramework === 'mocha') {
+  } else if (testFramework === 'mocha') {
     files.push({
       filename: `test/app.spec${ext}`,
       content: mochaTest
-    });
-  } if (testFramework === 'zora') {
-    files.push({
-      filename: `test/app.spec${ext}`,
-      content: zoraTest
     });
   }
 

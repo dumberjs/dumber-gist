@@ -50,49 +50,65 @@ const appTs = `export class MyApp {
 }
 `;
 
-const testHelper = ext => `import Aurelia, { CustomElement } from 'aurelia';
-export async function render(template${ext === '.ts' ? ': string' : ''}, ...deps${ext === '.ts' ? ': readonly unknown[]' : ''}) {
-  const wrapper = CustomElement.define({name: 'wrapper', template});
-  const div = document.createElement('div');
-  const au = Aurelia.register(deps).app({
-    host: div,
-    component: wrapper
-  });
-  await au.start();
-  return div;
+const testSetup = ext => `import { BrowserPlatform } from '@aurelia/platform-browser';
+import { setPlatform, onFixtureCreated${ext === '.ts' ? ', type IFixture' : ''} } from '@aurelia/testing';
+
+// Sets up the Aurelia environment for testing
+function bootstrapTextEnv() {
+  const platform = new BrowserPlatform(window);
+  setPlatform(platform);
+  BrowserPlatform.set(globalThis, platform);
 }
+
+const fixtures${ext === '.ts' ? ': IFixture<object>[]' : ''} = [];
+beforeAll(() => {
+  bootstrapTextEnv();
+  onFixtureCreated(fixture => {
+    fixtures.push(fixture);
+  });
+});
+
+afterEach(() => {
+  fixtures.forEach(async f => {
+    try {
+      await f.stop(true);
+    } catch {
+      // ignore
+    }
+  });
+  fixtures.length = 0;
+});
 `;
 
-const jasmineTest = `import { render } from './helper';
+const jasmineTest = `import { createFixture } from '@aurelia/testing';
 import { MyApp } from '../src/my-app';
 
 describe('Component App', () => {
   it('should render message', async () => {
-    const div = await render('<my-app></my-app>', MyApp);
-    expect(div.textContent.trim()).toEqual('Hello Aurelia 2!');
+    const { assertText } = await createFixture(
+      '<my-app></my-app>',
+      {},
+      [MyApp],
+    ).started;
+
+    assertText('Hello Aurelia 2!', { compact: true });
   });
 });
 `;
 
-const mochaTest = `import { render } from './helper';
-import {expect} from 'chai';
+const mochaTest = `import { createFixture } from '@aurelia/testing';
 import { MyApp } from '../src/my-app';
 
 describe('Component App', () => {
   it('should render message', async () => {
-    const div = await render('<my-app></my-app>', MyApp);
-    expect(div.textContent.trim()).to.equal('Hello Aurelia 2!');
+    const { assertText } = await createFixture(
+      '<my-app></my-app>',
+      {},
+      [MyApp],
+    ).started;
+
+    assertText('Hello Aurelia 2!', { compact: true });
   });
-});
-`
-
-const zoraTest = `import { render } from './helper';
-import {test} from 'zora';
-import { MyApp } from '../src/my-app';
-
-test('should render message', async t => {
-  const div = await render('<my-app></my-app>', MyApp);
-  t.equal(div.textContent.trim(), 'Hello Aurelia 2!');
 });
 `;
 
@@ -123,8 +139,8 @@ export default function({transpiler, testFramework}) {
 
   if (testFramework !== 'none') {
     files.push({
-      filename: `test/helper${ext}`,
-      content: testHelper(ext)
+      filename: `test/setup${ext}`,
+      content: testSetup(ext)
     });
 
     if (testFramework === 'jasmine') {
@@ -132,15 +148,10 @@ export default function({transpiler, testFramework}) {
         filename: `test/app.spec${ext}`,
         content: jasmineTest
       });
-    } if (testFramework === 'mocha') {
+    } else if (testFramework === 'mocha') {
       files.push({
         filename: `test/app.spec${ext}`,
         content: mochaTest
-      });
-    } if (testFramework === 'zora') {
-      files.push({
-        filename: `test/app.spec${ext}`,
-        content: zoraTest
       });
     }
   }

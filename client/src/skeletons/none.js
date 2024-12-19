@@ -45,14 +45,6 @@ describe('Component app', () => {
 });
 `;
 
-const zoraTest = `import {test} from 'zora';
-import app from '../src/app';
-
-test('should render message', t => {
-  t.equal(app.textContent, 'Hello Dumber Gist!');
-});
-`;
-
 export default function({transpiler, testFramework}) {
   const ext = transpiler === 'typescript' ? '.ts' : '.js';
   const files = [
@@ -78,15 +70,10 @@ export default function({transpiler, testFramework}) {
       filename: `test/app.spec${ext}`,
       content: jasmineTest
     });
-  } if (testFramework === 'mocha') {
+  } else if (testFramework === 'mocha') {
     files.push({
       filename: `test/app.spec${ext}`,
       content: mochaTest
-    });
-  } if (testFramework === 'zora') {
-    files.push({
-      filename: `test/app.spec${ext}`,
-      content: zoraTest
     });
   }
 

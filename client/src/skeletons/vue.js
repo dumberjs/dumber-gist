@@ -65,16 +65,6 @@ describe('Component App', () => {
 });
 `;
 
-const zoraTest = `import {test} from 'zora';
-import { mount } from '@vue/test-utils';
-import App from '../src/App';
-
-test('should render message', t => {
-  const wrapper = mount(App);
-  t.equal(wrapper.text(), 'Hello Vue!');
-});
-`;
-
 export default function({transpiler, testFramework}) {
   const ext = transpiler === 'typescript' ? '.ts' : '.js';
   const files = [
@@ -101,15 +91,10 @@ export default function({transpiler, testFramework}) {
       filename: `test/app.spec${ext}`,
       content: jasmineTest
     });
-  } if (testFramework === 'mocha') {
+  } else if (testFramework === 'mocha') {
     files.push({
       filename: `test/app.spec${ext}`,
       content: mochaTest
-    });
-  } if (testFramework === 'zora') {
-    files.push({
-      filename: `test/app.spec${ext}`,
-      content: zoraTest
     });
   }
 

@@ -127,35 +127,6 @@ describe('Component app', () => {
 });
 `;
 
-const zoraTest = `import {StageComponent} from 'aurelia-testing';
-import {bootstrap} from 'aurelia-bootstrapper';
-import {test} from 'zora';
-
-test('Component app should render message', async t => {
-  let component = StageComponent
-      .withResources('app')
-      .inView('<app></app>')
-      .boundTo({});
-
-  return component.create(bootstrap)
-  .then(
-    () => {
-      const view = component.element;
-      t.equal(view.textContent.trim(), 'Hello Aurelia!');
-    },
-    e => {
-      t.fail(e);
-    }
-  )
-  .then(() => {
-    if (component) {
-      component.dispose();
-      component = null;
-    }
-  });
-});
-`;
-
 export default function({transpiler, testFramework}) {
   const ext = transpiler === 'typescript' ? '.ts' : '.js';
   const files = [
@@ -192,15 +163,10 @@ export default function({transpiler, testFramework}) {
         filename: `test/app.spec${ext}`,
         content: jasmineTest
       });
-    } if (testFramework === 'mocha') {
+    } else if (testFramework === 'mocha') {
       files.push({
         filename: `test/app.spec${ext}`,
         content: mochaTest
-      });
-    } if (testFramework === 'zora') {
-      files.push({
-        filename: `test/app.spec${ext}`,
-        content:zoraTest
       });
     }
   }

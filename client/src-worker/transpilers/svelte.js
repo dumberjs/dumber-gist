@@ -89,8 +89,6 @@ export class SvelteTranspiler {
     );
 
     const compiled = compile(preprocessed.toString(), {
-      filename: filename,
-      format: 'esm',
       outputFilename: newFilename
     });
 

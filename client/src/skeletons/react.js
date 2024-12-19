@@ -41,7 +41,7 @@ export default function App() {
 `;
 
 const jasmineTest = `import React from 'react';
-import ShallowRenderer from 'react-test-renderer/shallow';
+import ShallowRenderer from 'react-shallow-renderer';
 import App from '../src/App';
 
 describe('Component App', () => {
@@ -58,7 +58,7 @@ describe('Component App', () => {
 `;
 
 const mochaTest = `import React from 'react';
-import ShallowRenderer from 'react-test-renderer/shallow';
+import ShallowRenderer from 'react-shallow-renderer';
 import {expect} from 'chai';
 import App from '../src/App';
 
@@ -72,22 +72,6 @@ describe('Component App', () => {
       <h1>Hello React!</h1>
     );
   });
-});
-`
-
-const zoraTest = `import React from 'react';
-import ShallowRenderer from 'react-test-renderer/shallow';
-import App from '../src/App';
-import {test} from 'zora';
-
-test('should render message', t => {
-  const renderer = new ShallowRenderer();
-  renderer.render(<App />);
-  let result = renderer.getRenderOutput();
-  t.equal(result.type, 'div');
-  t.deepEqual(result.props.children,
-    <h1>Hello React!</h1>
-  );
 });
 `;
 
@@ -117,15 +101,10 @@ export default function({transpiler, testFramework}) {
       filename: `test/app.spec${ext}`,
       content: jasmineTest
     });
-  } if (testFramework === 'mocha') {
+  } else if (testFramework === 'mocha') {
     files.push({
       filename: `test/app.spec${ext}`,
       content: mochaTest
-    });
-  } if (testFramework === 'zora') {
-    files.push({
-      filename: `test/app.spec${ext}`,
-      content: zoraTest
     });
   }
 

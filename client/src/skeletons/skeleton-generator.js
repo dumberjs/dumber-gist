@@ -88,31 +88,6 @@ mocha.run();
 </html>
 `;
 
-const DEFAULT_zora_INDEX_HTML = `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Unit Tests</title>
-</head>
-<body>
-<p>See console for TAP output.</p>
-<script src="/dist/entry-bundle.js"></script>
-<script>
-requirejs([
-  // Load test/setup if exists.
-  // or tests/setup, __test__/setup, __tests__/setup
-  // also matches files in any src/**/__test__
-  /\\/(tests?|__tests?__)\\/setup$/,
-  // Load test/**/*.spec.js if exists.
-  // or tests/**/*.test.js, __test__/**/*.spec.js
-  // also matches files in any src/**/__test__
-  /\\.(spec|test)$/
-]);
-</script>
-</body>
-</html>
-`;
-
 @inject(EventAggregator, EditSession)
 export class SkeletonGenerator {
   constructor(ea, session) {
@@ -141,12 +116,6 @@ export class SkeletonGenerator {
       files.push({
         filename: 'run-tests.html',
         content: DEFAULT_MOCHA_INDEX_HTML
-      });
-    } else if (others.testFramework === 'zora') {
-      // devDependencies = {'zora': '^4.0.0'};
-      files.push({
-        filename: 'run-tests.html',
-        content: DEFAULT_zora_INDEX_HTML
       });
     }
 
