@@ -40,37 +40,39 @@ export default function App() {
 }
 `;
 
-const jasmineTest = `import React from 'react';
-import ShallowRenderer from 'react-shallow-renderer';
+const testSetup = `global.IS_REACT_ACT_ENVIRONMENT = true;`;
+
+const jasmineTest = `import React, {act} from 'react';
+import ReactDOMClient from 'react-dom/client';
 import App from '../src/App';
 
 describe('Component App', () => {
-  it('should render message', () => {
-    const renderer = new ShallowRenderer();
-    renderer.render(<App />);
-    let result = renderer.getRenderOutput();
-    expect(result.type).toBe('div');
-    expect(result.props.children).toEqual(
-      <h1>Hello React!</h1>
-    );
+  it('should render message', async () => {
+    const container = document.createElement('div');
+
+    await act( async () => {
+      ReactDOMClient.createRoot(container).render(<App />);
+    });
+    const h1 = container.querySelector('h1');
+    expect(h1.textContent).toBe('Hello React!');
   });
 });
 `;
 
-const mochaTest = `import React from 'react';
-import ShallowRenderer from 'react-shallow-renderer';
-import {expect} from 'chai';
+const mochaTest = `import React, {act} from 'react';
+import ReactDOMClient from 'react-dom/client';
+import { expect } from 'chai';
 import App from '../src/App';
 
 describe('Component App', () => {
-  it('should render message', () => {
-    const renderer = new ShallowRenderer();
-    renderer.render(<App />);
-    let result = renderer.getRenderOutput();
-    expect(result.type).to.equal('div');
-    expect(result.props.children).to.deep.equal(
-      <h1>Hello React!</h1>
-    );
+  it('should render message', async () => {
+    const container = document.createElement('div');
+
+    await act( async () => {
+      ReactDOMClient.createRoot(container).render(<App />);
+    });
+    const h1 = container.querySelector('h1');
+    expect(h1.textContent).to.equal('Hello React!');
   });
 });
 `;
@@ -96,16 +98,24 @@ export default function({transpiler, testFramework}) {
     }
   ];
 
-  if (testFramework === 'jasmine') {
+
+  if (testFramework !== 'none') {
     files.push({
-      filename: `test/app.spec${ext}`,
-      content: jasmineTest
+      filename: `test/setup${ext}`,
+      content: testSetup
     });
-  } else if (testFramework === 'mocha') {
-    files.push({
-      filename: `test/app.spec${ext}`,
-      content: mochaTest
-    });
+
+    if (testFramework === 'jasmine') {
+      files.push({
+        filename: `test/app.spec${ext}`,
+        content: jasmineTest
+      });
+    } else if (testFramework === 'mocha') {
+      files.push({
+        filename: `test/app.spec${ext}`,
+        content: mochaTest
+      });
+    }
   }
 
   return files;
