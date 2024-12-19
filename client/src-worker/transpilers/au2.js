@@ -56,7 +56,18 @@ export class Au2Transpiler {
         // Remove leading "/"
         resolved = resolved.substring(1);
         return !!_.find(files, {filename: resolved});
-      }
+      },
+      (unit, filePath) => {
+        let resolved = path.resolve(path.dirname(unit.path), filePath);
+        // in browser env, path.resolve('src', './app.html') yields '/src/app.html'
+        // Remove leading "/"
+        resolved = resolved.substring(1);
+        const file = _.find(files, {filename: resolved});
+        if (file) {
+          return file.content;
+        }
+        return "";
+      },
     );
 
     if (result) {

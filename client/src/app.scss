@@ -18,7 +18,7 @@ html {
 }
 
 .d-small-hide {
-  @media (max-width: $small - .02) {
+  @media (max-width: ($small - .02)) {
     display: none !important;
   }
 }
@@ -30,7 +30,7 @@ html {
 }
 
 .d-tiny-hide {
-  @media (max-width: $tiny - .02) {
+  @media (max-width: ($tiny - .02)) {
     display: none !important;
   }
 }
@@ -244,7 +244,7 @@ html {
   flex-wrap: nowrap;
   align-items: center;
 
-  @media (max-width: $tiny - .02) {
+  @media (max-width: ($tiny - .02)) {
     margin: .25rem;
   }
 
@@ -283,7 +283,7 @@ html {
     flex-direction: column;
     z-index: 100;
 
-    @media (max-width: $small - .02) {
+    @media (max-width: ($small - .02)) {
       background-color: $gray-800;
       position: absolute;
       top: 0;
@@ -308,7 +308,7 @@ html {
     flex-direction: column;
     z-index: 3;
 
-    @media (max-width: $tiny - .02) {
+    @media (max-width: ($tiny - .02)) {
       display: none;
       position: absolute;
       top: 0;
@@ -322,7 +322,7 @@ html {
       }
     }
 
-    @media (max-width: $small - .02) and (min-width: $tiny) {
+    @media (max-width: ($small - .02)) and (min-width: $tiny) {
       &.sole-panel {
         position: absolute;
         top: 0;
@@ -349,7 +349,7 @@ html {
     flex-direction: column;
     z-index: 2;
 
-    @media (max-width: $tiny - .02) {
+    @media (max-width: ($tiny - .02)) {
       display: none;
       position: absolute;
       top: 0;
@@ -362,7 +362,7 @@ html {
       }
     }
 
-    @media (max-width: $small - .02) and (min-width: $tiny) {
+    @media (max-width: ($small - .02)) and (min-width: $tiny) {
       &.sole-panel {
         position: absolute;
         top: 0;
@@ -429,7 +429,7 @@ html {
   appearance: none;
 
 
-  @media (max-width: $tiny - .02) {
+  @media (max-width: ($tiny - .02)) {
     padding-left: .6rem;
     padding-right: .6rem;
   }
@@ -446,7 +446,7 @@ html {
 
   + .btn {
     margin-left: 4px;
-    @media (max-width: $tiny - .02) {
+    @media (max-width: ($tiny - .02)) {
       margin-left: 1px;
     }
   }
@@ -466,7 +466,7 @@ html {
   &.even-width {
     min-width: 3rem;
 
-    @media (max-width: $tiny - .02) {
+    @media (max-width: ($tiny - .02)) {
       min-width: 2rem;
     }
   }
@@ -850,7 +850,7 @@ $node-start-offset: .6rem;
     width: 25rem;
   }
 
-  @media (max-width: $tiny - .02) {
+  @media (max-width: ($tiny - .02)) {
     width: 100%;
   }
 

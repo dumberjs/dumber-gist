@@ -6,11 +6,8 @@ const swc = require('gulp-swc');
 const sass = require('gulp-dart-sass');
 const plumber = require('gulp-plumber');
 const merge2 = require('merge2');
-const postcss = require('gulp-postcss');
 const terser = require('gulp-terser');
 const gulpif = require('gulp-if');
-const autoprefixer = require('autoprefixer');
-const postcssUrl = require('postcss-url');
 const hostnames = require('./host-names');
 
 const {NODE_ENV} = process.env;
@@ -103,11 +100,7 @@ function buildJs(src) {
 
 function buildCss(src) {
   return gulp.src(src, {sourcemaps: !isProd})
-  .pipe(sass.sync().on('error', sass.logError))
-  .pipe(postcss([
-    autoprefixer(),
-    postcssUrl({url: 'inline', encodeType: 'base64'})
-  ]));
+  .pipe(sass.sync().on('error', sass.logError));
 }
 
 function buildApp() {

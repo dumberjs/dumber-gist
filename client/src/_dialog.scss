@@ -27,7 +27,7 @@
     }
   }
 
-  @media (max-width: $tiny - .02) {
+  @media (max-width: ($tiny - .02)) {
     width: 310px;
   }
 

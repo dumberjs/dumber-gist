@@ -19,12 +19,12 @@ export class SelectSkeletonDialog {
     {
       value: 'aurelia',
       label: 'Aurelia',
-      image: 'https://aurelia.io/styles/images/aurelia-icon.svg'
+      image: 'https://aurelia.io/aurelia-icon.svg'
     },
     {
       value: 'aurelia2',
       label: 'Aurelia 2',
-      image: 'https://aurelia.io/styles/images/aurelia-icon.svg',
+      image: 'https://aurelia.io/aurelia-icon.svg',
     },
     {
       value: 'backbone',
