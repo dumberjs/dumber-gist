@@ -50,7 +50,7 @@ const appTs = `export class MyApp {
 }
 `;
 
-const testSetup = ext => `import { BrowserPlatform } from '@aurelia/platform-browser';
+const jasmineSetup = ext => `import { BrowserPlatform } from '@aurelia/platform-browser';
 import { setPlatform, onFixtureCreated${ext === '.ts' ? ', type IFixture' : ''} } from '@aurelia/testing';
 
 // Sets up the Aurelia environment for testing
@@ -77,6 +77,39 @@ afterEach(() => {
     }
   });
   fixtures.length = 0;
+});
+`;
+
+const mochaSetup = ext => `import { BrowserPlatform } from '@aurelia/platform-browser';
+import { setPlatform, onFixtureCreated${ext === '.ts' ? ', type IFixture' : ''} } from '@aurelia/testing';
+
+// Sets up the Aurelia environment for testing
+function bootstrapTextEnv() {
+  const platform = new BrowserPlatform(window);
+  setPlatform(platform);
+  BrowserPlatform.set(globalThis, platform);
+}
+
+const fixtures${ext === '.ts' ? ': IFixture<object>[]' : ''} = [];
+mocha.setup({
+  rootHooks: {
+    beforeAll() {
+      bootstrapTextEnv();
+      onFixtureCreated(fixture => {
+        fixtures.push(fixture);
+      });
+    },
+    afterEach() {
+      fixtures.forEach(async f => {
+        try {
+          await f.stop(true);
+        } catch {
+          // ignore
+        }
+      });
+      fixtures.length = 0;
+    }
+  }
 });
 `;
 
@@ -137,23 +170,26 @@ export default function({transpiler, testFramework}) {
     }
   ];
 
-  if (testFramework !== 'none') {
-    files.push({
-      filename: `test/setup${ext}`,
-      content: testSetup(ext)
-    });
-
-    if (testFramework === 'jasmine') {
-      files.push({
+  if (testFramework === 'jasmine') {
+    files.push(
+      {
+        filename: `test/setup${ext}`,
+        content: jasmineSetup(ext)
+      }, {
         filename: `test/app.spec${ext}`,
         content: jasmineTest
-      });
-    } else if (testFramework === 'mocha') {
-      files.push({
+      }
+    );
+  } else if (testFramework === 'mocha') {
+    files.push(
+      {
+        filename: `test/setup${ext}`,
+        content: mochaSetup(ext)
+      }, {
         filename: `test/app.spec${ext}`,
         content: mochaTest
-      });
-    }
+      }
+    );
   }
 
   return files;

@@ -60,13 +60,14 @@ const DEFAULT_MOCHA_INDEX_HTML = `<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <title>Unit Tests</title>
-<link rel="stylesheet" href="//${JSDELIVR_CDN_DOMAIN}/npm/mocha@7/mocha.css">
+<link rel="stylesheet" href="//${JSDELIVR_CDN_DOMAIN}/npm/mocha/mocha.css">
 </head>
 <body>
 <div id="mocha"></div>
-<script src="//${JSDELIVR_CDN_DOMAIN}/npm/mocha@7/mocha.js"></script>
+<script src="//${JSDELIVR_CDN_DOMAIN}/npm/mocha/mocha.js"></script>
 <script class="mocha-init">
-mocha.setup({ui: "bdd", reporter: "html"});
+mocha.setup('bdd');
+mocha.checkLeaks();
 </script>
 <script src="/dist/entry-bundle.js"></script>
 <script>
