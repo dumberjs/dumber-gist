@@ -205,8 +205,6 @@ export class DumberSession {
     // console.log(`[dumber] `);
 
     const isAurelia1 = _.some(deps, {name: 'aurelia-bootstrapper'});
-    // package "esm-env" uses "exports" in package.json that dumber is yet to support.
-    const usesEsmEnv = _.some(deps, {name: 'esm-env'});
 
     this.config = config;
 
@@ -230,14 +228,6 @@ export class DumberSession {
       },
       deps: deps
     };
-
-    if (usesEsmEnv) {
-      opts.onRequire = moduleId => {
-        if (moduleId === 'esm-env') {
-          return 'export const env = {BROWSER: true, DEV: true, NODE: false};';
-        }
-      };
-    }
 
     this.instance = new this.Dumber(opts);
 

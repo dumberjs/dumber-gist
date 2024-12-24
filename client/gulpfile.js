@@ -125,9 +125,7 @@ const drWorker = dumber({
     DUMBER_MODULE_LOADER_DIST
   ],
   deps: [
-    {name: 'punycode', main: 'punycode.js', lazyMain: true},
-    // Dumber has not supported package.json exports yet
-    {name: 'locate-character', main: 'src/index.js'},
+    {name: 'punycode', main: 'punycode.js', lazyMain: true}
   ],
   append: [
     isTest ?

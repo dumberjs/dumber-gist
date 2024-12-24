@@ -1,8 +1,22 @@
 import path from 'path';
+import _ from 'lodash';
 import transformInferno from 'ts-plugin-inferno';
 import * as ts from 'typescript';
 import {stripSourceMappingUrl} from 'dumber/lib/shared.js';
 const EXTS = ['.js', '.ts', '.jsx', '.tsx'];
+
+function isAurelia1(files) {
+  const packageJson = _.find(files, {filename: 'package.json'});
+  if (packageJson) {
+    try {
+      const meta = JSON.parse(packageJson.content);
+      // package "aurelia" is for aurelia 2
+      return _.has(meta, 'dependencies["aurelia-bootstrapper"]');
+    } catch (e) {
+      // ignore
+    }
+  }
+}
 
 export class JsTranspiler {
   match(file) {
@@ -18,14 +32,16 @@ export class JsTranspiler {
 
     const jsxPragma = opts.jsxPragma || 'React.createElement';
     const jsxFrag = opts.jsxFrag || 'React.Fragment';
+    // Only au1 uses legacy decorators.
+    const au1 = isAurelia1(files);
 
     const options = {
       fileName: filename,
       compilerOptions: {
         allowJs: true,
         checkJs: false,
-        experimentalDecorators: true,
-        emitDecoratorMetadata: true,
+        experimentalDecorators: au1,
+        emitDecoratorMetadata: au1,
         inlineSources: true,
         // Don't compile to ModuleKind.AMD because
         // dumber can stub some commonjs globals.
